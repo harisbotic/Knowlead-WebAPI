@@ -19,6 +19,9 @@
             "args": [
                 "run"
             ]
+        },
+        {
+            "taskName": "restore"
         }
     ]
 }
