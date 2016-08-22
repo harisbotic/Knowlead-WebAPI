@@ -2,18 +2,30 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Knowlead.DomainModel;
+using Knowlead.DomainModel.LookupModels;
 using Microsoft.AspNetCore.Mvc;
+using Knowlead.DomainModel.LookupModels.Geo;
+using Knowlead.DomainModel.LookupModels.Core;
 
 namespace Knowlead.Controllers
 {
     [Route("api/[controller]")]
     public class ValuesController : Controller
     {
+        private ApplicationDbContext _context;
+        
+        public ValuesController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+        
         // GET api/values
         [HttpGet]
-        public IEnumerable<string> Get()
+        public Achievement Get()
         {
-            return new string[] { "value3", "value2" };
+            var city = _context.Cities.Where(x => x.Name == "Vogosca").FirstOrDefault();
+            return city;
         }
 
         // GET api/values/5
