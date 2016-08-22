@@ -22,7 +22,7 @@ namespace Knowlead.Controllers
         
         // GET api/values
         [HttpGet]
-        public Achievement Get()
+        public City Get()
         {
             var city = _context.Cities.Where(x => x.Name == "Vogosca").FirstOrDefault();
             return city;
