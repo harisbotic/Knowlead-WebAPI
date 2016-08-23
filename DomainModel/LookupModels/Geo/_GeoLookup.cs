@@ -1,7 +1,12 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Knowlead.DomainModel.LookupModels.Geo
 {
-    public class GeoLookup
+    [Table("GeoLookup")]
+    public class _GeoLookup
     {
+        [Key]
         public int GeoLookupId { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }

@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Knowlead.DomainModel.LookupModels.Core;
 using Knowlead.DomainModel.LookupModels.Geo;
 using Knowlead.DomainModel.CoreModels;
+using Knowlead.DomainModel.FeedbackModels;
+using Knowlead.DomainModel.LookupModels.FeedbackModels;
 
 namespace Knowlead.DomainModel
 {
@@ -15,13 +17,40 @@ namespace Knowlead.DomainModel
         {
             _config = config;
         }
+        //No need to put base classes in dbset
+        #region Lookup Models
+            public DbSet<Achievement> Achievements {get; set; }
+            public DbSet<City> Cities {get; set; }
+            public DbSet<Country> Countries {get; set; }
+            public DbSet<FOS> Fos {get; set; }
+            public DbSet<Language> Languages {get; set; }
+            public DbSet<Status> Statuses {get; set;}
+            
+        #endregion 
 
-        public DbSet<Achievement> Achievements {get; set; }
-        public DbSet<City> Cities {get; set; }
-        public DbSet<Country> Countries {get; set; }
-        public DbSet<FOS> Fos {get; set; }
-        public DbSet<Language> Languages {get; set; }
-        public DbSet<Image> Images {get; set; }
+        #region Feedback Models
+            public DbSet<FeedbackClass> FeedbackClasses {get; set;}
+            public DbSet<FeedbackCourse> FeedbackCourses {get; set;}
+            public DbSet<FeedbackP2P> FeedbackP2P {get; set;}
+            public DbSet<FeedbackQuestion> FeedbackQuestions {get; set;}    
+
+        #endregion   
+
+        #region User Models
+            public DbSet<ApplicationUserInterest> ApplicationUserInterests { get; set; }
+            public DbSet<ApplicationUserLanguage> ApplicationUserLanguages { get; set; }
+            public DbSet<ApplicationUserSkill> ApplicationUserSkills { get; set; }
+            public DbSet<UserAchievement> UserAchievements { get; set; }
+            public DbSet<UserCertificate> UserCertificates { get; set; }
+            public DbSet<UserNotebook> UserNotebooks { get; set; }
+
+        #endregion      
+        
+        #region Core Models
+            public DbSet<Image> Images {get; set; }
+
+        #endregion 
+
         
 
 
@@ -38,30 +67,33 @@ namespace Knowlead.DomainModel
         {
              base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<CoreLookup>()
+            modelBuilder.Entity<_CoreLookup>()
                 .HasDiscriminator<string>("Category")
                 .HasValue<Achievement>("Achievement")
                 .HasValue<FOS>("Fos")
-                .HasValue<Language>("Language");
+                .HasValue<Language>("Language")
+                .HasValue<Status>("Status");
 
-            modelBuilder.Entity<GeoLookup>()
+            modelBuilder.Entity<_GeoLookup>()
                 .HasDiscriminator<string>("Category")
                 .HasValue<City>("City")
                 .HasValue<Country>("Country");
 
-            /*** SceneTask ***/ 
-            // modelBuilder.Entity<SceneTask>()
-            //     .HasKey(st => new {st.SceneId, st.TaskId});
+            modelBuilder.Entity<_Feedback>()
+                .HasDiscriminator<string>("Category")
+                .HasValue<FeedbackClass>("Class")
+                .HasValue<FeedbackCourse>("Course")
+                .HasValue<FeedbackP2P>("P2P")
+                .HasValue<FeedbackQuestion>("Question");
 
-            // modelBuilder.Entity<SceneTask>()
-            //     .HasOne(fh => fh.Scene)
-            //     .WithMany(ft => ft.SceneTasks)
-            //     .HasForeignKey(fh => fh.SceneId);
+            modelBuilder.Entity<ApplicationUserLanguage>()
+                .HasKey(t => new { t.ApplicationUserId, t.LanguageId });
 
-            // modelBuilder.Entity<SceneTask>()
-            //     .HasOne(th => th.Task)
-            //     .WithMany(fts => fts.SceneTasks)
-            //     .HasForeignKey(th => th.TaskId);
+            modelBuilder.Entity<ApplicationUserInterest>()
+                .HasKey(t => new { t.ApplicationUserId, t.FosId });
+
+            modelBuilder.Entity<ApplicationUserSkill>()
+                .HasKey(t => new { t.ApplicationUserId, t.FosId });
 
         }
     }

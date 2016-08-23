@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using Knowlead.DomainModel.LookupModels.Core;
+using Knowlead.DomainModel.LookupModels.Geo;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Knowlead.DomainModel.UserModels
@@ -7,8 +10,14 @@ namespace Knowlead.DomainModel.UserModels
     public string Timezone { get; set; } //TimezoneInfo.Id
     public string AboutMe { get; set; }
 
-    //city_id
-    //availability_id
+    public int CityId { get; set; }
+    public City City { get; set; }
+    
+    public int StatusId { get; set; }
+    public Status Status { get; set; }
+
+
+    public ICollection<ApplicationUserLanguage> ApplicationUserLanguages { get; set; }
     
   }
 }
