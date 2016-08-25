@@ -11,12 +11,14 @@ namespace Knowlead.DomainModel.UserModels
     public string Timezone { get; set; } //TimezoneInfo.Id
     public string AboutMe { get; set; }
 
-    public int CityId { get; set; }
+    public int? CityId { get; set; }
     public City City { get; set; }
     
-    public int StatusId { get; set; }
-    public Status Status { get; set; }
+    public UserStatus Status { get; set; } = UserStatus.Offline;
 
+    public enum UserStatus {
+      Online, Offline, Busy
+    }
 
     public ICollection<ApplicationUserLanguage> ApplicationUserLanguages { get; set; }
     
