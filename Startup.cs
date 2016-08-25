@@ -9,7 +9,6 @@ using Newtonsoft.Json.Serialization;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Knowlead.DomainModel.UserModels;
-using Knowlead.Migrations;
 
 namespace Knowlead
 {
