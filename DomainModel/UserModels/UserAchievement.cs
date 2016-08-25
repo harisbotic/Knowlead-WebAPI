@@ -12,7 +12,7 @@ namespace Knowlead.DomainModel.UserModels
     
     public DateTime CreatedAt { get; set; }
 
-    public string ApplicationUserId { get; set; }
+    public Guid ApplicationUserId { get; set; }
     public ApplicationUser ApplicationUser { get; set; }
 
     public int AchievementId { get; set; }

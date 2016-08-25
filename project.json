@@ -21,7 +21,9 @@
     "Microsoft.EntityFrameworkCore.Tools": {
       "version": "1.0.0-preview2-final",
       "type": "build"
-    }
+    },
+    "AspNet.Security.OAuth.Validation": "1.0.0-alpha2-final",
+    "OpenIddict": "1.0.0-*"
   },
 
   "tools": {

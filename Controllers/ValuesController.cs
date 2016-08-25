@@ -1,12 +1,7 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Knowlead.DomainModel;
-using Knowlead.DomainModel.LookupModels;
 using Microsoft.AspNetCore.Mvc;
 using Knowlead.DomainModel.LookupModels.Geo;
-using Knowlead.DomainModel.LookupModels.Core;
 
 namespace Knowlead.Controllers
 {

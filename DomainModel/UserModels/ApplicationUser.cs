@@ -1,11 +1,12 @@
+using System;
 using System.Collections.Generic;
 using Knowlead.DomainModel.LookupModels.Core;
 using Knowlead.DomainModel.LookupModels.Geo;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using OpenIddict;
 
 namespace Knowlead.DomainModel.UserModels
 {
-  public class ApplicationUser : IdentityUser
+  public class ApplicationUser : OpenIddictUser<Guid>
   {
     public string Timezone { get; set; } //TimezoneInfo.Id
     public string AboutMe { get; set; }

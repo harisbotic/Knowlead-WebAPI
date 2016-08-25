@@ -1,16 +1,19 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Knowlead.DomainModel.UserModels;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Knowlead.DomainModel.LookupModels.Core;
 using Knowlead.DomainModel.LookupModels.Geo;
 using Knowlead.DomainModel.CoreModels;
 using Knowlead.DomainModel.FeedbackModels;
 using Knowlead.DomainModel.LookupModels.FeedbackModels;
+using OpenIddict;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using System;
+using Npgsql.EntityFrameworkCore.PostgreSQL;
 
 namespace Knowlead.DomainModel
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class ApplicationDbContext : OpenIddictDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
     {
         private IConfigurationRoot _config;
         public ApplicationDbContext(IConfigurationRoot config, DbContextOptions options) : base(options) 
@@ -65,7 +68,8 @@ namespace Knowlead.DomainModel
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-             base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.HasPostgresExtension("uuid-ossp");
 
             modelBuilder.Entity<_CoreLookup>()
                 .HasDiscriminator<string>("Category")
