@@ -16,14 +16,21 @@ namespace Knowlead
     {
         private IConfigurationRoot _config;
 
+        public static IConfigurationRoot getConfiguration(IHostingEnvironment env) {
+            var builder = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddEnvironmentVariables();
+            if (env != null) {
+                builder
+                    .SetBasePath(env.ContentRootPath)
+                    .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
+            }
+            return builder.Build();
+        }
+
         public Startup(IHostingEnvironment env)
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddEnvironmentVariables();
-            _config = builder.Build();
+            _config = getConfiguration(env);
         }
 
         // Service configuration related functions
@@ -94,11 +101,6 @@ namespace Knowlead
             app.UseIdentity();
             app.UseOpenIddict();
             app.UseMvc();
-            using (var context = new ApplicationDbContext(
-                _config,
-                app.ApplicationServices.GetRequiredService<DbContextOptions<ApplicationDbContext>>())) {
-                context.Database.EnsureCreated();
-            }
             databaseInitializer.Seed();
         }
     }

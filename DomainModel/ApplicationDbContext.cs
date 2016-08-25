@@ -27,7 +27,6 @@ namespace Knowlead.DomainModel
             public DbSet<Country> Countries {get; set; }
             public DbSet<FOS> Fos {get; set; }
             public DbSet<Language> Languages {get; set; }
-            public DbSet<Status> Statuses {get; set;}
             
         #endregion 
 
@@ -75,8 +74,7 @@ namespace Knowlead.DomainModel
                 .HasDiscriminator<string>("Category")
                 .HasValue<Achievement>("Achievement")
                 .HasValue<FOS>("Fos")
-                .HasValue<Language>("Language")
-                .HasValue<Status>("Status");
+                .HasValue<Language>("Language");
 
             modelBuilder.Entity<_GeoLookup>()
                 .HasDiscriminator<string>("Category")
