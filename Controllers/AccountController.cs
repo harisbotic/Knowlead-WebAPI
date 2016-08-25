@@ -25,7 +25,10 @@ namespace Knowlead.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<ResponseModel> Register(ApplicationUserModel userModel) {
+        public async Task<ResponseModel> Register([FromBody] ApplicationUserModel userModel) {
+            if (userModel == null) {
+                return new ResponseModel(false, new ErrorModel("Model is empty", ErrorCodes.ValidationError));
+            }
             ApplicationUser tmp = userModel.MapToApplicationUser();
             string password = userModel.Password;
             if (ModelState.IsValid) {
@@ -33,19 +36,18 @@ namespace Knowlead.Controllers
                 try {
                     result = await userManager.CreateAsync(tmp, password);
                 } catch(ArgumentException ex) {
-                    return new ResponseModel{Success = false, ErrorMap = new Dictionary<string, List<ErrorModel>> {
+                    return new ResponseModel(false, new Dictionary<string, List<ErrorModel>> {
                         {
                             ex.ParamName,
-                            new List<ErrorModel>{new ErrorModel{ErrorCode = (int)ErrorCodes.DatabaseError, ErrorDescription = ex.Message}}
+                            new List<ErrorModel>{new ErrorModel(ex.Message, ErrorCodes.DatabaseError)}
                         }
-                    }};
+                    });
                 }
-                return new ResponseModel{Success = result.Succeeded, ErrorList = result.Errors.AsStringList().MapToErrorList()};
+                return new ResponseModel(result.Succeeded, result.Errors.MapToErrorList());
             } else {
-                return new ResponseModel{
-                    Success = false,
-                    ErrorMap = ModelState.AsDictionary().MapToErrorDictionary((int)ErrorCodes.ValidationError)
-                };
+                return new ResponseModel(false,
+                    ModelState.AsDictionary().MapToErrorDictionary((int)ErrorCodes.ValidationError)
+                );
             }
         }
     }

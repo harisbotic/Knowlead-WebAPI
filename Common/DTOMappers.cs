@@ -1,6 +1,9 @@
 using System.Collections.Generic;
+using System.Linq;
 using Knowlead.DomainModel.UserModels;
 using Knowlead.DTO;
+using Microsoft.AspNetCore.Identity;
+using static Knowlead.Common.Constants;
 
 namespace Knowlead.Common {
     static class DTOMappers {
@@ -19,9 +22,13 @@ namespace Knowlead.Common {
         public static List<ErrorModel> MapToErrorList(this List<string> list, int? code = null) {
             List<ErrorModel> ret = new List<ErrorModel>();
             foreach (var val in list) {
-                ret.Add(new ErrorModel{ErrorDescription = val, ErrorCode = code});
+                ret.Add(new ErrorModel(val, code));
             }
             return ret;
+        }
+
+        public static List<ErrorModel> MapToErrorList(this IEnumerable<IdentityError> errors) {
+            return errors.Select(err => new ErrorModel(err.Description, ErrorCodes.IdentityError)).ToList();
         }
     }
 }
