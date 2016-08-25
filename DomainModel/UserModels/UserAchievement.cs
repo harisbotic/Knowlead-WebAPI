@@ -1,6 +1,5 @@
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using Knowlead.DomainModel.LookupModels.Core;
 
 namespace Knowlead.DomainModel.UserModels

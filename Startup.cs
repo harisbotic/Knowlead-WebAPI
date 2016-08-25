@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -11,8 +8,6 @@ using Knowlead.DomainModel;
 using Newtonsoft.Json.Serialization;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using OpenIddict;
-using CryptoHelper;
 using Knowlead.DomainModel.UserModels;
 using Knowlead.Migrations;
 
@@ -92,7 +87,7 @@ namespace Knowlead
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IDatabaseInitializer databaseInitializer)
         {
             loggerFactory.AddConsole(_config.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -104,51 +99,8 @@ namespace Knowlead
                 _config,
                 app.ApplicationServices.GetRequiredService<DbContextOptions<ApplicationDbContext>>())) {
                 context.Database.EnsureCreated();
-                ConfigureClients(context);
             }
-        }
-
-        // Add Mvc.Client to the known applications.
-        public void ConfigureClients(ApplicationDbContext context) {
-            context.Applications.RemoveRange(context.Applications.ToList());
-            context.SaveChanges();
-
-            // Note: when using the introspection middleware, your resource server
-            // MUST be registered as an OAuth2 client and have valid credentials.
-            // 
-            // context.Applications.Add(new OpenIddictApplication {
-            //     Id = "resource_server",
-            //     DisplayName = "Main resource server",
-            //     Secret = Crypto.HashPassword("secret_secret_secret"),
-            //     Type = OpenIddictConstants.ClientTypes.Confidential
-            // });
-            context.Applications.Add(new OpenIddictApplication<Guid> {
-                ClientId = "backend",
-                ClientSecret = Crypto.HashPassword("hepek_ovo_ono123.!faefawefceawcddevhybope;"),
-                DisplayName = "Knowlead backend",
-                LogoutRedirectUri = "http://localhost:5000/",
-                RedirectUri = "http://localhost:5000/signin-oidc",
-                Type = OpenIddictConstants.ClientTypes.Confidential
-            });
-
-            // To test this sample with Postman, use the following settings:
-            // 
-            // * Authorization URL: http://localhost:54540/connect/authorize
-            // * Access token URL: http://localhost:54540/connect/token
-            // * Client ID: postman
-            // * Client secret: [blank] (not used with public clients)
-            // * Scope: openid email profile roles
-            // * Grant type: authorization code
-            // * Request access token locally: yes
-            context.Applications.Add(new OpenIddictApplication<Guid> {
-                ClientId = "postman",
-                ClientSecret = "super_secret_postman",
-                DisplayName = "Postman",
-                RedirectUri = "https://www.getpostman.com/oauth2/callback",
-                Type = OpenIddictConstants.ClientTypes.Public
-            });
-
-            context.SaveChanges();
+            databaseInitializer.Seed();
         }
     }
 }
