@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Knowlead.DomainModel.LookupModels.Geo
 {
-    [Table("GeoLookup")]
+    [Table("GeoLookups")]
     public class _GeoLookup
     {
         [Key]

@@ -5,7 +5,7 @@ using Knowlead.DomainModel.UserModels;
 
 namespace Knowlead.DomainModel.FeedbackModels
 {
-    [Table("Feedback")]
+    [Table("Feedbacks")]
     public class _Feedback
     {
         [Key]

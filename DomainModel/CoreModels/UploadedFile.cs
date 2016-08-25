@@ -4,15 +4,14 @@ using Knowlead.DomainModel.UserModels;
 
 namespace Knowlead.DomainModel.CoreModels
 {
-    public class Image
+    public class UploadedFile
     {
-        public int ImageId { get; set; }
+        [Key]
+        public int UploadedFileId { get; set; }
         public string Filename { get; set; }
-        public int Width { get; set; }
-        public int Height { get; set; }
+        public long Filesize { get; set; }
 
         public Guid UploadedById { get; set; }
         public ApplicationUser UploadedBy { get; set; }
     }
 }
-

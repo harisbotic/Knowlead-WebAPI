@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Knowlead.DomainModel.LookupModels.Core
 {
-    [Table("CoreLookup")]
+    [Table("CoreLookups")]
     public class _CoreLookup
     {
         [Key]
