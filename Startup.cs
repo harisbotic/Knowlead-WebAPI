@@ -45,7 +45,14 @@ namespace Knowlead
 
         // Register the Identity services.
         private void ConfigureIdentityFramework(IServiceCollection services) {
-            services.AddIdentity<ApplicationUser, IdentityRole<Guid>>()
+            services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(config =>
+            {
+                config.User.RequireUniqueEmail = true;
+                config.Password.RequiredLength = 8;
+                config.Password.RequireUppercase = false;
+                config.Password.RequireDigit = false;
+                config.Password.RequireNonAlphanumeric = false;
+            })
                 .AddEntityFrameworkStores<ApplicationDbContext, Guid>()
                 .AddDefaultTokenProviders();
         }
