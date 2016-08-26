@@ -8,6 +8,8 @@ using Knowlead.DomainModel;
 using Newtonsoft.Json.Serialization;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Knowlead.DomainModel.UserModels;
+using Knowlead.BLL;
+using Knowlead.BLL.Interfaces;
 
 namespace Knowlead
 {
@@ -32,18 +34,23 @@ namespace Knowlead
             _config = getConfiguration(env);
         }
 
-        // Service configuration related functions
+        // Register configuration related dependencies
         private void ConfigureConfig(IServiceCollection services) {
             services.AddSingleton(_config);
         }
-
-        // Add Entity Framework DB context
+        
+        // Register Repository dependencies
+        private void ConfigureRepositories(IServiceCollection services) {
+            services.AddScoped<IAccountRepository, AccountRepository>();
+        }
+        
+        // Register Entity Framework DB context
         private void ConfigureDbContext(IServiceCollection services) {
             services.AddDbContext<ApplicationDbContext>();
             services.AddTransient<IDatabaseInitializer, DatabaseInitializer>();
         }
 
-        // Register the Identity services.
+        // Register the Identity dependencies.
         private void ConfigureIdentityFramework(IServiceCollection services) {
             services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(config =>
             {
@@ -79,7 +86,7 @@ namespace Knowlead
                 .AddEphemeralSigningKey();
         }
 
-        // Add framework services.
+        // Add framework dependencies.
         private void ConfigureMvc(IServiceCollection services) { 
             services.AddMvc()
                 .AddJsonOptions(config => 
@@ -92,6 +99,7 @@ namespace Knowlead
         public void ConfigureServices(IServiceCollection services)
         {
             ConfigureConfig(services);
+            ConfigureRepositories(services);
             ConfigureDbContext(services);
             ConfigureIdentityFramework(services);
             ConfigureOpenIdDict(services);
