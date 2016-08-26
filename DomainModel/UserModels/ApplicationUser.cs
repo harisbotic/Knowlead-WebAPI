@@ -17,8 +17,9 @@ namespace Knowlead.DomainModel.UserModels
         [Required]
         public UserStatus Status { get; set; }
 
-        public enum UserStatus {
-          Online, Offline, Busy
+        public enum UserStatus 
+        {
+            Online, Offline, Busy
         }
 
         public ICollection<ApplicationUserLanguage> ApplicationUserLanguages { get; set; }

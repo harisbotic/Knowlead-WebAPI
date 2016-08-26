@@ -13,7 +13,15 @@ namespace Knowlead.DomainModel.P2PModels
         public DateTime StartingAt { get; set; }
         
         [Required]
-        public int StatusId { get; set; }
-        public Status Status { get; set; }
+        public UserStatus Status { get; set; }
+        public enum UserStatus 
+        {
+            Unactive, PendingAction, Scheduled, Finsihed
+        }
+
+        public P2P()
+        {
+            this.Status = UserStatus.Unactive;
+        }
     }
 }
