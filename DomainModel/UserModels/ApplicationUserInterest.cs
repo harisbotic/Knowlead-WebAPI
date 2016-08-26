@@ -4,14 +4,14 @@ using Knowlead.DomainModel.LookupModels.Core;
 
 namespace Knowlead.DomainModel.UserModels
 {
-  public class ApplicationUserInterest
-  {
-      [Required]
-      public Guid ApplicationUserId { get; set; }
-      public ApplicationUser ApplicationUser { get; set; }
+    public class ApplicationUserInterest
+    {
+        [Required]
+        public Guid ApplicationUserId { get; set; }
+        public ApplicationUser ApplicationUser { get; set; }
 
-      [Required]
-      public int FosId { get; set; }
-      public FOS Fos { get; set; }
-  }
+        [Required]
+        public int FosId { get; set; }
+        public FOS Fos { get; set; }
+    }
 }
