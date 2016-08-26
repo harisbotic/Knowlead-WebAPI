@@ -8,11 +8,15 @@ namespace Knowlead.DomainModel.UserModels
     {
         [Key]
         public int UserNotebookId { get; set; }
+        [Required]
         public string Name { get; set; }
+        [Required]
         public string Markdown { get; set; }
+        [Required]
         public DateTime CreatedAt { get; set; }
 
 
+        [Required]
         public Guid ApplicationUserId { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
 

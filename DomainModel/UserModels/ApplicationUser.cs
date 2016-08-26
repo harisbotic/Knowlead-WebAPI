@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using Knowlead.DomainModel.LookupModels.Core;
 using Knowlead.DomainModel.LookupModels.Geo;
 using OpenIddict;
@@ -14,7 +15,8 @@ namespace Knowlead.DomainModel.UserModels
     public int? CityId { get; set; }
     public City City { get; set; }
     
-    public UserStatus Status { get; set; } = UserStatus.Offline;
+    [Required]
+    public UserStatus Status { get; set; }
 
     public enum UserStatus {
       Online, Offline, Busy
@@ -22,5 +24,9 @@ namespace Knowlead.DomainModel.UserModels
 
     public ICollection<ApplicationUserLanguage> ApplicationUserLanguages { get; set; }
     
+    public ApplicationUser()
+    {
+        this.Status = UserStatus.Offline;
+    }
   }
 }

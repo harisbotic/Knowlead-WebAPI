@@ -8,7 +8,9 @@ namespace Knowlead.DomainModel.LookupModels.Core
     {
         [Key]
         public int CoreLookupId { get; set; }
+        [Required]
         public string Code { get; set; }
+        [Required]
         public string Name { get; set; }
     }
 }

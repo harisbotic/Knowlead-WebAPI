@@ -8,7 +8,9 @@ namespace Knowlead.DomainModel.LookupModels.Geo
     {
         [Key]
         public int GeoLookupId { get; set; }
+        [Required]
         public string Code { get; set; }
+        [Required]
         public string Name { get; set; }
     }
 }

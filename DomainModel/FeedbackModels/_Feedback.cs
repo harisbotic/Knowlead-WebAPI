@@ -12,12 +12,15 @@ namespace Knowlead.DomainModel.FeedbackModels
         public int FeedbackId { get; set; }
         public string FeedbackText { get; set; }
 
+        [Required]
         public int FosId { get; set; }
         public FOS Fos { get; set; }
         
+        //[Required]
         //public int TeacherId { get; set; }
         public ApplicationUser Teacher { get; set; }
         
+        //[Required]
         //public int StudentId { get; set; }
         public ApplicationUser Student { get; set; }
     }
