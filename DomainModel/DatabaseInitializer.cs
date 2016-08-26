@@ -2,10 +2,10 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using CryptoHelper;
-using Microsoft.EntityFrameworkCore;
 using OpenIddict;
 
-namespace Knowlead.DomainModel {
+namespace Knowlead.DomainModel
+{
     public class DatabaseInitializer : IDatabaseInitializer
     {
         private readonly ApplicationDbContext context;

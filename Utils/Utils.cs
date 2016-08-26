@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace Knowlead.Utils {
+namespace Knowlead.Utils
+{
     static class Utils {
         public static string ConcatToString<T>(this IEnumerable<T> enumerable, string delim = " ") {
             string ret = "";

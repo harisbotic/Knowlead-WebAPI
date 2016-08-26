@@ -1,6 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 using Knowlead.DomainModel.CoreModels;
-using Knowlead.DomainModel.LookupModels.Core;
 
 namespace Knowlead.DomainModel.P2PModels
 {

@@ -7,7 +7,6 @@ using Knowlead.DTO;
 using Knowlead.Utils;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using static Knowlead.Common.Constants;
 
 namespace Knowlead.Controllers

@@ -7,7 +7,6 @@ using Microsoft.Extensions.Logging;
 using Knowlead.DomainModel;
 using Newtonsoft.Json.Serialization;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
 using Knowlead.DomainModel.UserModels;
 
 namespace Knowlead
