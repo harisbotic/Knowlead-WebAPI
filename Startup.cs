@@ -75,7 +75,10 @@ namespace Knowlead
                 .EnableUserinfoEndpoint("/connect/userinfo")
 
                 // Allow client applications to use the code flow.
-                .AllowAuthorizationCodeFlow()
+                // .AllowAuthorizationCodeFlow()
+                .AllowPasswordFlow()
+                .AllowRefreshTokenFlow()
+                .UseJsonWebTokens()
 
                 // During development, you can disable the HTTPS requirement.
                 .DisableHttpsRequirement()
@@ -114,6 +117,14 @@ namespace Knowlead
             app.UseOAuthValidation();
             app.UseIdentity();
             app.UseOpenIddict();
+            app.UseJwtBearerAuthentication(new JwtBearerOptions
+            {
+                AutomaticAuthenticate = true,
+                AutomaticChallenge = true,
+                RequireHttpsMetadata = false,
+                Audience = "http://localhost:5000",
+                Authority = "http://localhost:5000/"
+            });
             app.UseMvc();
             databaseInitializer.Seed();
         }

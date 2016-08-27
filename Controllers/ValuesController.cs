@@ -2,6 +2,7 @@ using System.Linq;
 using Knowlead.DomainModel;
 using Microsoft.AspNetCore.Mvc;
 using Knowlead.DomainModel.LookupModels.Geo;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Knowlead.Controllers
 {
@@ -24,7 +25,7 @@ namespace Knowlead.Controllers
         }
 
         // GET api/values/5
-        [HttpGet("{id}")]
+        [HttpGet("{id}"), Authorize]
         public string Get(int id)
         {
             return "value";
