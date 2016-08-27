@@ -16,12 +16,12 @@ namespace Knowlead.DomainModel.P2PModels
         public UserStatus Status { get; set; }
         public enum UserStatus 
         {
-            Unactive, PendingAction, Scheduled, Finsihed
+            Inactive, PendingAction, Scheduled, Finsihed
         }
 
         public P2P()
         {
-            this.Status = UserStatus.Unactive;
+            this.Status = UserStatus.Inactive;
         }
     }
 }

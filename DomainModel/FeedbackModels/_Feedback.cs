@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Knowlead.DomainModel.LookupModels.Core;
@@ -16,12 +17,14 @@ namespace Knowlead.DomainModel.FeedbackModels
         public int FosId { get; set; }
         public FOS Fos { get; set; }
 
-        //[Required]
-        //public int TeacherId { get; set; }
+        [Required]
+        public Guid TeacherId { get; set; }
+        [ForeignKey("TeacherId")]
         public ApplicationUser Teacher { get; set; }
 
-        //[Required]
-        //public int StudentId { get; set; }
+        [Required]
+        public Guid StudentId { get; set; }
+        [ForeignKey("StudentId")]
         public ApplicationUser Student { get; set; }
     }
 }

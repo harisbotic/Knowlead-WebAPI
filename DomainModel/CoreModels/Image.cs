@@ -6,9 +6,8 @@ namespace Knowlead.DomainModel.CoreModels
 {
     public class Image
     {
-        public int ImageId { get; set; }
-        [Required]
-        public string Filename { get; set; }
+        [Key]
+        public Guid Filename { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
 

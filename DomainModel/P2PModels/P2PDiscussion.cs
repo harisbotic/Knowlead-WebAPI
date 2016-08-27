@@ -9,7 +9,7 @@ namespace Knowlead.DomainModel.P2PModels
         [Required]
         public string Text { get; set; }
 
-        public int ResponseToId { get; set; }
+        public int? ResponseToId { get; set; }
         public P2PDiscussion ResponseTo { get; set; }
         
         [Required]

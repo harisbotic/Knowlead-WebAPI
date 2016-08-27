@@ -7,9 +7,7 @@ namespace Knowlead.DomainModel.CoreModels
     public class UploadedFile
     {
         [Key]
-        public int UploadedFileId { get; set; }
-        [Required]
-        public string Filename { get; set; }
+        public Guid Filename { get; set; }
         public long Filesize { get; set; }
 
         [Required]
