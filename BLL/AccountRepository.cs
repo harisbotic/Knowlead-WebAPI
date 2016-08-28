@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Knowlead.BLL.Interfaces;
-using Knowlead.Common;
 using Knowlead.DomainModel;
 using Knowlead.DomainModel.UserModels;
 using Knowlead.DTO;
+using Knowlead.DTO.Mappers;
 using Microsoft.AspNetCore.Identity;
 using static Knowlead.Common.Constants;
 
@@ -26,7 +27,7 @@ namespace Knowlead.BLL
             _signInManager = signInManager;
         }
 
-        public async Task<ResponseModel> RegisterApplicationUserAsync(ApplicationUserModel applicationUserModel)
+        public async Task<ResponseModel> RegisterApplicationUserAsync(RegisterUserModel applicationUserModel)
         {
             var applicationUser = applicationUserModel.MapToApplicationUser();
             var password = applicationUserModel.Password;
@@ -48,6 +49,11 @@ namespace Knowlead.BLL
             }
 
             return new ResponseModel(result.Succeeded, result.Errors.MapToErrorList());
+        }
+
+        public async Task<ApplicationUser> GetUserByPrincipal(ClaimsPrincipal principal)
+        {
+            return await _userManager.GetUserAsync(principal);
         }
     }
 }

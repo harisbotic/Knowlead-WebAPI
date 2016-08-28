@@ -1,16 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
-using Knowlead.DomainModel.UserModels;
-using Knowlead.DTO;
 using Microsoft.AspNetCore.Identity;
 using static Knowlead.Common.Constants;
 
-namespace Knowlead.Common {
-    static class DTOMappers {
-        public static ApplicationUser MapToApplicationUser(this ApplicationUserModel model) {
-            return new ApplicationUser{Email = model.Email, PasswordHash = model.Password, UserName = model.Username};
-        }
-
+namespace Knowlead.DTO.Mappers {
+    static class ErrorMappers {
         public static Dictionary<string, List<ErrorModel>> MapToErrorDictionary(this Dictionary<string, List<string>> dictionary, int? code = null) {
             Dictionary<string, List<ErrorModel>> ret = new Dictionary<string, List<ErrorModel>>();
             foreach (var entry in dictionary) {

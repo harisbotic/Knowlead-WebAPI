@@ -96,6 +96,10 @@ namespace Knowlead
                 {
                     config.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                 });
+            services.Configure<IdentityOptions>(options=>
+            {
+                options.Cookies.ApplicationCookie.LoginPath = null;
+            });
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -114,7 +118,7 @@ namespace Knowlead
         {
             loggerFactory.AddConsole(_config.GetSection("Logging"));
             loggerFactory.AddDebug();
-            app.UseOAuthValidation();
+            //app.UseOAuthValidation();
             app.UseIdentity();
             app.UseOpenIddict();
             app.UseJwtBearerAuthentication(new JwtBearerOptions
