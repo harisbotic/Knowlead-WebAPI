@@ -8,6 +8,9 @@ namespace Knowlead.DomainModel.UserModels
 {
     public class ApplicationUser : OpenIddictUser<Guid>
     {
+        [Required]
+        [EmailAddress]
+        override public string Email { get; set; }
         public string Timezone { get; set; } //TimezoneInfo.Id
         public string AboutMe { get; set; }
 
