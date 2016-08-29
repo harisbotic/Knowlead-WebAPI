@@ -7,7 +7,11 @@ namespace Knowlead.DTO.Mappers {
         }
 
         public static ApplicationUserModel MapToApplicationUserModel(this ApplicationUser model) {
-            return new ApplicationUserModel{Username = model.UserName, Email = model.Email};
+            return new ApplicationUserModel{
+                Username = model.UserName,
+                Email = model.Email,
+                EmailConfirmed = model.EmailConfirmed
+            };
         }
     }
 }

@@ -36,6 +36,10 @@ namespace Knowlead.BLL
             try 
             {
                 result = await _userManager.CreateAsync(applicationUser, applicationUserModel.Password);
+                if (result.Succeeded) {
+                    string token = await _userManager.GenerateEmailConfirmationTokenAsync(applicationUser);
+                    //TODO: send email
+                }
             } 
             catch(ArgumentException ex) 
             {

@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Knowlead.BLL.Interfaces;
+using Knowlead.Common.Attributes;
 using Knowlead.DomainModel.UserModels;
 using Knowlead.DTO;
 using Knowlead.DTO.Mappers;
@@ -31,7 +32,7 @@ namespace Knowlead.Controllers
             return (await _accountRepository.RegisterApplicationUserAsync(userModel));
         }
 
-        [HttpGet("me"), Authorize]
+        [HttpGet("me"), ReallyAuthorize]
         public async Task<ApplicationUserModel> me()
         {
             return (await GetCurrentUser()).MapToApplicationUserModel();
@@ -40,7 +41,13 @@ namespace Knowlead.Controllers
         [HttpGetAttribute("/account/login")]
         public IActionResult dummy()
         {
-            return Forbid("Not logged in");
+            return new ForbidResult();
+        }
+
+        [HttpGetAttribute("authorizetest"), ReallyAuthorize]
+        public ResponseModel AuthorizeTest()
+        {
+            return new ResponseModel(true);
         }
     }
 }
