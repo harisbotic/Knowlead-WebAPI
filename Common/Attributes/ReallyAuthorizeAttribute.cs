@@ -7,36 +7,51 @@ using Microsoft.AspNetCore.Mvc;
 using Knowlead.BLL;
 using Knowlead.DomainModel.UserModels;
 using Knowlead.BLL.Interfaces;
+using System.Threading.Tasks;
 
 namespace Knowlead.Common.Attributes
 {
     class ReallyAuthorizeAttribute : TypeFilterAttribute
     {
-        public ReallyAuthorizeAttribute() : base(typeof(ReallyAuthorizedAttributeImpl))
+        public ReallyAuthorizeAttribute(bool verifyEmail = true) :
+            base((verifyEmail) ? typeof(ReallyAuthorizedEmailAttributeImpl) : typeof(ReallyAuthorizedAttributeImpl))
         {
         }
 
-        private class ReallyAuthorizedAttributeImpl : Attribute, IAuthorizationFilter
+        private class ReallyAuthorizedAttributeImpl : IAsyncAuthorizationFilter
         {
-            IAccountRepository _accountRepository;
-            public ReallyAuthorizedAttributeImpl(IAccountRepository repository)
+            public ReallyAuthorizedAttributeImpl()
             {
-                _accountRepository = repository;
             }
-            public bool CheckEmail { get; set; } = false;
-            public async void OnAuthorization(AuthorizationFilterContext context)
+
+            public virtual Task OnAuthorizationAsync(AuthorizationFilterContext context)
             {
                 if (!context.HttpContext.User.Identity.IsAuthenticated)
                 {
                     context.Result = new ModelResult(new ErrorModel("Not logged in", ErrorCodes.NotLoggedIn), 403);
-                    return;
                 }
-                if (CheckEmail)
+                return Task.CompletedTask;
+            }
+        }
+
+        private class ReallyAuthorizedEmailAttributeImpl : ReallyAuthorizedAttributeImpl
+        {
+            IAccountRepository _accountRepository;
+            public ReallyAuthorizedEmailAttributeImpl(IAccountRepository repository)
+            {
+                _accountRepository = repository;
+            }
+
+            public async override Task OnAuthorizationAsync(AuthorizationFilterContext context)
+            {
+                await base.OnAuthorizationAsync(context);
+                if (context.Result == null)
                 {
                     ApplicationUser user = await _accountRepository.GetUserByPrincipal(context.HttpContext.User);
                     if (!user.EmailConfirmed)
                     {
                         context.Result = new ModelResult(new ErrorModel("Email not verified", ErrorCodes.EmailNotConfirmed), 403);
+                        return;
                     }
                 }
             }
