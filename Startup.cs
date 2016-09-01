@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Knowlead.DomainModel.UserModels;
 using Knowlead.BLL;
 using Knowlead.BLL.Interfaces;
+using Knowlead.Services;
 
 namespace Knowlead
 {
@@ -19,13 +20,14 @@ namespace Knowlead
 
         public static IConfigurationRoot getConfiguration(IHostingEnvironment env) {
             var builder = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .AddEnvironmentVariables();
             if (env != null) {
                 builder
                     .SetBasePath(env.ContentRootPath)
-                    .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
+                    .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
             }
+
             return builder.Build();
         }
 
@@ -42,6 +44,11 @@ namespace Knowlead
         // Register Repository dependencies
         private void ConfigureRepositories(IServiceCollection services) {
             services.AddScoped<IAccountRepository, AccountRepository>();
+        }
+
+        // Register Email Services dependencies
+        private void ConfigureMessageServices(IServiceCollection services) {
+            services.AddSingleton<MessageServices>();
         }
         
         // Register Entity Framework DB context
@@ -107,6 +114,7 @@ namespace Knowlead
         {
             ConfigureConfig(services);
             ConfigureRepositories(services);
+            ConfigureMessageServices(services);
             ConfigureDbContext(services);
             ConfigureIdentityFramework(services);
             ConfigureOpenIdDict(services);

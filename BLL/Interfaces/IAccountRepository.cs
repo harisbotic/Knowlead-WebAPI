@@ -9,5 +9,6 @@ namespace Knowlead.BLL.Interfaces
     {
         Task<ResponseModel> RegisterApplicationUserAsync(RegisterUserModel applicationUserModel);
         Task<ApplicationUser> GetUserByPrincipal(ClaimsPrincipal principal);
+        Task<ResponseModel> ConfirmEmail(ConfirmEmailModel confirmEmailModel);
     }
 }

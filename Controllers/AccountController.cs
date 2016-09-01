@@ -4,7 +4,6 @@ using Knowlead.Common.Attributes;
 using Knowlead.DomainModel.UserModels;
 using Knowlead.DTO;
 using Knowlead.DTO.Mappers;
-using Knowlead.Utils;
 using Knowloead.Common.Attributes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -36,6 +35,13 @@ namespace Knowlead.Controllers
         public async Task<ApplicationUserModel> me()
         {
             return (await GetCurrentUser()).MapToApplicationUserModel();
+        }
+
+        [HttpPost("confirmEmail"), ValidateModel]
+        [AllowAnonymous]
+        public async Task<ResponseModel> ConfirmEmail([FromBody] ConfirmEmailModel confirmEmailModel)
+        {
+            return (await _accountRepository.ConfirmEmail(confirmEmailModel));
         }
 
         [HttpGetAttribute("/account/login")]
