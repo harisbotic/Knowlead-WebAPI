@@ -31,7 +31,7 @@ namespace Knowlead.Controllers
             return (await _accountRepository.RegisterApplicationUserAsync(userModel));
         }
 
-        [HttpGet("me"), ReallyAuthorize]
+        [HttpGet("me"), ReallyAuthorize(false)]
         public async Task<ApplicationUserModel> me()
         {
             return (await GetCurrentUser()).MapToApplicationUserModel();

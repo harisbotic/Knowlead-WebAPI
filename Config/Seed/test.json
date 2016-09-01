@@ -1,0 +1,6 @@
+{
+    "model": "Knowlead.DomainModel.LookupModels.Geo.City",
+    "data": [
+        {"code": "SA", "name": "Sarajevo"}
+    ]
+}

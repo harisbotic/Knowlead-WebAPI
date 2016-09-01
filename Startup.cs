@@ -18,8 +18,9 @@ namespace Knowlead
     {
         private IConfigurationRoot _config;
 
-        public static IConfigurationRoot getConfiguration(IHostingEnvironment env) {
+        public static IConfigurationRoot GetConfiguration(IHostingEnvironment env) {
             var builder = new ConfigurationBuilder()
+                .SetBasePath(System.IO.Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .AddEnvironmentVariables();
             if (env != null) {
@@ -33,7 +34,7 @@ namespace Knowlead
 
         public Startup(IHostingEnvironment env)
         {
-            _config = getConfiguration(env);
+            _config = GetConfiguration(env);
         }
 
         // Register configuration related dependencies
