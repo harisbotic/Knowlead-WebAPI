@@ -1,15 +1,19 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
+using AutoMapper;
 using Knowlead.DomainModel;
-using Knowlead.DomainModel.LookupModels.Geo;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Newtonsoft.Json.Linq;
 
 namespace Knowlead.Scripts
 {
     public interface ISeeder
     {
-        void ImportSingleRow(JObject row);
+        void ImportSingleRow(JObject row, string key);
         void ClearTable();
         void SaveChanges();
     }
@@ -17,26 +21,67 @@ namespace Knowlead.Scripts
     public class Seeder<T> : ISeeder where T : class 
     {
         ApplicationDbContext _context;
+        DbSet<T> _dbset;
         public Seeder(ApplicationDbContext context)
         {
             _context = context;
+            _dbset = _context.Set<T>();
+            Mapper.Initialize(config => {
+                config.CreateMap<T, T>();
+                config.ShouldMapProperty = p =>
+                    p.GetCustomAttribute(typeof(KeyAttribute)) == null &&
+                    !p.Name.EndsWith("Id") && !p.Name.EndsWith("ID");
+            });
         }
         public void ClearTable()
         {
-            Console.Write("Clearing table ... ");
+            Console.Write("Warning: Clearing table ... ");
             Console.Out.Flush();
-            GetDbSet().RemoveRange(GetDbSet().ToList());
+            _dbset.RemoveRange(_dbset.ToList());
             Console.WriteLine("OK");
         }
 
-        public void ImportSingleRow(JObject row)
+        public void ImportSingleRow(JObject row, string key)
         {
-            GetDbSet().Add(row.ToObject<T>());
+            T obj = row.ToObject<T>();
+            if (key == null)
+            {
+                DoImportRow(obj);
+            } else
+            {
+                T[] candidates = _dbset.Where(GetWhereClause(obj, key)).ToArray();
+                if (candidates.Length == 0)
+                {
+                    DoImportRow(obj);
+                } else if (candidates.Length > 1)
+                {
+                    throw new InvalidOperationException("More then one candidate found for key '" + key + "'");
+                } else
+                {
+                    DoUpdateRow(obj, ref candidates[0]);
+                }
+            }
         }
 
-        private DbSet<T> GetDbSet()
+        private Expression<Func<T, bool>> GetWhereClause(T obj, string key)
         {
-            return _context.Set<T>();
+            var arg = Expression.Parameter(typeof(T));
+            var left = Expression.Property(arg, key);
+            var right = Expression.Constant(obj.GetType().GetProperty(key).GetValue(obj));
+            Expression clause = Expression.Equal(left, right);
+            return Expression.Lambda<Func<T, bool>>(clause, arg);
+        }
+
+        private void DoImportRow(T obj)
+        {
+            _dbset.Add(obj);
+        }
+
+        private void DoUpdateRow(T from, ref T to)
+        {
+            Mapper.Map(from, to, typeof(T), typeof(T));
+            /*EntityEntry entry = _context.Entry(to);
+            entry.State = EntityState.Modified;*/
         }
 
         public void SaveChanges()

@@ -1,5 +1,9 @@
 {
     "model": "Knowlead.DomainModel.LookupModels.Geo.City",
+    "importConfig": {
+        "key": "Code",
+        "clearTable": true
+    },
     "data": [
         {"code": "SA", "name": "Sarajevo"}
     ]
