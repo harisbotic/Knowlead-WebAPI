@@ -35,7 +35,8 @@ namespace Knowlead
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton(_config);
-            
+
+            services.AddCrossOrigin();
             services.AddRepositories();
             services.AddMessageServices();
             services.AddCustomizedMvc();
@@ -50,6 +51,7 @@ namespace Knowlead
         {
             loggerFactory.AddConsole(_config.GetSection("Logging"));
             loggerFactory.AddDebug();
+            app.UseCors("AllowAll");
             app.UseIdentity();
             //app.UseOAuthValidation();
             app.UseOpenIddict();
@@ -62,7 +64,6 @@ namespace Knowlead
                 Authority = "http://localhost:5000/"
             });
             app.UseMvc();
-            databaseInitializer.Seed();
         }
     }
 }

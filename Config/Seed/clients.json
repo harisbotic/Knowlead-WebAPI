@@ -1,0 +1,16 @@
+{
+    "model": "OpenIddictApplication",
+    "importConfig": {
+        "key": "ClientId",
+        "clearTable": true
+    },
+    "data": [
+        {
+            "ClientId": "angular",
+            "ClientSecret": "",
+            "DisplayName": "Angular 2",
+            "RedirectUri": "",
+            "Type": "public"
+        }
+    ]
+}
