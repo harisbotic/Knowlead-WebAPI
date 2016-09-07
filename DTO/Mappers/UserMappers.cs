@@ -1,4 +1,5 @@
 using Knowlead.DomainModel.UserModels;
+using Knowlead.DTO.ApplicationUserModels;
 
 namespace Knowlead.DTO.Mappers {
     static class UserMappers {

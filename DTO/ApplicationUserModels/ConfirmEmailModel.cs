@@ -1,7 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Knowlead.DTO {
-    public class ConfirmEmailModel {
+namespace Knowlead.DTO.ApplicationUserModels
+{
+    public class ConfirmEmailModel
+    {
         [Required]
         [EmailAddress]
         public string Email { get; set; }

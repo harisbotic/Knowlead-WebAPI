@@ -1,5 +1,5 @@
 {
-    "model": "Knowlead.DomainModel.LookupModels.Geo.City",
+    "model": "Knowlead.DomainModel.LookupModels.Geo.State",
     "importConfig": {
         "key": "Code",
         "clearTable": true

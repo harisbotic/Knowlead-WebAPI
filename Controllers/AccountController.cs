@@ -3,6 +3,7 @@ using Knowlead.BLL.Interfaces;
 using Knowlead.Common.Attributes;
 using Knowlead.DomainModel.UserModels;
 using Knowlead.DTO;
+using Knowlead.DTO.ApplicationUserModels;
 using Knowlead.DTO.Mappers;
 using Knowloead.Common.Attributes;
 using Microsoft.AspNetCore.Authorization;
@@ -44,13 +45,20 @@ namespace Knowlead.Controllers
             return (await _accountRepository.ConfirmEmail(confirmEmailModel));
         }
 
-        [HttpGetAttribute("/account/login")]
+        [HttpPatch("details"), ValidateModel]
+        public async Task<ResponseModel> Details([FromBody] UserDetailsModel userDetailsModel)
+        {
+            var currentUser = await GetCurrentUser();
+            return (await _accountRepository.UpdateUserDetails(currentUser, userDetailsModel));
+        }
+
+        [HttpGet("/account/login")]
         public IActionResult dummy()
         {
             return new ForbidResult();
         }
 
-        [HttpGetAttribute("authorizetest"), ReallyAuthorize]
+        [HttpGet("authorizetest"), ReallyAuthorize]
         public ResponseModel AuthorizeTest()
         {
             return new ResponseModel(true);

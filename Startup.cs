@@ -38,10 +38,11 @@ namespace Knowlead
             
             services.AddRepositories();
             services.AddMessageServices();
+            services.AddCustomizedMvc();
             services.AddDbContext();
             services.AddIdentityFramework();
             services.AddOpenIdDict();
-            services.AddCustomizedMvc();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,8 +50,8 @@ namespace Knowlead
         {
             loggerFactory.AddConsole(_config.GetSection("Logging"));
             loggerFactory.AddDebug();
-            //app.UseOAuthValidation();
             app.UseIdentity();
+            //app.UseOAuthValidation();
             app.UseOpenIddict();
             app.UseJwtBearerAuthentication(new JwtBearerOptions
             {

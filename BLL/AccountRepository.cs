@@ -6,6 +6,7 @@ using Knowlead.BLL.Interfaces;
 using Knowlead.DomainModel;
 using Knowlead.DomainModel.UserModels;
 using Knowlead.DTO;
+using Knowlead.DTO.ApplicationUserModels;
 using Knowlead.DTO.Mappers;
 using Knowlead.Services;
 using Microsoft.AspNetCore.Identity;
@@ -75,6 +76,17 @@ namespace Knowlead.BLL
             return await _userManager.GetUserAsync(principal);
         }
 
+        public async Task<ResponseModel> UpdateUserDetails(ApplicationUser applicationUser, UserDetailsModel userDetailsModel)
+        {
+            IdentityResult result;
+
+            applicationUser.AboutMe = userDetailsModel.AboutMe;
+
+            result = await _userManager.UpdateAsync(applicationUser);
+
+            return new ResponseModel(result.Succeeded, result.Errors.MapToErrorList());
+        }
+
         public async Task<ResponseModel> ConfirmEmail(ConfirmEmailModel confirmEmailModel)
         {
             var user = await _userManager.FindByEmailAsync(confirmEmailModel.Email);
@@ -90,6 +102,18 @@ namespace Knowlead.BLL
                 return new ResponseModel(result.Succeeded, result.Errors.MapToErrorList());
 
             return new ResponseModel(false, new ErrorModel("Code doesn't match", ErrorCodes.ValidationError));
+        }
+
+        public async Task<ResponseModel> SaveChangesAsync()
+        {
+            bool hasChanges = (await _context.SaveChangesAsync() > 0);
+
+            if (!hasChanges)
+            {
+                return new ResponseModel(false, new ErrorModel("0 Changes were made", ErrorCodes.DatabaseError));
+            }
+
+            return new ResponseModel(true);
         }
     }
 }

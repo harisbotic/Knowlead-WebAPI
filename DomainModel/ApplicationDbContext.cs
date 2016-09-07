@@ -25,7 +25,7 @@ namespace Knowlead.DomainModel
         //No need to put base classes in dbset
         #region Lookup Models
             public DbSet<Achievement> Achievements {get; set; }
-            public DbSet<City> Cities {get; set; }
+            public DbSet<State> States {get; set; }
             public DbSet<Country> Countries {get; set; }
             public DbSet<FOS> Fos {get; set; }
             public DbSet<Language> Languages {get; set; }
@@ -93,7 +93,7 @@ namespace Knowlead.DomainModel
 
             modelBuilder.Entity<_GeoLookup>()
                 .HasDiscriminator<string>("Category")
-                .HasValue<City>("City")
+                .HasValue<State>("State")
                 .HasValue<Country>("Country");
 
             modelBuilder.Entity<_Feedback>()

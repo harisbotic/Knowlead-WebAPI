@@ -1,10 +1,8 @@
-using System;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Knowlead.Common.Responses;
 using Knowlead.DTO;
 using static Knowlead.Common.Constants;
 using Microsoft.AspNetCore.Mvc;
-using Knowlead.BLL;
 using Knowlead.DomainModel.UserModels;
 using Knowlead.BLL.Interfaces;
 using System.Threading.Tasks;

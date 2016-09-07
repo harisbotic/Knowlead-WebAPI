@@ -14,8 +14,8 @@ namespace Knowlead.DomainModel.UserModels
         public string Timezone { get; set; } //TimezoneInfo.Id
         public string AboutMe { get; set; }
 
-        public int? CityId { get; set; }
-        public City City { get; set; }
+        public int? StateId { get; set; }
+        public State State { get; set; }
         
         [Required]
         public UserStatus Status { get; set; }

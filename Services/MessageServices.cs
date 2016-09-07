@@ -32,7 +32,7 @@ namespace Knowlead.Services
                 }
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 Console.WriteLine("jel to");
             }

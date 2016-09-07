@@ -18,10 +18,10 @@ namespace Knowlead.Controllers
         
         // GET api/values
         [HttpGet]
-        public City Get()
+        public State Get()
         {
-            var city = _context.Cities.Where(x => x.Name == "Vogosca").FirstOrDefault();
-            return city;
+            var State = _context.States.Where(x => x.Name == "Vogosca").FirstOrDefault();
+            return State;
         }
 
         // GET api/values/5

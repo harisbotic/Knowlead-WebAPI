@@ -13,15 +13,15 @@ namespace Knowlead.Scripts
     {
         public static ISeeder SeederFactory(Type type, ApplicationDbContext context)
         {
-            if (type.Name == "City")
+            if (type.Name == "State")
             {
-                return new Seeder<City>(context);
+                return new Seeder<State>(context);
             } else
             {
                 throw new ArgumentException(type.Name + " not supported in factory", "type");
             }
         }
-        private static readonly string[] AllowedClasses = {"City"};
+        private static readonly string[] AllowedClasses = {"State"};
         private class SeedClass
         {
             public string Model { get; set; }

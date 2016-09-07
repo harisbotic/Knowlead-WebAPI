@@ -6,7 +6,6 @@ using System.Reflection;
 using AutoMapper;
 using Knowlead.DomainModel;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Newtonsoft.Json.Linq;
 
 namespace Knowlead.Scripts
