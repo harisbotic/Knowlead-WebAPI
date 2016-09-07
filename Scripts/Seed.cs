@@ -6,6 +6,7 @@ using Newtonsoft.Json.Linq;
 using System.Reflection;
 using Knowlead.DomainModel.LookupModels.Geo;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace Knowlead.Scripts
 {
@@ -16,12 +17,20 @@ namespace Knowlead.Scripts
             if (type.Name == "City")
             {
                 return new Seeder<City>(context);
+            } else if (type.Name == "OpenIddictApplication")
+            {
+                return new Seeder<OpenIddict.OpenIddictApplication<Guid>>(context);
             } else
             {
                 throw new ArgumentException(type.Name + " not supported in factory", "type");
             }
         }
-        private static readonly string[] AllowedClasses = {"City"};
+
+        public static Dictionary<string, Type> models = new Dictionary<string, Type>()
+        {
+            {"City", typeof(City)},
+            {"OpenIddictApplication", typeof(OpenIddict.OpenIddictApplication)}
+        };
         private class SeedClass
         {
             public string Model { get; set; }
@@ -65,20 +74,11 @@ namespace Knowlead.Scripts
                 Console.WriteLine("Error: root object doesn't contain 'table' element.");
                 return;
             }
-            Type entityType = Type.GetType(data.Model);
+            Type entityType;
+            models.TryGetValue(data.Model, out entityType);
             if (entityType == null)
             {
                 Console.WriteLine("Error: model '" + data.Model + "' not found.");
-                return;
-            }
-            if (!entityType.Namespace.StartsWith("Knowlead.DomainModel"))
-            {
-                Console.WriteLine("Error: only classes in 'Knowlead.DomainModel' are allowed to be seeded.");
-                return;
-            }
-            if (Array.IndexOf(AllowedClasses, entityType.Name) == -1)
-            {
-                Console.WriteLine("Error: model '" + data.Model + "' not allowed to be seeded.");
                 return;
             }
             if (data.Data == null || data.Data.Count == 0)

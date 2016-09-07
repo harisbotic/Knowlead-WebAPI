@@ -29,8 +29,7 @@ namespace Knowlead.Scripts
             Mapper.Initialize(config => {
                 config.CreateMap<T, T>();
                 config.ShouldMapProperty = p =>
-                    p.GetCustomAttribute(typeof(KeyAttribute)) == null &&
-                    !p.Name.EndsWith("Id") && !p.Name.EndsWith("ID");
+                    p.GetCustomAttribute(typeof(KeyAttribute)) == null;
             });
         }
         public void ClearTable()
