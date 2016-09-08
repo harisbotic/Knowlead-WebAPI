@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Identity;
 using static Knowlead.Common.Constants;
 using System.Net;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace Knowlead.BLL
 {
@@ -48,11 +49,9 @@ namespace Knowlead.BLL
                 result = await _userManager.CreateAsync(applicationUser, applicationUserModel.Password);
                 if (result.Succeeded) {
                     string token = await _userManager.GenerateEmailConfirmationTokenAsync(applicationUser);
-                    string encodedToken = WebUtility.UrlEncode(token);
                     string encodedEmail = WebUtility.UrlEncode(applicationUser.Email);
-                    string url = $"{_config["Urls:api"]}/api/account/confirmemail?userId={encodedEmail}&code={encodedToken}";
-                    
-                    url = $"{token}"; //TEMP, WHILE WE DONT HAVE CLIENT APP
+                    string encodedToken = WebUtility.UrlEncode(token);
+                    string url = $"{_config["Urls:client"]}/confirmemail?email={encodedEmail}&code={encodedToken}";
 
                     await _messageServices.TempSendEmailAsync(applicationUser.Email,"Knowlead Confirmation", "haris.botic96@gmail.com", "KnowLead", url);
                 }
@@ -76,11 +75,29 @@ namespace Knowlead.BLL
             return await _userManager.GetUserAsync(principal);
         }
 
-        public async Task<ResponseModel> UpdateUserDetails(ApplicationUser applicationUser, UserDetailsModel userDetailsModel)
+        public async Task<ResponseModel> UpdateUserDetails(ApplicationUser applicationUser, JsonPatchDocument<UserDetailsModel> userDetailsPatch)
         {
             IdentityResult result;
 
-            applicationUser.AboutMe = userDetailsModel.AboutMe;
+            var userDetailsModel = applicationUser.MapToUserDetailModel();
+            userDetailsPatch.ApplyTo(userDetailsModel);
+
+            applicationUser.Name = userDetailsModel?.Name;
+            applicationUser.Surname = userDetailsModel?.Surname;
+            applicationUser.AboutMe = userDetailsModel?.AboutMe;
+            applicationUser.Birthdate = userDetailsModel?.Birthdate;
+            applicationUser.IsMale = userDetailsModel?.IsMale;
+
+            applicationUser.CountryId = userDetailsModel?.CountryId;
+            applicationUser.StateId = userDetailsModel?.StateId;
+
+            // List<EmpAssets> oldAssests = context.EmpAssets.Where(x => x.EmployeeId == employeeId).ToList();
+
+            // List<EmpAssets> addedAssests = updatedAssests.ExceptBy(oldAssests, x => x.CityId).ToList();
+            // List<EmpAssets> deletedAssests = oldAssests.ExceptBy(updatedAssests, x => x.CityId).ToList();
+
+            // deletedAssests.ForEach( x => context.Entry(x).State = EntityState.Deleted);
+            // addedAssests.ForEach(x => context.Entry(x).State = EntityState.Added);
 
             result = await _userManager.UpdateAsync(applicationUser);
 

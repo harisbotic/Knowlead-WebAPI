@@ -8,6 +8,7 @@ using Knowlead.DTO.Mappers;
 using Knowloead.Common.Attributes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Knowlead.Controllers
@@ -35,7 +36,7 @@ namespace Knowlead.Controllers
         [HttpGet("me"), ReallyAuthorize(false)]
         public async Task<ApplicationUserModel> me()
         {
-            return (await GetCurrentUser()).MapToApplicationUserModel();
+            return (await GetCurrentUserAsync()).MapToApplicationUserModel();
         }
 
         [HttpPost("confirmEmail"), ValidateModel]
@@ -45,11 +46,11 @@ namespace Knowlead.Controllers
             return (await _accountRepository.ConfirmEmail(confirmEmailModel));
         }
 
-        [HttpPatch("details"), ValidateModel]
-        public async Task<ResponseModel> Details([FromBody] UserDetailsModel userDetailsModel)
+        [HttpPatch("details"), ValidateModel, ReallyAuthorize()]
+        public async Task<ResponseModel> Details([FromBody] JsonPatchDocument<UserDetailsModel> userDetailsPatch)
         {
-            var currentUser = await GetCurrentUser();
-            return (await _accountRepository.UpdateUserDetails(currentUser, userDetailsModel));
+            var currentUser = (await GetCurrentUserAsync());  
+            return (await _accountRepository.UpdateUserDetails(currentUser, userDetailsPatch));
         }
 
         [HttpGet("/account/login")]

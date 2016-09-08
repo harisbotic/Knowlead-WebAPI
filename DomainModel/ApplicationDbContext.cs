@@ -41,6 +41,7 @@ namespace Knowlead.DomainModel
         #endregion   
 
         #region User Models
+            public DbSet<ApplicationUser> ApplicationUsers { get; set; }
             public DbSet<ApplicationUserInterest> ApplicationUserInterests { get; set; }
             public DbSet<ApplicationUserLanguage> ApplicationUserLanguages { get; set; }
             public DbSet<ApplicationUserSkill> ApplicationUserSkills { get; set; }

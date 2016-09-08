@@ -13,7 +13,7 @@ namespace Knowlead.Controllers
         {
             _accountRepository = accountRepository;
         }
-        protected async Task<ApplicationUser> GetCurrentUser()
+        protected async Task<ApplicationUser> GetCurrentUserAsync()
         {
             return await _accountRepository.GetUserByPrincipal(User);
         }
