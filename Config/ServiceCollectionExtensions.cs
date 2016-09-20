@@ -14,7 +14,10 @@ public static class ServiceCollectionExtensions
    
     public static IServiceCollection AddCustomizedMvc(this IServiceCollection services)
     {
-            services.AddMvc()
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(typeof(ResponseModelAttribute));
+            })
                 .AddJsonOptions(config => 
                 {
                     config.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
