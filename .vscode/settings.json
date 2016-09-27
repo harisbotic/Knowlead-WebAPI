@@ -10,7 +10,9 @@
         
         ".gitignore": true,
         "Dockerfile": true,
-        "project.lock.json": true,
+        "**/project.lock.json": true,
+        "**/bin": true,
+        "**/obj": true,
         "web.config": true
         
     }

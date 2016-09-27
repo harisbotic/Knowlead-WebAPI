@@ -1,0 +1,22 @@
+{
+  "version": "1.0.0-*",
+  "buildOptions": {
+    "debugType": "portable"
+  }, 
+  "dependencies": {
+    "Knowlead.Common": {
+      "target": "project"
+    },
+    "Knowlead.DomainModel": {
+      "target": "project"
+    },
+    "Microsoft.AspNetCore.Mvc.DataAnnotations": "1.0.1"
+  },
+  "frameworks": {
+    "netstandard1.6": {
+      "dependencies": {
+        "NETStandard.Library": "1.6.0"
+      }
+    }
+  }
+}

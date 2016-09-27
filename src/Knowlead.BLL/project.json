@@ -1,0 +1,28 @@
+{
+  "version": "1.0.0-*",
+  "buildOptions": {
+    "debugType": "portable"
+  },
+  "dependencies": {
+    "Knowlead.Common": {
+      "target": "project"
+    },
+    "Knowlead.DAL": {
+      "target": "project"
+    },
+    "Knowlead.DomainModel": {
+      "target": "project"
+    },
+    "Knowlead.DTO": {
+      "target": "project"
+    },
+    "Microsoft.AspNetCore.JsonPatch": "1.0.0"
+  },
+  "frameworks": {
+    "netstandard1.6": {
+      "dependencies": {
+        "NETStandard.Library": "1.6.0"
+      }
+    }
+  }
+}
