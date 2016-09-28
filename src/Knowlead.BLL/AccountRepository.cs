@@ -41,6 +41,8 @@ namespace Knowlead.BLL
         public async Task<ResponseModel> RegisterApplicationUserAsync(RegisterUserModel registerUserModel)
         {
             var applicationUser = Mapper.Map<ApplicationUser>(registerUserModel);
+            
+            applicationUser.UserName = registerUserModel.Email;
             var password = registerUserModel.Password;
             IdentityResult result;
             

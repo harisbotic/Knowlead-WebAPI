@@ -19,7 +19,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OpenIddict;
 
-namespace Mvc.Server {
+namespace Mvc.Server
+{
     public class AuthorizationController : Controller {
         private readonly OpenIddictApplicationManager<OpenIddictApplication<Guid>> _applicationManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -41,11 +42,11 @@ namespace Mvc.Server {
             var request = HttpContext.GetOpenIdConnectRequest();
         
             if (request.IsPasswordGrantType()) {
-                var user = await _userManager.FindByNameAsync(request.Username);
+                var user = await _userManager.FindByEmailAsync(request.Username);
                 if (user == null) {
                     return BadRequest(new OpenIdConnectResponse {
                         Error = OpenIdConnectConstants.Errors.InvalidGrant,
-                        ErrorDescription = "The username/password couple is invalid."
+                        ErrorDescription = "The email/password couple is invalid."
                     });
                 }
         
@@ -57,7 +58,7 @@ namespace Mvc.Server {
         
                     return BadRequest(new OpenIdConnectResponse {
                         Error = OpenIdConnectConstants.Errors.InvalidGrant,
-                        ErrorDescription = "The username/password couple is invalid."
+                        ErrorDescription = "The email/password couple is invalid."
                     });
                 }
         
