@@ -13,7 +13,7 @@ public static class GenerateScript
     {
         if (args.Length < 2)
         {
-            Console.WriteLine("Error: Missing output folder.");
+            Console.WriteLine("Error: Missing output folder. Default is: '../../../Knowlead-WebClient/src/app/models'");
             Console.WriteLine("Usage: generate output_folder");
             return;
         }
@@ -23,24 +23,29 @@ public static class GenerateScript
             Console.WriteLine("Path doesn't exist");
             return;
         }
+
+        if (!args[1].EndsWith("/")) {
+            args[1] += "/";
+        }
         
         List<Type> types = GetTypesInNamespace(Assembly.Load(new AssemblyName("Knowlead.DTO")), "Knowlead.DTO");
-        types.Add(typeof(Constants.ErrorCodes));
-        var generator = new TypeScriptBuilder.TypeScriptGenerator(new TypeScriptGeneratorOptions{
+        TypeScriptGeneratorOptions options = new TypeScriptGeneratorOptions{
             IgnoreNamespaces = true,
             EmitIinInterface = false
-        });
+        };
+        var generator = new TypeScriptBuilder.TypeScriptGenerator(options);
         generator.ExcludeType(typeof(Profile));
-        Console.Write("Writing classes: ");
         foreach (Type type in types)
         {
-            Console.Write(type.Name + " ");
             generator.AddCSType(type);
         }
-        Console.WriteLine();
-        Console.WriteLine("-----------------------------------");
-        Console.WriteLine(generator.ToString());
-        
+        Console.WriteLine("dto.ts");
+        generator.Store(args[1] + "dto.ts");
+
+        generator = new TypeScriptBuilder.TypeScriptGenerator(options);
+        generator.AddCSType(typeof(Constants.ErrorCodes));
+        Console.WriteLine("constants.ts");
+        generator.Store(args[1] + "constants.ts");
     }
     private static List<Type> GetTypesInNamespace(Assembly assembly, string nameSpace)
     {
