@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using AutoMapper;
+using Knowlead.Common;
+using TypeScriptBuilder;
 
 public static class GenerateScript
 {
@@ -20,10 +23,14 @@ public static class GenerateScript
             Console.WriteLine("Path doesn't exist");
             return;
         }
-        /*
+        
         List<Type> types = GetTypesInNamespace(Assembly.Load(new AssemblyName("Knowlead.DTO")), "Knowlead.DTO");
-        types.Add(typeof(Constants));
-        var generator = new TypeScriptBuilder.TypeScriptGenerator();
+        types.Add(typeof(Constants.ErrorCodes));
+        var generator = new TypeScriptBuilder.TypeScriptGenerator(new TypeScriptGeneratorOptions{
+            IgnoreNamespaces = true,
+            EmitIinInterface = false
+        });
+        generator.ExcludeType(typeof(Profile));
         Console.Write("Writing classes: ");
         foreach (Type type in types)
         {
@@ -33,12 +40,12 @@ public static class GenerateScript
         Console.WriteLine();
         Console.WriteLine("-----------------------------------");
         Console.WriteLine(generator.ToString());
-        */
+        
     }
     private static List<Type> GetTypesInNamespace(Assembly assembly, string nameSpace)
     {
         Console.WriteLine(assembly.ToString());
-        return assembly.GetTypes().Where(t => t.Namespace != null && t.Namespace.StartsWith(nameSpace)).ToList();
+        return assembly.GetTypes().Where(t => t.Namespace != null && t.Namespace.StartsWith(nameSpace) && !t.Name.Contains("<>")).ToList();
     }
 
 }
