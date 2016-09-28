@@ -21,7 +21,7 @@ public static class GenerateScript
             Console.WriteLine("Path doesn't exist");
             return;
         }
-        
+        /*
         List<Type> types = GetTypesInNamespace(Assembly.Load(new AssemblyName("Knowlead.DTO")), "Knowlead.DTO");
         types.Add(typeof(Constants));
         var generator = new TypeScriptBuilder.TypeScriptGenerator();
@@ -34,6 +34,7 @@ public static class GenerateScript
         Console.WriteLine();
         Console.WriteLine("-----------------------------------");
         Console.WriteLine(generator.ToString());
+        */
     }
     private static List<Type> GetTypesInNamespace(Assembly assembly, string nameSpace)
     {
