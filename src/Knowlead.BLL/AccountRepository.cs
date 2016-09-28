@@ -5,16 +5,15 @@ using System.Threading.Tasks;
 using Knowlead.BLL.Interfaces;
 using Knowlead.DAL;
 using Knowlead.DomainModel.UserModels;
-using Knowlead.DTO.SpecificModels.ApplicationUserModels;
-using Knowlead.DTO.SpecificModels;
-using Knowlead.DTO.DomainModels.ApplicationUserModels;
-using Knowlead.DTO.Mappings;
+using Knowlead.DTO.ResponseModels;
+using Knowlead.DTO.UserModels;
 using Knowlead.Services;
 using Microsoft.AspNetCore.Identity;
 using static Knowlead.Common.Constants;
 using System.Net;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.JsonPatch;
+using AutoMapper;
 
 namespace Knowlead.BLL
 {
@@ -39,15 +38,15 @@ namespace Knowlead.BLL
             _config = config;
         }
 
-        public async Task<ResponseModel> RegisterApplicationUserAsync(RegisterUserModel applicationUserModel)
+        public async Task<ResponseModel> RegisterApplicationUserAsync(RegisterUserModel registerUserModel)
         {
-            var applicationUser = applicationUserModel.MapToApplicationUser();
-            var password = applicationUserModel.Password;
+            var applicationUser = Mapper.Map<ApplicationUser>(registerUserModel);
+            var password = registerUserModel.Password;
             IdentityResult result;
             
             try 
             {
-                result = await _userManager.CreateAsync(applicationUser, applicationUserModel.Password);
+                result = await _userManager.CreateAsync(applicationUser, registerUserModel.Password);
                 if (result.Succeeded) {
                     string token = await _userManager.GenerateEmailConfirmationTokenAsync(applicationUser);
                     string encodedEmail = WebUtility.UrlEncode(applicationUser.Email);
@@ -76,21 +75,21 @@ namespace Knowlead.BLL
             return await _userManager.GetUserAsync(principal);
         }
 
-        public async Task<ResponseModel> UpdateUserDetails(ApplicationUser applicationUser, JsonPatchDocument<UserDetailsModel> userDetailsPatch)
+        public async Task<ResponseModel> UpdateUserDetails(ApplicationUser applicationUser, JsonPatchDocument<ApplicationUserModel> applicationUserPatch)
         {
             IdentityResult result;
 
-            var userDetailsModel = applicationUser.MapToUserDetailModel();
-            userDetailsPatch.ApplyTo(userDetailsModel);
+            var applicationUserModel = Mapper.Map<ApplicationUserModel>(applicationUser);
+            applicationUserPatch.ApplyTo(applicationUserModel);
 
-            applicationUser.Name = userDetailsModel?.Name;
-            applicationUser.Surname = userDetailsModel?.Surname;
-            applicationUser.AboutMe = userDetailsModel?.AboutMe;
-            applicationUser.Birthdate = userDetailsModel?.Birthdate;
-            applicationUser.IsMale = userDetailsModel?.IsMale;
+            applicationUser.Name = applicationUserModel?.Name;
+            applicationUser.Surname = applicationUserModel?.Surname;
+            applicationUser.AboutMe = applicationUserModel?.AboutMe;
+            applicationUser.Birthdate = applicationUserModel?.Birthdate;
+            applicationUser.IsMale = applicationUserModel?.IsMale;
 
-            applicationUser.CountryId = userDetailsModel?.CountryId;
-            applicationUser.StateId = userDetailsModel?.StateId;
+            applicationUser.CountryId = applicationUserModel?.CountryId;
+            applicationUser.StateId = applicationUserModel?.StateId;
 
             // List<EmpAssets> oldAssests = context.EmpAssets.Where(x => x.EmployeeId == employeeId).ToList();
 

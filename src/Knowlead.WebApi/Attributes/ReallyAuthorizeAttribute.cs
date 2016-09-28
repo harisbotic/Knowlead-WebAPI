@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using Knowlead.Common.Responses;
-using Knowlead.DTO.SpecificModels;
+using Knowlead.DTO.ResponseModels;
 using static Knowlead.Common.Constants;
 using Microsoft.AspNetCore.Mvc;
 using Knowlead.DomainModel.UserModels;

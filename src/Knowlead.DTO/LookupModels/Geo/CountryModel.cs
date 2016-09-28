@@ -1,4 +1,4 @@
-namespace Knowlead.DTO.DomainModels.LookupModels.Geo
+namespace Knowlead.DTO.LookupModels.Geo
 {
     public class CountryModel : _GeoLookupModel
     {
