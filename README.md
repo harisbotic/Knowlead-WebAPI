@@ -2,5 +2,8 @@
 
 ## How to run
 
-- 1. do a "dotnet restore" on root directory
-- 2. go to "cd src/Knowlead.WebApi/" and exec "dotnet run"
+- 1. Exec in root "git submodule init" on root dir
+- 2. Exec in root "git submodule update --recursive --remote"
+- 3. Exec in root "dotnet restore"
+- 4. Go to "cd src/Knowlead.WebApi/"
+- 5. And then run it with "dotnet run"
