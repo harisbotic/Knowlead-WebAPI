@@ -1,9 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Knowlead.DTO.DomainModels.LookupModels.Geo
+namespace Knowlead.DTO.LookupModels.Geo
 {
     public class _GeoLookupModel
     {
+        public int GeoLookupId { get; set; }
         [Required]
         public string Code { get; set; }
         [Required]

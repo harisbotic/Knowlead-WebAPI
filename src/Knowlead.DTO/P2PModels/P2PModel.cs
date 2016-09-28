@@ -1,15 +1,10 @@
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Knowlead.DomainModel.P2PModels
+namespace Knowlead.DTO.P2PModels
 {
-    [Table("P2Ps")]
-    public class P2P
-    {
-        [Key]
-        public int P2pId { get; set; }
-        
+    public class P2PModel
+    {        
         [Required]
         public float Rate { get; set; }
         public DateTime StartingAt { get; set; }
@@ -21,7 +16,7 @@ namespace Knowlead.DomainModel.P2PModels
             Inactive, PendingAction, Scheduled, Finsihed
         }
 
-        public P2P()
+        public P2PModel()
         {
             this.Status = UserStatus.Inactive;
         }

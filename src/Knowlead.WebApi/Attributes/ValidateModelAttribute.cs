@@ -1,8 +1,7 @@
 using System;
 using System.Linq;
 using System.Reflection;
-using Knowlead.DTO.SpecificModels;
-using Knowlead.DTO.Mappings;
+using Knowlead.DTO.ResponseModels;
 using Knowlead.Utils;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;

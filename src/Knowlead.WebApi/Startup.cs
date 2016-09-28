@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Knowlead.DAL;
+using AutoMapper;
 
 namespace Knowlead
 {
@@ -38,6 +39,7 @@ namespace Knowlead
 
             services.AddCrossOrigin();
             services.AddRepositories();
+            services.AddAutoMapper();
             services.AddMessageServices();
             services.AddCustomizedMvc();
             services.AddDbContext();

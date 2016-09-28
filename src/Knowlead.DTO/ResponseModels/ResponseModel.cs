@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Knowlead.DTO.SpecificModels {
+namespace Knowlead.DTO.ResponseModels {
     public class ResponseModel {
         public bool Success { get; set; }
         public Dictionary<string, List<ErrorModel>> ErrorMap { get; set; }
