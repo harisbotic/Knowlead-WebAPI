@@ -37,7 +37,8 @@
     },
     "AspNet.Security.OAuth.Validation": "1.0.0-alpha2-final",
     "OpenIddict": "1.0.0-*",
-    "AutoMapper": "*"
+    "AutoMapper": "*",
+    "TypeScriptBuilder": "*"
   },
 
   "tools": {

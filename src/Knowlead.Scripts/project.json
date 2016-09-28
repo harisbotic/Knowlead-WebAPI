@@ -1,0 +1,40 @@
+{
+  "version": "1.0.0-*",
+  "buildOptions": {
+    "debugType": "portable",
+    "emitEntryPoint": true
+  },
+  "dependencies": {
+    "Microsoft.NETCore.App": {
+      "version": "1.0.1",
+      "type": "platform"
+    },
+    "Knowlead.BLL": {
+      "target": "project"
+    },
+    "Knowlead.DAL": {
+      "target": "project"
+    },
+    "Knowlead.DomainModel": {
+      "target": "project"
+    },
+    "Knowlead.DTO": {
+      "target": "project"
+    },
+    "Knowlead.WebApi": {
+      "target": "project"
+    },
+    "AutoMapper": "5.1.1"
+  },
+  "frameworks": {
+    "netcoreapp1.0": {
+      "dependencies": {
+        "Microsoft.NETCore.App": {
+          "type": "platform",
+          "version": "1.0.1"
+        }
+      },
+      "imports": "dnxcore50"
+    }
+  }
+}

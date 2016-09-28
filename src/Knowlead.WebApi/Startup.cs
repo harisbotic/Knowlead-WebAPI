@@ -10,7 +10,7 @@ namespace Knowlead
     public class Startup
     {
         private IConfigurationRoot _config;
-        private static readonly string _configPath = "./Config/Appsettings";
+        public static string _configPath = "./Config/Appsettings";
         public static IConfigurationRoot GetConfiguration(IHostingEnvironment env) {
             
             var builder = new ConfigurationBuilder()
