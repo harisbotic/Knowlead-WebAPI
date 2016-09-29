@@ -35,12 +35,14 @@ public static class GenerateScript
         };
         var generator = new TypeScriptBuilder.TypeScriptGenerator(options);
         generator.ExcludeType(typeof(Profile));
+        generator.ExcludeType(typeof(Guid));
         foreach (Type type in types)
         {
             generator.AddCSType(type);
         }
         Console.WriteLine("dto.ts");
         generator.Store(args[1] + "dto.ts");
+        File.AppendAllLines(args[1] + "dto.ts", new String[] {"export type Guid = string;"});
 
         generator = new TypeScriptBuilder.TypeScriptGenerator(options);
         generator.AddCSType(typeof(Constants.ErrorCodes));
