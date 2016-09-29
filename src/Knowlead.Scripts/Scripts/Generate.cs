@@ -49,8 +49,12 @@ public static class GenerateScript
     }
     private static List<Type> GetTypesInNamespace(Assembly assembly, string nameSpace)
     {
-        Console.WriteLine(assembly.ToString());
-        return assembly.GetTypes().Where(t => t.Namespace != null && t.Namespace.StartsWith(nameSpace) && !t.Name.Contains("<>")).ToList();
+        return assembly.GetTypes().Where(t =>
+            t.Namespace != null &&
+            t.Namespace.StartsWith(nameSpace) &&
+            !t.Name.Contains("<>") &&
+            t.GetTypeInfo().BaseType != typeof(Profile)
+        ).ToList();
     }
 
 }
