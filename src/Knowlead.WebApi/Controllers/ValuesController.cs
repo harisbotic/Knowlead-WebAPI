@@ -3,6 +3,7 @@ using Knowlead.DAL;
 using Microsoft.AspNetCore.Mvc;
 using Knowlead.DomainModel.LookupModels.Geo;
 using Microsoft.AspNetCore.Authorization;
+using Knowlead.BLL.Interfaces;
 
 namespace Knowlead.Controllers
 {
@@ -11,7 +12,9 @@ namespace Knowlead.Controllers
     {
         private ApplicationDbContext _context;
         
-        public ValuesController(ApplicationDbContext context)
+        
+        public ValuesController(ApplicationDbContext context,
+                                IAccountRepository accountRepository)
         {
             _context = context;
         }

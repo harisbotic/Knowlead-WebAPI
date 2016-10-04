@@ -1,22 +1,22 @@
 using System;
-using System.ComponentModel.DataAnnotations;
+using Knowlead.Common.DataAnnotations;
 using Knowlead.DTO.LookupModels.Core;
 
 namespace Knowlead.DTO.UserModels
 {
     public class UserAchievementModel
     {
-        [Required]
+        [MyRequired]
         public int UserAchievementId { get; set; }
 
-        [Required]
+        [MyRequired]
         public DateTime CreatedAt { get; set; }
 
-        [Required]
+        [MyRequired]
         public Guid ApplicationUserId { get; set; }
         public ApplicationUserModel ApplicationUser { get; set; }
 
-        [Required]
+        [MyRequired]
         public int AchievementId { get; set; }
 
         public AchievementModel Achievement { get; set; }

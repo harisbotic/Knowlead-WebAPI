@@ -28,7 +28,7 @@ namespace Knowlead.Controllers
         }
 
         [HttpPost("register"), ValidateModel]
-        public async Task<ResponseModel> Register([FromBody] RegisterUserModel userModel)
+        public async Task<IActionResult> Register([FromBody] RegisterUserModel userModel)
         {
             return (await _accountRepository.RegisterApplicationUserAsync(userModel));
         }
@@ -37,34 +37,43 @@ namespace Knowlead.Controllers
         public async Task<ApplicationUserModel> me()
         {
             var applicationUser = await GetCurrentUserAsync();
-
+            //SEND OBJECT HERE TODO
             return Mapper.Map<ApplicationUserModel>(applicationUser);
         }
 
         [HttpPost("confirmEmail"), ValidateModel]
         [AllowAnonymous]
-        public async Task<ResponseModel> ConfirmEmail([FromBody] ConfirmEmailModel confirmEmailModel)
+        public async Task<IActionResult> ConfirmEmail([FromBody] ConfirmEmailModel confirmEmailModel)
         {
             return (await _accountRepository.ConfirmEmail(confirmEmailModel));
         }
 
         [HttpPatch("details"), ValidateModel, ReallyAuthorize(true)]
-        public async Task<ResponseModel> Details([FromBody] JsonPatchDocument<ApplicationUserModel> userDetailsPatch)
+        public async Task<IActionResult> Details([FromBody] JsonPatchDocument<ApplicationUserModel> userDetailsPatch)
         {
             var currentUser = (await GetCurrentUserAsync());  
             return (await _accountRepository.UpdateUserDetails(currentUser, userDetailsPatch));
         }
 
-        [HttpGet("/account/login")]
-        public IActionResult dummy()
+        [HttpPost("/account/login"), ValidateModelAttribute]
+        public IActionResult dummy([FromBody] ConfirmEmailModel confirmEmailModel)
         {
-            return new ForbidResult();
+            
+            // _ResponseModel.AddFormError("code", "val", "par");
+            // _ResponseModel.AddFormError("key", "val", "par");
+            // _ResponseModel.AddFormError("key2", "val2", "par2");
+            // _ResponseModel.AddErrors(ModelState);
+            // _ResponseModel.AddError("hey");
+            
+
+            return new OkObjectResult(new ResponseModel());
+            
         }
 
-        [HttpGet("authorizetest"), ReallyAuthorize]
-        public ResponseModel AuthorizeTest()
+        [HttpGet("/authorizetest"), ReallyAuthorize]
+        public IActionResult AuthorizeTest()
         {
-            return new ResponseModel(true);
+            return new OkObjectResult(new ResponseModel());
         }
     }
 }

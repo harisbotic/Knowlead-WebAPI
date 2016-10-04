@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using AspNet.Security.OpenIdConnect.Extensions;
 using AspNet.Security.OpenIdConnect.Server;
 using Knowlead.DomainModel.UserModels;
+using Knowlead.DTO.ResponseModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -44,10 +45,9 @@ namespace Mvc.Server
             if (request.IsPasswordGrantType()) {
                 var user = await _userManager.FindByEmailAsync(request.Username);
                 if (user == null) {
-                    return BadRequest(new OpenIdConnectResponse {
-                        Error = OpenIdConnectConstants.Errors.InvalidGrant,
-                        ErrorDescription = "The email/password couple is invalid."
-                    });
+                    return BadRequest(new ResponseModel(new ErrorModel {
+                        Value = "The email/password couple is invalid."
+                    }));
                 }
         
                 // Ensure the password is valid.
@@ -56,10 +56,9 @@ namespace Mvc.Server
                         await _userManager.AccessFailedAsync(user);
                     }
         
-                    return BadRequest(new OpenIdConnectResponse {
-                        Error = OpenIdConnectConstants.Errors.InvalidGrant,
-                        ErrorDescription = "The email/password couple is invalid."
-                    });
+                    return BadRequest(new ResponseModel(new ErrorModel {
+                        Value = "The email/password couple is invalid."
+                    }));
                 }
         
                 if (_userManager.SupportsUserLockout) {
@@ -79,11 +78,10 @@ namespace Mvc.Server
         
                 return SignIn(ticket.Principal, ticket.Properties, ticket.AuthenticationScheme);
             }
-        
-            return BadRequest(new OpenIdConnectResponse {
-                Error = OpenIdConnectConstants.Errors.UnsupportedGrantType,
-                ErrorDescription = "The specified grant type is not supported."
-            });
+
+            return BadRequest(new ResponseModel(new ErrorModel {
+                Value = "The specified grant type is not supported."
+            }));
         }
 
         [Authorize, HttpPost("~/connect/authorize/deny")]

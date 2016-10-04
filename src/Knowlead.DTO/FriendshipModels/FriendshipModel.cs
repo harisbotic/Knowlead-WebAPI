@@ -1,16 +1,16 @@
 using System;
-using System.ComponentModel.DataAnnotations;
+using Knowlead.Common.DataAnnotations;
 using Knowlead.DTO.UserModels;
 
 namespace Knowlead.DTO.FriendshipModels
 {
     public class FriendshipModel
     {
-        [Required]
+        [MyRequired]
         public Guid UserSentId { get; set; }
         public ApplicationUserModel UserSent { get; set; }
 
-        [Required]
+        [MyRequired]
         public Guid UserAcceptedId { get; set; }
         public ApplicationUserModel UserAccepted { get; set; }
     }

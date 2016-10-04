@@ -1,10 +1,10 @@
-using System.ComponentModel.DataAnnotations;
+using Knowlead.Common.DataAnnotations;
 
 namespace Knowlead.DomainModel.LookupModels.Core
 {
     public class FOS : _CoreLookup
     {
-        [Required]
+        [MyRequired]
         public string FosDesc { get; set; }
     }
 }

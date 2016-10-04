@@ -2,17 +2,16 @@ using System;
 using System.Linq;
 using System.Reflection;
 using Knowlead.DTO.ResponseModels;
-using Knowlead.Utils;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using static Knowlead.Common.Constants;
 
 namespace Knowlead.Common.Attributes
 {
     public class ValidateModelAttribute : ActionFilterAttribute
     {
         private Object _argument;
+        private ResponseModel responseModel;
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             if (context.ActionArguments.Values.Count != 1)
@@ -21,19 +20,17 @@ namespace Knowlead.Common.Attributes
             }
 
             _argument = context.ActionArguments.Values.First();
-
+            responseModel = new ResponseModel();
             if (_argument == null)
             {
-                context.Result = new BadRequestObjectResult(new ResponseModel(false,
-                    new ErrorModel("Model is empty", ErrorCodes.ValidationError)
-                ));
+                var error = new ErrorModel(Constants.ErrorCodes.ModelEmpty);
+                context.Result = new BadRequestObjectResult(new ResponseModel(error));
             }
 
             else if (!context.ModelState.IsValid)
             {
-                context.Result = new BadRequestObjectResult(new ResponseModel(false,
-                    context.ModelState.AsDictionary().MapToErrorDictionary((int)ErrorCodes.ValidationError)
-                ));
+                responseModel.AddErrors(context.ModelState);
+                context.Result = new BadRequestObjectResult(responseModel);
             }
 
             else if (context.HttpContext.Request.Method.ToUpper() == "PATCH")
@@ -54,8 +51,8 @@ namespace Knowlead.Common.Attributes
                 }
                 catch (Exception ex)
                 {
-                    context.Result = new BadRequestObjectResult(new ResponseModel(false,
-                    new ErrorModel(ex.Message, ErrorCodes.ValidationError)));
+                    var error = new ErrorModel(ex.Message);
+                    context.Result = new BadRequestObjectResult(new ResponseModel(error));
                 }
             }
         }

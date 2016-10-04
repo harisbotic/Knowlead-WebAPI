@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+using Knowlead.Common.DataAnnotations;
 using Knowlead.DomainModel.LookupModels.Geo;
 using OpenIddict;
 
@@ -8,8 +8,8 @@ namespace Knowlead.DomainModel.UserModels
 {
     public class ApplicationUser : OpenIddictUser<Guid>
     {
-        [Required]
-        [EmailAddress]
+        [MyRequired]
+        [MyEmailAddress]
         override public string Email { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
@@ -25,7 +25,7 @@ namespace Knowlead.DomainModel.UserModels
         public int? StateId { get; set; }
         public State State { get; set; }
         
-        [Required]
+        [MyRequired]
         public UserStatus Status { get; set; }
 
         public enum UserStatus 

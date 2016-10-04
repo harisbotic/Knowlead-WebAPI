@@ -1,13 +1,13 @@
-using System.ComponentModel.DataAnnotations;
+using Knowlead.Common.DataAnnotations;
 
 namespace Knowlead.DTO.LookupModels.Core
 {
     public class _CoreLookupModel
     {
         public int CoreLookupId { get; set; }
-        [Required]
+        [MyRequired]
         public string Code { get; set; }
-        [Required]
+        [MyRequired]
         public string Name { get; set; }
     }
 }

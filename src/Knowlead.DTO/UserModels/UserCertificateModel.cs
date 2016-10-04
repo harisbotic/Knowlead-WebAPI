@@ -1,22 +1,22 @@
 using System;
-using System.ComponentModel.DataAnnotations;
+using Knowlead.Common.DataAnnotations;
 using Knowlead.DTO.CoreModels;
 
 namespace Knowlead.DTO.UserModels
 {
     public class UserCertificateModel
     {
-        [Required]
+        [MyRequired]
         public int UserCertificateId { get; set; }
         
-        [Required]
+        [MyRequired]
         public string Name { get; set; }
         public string Desc { get; set; }
 
-        [Required]
+        [MyRequired]
         public DateTime CreatedAt { get; set; }
 
-        [Required]
+        [MyRequired]
         public Guid ApplicationUserId { get; set; }
         public ApplicationUserModel ApplicationUser { get; set; }
 

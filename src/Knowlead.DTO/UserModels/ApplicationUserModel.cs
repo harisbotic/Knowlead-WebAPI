@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+using Knowlead.Common.DataAnnotations;
 using Knowlead.DTO.LookupModels.Geo;
 
 namespace Knowlead.DTO.UserModels
 {
     public class ApplicationUserModel
     {
-        [Required]
-        [EmailAddress]
+        [MyRequired]
+        [MyEmailAddress]
         public string Email { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
@@ -24,7 +24,7 @@ namespace Knowlead.DTO.UserModels
         public int? StateId { get; set; }
         public StateModel State { get; set; }
         
-        [Required]
+        [MyRequired]
         public UserStatus Status { get; set; }
 
         public enum UserStatus 

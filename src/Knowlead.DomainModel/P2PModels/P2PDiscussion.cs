@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Knowlead.Common.DataAnnotations;
 
 namespace Knowlead.DomainModel.P2PModels
 {
@@ -7,13 +8,13 @@ namespace Knowlead.DomainModel.P2PModels
         [Key]
         public int P2pDiscussionId { get; set; }
         
-        [Required]
+        [MyRequired]
         public string Text { get; set; }
 
         public int? ResponseToId { get; set; }
         public P2PDiscussion ResponseTo { get; set; }
         
-        [Required]
+        [MyRequired]
         public int P2pId { get; set; }
         public P2P P2p { get; set; }
     }

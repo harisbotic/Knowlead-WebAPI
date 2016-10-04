@@ -4,7 +4,11 @@
     "debugType": "portable"
   },
   "dependencies": {
-    "OpenIddict": "1.0.0-*"
+    "Knowlead.Common": {
+      "target": "project"
+    },
+    "OpenIddict": "1.0.0-*",
+    "Microsoft.AspNetCore.Mvc.DataAnnotations": "1.0.1"
   },
   "frameworks": {
     "netstandard1.6": {

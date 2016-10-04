@@ -1,15 +1,15 @@
 using System;
-using System.ComponentModel.DataAnnotations;
+using Knowlead.Common.DataAnnotations;
 
 namespace Knowlead.DTO.P2PModels
 {
     public class P2PModel
     {        
-        [Required]
+        [MyRequired]
         public float Rate { get; set; }
         public DateTime StartingAt { get; set; }
         
-        [Required]
+        [MyRequired]
         public P2PStatus Status { get; set; }
         public enum P2PStatus 
         {

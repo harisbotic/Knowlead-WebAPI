@@ -1,24 +1,24 @@
-using System.ComponentModel.DataAnnotations;
+using Knowlead.Common.DataAnnotations;
 
 namespace Knowlead.DTO.UserModels
 {
     public class RegisterUserModel
     {
-        [Required]
-        [EmailAddress]
+        [MyRequired]
+        [MyEmailAddress]
         public string Email { get; set; }
-        [Required]
+        [MyRequired]
         public string Password { get; set; }
     }
 
     public class ConfirmEmailModel
     {
-        [Required]
-        [EmailAddress]
+        [MyRequired]
+        [MyEmailAddress]
         public string Email { get; set; }
-        [Required]
+        [MyRequired]
         public string Code { get; set; }
-        [Required]
+        [MyRequired]
         public string Password { get; set; }
     }
 }

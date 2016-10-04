@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Knowlead.BLL.Interfaces;
@@ -9,11 +8,12 @@ using Knowlead.DTO.ResponseModels;
 using Knowlead.DTO.UserModels;
 using Knowlead.Services;
 using Microsoft.AspNetCore.Identity;
-using static Knowlead.Common.Constants;
 using System.Net;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.JsonPatch;
 using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using Knowlead.Common;
 
 namespace Knowlead.BLL
 {
@@ -38,7 +38,7 @@ namespace Knowlead.BLL
             _config = config;
         }
 
-        public async Task<ResponseModel> RegisterApplicationUserAsync(RegisterUserModel registerUserModel)
+        public async Task<IActionResult> RegisterApplicationUserAsync(RegisterUserModel registerUserModel)
         {
             var applicationUser = Mapper.Map<ApplicationUser>(registerUserModel);
             
@@ -60,16 +60,15 @@ namespace Knowlead.BLL
             } 
             catch(ArgumentException ex) 
             {
-                return new ResponseModel(false, new Dictionary<string, List<ErrorModel>> 
+                return new BadRequestObjectResult(new ResponseModel(new FormErrorModel
                 {
-                    {
-                        ex.ParamName,
-                        new List<ErrorModel>{new ErrorModel(ex.Message, ErrorCodes.DatabaseError)}
-                    }
-                });
+                    Key = ex.ParamName,
+                    Value = ex.Message
+                }));
+                
             }
 
-            return new ResponseModel(result.Succeeded, result.Errors.MapToErrorList());
+            return new OkObjectResult(new ResponseModel());
         }
 
         public async Task<ApplicationUser> GetUserByPrincipal(ClaimsPrincipal principal)
@@ -77,7 +76,7 @@ namespace Knowlead.BLL
             return await _userManager.GetUserAsync(principal);
         }
 
-        public async Task<ResponseModel> UpdateUserDetails(ApplicationUser applicationUser, JsonPatchDocument<ApplicationUserModel> applicationUserPatch)
+        public async Task<IActionResult> UpdateUserDetails(ApplicationUser applicationUser, JsonPatchDocument<ApplicationUserModel> applicationUserPatch)
         {
             IdentityResult result;
 
@@ -103,36 +102,52 @@ namespace Knowlead.BLL
 
             result = await _userManager.UpdateAsync(applicationUser);
 
-            return new ResponseModel(result.Succeeded, result.Errors.MapToErrorList());
+            if(!result.Succeeded)
+            {
+                return new BadRequestObjectResult(new ResponseModel(result.Errors));
+            }
+            
+            return new OkObjectResult(new ResponseModel());
+            
         }
 
-        public async Task<ResponseModel> ConfirmEmail(ConfirmEmailModel confirmEmailModel)
+        public async Task<IActionResult> ConfirmEmail(ConfirmEmailModel confirmEmailModel)
         {
             var user = await _userManager.FindByEmailAsync(confirmEmailModel.Email);
             if (user == null)
-                return new ResponseModel(false, new ErrorModel("User with specified email doesn't exist", ErrorCodes.DatabaseError));
+            {
+                var formError = new FormErrorModel(nameof(confirmEmailModel.Email), Constants.ErrorCodes.UserNotFound);
+                return new BadRequestObjectResult(new ResponseModel(formError));
+            }
 
             var correctPassword = await _userManager.CheckPasswordAsync(user, confirmEmailModel.Password);
             if(!correctPassword)
-                return new ResponseModel(false, new ErrorModel("Incorrect Password", ErrorCodes.ValidationError));
+            {
+                var formError = new FormErrorModel(nameof(confirmEmailModel.Email), Constants.ErrorCodes.PasswordIncorrect);
+                return new BadRequestObjectResult(new ResponseModel(formError));
+            }
 
             var result = await _userManager.ConfirmEmailAsync(user, confirmEmailModel.Code);
-            if(result.Succeeded)
-                return new ResponseModel(result.Succeeded, result.Errors.MapToErrorList());
+            if(!result.Succeeded)
+            {
+                var formError = new FormErrorModel(nameof(confirmEmailModel.Code), Constants.ErrorCodes.CodeIncorrect);
+                return new BadRequestObjectResult(new ResponseModel(formError));
+            }
 
-            return new ResponseModel(false, new ErrorModel("Code doesn't match", ErrorCodes.ValidationError));
+            return new OkObjectResult(new ResponseModel());
         }
 
-        public async Task<ResponseModel> SaveChangesAsync()
+        public async Task<IActionResult> SaveChangesAsync()
         {
             bool hasChanges = (await _context.SaveChangesAsync() > 0);
 
             if (!hasChanges)
             {
-                return new ResponseModel(false, new ErrorModel("0 Changes were made", ErrorCodes.DatabaseError));
+                var error = new ErrorModel(Constants.ErrorCodes.DatabaseError);
+                return new BadRequestObjectResult(new ResponseModel(error));
             }
 
-            return new ResponseModel(true);
+            return new OkObjectResult(new ResponseModel());
         }
     }
 }

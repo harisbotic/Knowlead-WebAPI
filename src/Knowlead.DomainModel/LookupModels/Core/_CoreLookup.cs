@@ -1,5 +1,6 @@
-using System.ComponentModel.DataAnnotations;
+using Knowlead.Common.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace Knowlead.DomainModel.LookupModels.Core
 {
@@ -8,9 +9,9 @@ namespace Knowlead.DomainModel.LookupModels.Core
     {
         [Key]
         public int CoreLookupId { get; set; }
-        [Required]
+        [MyRequired]
         public string Code { get; set; }
-        [Required]
+        [MyRequired]
         public string Name { get; set; }
     }
 }

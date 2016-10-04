@@ -1,11 +1,10 @@
 using Microsoft.AspNetCore.Mvc.Filters;
-using Knowlead.Common.Responses;
 using Knowlead.DTO.ResponseModels;
-using static Knowlead.Common.Constants;
 using Microsoft.AspNetCore.Mvc;
 using Knowlead.DomainModel.UserModels;
 using Knowlead.BLL.Interfaces;
 using System.Threading.Tasks;
+using Knowlead.Common;
 
 namespace Knowlead.WebApi.Attributes
 {
@@ -26,7 +25,9 @@ namespace Knowlead.WebApi.Attributes
             {
                 if (!context.HttpContext.User.Identity.IsAuthenticated)
                 {
-                    context.Result = new ModelResult(new ErrorModel("Not logged in", ErrorCodes.NotLoggedIn), 403);
+                    var error = new ErrorModel(Constants.ErrorCodes.NotLoggedIn);
+                    context.Result = new BadRequestObjectResult(new ResponseModel(error));
+
                 }
                 return Task.CompletedTask;
             }
@@ -48,7 +49,8 @@ namespace Knowlead.WebApi.Attributes
                     ApplicationUser user = await _accountRepository.GetUserByPrincipal(context.HttpContext.User);
                     if (!user.EmailConfirmed)
                     {
-                        context.Result = new ModelResult(new ErrorModel("Email not verified", ErrorCodes.EmailNotConfirmed), 403);
+                        var error = new ErrorModel(Constants.ErrorCodes.EmailNotVerified);
+                        context.Result = new BadRequestObjectResult(new ResponseModel(error));
                         return;
                     }
                 }

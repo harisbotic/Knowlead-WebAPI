@@ -1,19 +1,27 @@
 // Place your settings in this file to overwrite default and user settings.
 {
     "files.exclude": {
+        //OS's and others things
         "**/.git": true,
         "**/.svn": true,
         "**/.hg": true,
         "**/.DS_Store": true,
-        "bin": true,
-        "obj": true,
         
-        ".gitignore": true,
-        "Dockerfile": true,
+        //Auto generated things
         "**/project.lock.json": true,
         "**/bin": true,
         "**/obj": true,
-        "web.config": true
+        
+        //Things that are in root
+        "web.config": true,
+        "Dockerfile": true,
+        "README.md": true,
+        "NuGet.Config": true,
+
+        //Git things
+        "TypeScriptBuilder": true,
+        ".gitmodules": true,
+        ".gitignore": true
         
     }
 }

@@ -1,18 +1,18 @@
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Knowlead.DomainModel.UserModels;
-using Knowlead.DTO.ResponseModels;
 using Knowlead.DTO.UserModels;
 using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Knowlead.BLL.Interfaces
 {
     public interface IAccountRepository
     {
-        Task<ResponseModel> RegisterApplicationUserAsync(RegisterUserModel registerUserModel);
+        Task<IActionResult> RegisterApplicationUserAsync(RegisterUserModel registerUserModel);
         Task<ApplicationUser> GetUserByPrincipal(ClaimsPrincipal principal);
-        Task<ResponseModel> UpdateUserDetails(ApplicationUser applicationUser, JsonPatchDocument<ApplicationUserModel> applicationUserPatch);
-        Task<ResponseModel> ConfirmEmail(ConfirmEmailModel confirmEmailModel);
-        Task<ResponseModel> SaveChangesAsync();
+        Task<IActionResult> UpdateUserDetails(ApplicationUser applicationUser, JsonPatchDocument<ApplicationUserModel> applicationUserPatch);
+        Task<IActionResult> ConfirmEmail(ConfirmEmailModel confirmEmailModel);
+        Task<IActionResult> SaveChangesAsync();
     }
 }

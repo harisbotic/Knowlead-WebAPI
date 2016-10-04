@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using Knowlead.Common.DataAnnotations;
 using Knowlead.DomainModel.UserModels;
 
 namespace Knowlead.DomainModel.CoreModels
@@ -11,7 +12,7 @@ namespace Knowlead.DomainModel.CoreModels
         public int Width { get; set; }
         public int Height { get; set; }
 
-        [Required]
+        [MyRequired]
         public Guid UploadedById { get; set; }
         public ApplicationUser UploadedBy { get; set; }
     }

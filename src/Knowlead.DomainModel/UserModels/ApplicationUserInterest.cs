@@ -1,16 +1,16 @@
 using System;
-using System.ComponentModel.DataAnnotations;
+using Knowlead.Common.DataAnnotations;
 using Knowlead.DomainModel.LookupModels.Core;
 
 namespace Knowlead.DomainModel.UserModels
 {
     public class ApplicationUserInterest
     {
-        [Required]
+        [MyRequired]
         public Guid ApplicationUserId { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
 
-        [Required]
+        [MyRequired]
         public int FosId { get; set; }
         public FOS Fos { get; set; }
     }

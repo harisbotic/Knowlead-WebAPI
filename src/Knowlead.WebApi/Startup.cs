@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Knowlead.DAL;
 using AutoMapper;
+using Knowlead.WebApi.Config;
 
 namespace Knowlead
 {

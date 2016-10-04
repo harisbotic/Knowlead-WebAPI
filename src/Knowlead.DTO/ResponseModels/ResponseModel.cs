@@ -1,26 +1,95 @@
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Knowlead.DTO.ResponseModels {
-    public class ResponseModel {
-        public bool Success { get; set; }
-        public Dictionary<string, List<ErrorModel>> ErrorMap { get; set; }
-        public List<ErrorModel> ErrorList { get; set; }
+    public class ResponseModel 
+        {
+        public Dictionary<string, ICollection<string>> FormErrors { get; set; }
+        public ICollection<string> Errors { get; set; }
+        public object Object {get; set;}
 
-        public ResponseModel(bool success) {
-            Success = success;
+        private void InitLists() 
+        {
+            FormErrors = new Dictionary<string, ICollection<string>>();
+            Errors = new List<string>();
         }
 
-        public ResponseModel(bool success, Dictionary<string, List<ErrorModel>> errorMap) : this(success) {
-            ErrorMap = errorMap;
+        public ResponseModel()
+        {
+            InitLists();
         }
 
-        public ResponseModel(bool success, List<ErrorModel> errorList) : this(success) {
-            ErrorList = errorList;
+        public ResponseModel(FormErrorModel formError)
+        {
+            InitLists();
+
+            AddFormError(formError);
         }
 
-        public ResponseModel(bool success, ErrorModel error) : this(success) {
-            ErrorList = new List<ErrorModel>();
-            ErrorList.Add(error);
+        public ResponseModel(ErrorModel error)
+        {
+            InitLists();
+            
+            AddError(error);
+        }
+
+        public ResponseModel(ModelStateDictionary modelState)
+        {
+            InitLists();
+            
+            AddErrors(modelState);
+        }
+
+        public ResponseModel(IEnumerable<IdentityError> identityErrors)
+        {
+            InitLists();
+            
+            AddErrors(identityErrors);
+        }
+
+        public void AddError(ErrorModel error)
+        {
+            Errors.Add($"{error.Value}{error.Param}");
+        }
+
+        public void AddFormError(FormErrorModel formError)
+        {            
+            ICollection<string> list;
+
+            if (!FormErrors.TryGetValue(formError.Key, out list))
+            {
+                list = new List<string>();
+                FormErrors.Add(formError.Key, list);
+            }
+
+            list.Add($"{@formError.Value}{formError.Param}");
+        }
+
+        public void AddErrors(ModelStateDictionary modelState)
+        {
+            foreach (var entry in modelState)
+            {
+                foreach (ModelError error in entry.Value.Errors)
+                {
+                    AddFormError(new FormErrorModel
+                    {
+                        Key = entry.Key,
+                        Value = error.ErrorMessage
+                    });
+                }
+            }
+        }
+
+        public void AddErrors(IEnumerable<IdentityError> identityErrors)
+        {
+            foreach (var error in identityErrors)
+            {
+                if(error.Code != null)
+                    AddFormError(new FormErrorModel(error.Code, error.Description));
+                else
+                    AddError(new ErrorModel(error.Description));
+            }
         }
     }
 }
