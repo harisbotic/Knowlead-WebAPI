@@ -130,7 +130,7 @@ namespace Knowlead.BLL
             var result = await _userManager.ConfirmEmailAsync(user, confirmEmailModel.Code);
             if(!result.Succeeded)
             {
-                var formError = new FormErrorModel(nameof(confirmEmailModel.Code), Constants.ErrorCodes.CodeIncorrect);
+                var formError = new FormErrorModel(nameof(confirmEmailModel.Code), Constants.ErrorCodes.ConfirmationCodeIncorrect);
                 return new BadRequestObjectResult(new ResponseModel(formError));
             }
 
