@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using AutoMapper;
 using Knowlead.Common;
+using Knowlead.DTO.ResponseModels;
 using TypeScriptBuilder;
 
 public static class GenerateScript
@@ -36,6 +37,10 @@ public static class GenerateScript
         var generator = new TypeScriptBuilder.TypeScriptGenerator(options);
         generator.ExcludeType(typeof(Profile));
         generator.ExcludeType(typeof(Guid));
+
+        generator.ExcludeType(typeof(FormErrorModel));
+        generator.ExcludeType(typeof(ErrorModel));
+
         foreach (Type type in types)
         {
             generator.AddCSType(type);

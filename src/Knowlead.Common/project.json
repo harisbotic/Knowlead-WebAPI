@@ -5,7 +5,10 @@
   },
   "dependencies": {
     "Microsoft.AspNetCore.Mvc.DataAnnotations": "1.0.1",
-    "Microsoft.AspNetCore.Identity": "1.0.0"
+    "Microsoft.AspNetCore.Identity": "1.0.0",
+    "TypeScriptBuilder": {
+      "target": "project"
+    }
   },
   "frameworks": {
     "netstandard1.6": {
