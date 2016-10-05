@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using Knowlead.Common.DataAnnotations;
+using Knowlead.DomainModel.LookupModels.Core;
 using Knowlead.DomainModel.LookupModels.Geo;
 using OpenIddict;
 
@@ -25,6 +27,12 @@ namespace Knowlead.DomainModel.UserModels
         public int? StateId { get; set; }
         public State State { get; set; }
         
+        public int? MotherTongueId { get; set; }
+        [ForeignKey("MotherTongueId")]
+        public Language MotherTongue { get; set; }
+
+        public ICollection<ApplicationUserLanguage> ApplicationUserLanguages { get; set; }
+
         [MyRequired]
         public UserStatus Status { get; set; }
 
@@ -32,8 +40,6 @@ namespace Knowlead.DomainModel.UserModels
         {
             Online, Offline, Busy
         }
-
-        public ICollection<ApplicationUserLanguage> ApplicationUserLanguages { get; set; }
         
         public ApplicationUser()
         {

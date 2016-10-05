@@ -26,7 +26,7 @@ namespace Knowlead.DTO.ResponseModels
         public ErrorModel()
         {
             this.Value = "Default Value";
-            this.Param = null;
+            this.param = null;
         }
 
         

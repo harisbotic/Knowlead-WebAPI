@@ -15,7 +15,7 @@ namespace Knowlead.DTO.ResponseModels
             }
         }
 
-        public FormErrorModel(string key, string @value, string parameter = null): base(key, @value)
+        public FormErrorModel(string key, string @value, string parameter = null): base(@value, parameter)
         {
             this.Key = key;
             this.Value = @value;

@@ -10,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AspNet.Security.OpenIdConnect.Extensions;
 using AspNet.Security.OpenIdConnect.Server;
+using Knowlead.Common;
 using Knowlead.DomainModel.UserModels;
 using Knowlead.DTO.ResponseModels;
 using Microsoft.AspNetCore.Authentication;
@@ -42,11 +43,12 @@ namespace Mvc.Server
         {
             var request = HttpContext.GetOpenIdConnectRequest();
         
-            if (request.IsPasswordGrantType()) {
+            if (request.IsPasswordGrantType())
+            {
                 var user = await _userManager.FindByEmailAsync(request.Username);
                 if (user == null) {
                     return BadRequest(new ResponseModel(new ErrorModel {
-                        Value = "The email/password couple is invalid."
+                        Value = Constants.ErrorCodes.LoginCredentialsIncorrect
                     }));
                 }
         
@@ -57,10 +59,17 @@ namespace Mvc.Server
                     }
         
                     return BadRequest(new ResponseModel(new ErrorModel {
-                        Value = "The email/password couple is invalid."
+                        Value = Constants.ErrorCodes.LoginCredentialsIncorrect
                     }));
                 }
-        
+                
+                if (!user.EmailConfirmed)
+                {
+                    return BadRequest(new ResponseModel(new ErrorModel {
+                        Value = Constants.ErrorCodes.EmailNotVerified
+                    }));
+                }
+
                 if (_userManager.SupportsUserLockout) {
                     await _userManager.ResetAccessFailedCountAsync(user);
                 }

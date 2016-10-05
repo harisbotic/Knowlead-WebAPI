@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using Knowlead.Common.DataAnnotations;
+using Knowlead.DTO.LookupModels.Core;
 using Knowlead.DTO.LookupModels.Geo;
 
 namespace Knowlead.DTO.UserModels
@@ -23,7 +25,12 @@ namespace Knowlead.DTO.UserModels
         
         public int? StateId { get; set; }
         public StateModel State { get; set; }
-        
+    
+        public int? MotherTongueId { get; set; }
+        [ForeignKey("MotherTongueId")]
+        public LanguageModel MotherTongue { get; set; }
+        public ICollection<ApplicationUserLanguageModel> ApplicationUserLanguages { get; set; }
+
         [MyRequired]
         public UserStatus Status { get; set; }
 
@@ -31,8 +38,6 @@ namespace Knowlead.DTO.UserModels
         {
             Online, Offline, Busy
         }
-
-        public ICollection<ApplicationUserLanguageModel> ApplicationUserLanguages { get; set; }
         
         public ApplicationUserModel()
         {

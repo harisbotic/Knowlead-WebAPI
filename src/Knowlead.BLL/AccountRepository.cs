@@ -1,4 +1,3 @@
-using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Knowlead.BLL.Interfaces;
@@ -44,31 +43,27 @@ namespace Knowlead.BLL
             
             applicationUser.UserName = registerUserModel.Email;
             var password = registerUserModel.Password;
-            IdentityResult result;
             
-            try 
+            var result = await _userManager.CreateAsync(applicationUser, registerUserModel.Password);
+            if (result.Succeeded)
             {
-                result = await _userManager.CreateAsync(applicationUser, registerUserModel.Password);
-                if (result.Succeeded) {
-                    string token = await _userManager.GenerateEmailConfirmationTokenAsync(applicationUser);
-                    string encodedEmail = WebUtility.UrlEncode(applicationUser.Email);
-                    string encodedToken = WebUtility.UrlEncode(token);
-                    string url = $"{_config["Urls:client"]}/confirmemail?email={encodedEmail}&code={encodedToken}";
+                string token = await _userManager.GenerateEmailConfirmationTokenAsync(applicationUser);
+                string encodedEmail = WebUtility.UrlEncode(applicationUser.Email);
+                string encodedToken = WebUtility.UrlEncode(token);
+                string url = $"{_config["Urls:client"]}/confirmemail?email={encodedEmail}&code={encodedToken}";
 
-                    await _messageServices.TempSendEmailAsync(applicationUser.Email,"Knowlead Confirmation", "haris.botic96@gmail.com", "KnowLead", url);
-                }
-            } 
-            catch(ArgumentException ex) 
+                // message service probably needs try and catch but this is temp solution anyways
+                await _messageServices.TempSendEmailAsync(applicationUser.Email,"Knowlead Confirmation", "haris.botic96@gmail.com", "KnowLead", url);
+            }
+            else
             {
-                return new BadRequestObjectResult(new ResponseModel(new FormErrorModel
-                {
-                    Key = ex.ParamName,
-                    Value = ex.Message
-                }));
-                
+                return new BadRequestObjectResult(new ResponseModel(result.Errors));
             }
 
-            return new OkObjectResult(new ResponseModel());
+            var applicationUserModel = Mapper.Map<ApplicationUserModel>(applicationUser);
+            return new OkObjectResult(new ResponseModel{
+                Object = applicationUserModel
+            });
         }
 
         public async Task<ApplicationUser> GetUserByPrincipal(ClaimsPrincipal principal)

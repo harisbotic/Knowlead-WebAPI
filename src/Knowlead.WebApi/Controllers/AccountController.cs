@@ -33,12 +33,15 @@ namespace Knowlead.Controllers
             return (await _accountRepository.RegisterApplicationUserAsync(userModel));
         }
 
-        [HttpGet("me"), ReallyAuthorize(false)]
-        public async Task<ApplicationUserModel> me()
+        [HttpGet("me"), ReallyAuthorize]
+        public async Task<IActionResult> me()
         {
             var applicationUser = await GetCurrentUserAsync();
-            //SEND OBJECT HERE TODO
-            return Mapper.Map<ApplicationUserModel>(applicationUser);
+            var applicationUserModel = Mapper.Map<ApplicationUserModel>(applicationUser);
+            
+            return Ok(new ResponseModel{
+                Object = applicationUserModel
+            });
         }
 
         [HttpPost("confirmEmail"), ValidateModel]
@@ -48,7 +51,7 @@ namespace Knowlead.Controllers
             return (await _accountRepository.ConfirmEmail(confirmEmailModel));
         }
 
-        [HttpPatch("details"), ValidateModel, ReallyAuthorize(true)]
+        [HttpPatch("details"), ValidateModel, ReallyAuthorize]
         public async Task<IActionResult> Details([FromBody] JsonPatchDocument<ApplicationUserModel> userDetailsPatch)
         {
             var currentUser = (await GetCurrentUserAsync());  
@@ -66,14 +69,14 @@ namespace Knowlead.Controllers
             // _ResponseModel.AddError("hey");
             
 
-            return new OkObjectResult(new ResponseModel());
+            return Ok(new ResponseModel());
             
         }
 
         [HttpGet("/authorizetest"), ReallyAuthorize]
         public IActionResult AuthorizeTest()
         {
-            return new OkObjectResult(new ResponseModel());
+            return Ok(new ResponseModel());
         }
     }
 }

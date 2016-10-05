@@ -22,9 +22,12 @@ namespace Knowlead.Common
             [TSInitialize]
             public const string PasswordIncorrect = "INCORRECT_PASSWORD";
             [TSInitialize]
-            public const string ConfirmationCodeIncorrect = "INCORRECT_CODE";
+            public const string ConfirmationCodeIncorrect = "CONFIRMATION_CODE_INCORRECT";
             [TSInitialize]
             public const string NotLoggedIn = "NOT_LOGGED_IN";
+            [TSInitialize]
+            public const string LoginCredentialsIncorrect = "LOGIN_CREDENTIALS_INCORRECT";
+
         }
 
     }

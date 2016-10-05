@@ -76,7 +76,8 @@ namespace Knowlead.DAL
         {
             base.OnConfiguring(optionsBuilder);
             
-            optionsBuilder.UseNpgsql(_config["ConnectionStrings:DefaultContextConnection"]);
+            optionsBuilder.UseNpgsql(_config["ConnectionStrings:DefaultContextConnection"],
+                                            b => b.MigrationsAssembly("Knowlead.WebApi"));
 
         }
 
