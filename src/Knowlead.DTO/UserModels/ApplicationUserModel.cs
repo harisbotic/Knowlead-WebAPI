@@ -29,7 +29,9 @@ namespace Knowlead.DTO.UserModels
         public int? MotherTongueId { get; set; }
         [ForeignKey("MotherTongueId")]
         public LanguageModel MotherTongue { get; set; }
-        public ICollection<ApplicationUserLanguageModel> ApplicationUserLanguages { get; set; }
+
+        public ICollection<LanguageModel> Languages { get; set; }
+
 
         [MyRequired]
         public UserStatus Status { get; set; }
