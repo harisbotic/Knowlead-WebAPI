@@ -30,7 +30,7 @@ namespace Knowlead.DTO.UserModels
         [ForeignKey("MotherTongueId")]
         public LanguageModel MotherTongue { get; set; }
 
-        public ICollection<LanguageModel> Languages { get; set; }
+        public List<LanguageModel> Languages { get; set; }
 
 
         [MyRequired]
@@ -44,6 +44,7 @@ namespace Knowlead.DTO.UserModels
         public ApplicationUserModel()
         {
             this.Status = UserStatus.Offline;
+            Languages = new List<LanguageModel>();
         }
     }
 }

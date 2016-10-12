@@ -8,11 +8,9 @@ namespace Knowlead.DTO.UserModels
     {
         public _GeoLookupProfile()
         {
-            CreateMap<State, StateModel>();
-            CreateMap<StateModel, State>();
+            CreateMap<State, StateModel>().ReverseMap();
 
-            CreateMap<Country, CountryModel>();
-            CreateMap<CountryModel, Country>();
+            CreateMap<Country, CountryModel>().ReverseMap();
            
 
         }

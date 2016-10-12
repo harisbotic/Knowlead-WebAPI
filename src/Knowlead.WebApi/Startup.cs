@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Knowlead.DAL;
 using AutoMapper;
 using Knowlead.WebApi.Config;
+using Knowlead.Common.HttpRequestItems;
 
 namespace Knowlead
 {
@@ -37,6 +38,7 @@ namespace Knowlead
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton(_config);
+            services.AddScoped<Auth>();
 
             services.AddCrossOrigin();
             services.AddRepositories();

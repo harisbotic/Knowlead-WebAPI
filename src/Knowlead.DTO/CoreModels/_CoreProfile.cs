@@ -8,11 +8,9 @@ namespace Knowlead.DTO.UserModels
     {
         public _CoreProfile()
         {
-            CreateMap<Image, ImageModel>();
-            CreateMap<ImageModel, Image>();
+            CreateMap<Image, ImageModel>().ReverseMap();
 
-            CreateMap<UploadedFile, UploadedFileModel>();
-            CreateMap<UploadedFileModel, UploadedFile>();
+            CreateMap<UploadedFile, UploadedFileModel>().ReverseMap();
         }
     }
 }

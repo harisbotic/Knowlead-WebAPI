@@ -7,8 +7,7 @@ namespace Knowlead.DTO.UserModels
     {
         public _UserProfile()
         {
-            CreateMap<ApplicationUser, ApplicationUserModel>();
-            CreateMap<ApplicationUserModel, ApplicationUser>();
+            CreateMap<ApplicationUser, ApplicationUserModel>().ReverseMap();
 
             CreateMap<RegisterUserModel, ApplicationUser>();
 

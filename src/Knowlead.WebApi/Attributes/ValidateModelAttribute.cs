@@ -52,7 +52,7 @@ namespace Knowlead.Common.Attributes
                 catch (Exception ex)
                 {
                     var error = new ErrorModel(ex.Message);
-                    context.Result = new BadRequestObjectResult(new ResponseModel(error));
+                    //context.Result = new BadRequestObjectResult(new ResponseModel(error));
                 }
             }
         }

@@ -8,14 +8,11 @@ namespace Knowlead.DTO.UserModels
     {
         public _CoreLookupProfile()
         {
-            CreateMap<Achievement, AchievementModel>();
-            CreateMap<AchievementModel, Achievement>();
+            CreateMap<Achievement, AchievementModel>().ReverseMap();
                   
-            CreateMap<FOS, FOSModel>();
-            CreateMap<FOSModel, FOS>();
+            CreateMap<FOS, FOSModel>().ReverseMap();
 
-            CreateMap<Language, LanguageModel>();
-            CreateMap<LanguageModel, Language>();
+            CreateMap<Language, LanguageModel>().ReverseMap();
            
 
         }

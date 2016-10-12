@@ -13,6 +13,12 @@ using Microsoft.AspNetCore.JsonPatch;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Knowlead.Common;
+using System.Linq;
+using System;
+using Knowlead.DTO.LookupModels.Core;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.JsonPatch.Operations;
+using Newtonsoft.Json.Linq; 
 
 namespace Knowlead.BLL
 {
@@ -75,8 +81,56 @@ namespace Knowlead.BLL
         {
             IdentityResult result;
 
+            var langs = _context.ApplicationUserLanguages
+                                .Where(x => x.ApplicationUserId == applicationUser.Id)
+                                .ToList();
+
+            var langsModel = new List<LanguageModel>();
+
+            foreach (var item in langs)
+            {
+                langsModel.Add(new LanguageModel{
+                    CoreLookupId = item.LanguageId
+                });
+            }
+
             var applicationUserModel = Mapper.Map<ApplicationUserModel>(applicationUser);
+            
+            applicationUserModel.Languages = langsModel;
+
+
             applicationUserPatch.ApplyTo(applicationUserModel);
+
+            var e = new ApplicationUserLanguage
+            {
+                LanguageId = 1,
+                ApplicationUserId = applicationUser.Id
+            };
+
+            var varName = nameof(ApplicationUserModel.Languages);
+            var varPath = $"/{varName}/";
+            foreach (var operation in applicationUserPatch.Operations)
+            {
+                if(operation.path.StartsWith(varPath, StringComparison.CurrentCultureIgnoreCase))
+                {
+                    switch (operation.OperationType)
+                    {
+                        case OperationType.Add:
+                            var @value = operation.value as JObject;
+                            langs.Add(new ApplicationUserLanguage
+                            {
+                                LanguageId = (int)(@value.GetValue(nameof(LanguageModel.CoreLookupId), StringComparison.CurrentCultureIgnoreCase)),  
+                                ApplicationUserId = applicationUser.Id
+                            });
+                        break;
+
+                        case OperationType.Remove:
+                            var index = int.Parse((operation.path.Substring(varPath.Length)));
+                            langs.RemoveAt(index);
+                        break;
+                    }
+                }
+            }
 
             applicationUser.Name = applicationUserModel?.Name;
             applicationUser.Surname = applicationUserModel?.Surname;
@@ -87,13 +141,7 @@ namespace Knowlead.BLL
             applicationUser.CountryId = applicationUserModel?.CountryId;
             applicationUser.StateId = applicationUserModel?.StateId;
 
-            // List<EmpAssets> oldAssests = context.EmpAssets.Where(x => x.EmployeeId == employeeId).ToList();
-
-            // List<EmpAssets> addedAssests = updatedAssests.ExceptBy(oldAssests, x => x.CityId).ToList();
-            // List<EmpAssets> deletedAssests = oldAssests.ExceptBy(updatedAssests, x => x.CityId).ToList();
-
-            // deletedAssests.ForEach( x => context.Entry(x).State = EntityState.Deleted);
-            // addedAssests.ForEach(x => context.Entry(x).State = EntityState.Added);
+            applicationUser.ApplicationUserLanguages = langs;
 
             result = await _userManager.UpdateAsync(applicationUser);
 
@@ -102,7 +150,9 @@ namespace Knowlead.BLL
                 return new BadRequestObjectResult(new ResponseModel(result.Errors));
             }
             
-            return new OkObjectResult(new ResponseModel());
+            return new OkObjectResult(new ResponseModel{
+                Object = applicationUserModel
+            });
             
         }
 
