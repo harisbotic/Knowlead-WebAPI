@@ -6,40 +6,28 @@
     },
     "data": [
         {
-            "Name": "Bosanski",
-            "Code": "BA",
-            "Desc": "Bosanki jezik",
-            "Category": "Language"
+            "Name": "Bosnian",
+            "Code": "ba"
         },
         {
             "Name": "English",
-            "Code": "EN",
-            "Desc": "Engleski jezik",
-            "Category": "Language"
+            "Code": "en"
         },
         {
-            "Name": "Deuth",
-            "Code": "DE",
-            "Desc": "",
-            "Category": "Language"
+            "Name": "German",
+            "Code": "de"
         },
         {
             "Name": "Spanish",
-            "Code": "SP",
-            "Desc": "Bosanki jezik",
-            "Category": "Language"
+            "Code": "sp"
         },
         {
             "Name": "Bhutan",
-            "Code": "BH",
-            "Desc": "Bosanki jezik",
-            "Category": "Language"
+            "Code": "bh"
         },
         {
-            "Name": "Botswana",
-            "Code": "BT",
-            "Desc": "Bosanki jezik",
-            "Category": "Language"
+            "Name": "Botswanian",
+            "Code": "bt"
         }
     ]
 }

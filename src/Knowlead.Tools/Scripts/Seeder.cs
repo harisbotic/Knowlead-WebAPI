@@ -10,7 +10,7 @@ using Newtonsoft.Json.Linq;
 
 public interface ISeeder
 {
-    void ImportSingleRow(JObject row, string key);
+    void ImportSingleRow(JObject row);
     void ClearTable();
     void SaveChanges();
 }
@@ -19,8 +19,10 @@ public class Seeder<T> : ISeeder where T : class
 {
     ApplicationDbContext _context;
     DbSet<T> _dbset;
-    public Seeder(ApplicationDbContext context)
+    SeedScript.ImportConfig config;
+    public Seeder(ApplicationDbContext context, SeedScript.ImportConfig importConfig)
     {
+        this.config = importConfig;
         _context = context;
         _dbset = _context.Set<T>();
         Mapper.Initialize(config => {
@@ -31,27 +33,77 @@ public class Seeder<T> : ISeeder where T : class
     }
     public void ClearTable()
     {
-        Console.Write("Warning: Clearing table ... ");
-        Console.Out.Flush();
+        Console.WriteLine("Warning: Clearing table ...");
         _dbset.RemoveRange(_dbset.ToList());
         Console.WriteLine("OK");
     }
 
-    public void ImportSingleRow(JObject row, string key)
+    public void ImportSingleRow(JObject row)
     {
+        if (config.References != null && config.References.Length > 0)
+        {
+            foreach (var reference in config.References)
+            {
+                if (row[reference.ToProperty] == null)
+                {
+                    continue;
+                }
+                Type referenceType = SeedScript.models[reference.SearchModel];
+                if (referenceType == null)
+                {
+                    Console.WriteLine("Error: Invalid reference: model '" + reference.SearchModel + "' doesn't exist");
+                    return;
+                }
+                Object db = _context.GetType().GetMethod("Set").MakeGenericMethod(referenceType).Invoke(_context, new object[] {});
+                Object where = typeof(Seeder<T>)
+                    .GetMethod("GetWhereClauseGeneric")
+                    .MakeGenericMethod(referenceType)
+                    .Invoke(this, new object[] {reference.SearchProperty, row[reference.ToProperty].ToString()});
+                MethodInfo mi = typeof(System.Linq.Queryable)
+                    .GetMethods()
+                    .First((m) => m.Name == "Where")
+                    .MakeGenericMethod(referenceType);
+                Object queryable = mi
+                    .Invoke(null, new object[] {db, where});
+                Object[] objs = (Object[])typeof(System.Linq.Enumerable)
+                    .GetMethod("ToArray")
+                    .MakeGenericMethod(referenceType)
+                    .Invoke(null, new object[] {queryable});
+                String expression = reference.SearchModel + "." + reference.FromProperty + " == '" + row[reference.ToProperty].ToString() + "'";
+                if (objs.Length == 0)
+                {
+                    Console.WriteLine("Error: No current data matches expression " + expression);
+                    return;
+                } else if (objs.Length > 1)
+                {
+                    Console.WriteLine("Error: More then 1 value match expression " + expression);
+                    return;
+                }
+                PropertyInfo prop = referenceType.GetProperty(reference.FromProperty);
+                if (prop == null)
+                {
+                    Console.WriteLine("Error: Model " + reference.SearchModel + " doesn't contain property " + reference.FromProperty);
+                    return;
+                }
+                Console.WriteLine(row[reference.ToProperty].ToString() + " -> " + prop.GetValue(objs[0]) + " (expression: " + expression + ")");
+                row.GetValue(reference.ToProperty)
+                    .Replace(new JValue(prop.GetValue(objs[0])));
+            }
+        }
         T obj = row.ToObject<T>();
-        if (key == null)
+        if (config.Key == null)
         {
             DoImportRow(obj);
         } else
         {
-            T[] candidates = _dbset.Where(GetWhereClause(obj, key)).ToArray();
+            T[] candidates = _dbset.Where(GetWhereClause(obj, config.Key)).ToArray();
             if (candidates.Length == 0)
             {
                 DoImportRow(obj);
             } else if (candidates.Length > 1)
             {
-                throw new InvalidOperationException("More then one candidate found for key '" + key + "'");
+                Console.WriteLine("Error: More then one candidate found for key '" + config.Key + "'");
+                return;
             } else
             {
                 DoUpdateRow(obj, ref candidates[0]);
@@ -59,31 +111,41 @@ public class Seeder<T> : ISeeder where T : class
         }
     }
 
-    private Expression<Func<T, bool>> GetWhereClause(T obj, string key)
+    public static Expression<Func<TT, bool>> GetWhereClauseGeneric<TT>(string key, object value)
     {
-        var arg = Expression.Parameter(typeof(T));
-        var left = Expression.Property(arg, key);
-        var right = Expression.Constant(obj.GetType().GetProperty(key).GetValue(obj));
-        Expression clause = Expression.Equal(left, right);
-        return Expression.Lambda<Func<T, bool>>(clause, arg);
+        var arg = Expression.Parameter(typeof(TT));
+        var leftEx = Expression.Property(arg, key);
+        var rightEx = Expression.Constant(value);
+        Expression clause = Expression.Equal(leftEx, rightEx);
+        return Expression.Lambda<Func<TT, bool>>(clause, arg);
+    }
+
+    public Expression<Func<T, bool>> GetWhereClause(T obj, string key)
+    {
+        return GetWhereClauseGeneric<T>(key, obj.GetType().GetProperty(key).GetValue(obj));
     }
 
     private void DoImportRow(T obj)
     {
         _dbset.Add(obj);
+        if (config.SaveAfterEachRow)
+        {
+            SaveChanges();
+        }
     }
 
     private void DoUpdateRow(T from, ref T to)
     {
         Mapper.Map(from, to, typeof(T), typeof(T));
-        /*EntityEntry entry = _context.Entry(to);
-        entry.State = EntityState.Modified;*/
+        if (config.SaveAfterEachRow)
+        {
+            SaveChanges();
+        }
     }
 
     public void SaveChanges()
     {
-        Console.Write("Saving changes ... ");
-        Console.Out.Flush();
+        Console.WriteLine("Saving changes ... ");
         _context.SaveChanges();
         Console.WriteLine("OK");
     }

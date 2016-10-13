@@ -11,19 +11,19 @@ using System.Collections.Generic;
 
 public static class SeedScript
 {
-    public static ISeeder SeederFactory(Type type, ApplicationDbContext context)
+    public static ISeeder SeederFactory(Type type, ApplicationDbContext context, ImportConfig config)
     {
         if (type.Name == "State")
         {
-            return new Seeder<State>(context);
+            return new Seeder<State>(context, config);
         }
         else if (type.Name == "OpenIddictApplication")
         {
-            return new Seeder<OpenIddict.OpenIddictApplication<Guid>>(context);
+            return new Seeder<OpenIddict.OpenIddictApplication<Guid>>(context, config);
         }
         else if (type.Name == "Language")
         {
-            return new Seeder<Language>(context);
+            return new Seeder<Language>(context, config);
         } 
         else
         {
@@ -35,7 +35,7 @@ public static class SeedScript
     public static Dictionary<string, Type> models = new Dictionary<string, Type>()
     {
         {"State", typeof(State)},
-        {"OpenIddictApplication", typeof(OpenIddict.OpenIddictApplication)},
+        {"OpenIddictApplication", typeof(OpenIddict.OpenIddictApplication<Guid>)},
         {"Language", typeof(Language)}
     };
     private class SeedClass
@@ -44,13 +44,20 @@ public static class SeedScript
         public JArray Data { get; set; }
         public ImportConfig ImportConfig { get; set; }
     }
-
-    private class ImportConfig
+    public class ReferenceClass
+    {
+        public string FromProperty { get; set; }
+        public string ToProperty { get; set; }
+        public string SearchProperty { get; set; }
+        public string SearchModel { get; set; }
+    }
+    public class ImportConfig
     {
         public string Key { get; set; }
-        public bool ClearTable { get; set; }
+        public bool ClearTable { get; set; } = false;
+        public ReferenceClass[] References { get; set; }
+        public bool SaveAfterEachRow { get; set; } = false;
     }
-
     public static void Seed(string[] args)
     {
         
@@ -93,36 +100,39 @@ public static class SeedScript
             Console.WriteLine("Warning: data for import is empty");
             return;
         }
-        string key = null;
         if (data.ImportConfig != null)
         {
             if (data.ImportConfig.Key != null)
             {
-                key = data.ImportConfig.Key;
                 if (Array.IndexOf(
                     entityType.GetProperties().Select(prop => prop.Name).ToArray(),
                     data.ImportConfig.Key) == -1)
                 {
-                    Console.WriteLine("Error: model '" + data.Model + "' doesn't contain property '" + key + "'");
+                    Console.WriteLine("Error: model '" + data.Model + "' doesn't contain property '" + data.ImportConfig.Key + "'");
                     return;
                 }
             }
+        } else
+        {
+            data.ImportConfig = new ImportConfig();
         }
         Console.WriteLine("Debug: Using class: '" + entityType.Name + "'");
         ApplicationDbContext context = ScriptUtils.InitializeContext();
-        ISeeder seeder = SeederFactory(entityType, context);
+        ISeeder seeder = SeederFactory(entityType, context, data.ImportConfig);
         if (data.ImportConfig.ClearTable)
         {
             seeder.ClearTable();
             seeder.SaveChanges();
         }
-        Console.Write("Importing ... ");
-        Console.Out.Flush();
+        Console.WriteLine("Importing ... ");
         foreach (JObject row in data.Data)
         {
-            seeder.ImportSingleRow(row, key);
+            seeder.ImportSingleRow(row);
         }
         Console.WriteLine("OK");
-        seeder.SaveChanges();
+        if (!data.ImportConfig.SaveAfterEachRow)
+        {
+            seeder.SaveChanges();
+        }
     }
 }

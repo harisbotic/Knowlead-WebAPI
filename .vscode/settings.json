@@ -19,7 +19,6 @@
         "NuGet.Config": true,
 
         //Git things
-        "TypeScriptBuilder": true,
         ".gitmodules": true,
         ".gitignore": true
         

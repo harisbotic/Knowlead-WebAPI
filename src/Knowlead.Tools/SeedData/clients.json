@@ -2,7 +2,8 @@
     "model": "OpenIddictApplication",
     "importConfig": {
         "key": "ClientId",
-        "clearTable": true
+        "clearTable": true,
+        "saveAfterEachRow": true
     },
     "data": [
         {
