@@ -56,10 +56,10 @@ namespace Knowlead.Controllers
             return (await _accountRepository.ConfirmEmail(confirmEmailModel));
         }
 
-        [HttpPatch("details"), ValidateModel, ReallyAuthorize]
+        [HttpPatch("details"), ReallyAuthorize, ValidateModel, HandleExceptions]
         public async Task<IActionResult> Details([FromBody] JsonPatchDocument<ApplicationUserModel> userDetailsPatch)
         {
-            var currentUser = await _auth.GetUser(); 
+            var currentUser = await _auth.GetUser();
             return (await _accountRepository.UpdateUserDetails(currentUser, userDetailsPatch));
         }
 

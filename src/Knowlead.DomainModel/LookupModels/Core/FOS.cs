@@ -6,5 +6,7 @@ namespace Knowlead.DomainModel.LookupModels.Core
     {
         [MyRequired]
         public string FosDesc { get; set; }
+
+        public FOS ParentFos { get; set; }
     }
 }
