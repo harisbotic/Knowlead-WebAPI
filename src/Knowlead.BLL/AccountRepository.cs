@@ -18,7 +18,7 @@ using System;
 using Knowlead.DTO.LookupModels.Core;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.JsonPatch.Operations;
-using Newtonsoft.Json.Linq; 
+using Newtonsoft.Json.Linq;
 
 namespace Knowlead.BLL
 {
