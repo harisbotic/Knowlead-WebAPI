@@ -24,7 +24,11 @@ public static class SeedScript
         else if (type.Name == "Language")
         {
             return new Seeder<Language>(context, config);
-        } 
+        }
+        else if (type.Name == "FOS")
+        {
+            return new Seeder<FOS>(context, config);
+        }
         else
         {
             throw new ArgumentException(type.Name + " not supported in factory", "type");
@@ -36,7 +40,8 @@ public static class SeedScript
     {
         {"State", typeof(State)},
         {"OpenIddictApplication", typeof(OpenIddict.OpenIddictApplication<Guid>)},
-        {"Language", typeof(Language)}
+        {"Language", typeof(Language)},
+        {"FOS", typeof(FOS)}
     };
     private class SeedClass
     {

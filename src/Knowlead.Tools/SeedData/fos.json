@@ -1,0 +1,50 @@
+{
+    "model": "FOS",
+    "importConfig": {
+        "key": "Code",
+        "clearTable": false,
+        "saveAfterEachRow": true,
+        "references": [{
+            "fromProperty": "CoreLookupId",
+            "toProperty": "ParentFosId",
+            "searchProperty": "Code",
+            "searchModel": "FOS"
+        }]
+    },
+    "data": [
+        {
+            "Code": "1:root_1",
+            "Name": "First category",
+            "FosDesc": "This is first selectable category"
+        },
+        {
+            "Code": "1:root_2",
+            "Name": "Second category",
+            "FosDesc": "This is second selectable category ovo ono"
+        },
+        {
+            "Code": "2:root_1:first",
+            "Name": "First FOS in first category",
+            "FosDesc": "This is first field of study in first category",
+            "ParentFosId": "1:root_1"
+        },
+        {
+            "Code": "2:root_1:second",
+            "Name": "Second FOS in first category",
+            "FosDesc": "This is second field of study in first category ovo ono",
+            "ParentFosId": "1:root_1"
+        },
+        {
+            "Code": "2:root_2:first",
+            "Name": "First FOS in second category",
+            "FosDesc": "This is first field of study in second category",
+            "ParentFosId": "1:root_2"
+        },
+        {
+            "Code": "2:root_2:second",
+            "Name": "Second FOS in second category",
+            "FosDesc": "This is second field of study in second category ovo ono",
+            "ParentFosId": "1:root_2"
+        }
+    ]
+}

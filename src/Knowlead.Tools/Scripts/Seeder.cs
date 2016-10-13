@@ -6,6 +6,7 @@ using System.Reflection;
 using AutoMapper;
 using Knowlead.DAL;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 public interface ISeeder
@@ -40,6 +41,7 @@ public class Seeder<T> : ISeeder where T : class
 
     public void ImportSingleRow(JObject row)
     {
+        Console.WriteLine("Debug: Importing row: " + row.ToString(Formatting.None));
         if (config.References != null && config.References.Length > 0)
         {
             foreach (var reference in config.References)
@@ -127,6 +129,7 @@ public class Seeder<T> : ISeeder where T : class
 
     private void DoImportRow(T obj)
     {
+        Console.WriteLine("Debug: Importing new row");
         _dbset.Add(obj);
         if (config.SaveAfterEachRow)
         {
@@ -136,6 +139,7 @@ public class Seeder<T> : ISeeder where T : class
 
     private void DoUpdateRow(T from, ref T to)
     {
+        Console.WriteLine("Debug: Updating a row");
         Mapper.Map(from, to, typeof(T), typeof(T));
         if (config.SaveAfterEachRow)
         {

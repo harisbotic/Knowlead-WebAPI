@@ -8,5 +8,7 @@ namespace Knowlead.DTO.LookupModels.Core
         public string FosDesc { get; set; }
 
         public FOSModel ParentFos { get; set; }
+        
+        public int? ParentFosId { get; set; }
     }
 }
