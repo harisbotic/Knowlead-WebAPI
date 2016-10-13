@@ -81,7 +81,6 @@ namespace Knowlead.WebApi.Config
         public static IServiceCollection AddDbContext(this IServiceCollection services) 
         {
             services.AddDbContext<ApplicationDbContext>();
-            services.AddTransient<IDatabaseInitializer, DatabaseInitializer>();
 
             return services;
         }

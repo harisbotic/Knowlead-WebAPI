@@ -1,0 +1,45 @@
+{
+    "model": "Language",
+    "importConfig": {
+        "key": "CoreLookupId",
+        "clearTable": true
+    },
+    "data": [
+        {
+            "Name": "Bosanski",
+            "Code": "BA",
+            "Desc": "Bosanki jezik",
+            "Category": "Language"
+        },
+        {
+            "Name": "English",
+            "Code": "EN",
+            "Desc": "Engleski jezik",
+            "Category": "Language"
+        },
+        {
+            "Name": "Deuth",
+            "Code": "DE",
+            "Desc": "",
+            "Category": "Language"
+        },
+        {
+            "Name": "Spanish",
+            "Code": "SP",
+            "Desc": "Bosanki jezik",
+            "Category": "Language"
+        },
+        {
+            "Name": "Bhutan",
+            "Code": "BH",
+            "Desc": "Bosanki jezik",
+            "Category": "Language"
+        },
+        {
+            "Name": "Botswana",
+            "Code": "BT",
+            "Desc": "Bosanki jezik",
+            "Category": "Language"
+        }
+    ]
+}

@@ -20,7 +20,7 @@ namespace Knowlead.DTO.UserModels
         public Guid ApplicationUserId { get; set; }
         public ApplicationUserModel ApplicationUser { get; set; }
 
-        public int ImageId { get; set; }
+        public Guid ImageId { get; set; }
         public ImageModel Image { get; set; }
 
         public UserCertificateModel()

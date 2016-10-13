@@ -1,3 +1,4 @@
+using System;
 using Knowlead.Common.DataAnnotations;
 using Knowlead.DomainModel.CoreModels;
 
@@ -7,7 +8,7 @@ namespace Knowlead.DomainModel.LookupModels.Core
     {
         [MyRequired]
         public string Desc { get; set; }
-        public int ImageId { get; set; }
+        public Guid ImageId { get; set; }
         public Image Image { get; set; }
     }
 }

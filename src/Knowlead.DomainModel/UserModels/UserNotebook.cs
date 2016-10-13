@@ -21,7 +21,7 @@ namespace Knowlead.DomainModel.UserModels
         public Guid ApplicationUserId { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
 
-        public int ImageId { get; set; }
+        public Guid ImageId { get; set; }
         public Image Image { get; set; }
 
         public UserNotebook()

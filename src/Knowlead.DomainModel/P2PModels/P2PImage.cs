@@ -1,3 +1,4 @@
+using System;
 using Knowlead.Common.DataAnnotations;
 using Knowlead.DomainModel.CoreModels;
 
@@ -10,7 +11,7 @@ namespace Knowlead.DomainModel.P2PModels
         public P2P P2p{ get; set; }
 
         [MyRequired]
-        public int ImageId { get; set; }
+        public Guid ImageId { get; set; }
         public Image Image { get; set; }
       
     }

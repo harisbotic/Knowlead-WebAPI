@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Mvc;
 using Knowlead.DTO.UserModels;
 using AutoMapper;
 using Knowlead.Common.HttpRequestItems;
-using Knowlead.DTO;
 
 namespace Knowlead.Controllers
 {

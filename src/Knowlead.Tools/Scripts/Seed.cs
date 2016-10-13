@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Reflection;
 using Knowlead.DomainModel.LookupModels.Geo;
+using Knowlead.DomainModel.LookupModels.Core;
 using System.Linq;
 using System.Collections.Generic;
 
@@ -15,21 +16,27 @@ public static class SeedScript
         if (type.Name == "State")
         {
             return new Seeder<State>(context);
-
-        } else if (type.Name == "OpenIddictApplication")
+        }
+        else if (type.Name == "OpenIddictApplication")
         {
             return new Seeder<OpenIddict.OpenIddictApplication<Guid>>(context);
-        } else
+        }
+        else if (type.Name == "Language")
+        {
+            return new Seeder<Language>(context);
+        } 
+        else
         {
             throw new ArgumentException(type.Name + " not supported in factory", "type");
         }
     }
-    private static readonly string[] AllowedClasses = {"State"};
+    //private static readonly string[] AllowedClasses = {"State", "Language"};
 
     public static Dictionary<string, Type> models = new Dictionary<string, Type>()
     {
         {"State", typeof(State)},
-        {"OpenIddictApplication", typeof(OpenIddict.OpenIddictApplication)}
+        {"OpenIddictApplication", typeof(OpenIddict.OpenIddictApplication)},
+        {"Language", typeof(Language)}
     };
     private class SeedClass
     {
