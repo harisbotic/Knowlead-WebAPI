@@ -6,5 +6,7 @@ namespace Knowlead.DTO.LookupModels.Core
     {
         [MyRequired]
         public string FosDesc { get; set; }
+
+        public FOSModel ParentFos { get; set; }
     }
 }
