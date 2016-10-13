@@ -129,9 +129,9 @@ public static class SeedScript
         {
             seeder.ImportSingleRow(row);
         }
-        Console.WriteLine("OK");
         if (!data.ImportConfig.SaveAfterEachRow)
         {
+            Console.WriteLine("OK");
             seeder.SaveChanges();
         }
     }
