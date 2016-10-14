@@ -13,19 +13,19 @@ public static class SeedScript
 {
     public static ISeeder SeederFactory(Type type, ApplicationDbContext context, ImportConfig config)
     {
-        if (type.Name == "State")
+        if (type == typeof(State))
         {
             return new Seeder<State>(context, config);
         }
-        else if (type.Name == "OpenIddictApplication")
+        else if (type == typeof(OpenIddict.OpenIddictApplication<Guid>))
         {
             return new Seeder<OpenIddict.OpenIddictApplication<Guid>>(context, config);
         }
-        else if (type.Name == "Language")
+        else if (type == typeof(Language))
         {
             return new Seeder<Language>(context, config);
         }
-        else if (type.Name == "FOS")
+        else if (type == typeof(FOS))
         {
             return new Seeder<FOS>(context, config);
         }
