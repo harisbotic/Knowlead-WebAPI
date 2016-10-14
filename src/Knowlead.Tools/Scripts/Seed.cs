@@ -139,5 +139,10 @@ public static class SeedScript
             Console.WriteLine("OK");
             seeder.SaveChanges();
         }
+        if (data.ImportConfig.Key != null)
+        {
+            Console.WriteLine("Validating ...");
+            seeder.Validate();
+        }
     }
 }

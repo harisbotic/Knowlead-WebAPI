@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Expressions;
@@ -14,6 +15,7 @@ public interface ISeeder
     void ImportSingleRow(JObject row);
     void ClearTable();
     void SaveChanges();
+    void Validate();
 }
 
 public class Seeder<T> : ISeeder where T : class 
@@ -146,11 +148,25 @@ public class Seeder<T> : ISeeder where T : class
             SaveChanges();
         }
     }
-
     public void SaveChanges()
     {
         Console.WriteLine("Saving changes ... ");
         _context.SaveChanges();
         Console.WriteLine("OK");
+    }
+    public void Validate()
+    {
+        HashSet<Object> keys = new HashSet<Object>();
+        Object[] values = _dbset.ToArray();
+        foreach (var item in values)
+        {
+            Object keyValue = item.GetType().GetProperty(config.Key).GetValue(item);
+            if (keys.Contains(keyValue))
+            {
+                Console.WriteLine("Error: Model in database contains duplicate keys '" + config.Key + "' = " + keyValue);
+            } else {
+                keys.Add(keyValue);
+            }
+        }
     }
 }
