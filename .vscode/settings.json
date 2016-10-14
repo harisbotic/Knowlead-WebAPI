@@ -19,7 +19,6 @@
         "NuGet.Config": true,
 
         //Git things
-        ".gitmodules": true,
         ".gitignore": true
         
     }

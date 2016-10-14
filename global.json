@@ -1,7 +1,6 @@
 {
     "projects": [
         "src",
-        "test",
-        "TypeScriptBuilder/src"
+        "test"
     ]
 }

@@ -24,9 +24,7 @@
     "Knowlead.WebApi": {
       "target": "project"
     },
-    "TypeScriptBuilder": {
-      "target": "project"
-    },
+    "TypeScriptBuilder": "0.1.10",
     "AutoMapper": "5.1.1"
   },
   "frameworks": {
