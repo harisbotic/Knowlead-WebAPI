@@ -6,9 +6,7 @@
   "dependencies": {
     "Microsoft.AspNetCore.Mvc.DataAnnotations": "1.0.1",
     "Microsoft.AspNetCore.Identity": "1.0.0",
-    "TypeScriptBuilder": {
-      "target": "project"
-    }
+    "TypeScriptBuilder": "0.1.10"
   },
   "frameworks": {
     "netstandard1.6": {

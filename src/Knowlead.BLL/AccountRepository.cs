@@ -79,8 +79,6 @@ namespace Knowlead.BLL
 
         public async Task<IActionResult> UpdateUserDetails(ApplicationUser applicationUser, JsonPatchDocument<ApplicationUserModel> applicationUserPatch)
         {
-            IdentityResult result;
-
             var langs = _context.ApplicationUserLanguages
                                 .Where(x => x.ApplicationUserId == applicationUser.Id)
                                 .ToList();
@@ -143,7 +141,7 @@ namespace Knowlead.BLL
 
             applicationUser.ApplicationUserLanguages = langs;
 
-            result = await _userManager.UpdateAsync(applicationUser);
+            var result = await _userManager.UpdateAsync(applicationUser);
 
             if(!result.Succeeded)
             {
