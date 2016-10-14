@@ -17,6 +17,10 @@ public static class SeedScript
         {
             return new Seeder<State>(context, config);
         }
+        else if (type == typeof(Country))
+        {
+            return new Seeder<Country>(context, config);
+        }
         else if (type == typeof(OpenIddict.OpenIddictApplication<Guid>))
         {
             return new Seeder<OpenIddict.OpenIddictApplication<Guid>>(context, config);
@@ -41,7 +45,8 @@ public static class SeedScript
         {"State", typeof(State)},
         {"OpenIddictApplication", typeof(OpenIddict.OpenIddictApplication<Guid>)},
         {"Language", typeof(Language)},
-        {"FOS", typeof(FOS)}
+        {"FOS", typeof(FOS)},
+        {"Country", typeof(Country)}
     };
     private class SeedClass
     {

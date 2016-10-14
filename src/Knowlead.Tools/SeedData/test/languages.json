@@ -1,9 +1,9 @@
 {
     "model": "Language",
     "importConfig": {
-        "key": "CoreLookupId",
-        "clearTable": true,
-        "saveAfterEachRow": true
+        "key": "Code",
+        "clearTable": false,
+        "saveAfterEachRow": false
     },
     "data": [
         {

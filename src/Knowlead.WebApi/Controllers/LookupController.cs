@@ -22,7 +22,7 @@ namespace Knowlead.Controllers
         }
         
         // GET api/lookup/languages
-        [HttpGet("languages"), ReallyAuthorize]
+        [HttpGet("languages")]
         public IActionResult GetLanguages()
         {
             var languages = _context.Languages.ToList();
@@ -40,7 +40,7 @@ namespace Knowlead.Controllers
         }
 
         // GET api/lookup/countries
-        [HttpGet("countries"), ReallyAuthorize]
+        [HttpGet("countries")]
         public IActionResult GetCountries()
         {
             var countries = _context.Countries.ToList();
@@ -58,13 +58,13 @@ namespace Knowlead.Controllers
         }
 
         // GET api/lookup/state/5
-        [HttpGet("states"), ReallyAuthorize]
-        public IActionResult GetStatesFor(int countryId)
+        [HttpGet("states")]
+        public IActionResult GetStatesFor(int? countryId)
         {
             var states = new List<State>();
 
-            if(countryId > 0)
-                states = _context.States.Where(x => x.StatesCountryId == countryId).ToList();
+            if(countryId.HasValue)
+                states = _context.States.Where(x => x.StatesCountryId == countryId.Value).ToList();
             else
                 states = _context.States.ToList();
             

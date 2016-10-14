@@ -1,0 +1,41 @@
+{
+    "model": "State",
+    "importConfig": {
+        "key": "Code",
+        "clearTable": false,
+        "saveAfterEachRow": false,
+        "references": [{
+            "fromProperty": "GeoLookupId",
+            "toProperty": "StatesCountryId",
+            "searchProperty": "Code",
+            "searchModel": "Country"
+        }]
+    },
+    "data": [
+        {
+            "Code": "us:ny",
+            "Name": "New York",
+            "StatesCountryId": "us"
+        },
+        {
+            "Code": "us:wa",
+            "Name": "Washington d.c.",
+            "StatesCountryId": "us"
+        },
+        {
+            "Code": "ba:fbih",
+            "Name": "Federacija BiH",
+            "StatesCountryId": "ba"
+        },
+        {
+            "Code": "ba:rs",
+            "Name": "Republika Srpska",
+            "StatesCountryId": "ba"
+        },
+        {
+            "Code": "ba:b",
+            "Name": "Disktrikt Brcko",
+            "StatesCountryId": "ba"
+        }
+    ]
+}
