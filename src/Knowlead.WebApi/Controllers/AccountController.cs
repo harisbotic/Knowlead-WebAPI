@@ -41,7 +41,7 @@ namespace Knowlead.Controllers
         [HttpGet("me"), ReallyAuthorize]
         public async Task<IActionResult> me()
         {
-            var applicationUser = await _auth.GetUser();
+            var applicationUser = await _auth.GetUser(true, true);
             var applicationUserModel = Mapper.Map<ApplicationUserModel>(applicationUser);
             
             return Ok(new ResponseModel{

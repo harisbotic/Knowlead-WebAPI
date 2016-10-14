@@ -138,6 +138,7 @@ namespace Knowlead.BLL
 
             applicationUser.CountryId = applicationUserModel?.CountryId;
             applicationUser.StateId = applicationUserModel?.StateId;
+            applicationUser.MotherTongueId = applicationUserModel?.MotherTongueId;
 
             applicationUser.ApplicationUserLanguages = langs;
 
