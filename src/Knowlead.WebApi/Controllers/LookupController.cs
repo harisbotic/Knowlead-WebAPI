@@ -7,7 +7,6 @@ using Knowlead.DTO.LookupModels.Core;
 using AutoMapper;
 using Knowlead.DTO.ResponseModels;
 using Knowlead.DTO.LookupModels.Geo;
-using Knowlead.WebApi.Attributes;
 
 namespace Knowlead.Controllers
 {
@@ -57,7 +56,7 @@ namespace Knowlead.Controllers
             });
         }
 
-        // GET api/lookup/state/5
+        // GET api/lookup/state?countryId=5
         [HttpGet("states")]
         public IActionResult GetStatesFor(int? countryId)
         {

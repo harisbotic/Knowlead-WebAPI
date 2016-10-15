@@ -16,7 +16,6 @@ using Knowlead.Common;
 using System.Linq;
 using System;
 using Knowlead.DTO.LookupModels.Core;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.JsonPatch.Operations;
 using Newtonsoft.Json.Linq;
 
@@ -83,27 +82,9 @@ namespace Knowlead.BLL
                                 .Where(x => x.ApplicationUserId == applicationUser.Id)
                                 .ToList();
 
-            var langsModel = new List<LanguageModel>();
-
-            foreach (var item in langs)
-            {
-                langsModel.Add(new LanguageModel{
-                    CoreLookupId = item.LanguageId
-                });
-            }
-
             var applicationUserModel = Mapper.Map<ApplicationUserModel>(applicationUser);
             
-            applicationUserModel.Languages = langsModel;
-
-
             applicationUserPatch.ApplyTo(applicationUserModel);
-
-            var e = new ApplicationUserLanguage
-            {
-                LanguageId = 1,
-                ApplicationUserId = applicationUser.Id
-            };
 
             var varName = nameof(ApplicationUserModel.Languages);
             var varPath = $"/{varName}/";
@@ -132,9 +113,10 @@ namespace Knowlead.BLL
 
             applicationUser.Name = applicationUserModel?.Name;
             applicationUser.Surname = applicationUserModel?.Surname;
-            applicationUser.AboutMe = applicationUserModel?.AboutMe;
             applicationUser.Birthdate = applicationUserModel?.Birthdate;
             applicationUser.IsMale = applicationUserModel?.IsMale;
+            applicationUser.Timezone = applicationUserModel?.Timezone;
+            applicationUser.AboutMe = applicationUserModel?.AboutMe;
 
             applicationUser.CountryId = applicationUserModel?.CountryId;
             applicationUser.StateId = applicationUserModel?.StateId;
