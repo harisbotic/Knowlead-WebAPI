@@ -1,0 +1,36 @@
+{
+    "model": "FOS",
+    "importConfig": {
+        "key": "Code",
+        "clearTable": false,
+        "saveAfterEachRow": true,
+        "references": [{
+            "fromProperty": "CoreLookupId",
+            "toProperty": "ParentFosId",
+            "searchProperty": "Code",
+            "searchModel": "FOS"
+        }]
+    },
+    "data": [
+        {
+            "Code": "ComputerSciences.WebDesign.Htmlcssjavascript",
+            "Name": "HTML/CSS/JAVA SCRIPT Programming",
+            "ParentFosId": "ComputerSciences.ProgrammingLanguages"
+        },
+        {
+            "Code": "ComputerSciences.ProgrammingLanguages.Php",
+            "Name": "PHP Programming",
+            "ParentFosId": "ComputerSciences.ProgrammingLanguages"
+        },
+        {
+            "Code": "ComputerSciences.ProgrammingLanguages.MVC",
+            "Name": "MVC/ASP.NET",
+            "ParentFosId": "ComputerSciences.ProgrammingLanguages"
+        },
+        {
+            "Code": "ComputerSciences.ProgrammingLanguages.Angular",
+            "Name": "Angular Programming",
+            "ParentFosId": "ComputerSciences.ProgrammingLanguages"
+        }
+    ]
+}

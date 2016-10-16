@@ -1,0 +1,31 @@
+{
+    "model": "FOS",
+    "importConfig": {
+        "key": "Code",
+        "clearTable": false,
+        "saveAfterEachRow": true,
+        "references": [{
+            "fromProperty": "CoreLookupId",
+            "toProperty": "ParentFosId",
+            "searchProperty": "Code",
+            "searchModel": "FOS"
+        }]
+    },
+    "data": [
+        {
+            "Code": "ComputerSciences.GameDesign.C++",
+            "Name": "C++",
+            "ParentFosId": "ComputerSciences.GameDesign"
+        },
+         {
+            "Code": "ComputerSciences.GameDesign.Java",
+            "Name": "Java",
+            "ParentFosId": "ComputerSciences.GameDesign"
+        },
+         {
+            "Code": "ComputerSciences.GameDesign.Android",
+            "Name": "Android",
+            "ParentFosId": "ComputerSciences.GameDesign"
+        }
+    ]
+}

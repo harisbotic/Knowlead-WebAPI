@@ -1,0 +1,31 @@
+{
+    "model": "FOS",
+    "importConfig": {
+        "key": "Code",
+        "clearTable": false,
+        "saveAfterEachRow": true,
+        "references": [{
+            "fromProperty": "CoreLookupId",
+            "toProperty": "ParentFosId",
+            "searchProperty": "Code",
+            "searchModel": "FOS"
+        }]
+    },
+    "data": [
+        {
+            "Code": "ComputerSciences.MobileApplications.C++",
+            "Name": "C++",
+            "ParentFosId": "ComputerSciences.MobileApplications"
+        },
+         {
+            "Code": "ComputerSciences.MobileApplications.Java",
+            "Name": "Java",
+            "ParentFosId": "ComputerSciences.MobileApplications"
+        },
+         {
+            "Code": "ComputerSciences.MobileApplications.Android",
+            "Name": "Android",
+            "ParentFosId": "ComputerSciences.MobileApplications"
+        }
+    ]
+}

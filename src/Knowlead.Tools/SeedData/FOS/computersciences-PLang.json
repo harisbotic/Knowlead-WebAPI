@@ -1,0 +1,51 @@
+{
+    "model": "FOS",
+    "importConfig": {
+        "key": "Code",
+        "clearTable": false,
+        "saveAfterEachRow": true,
+        "references": [{
+            "fromProperty": "CoreLookupId",
+            "toProperty": "ParentFosId",
+            "searchProperty": "Code",
+            "searchModel": "FOS"
+        }]
+    },
+    "data": [
+        {
+            "Code": "ComputerSciences.ProgrammingLanguages.C",
+            "Name": "C Programming",
+            "ParentFosId": "ComputerSciences.ProgrammingLanguages"
+        },
+          {
+            "Code": "ComputerSciences.ProgrammingLanguages.C++",
+            "Name": "C++ Programming",
+            "ParentFosId": "ComputerSciences.ProgrammingLanguages"
+        },
+          {
+            "Code": "ComputerSciences.ProgrammingLanguages.C#",
+            "Name": "C# Programming",
+            "ParentFosId": "ComputerSciences.ProgrammingLanguages"
+        },
+          {
+            "Code": "ComputerSciences.ProgrammingLanguages.Java",
+            "Name": "Java Programming",
+            "ParentFosId": "ComputerSciences.ProgrammingLanguages"
+        },
+          {
+            "Code": "ComputerSciences.ProgrammingLanguages.Pascal",
+            "Name": "Pascal Programming",
+            "ParentFosId": "ComputerSciences.ProgrammingLanguages"
+        },
+          {
+            "Code": "ComputerSciences.ProgrammingLanguages.Basic",
+            "Name": "Basic Programming",
+            "ParentFosId": "ComputerSciences.ProgrammingLanguages"
+        },
+        {
+            "Code": "ComputerSciences.ProgrammingLanguages.Python",
+            "Name": "Python Programming",
+            "ParentFosId": "ComputerSciences.ProgrammingLanguages"
+        }
+    ]
+}

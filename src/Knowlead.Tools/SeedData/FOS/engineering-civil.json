@@ -1,0 +1,61 @@
+{
+    "model": "FOS",
+    "importConfig": {
+        "key": "Code",
+        "clearTable": false,
+        "saveAfterEachRow": true,
+        "references": [{
+            "fromProperty": "CoreLookupId",
+            "toProperty": "ParentFosId",
+            "searchProperty": "Code",
+            "searchModel": "FOS"
+        }]
+    },
+    "data": [
+        {
+            "Code": "Engineering.Civil.Materials",
+            "Name": "Materials",
+            "ParentFosId": "Engineering.Civil"
+        },
+        {
+            "Code": "Engineering.Civil.TechnicalDrawing",
+            "Name": "Technical Drawing",
+            "ParentFosId": "Engineering.Civil"
+        },
+        {
+            "Code": "Engineering.Civil.FluidMechanics",
+            "Name": "Fluid Mechanics",
+            "ParentFosId": "Engineering.Civil"
+        },
+        {
+            "Code": "Engineering.Civil.ComputerAidedDrawing",
+            "Name": "Computer Aided Drawing",
+            "ParentFosId": "Engineering.Civil"
+        },
+        {
+            "Code": "Engineering.Civil.Dynamics",
+            "Name": "Dynamics",
+            "ParentFosId": "Engineering.Civil"
+        },
+        {
+            "Code": "Engineering.Civil.Hydrology",
+            "Name": "Hydrology",
+            "ParentFosId": "Engineering.Civil"
+        },
+        {
+            "Code": "Engineering.Civil.Statics",
+            "Name": "Statics",
+            "ParentFosId": "Engineering.Civil"
+        },
+        {
+            "Code": "Engineering.Civil.SteelStructures",
+            "Name": "Steel Structures",
+            "ParentFosId": "Engineering.Civil"
+        },
+        {
+            "Code": "Engineering.Civil.Simulations",
+            "Name": "Simulations",
+            "ParentFosId": "Engineering.Civil"
+        }
+    ]
+}

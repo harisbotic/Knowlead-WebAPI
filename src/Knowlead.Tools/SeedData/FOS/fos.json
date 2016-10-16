@@ -1,0 +1,64 @@
+{
+    "model": "FOS",
+    "importConfig": {
+        "key": "Code",
+        "clearTable": false,
+        "saveAfterEachRow": true,
+        "references": [{
+            "fromProperty": "CoreLookupId",
+            "toProperty": "ParentFosId",
+            "searchProperty": "Code",
+            "searchModel": "FOS"
+        }]
+    },
+    "data": [
+        {
+            "Code": "Languages",
+            "Name": "Languages"
+        },
+        {
+            "Code": "Engineering",
+            "Name": "Engineering"
+        },
+        {
+            "Code": "ComputerSciences",
+            "Name": "Computer Sciences"
+        },
+        {
+            "Code": "Medicine",
+            "Name": "Medicine"
+        },
+        {
+            "Code": "Math",
+            "Name": "Math"
+        },
+        {
+            "Code": "SportsPhysicalEducation",
+            "Name": "Sport and Physical Education"
+        },
+        {
+            "Code": "NaturalSciences",
+            "Name": "Natural Sciences"
+        },
+        {
+            "Code": "BussinesEconomy",
+            "Name": "Bussines and Economy"
+        },
+        {
+            "Code": "ArtLiteraure",
+            "Name": "Art and Literature"
+        },
+        {
+            "Code": "SocialStudies",
+            "Name": "Social Studies"
+        },
+        {
+            "Code": "VisitingTraveling",
+            "Name": "Visiting and Traveling"
+        },
+        {
+            "Code": "Religion",
+            "Name": "Religion"
+        }
+    ]
+}

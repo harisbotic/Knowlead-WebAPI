@@ -1,0 +1,76 @@
+{
+    "model": "FOS",
+    "importConfig": {
+        "key": "Code",
+        "clearTable": false,
+        "saveAfterEachRow": true,
+        "references": [{
+            "fromProperty": "CoreLookupId",
+            "toProperty": "ParentFosId",
+            "searchProperty": "Code",
+            "searchModel": "FOS"
+        }]
+    },
+    "data": [
+        {
+            "Code": "Engineering.Mechanical.TechnicalDrawing",
+            "Name": "Technical Drawing",
+            "ParentFosId": "Engineering.Mechanical"
+        },
+        {
+            "Code": "Engineering.Mechanical.FluidMechanics ",
+            "Name": "Fluid Mechanics",
+            "ParentFosId": "Engineering.Mechanical"
+        },
+        {
+            "Code": "Engineering.Mechanical.ComputerAidedDrawing",
+            "Name": "Computer Aided Drawing",
+            "ParentFosId": "Engineering.Mechanical"
+        },
+        {
+            "Code": "Engineering.Mechanical.Materials ",
+            "Name": "Materials",
+            "ParentFosId": "Engineering.Mechanical"
+        },
+        {
+            "Code": "Engineering.Mechanical.MechanicSystemDesign",
+            "Name": "Mechanic System Design",
+            "ParentFosId": "Engineering.Mechanical"
+        },
+        {
+            "Code": "Engineering.Mechanical.MachineryDynamics",
+            "Name": "Machinery Dynamics",
+            "ParentFosId": "Engineering.Mechanical"
+        },
+        {
+            "Code": "Engineering.Mechanical.Mechatronics",
+            "Name": "Mechatronics",
+            "ParentFosId": "Engineering.Mechanical"
+        },
+        {
+            "Code": "Engineering.Mechanical.Aerodynamics",
+            "Name": "Aerodynamics",
+            "ParentFosId": "Engineering.Mechanical"
+        },
+        {
+            "Code": "Engineering.Mechanical.GasDynamics",
+            "Name": "Gas Dynamics",
+            "ParentFosId": "Engineering.Mechanical"
+        },
+        {
+            "Code": "Engineering.Mechanical.Thermodynamics",
+            "Name": "Thermodynamics",
+            "ParentFosId": "Engineering.Mechanical"
+        },
+        {
+            "Code": "Engineering.Mechanical.HydraulicAndPneumaticSystems ",
+            "Name": "Hydraulic And Pneumatic Systems ",
+            "ParentFosId": "Engineering.Mechanical"
+        },
+        {
+            "Code": "Engineering.Mechanical.Simulations",
+            "Name": "Simulations",
+            "ParentFosId": "Engineering.Mechanical"
+        }
+    ]
+}

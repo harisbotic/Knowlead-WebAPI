@@ -1,0 +1,81 @@
+{
+    "model": "FOS",
+    "importConfig": {
+        "key": "Code",
+        "clearTable": false,
+        "saveAfterEachRow": true,
+        "references": [{
+            "fromProperty": "CoreLookupId",
+            "toProperty": "ParentFosId",
+            "searchProperty": "Code",
+            "searchModel": "FOS"
+        }]
+    },
+    "data": [
+        {
+            "Code": "Engineering.Electrical.AutomaticControlSystems",
+            "Name": "Automatic Control Systems",
+            "ParentFosId": "Engineering.Electrical"
+        },
+        {
+            "Code": "Engineering.Electrical.SystemModelingSimulations",
+            "Name": "System Modeling And Simulations",
+            "ParentFosId": "Engineering.Electrical"
+        },
+        {
+            "Code": "Engineering.Electrical.ElectricalCircuits",
+            "Name": "Electrical Circuits",
+            "ParentFosId": "Engineering.Electrical"
+        },
+        {
+            "Code": "Engineering.Electrical.AnalogDigitalElectronics",
+            "Name": "Analaog And Digital Electronics",
+            "ParentFosId": "Engineering.Electrical"
+        },
+        {
+            "Code": "Engineering.Electrical.PowerElectronics",
+            "Name": "Power Electronics",
+            "ParentFosId": "Engineering.Electrical"
+        },
+        {
+            "Code": "Engineering.Electrical.Microcontrollers",
+            "Name": "Microcontrollers",
+            "ParentFosId": "Engineering.Electrical"
+        },
+        {
+            "Code": "Engineering.Electrical.Robotics",
+            "Name": "Robotics",
+            "ParentFosId": "Engineering.Electrical"
+        },
+        {
+            "Code": "Engineering.Electrical.PowerSystems",
+            "Name": "Power Systems",
+            "ParentFosId": "Engineering.Electrical"
+        },
+        {
+            "Code": "Engineering.Electrical.HighVoltageTechniques",
+            "Name": "High Voltage Techniques",
+            "ParentFosId": "Engineering.Electrical"
+        },
+        {
+            "Code": "Engineering.Electrical.ElectricalMeasurements",
+            "Name": "Electrical Measurements",
+            "ParentFosId": "Engineering.Electrical"
+        },
+        {
+            "Code": "Engineering.Electrical.ElectricalMachines",
+            "Name": "Electrical Machines",
+            "ParentFosId": "Engineering.Electrical"
+        },
+        {
+            "Code": "Engineering.Electrical.Telecommunications",
+            "Name": "Telecommunications",
+            "ParentFosId": "Engineering.Electrical"
+        },
+        {
+            "Code": "Engineering.Electrical.SignalsSystems",
+            "Name": "Signals And Systems",
+            "ParentFosId": "Engineering.Electrical"
+        }
+    ]
+}

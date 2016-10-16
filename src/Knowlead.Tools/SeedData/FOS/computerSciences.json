@@ -1,0 +1,36 @@
+{
+    "model": "FOS",
+    "importConfig": {
+        "key": "Code",
+        "clearTable": false,
+        "saveAfterEachRow": true,
+        "references": [{
+            "fromProperty": "CoreLookupId",
+            "toProperty": "ParentFosId",
+            "searchProperty": "Code",
+            "searchModel": "FOS"
+        }]
+    },
+    "data": [
+        {
+            "Code": "ComputerSciences.ProgrammingLanguages",
+            "Name": "Programming Languages",
+            "ParentFosId": "ComputerSciences"
+        },
+        {
+            "Code": "ComputerSciences.WebdDesign",
+            "Name": "Web Design",
+            "ParentFosId": "ComputerSciences"
+        },
+        {
+            "Code": "ComputerSciences.GameDesign",
+            "Name": "Game Design",
+            "ParentFosId": "ComputerSciences"
+        },
+        {
+            "Code": "ComputerSciences.MobileApplications",
+            "Name": "Mobile Applications",
+            "ParentFosId": "ComputerSciences"
+        }
+    ]
+}

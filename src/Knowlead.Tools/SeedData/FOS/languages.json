@@ -1,0 +1,125 @@
+{
+    "model": "FOS",
+    "importConfig": {
+        "key": "Code",
+        "clearTable": false,
+        "saveAfterEachRow": true,
+        "references": [{
+            "fromProperty": "CoreLookupId",
+            "toProperty": "ParentFosId",
+            "searchProperty": "Code",
+            "searchModel": "FOS"
+        }]
+    },
+    "data": [
+        {
+            "Code": "Languages.English",
+            "Name": "English",
+            "ParentFosId": "Languages"
+        },
+        {
+            "Code": "Languages.English.UK",
+            "Name": "UK English",
+            "ParentFosId": "Languages.English"
+        },
+        {
+            "Code": "Languages.English.USA",
+            "Name": "USA English",
+            "ParentFosId": "Languages.English"
+        },
+        {
+            "Code": "Languages.Arabic",
+            "Name": "Arabic",
+            "ParentFosId": "Languages"
+        },
+        {
+            "Code": "Languages.Arabic.Egyptian",
+            "Name": "Egyptian",
+            "ParentFosId": "Languages.Arabic"
+        },
+        {
+            "Code": "Languages.Arabic.GulfArabic",
+            "Name": "Gulf Arabic",
+            "ParentFosId": "Languages.Arabic"
+        },
+         {
+            "Code": "Languages.Arabic.LevantineArabic",
+            "Name": "Levantine Arabic",
+            "ParentFosId": "Languages.Arabic"
+        },
+        {
+            "Code": "Languages.Spanish",
+            "Name": "Spanish",
+            "ParentFosId": "Languages"
+        },
+        {
+            "Code": "Languages.French",
+            "Name": "French"
+        },
+        {
+            "Code": "Languages.German",
+            "Name": "German",
+            "ParentFosId": "Languages"
+        },
+        {
+            "Code": "Languages.Chinese",
+            "Name": "Chinese",
+            "ParentFosId": "Languages"
+        },
+         {
+            "Code": "Languages.Chinese.Mandarin",
+            "Name": "Mandarin Chinese",
+            "ParentFosId":"Languages.Chinese"
+        },
+         {
+            "Code": "Languages.Chinese.WuShanghainese",
+            "Name": "Wu Shanghainese",
+            "ParentFosId":"Languages.Chinese"
+        },
+         {
+            "Code": "Languages.Chinese.YueCantonese",
+            "Name": "YueCantonese",
+            "ParentFosId":"Languages.Chinese"
+        },
+        {
+            "Code": "Languages.Hindi",
+            "Name": "Hindi",
+            "ParentFosId": "Languages"
+        },
+        {
+            "Code": "Languages.Japanese",
+            "Name": "Japanese",
+            "ParentFosId": "Languages"
+        },
+        {
+            "Code": "Languages.Italian",
+            "Name": "Italian",
+            "ParentFosId": "Languages"
+        },
+        {
+            "Code": "Languages.Russian",
+            "Name": "Russian",
+            "ParentFosId": "Languages"
+        },
+        {
+            "Code": "Languages.Polish",
+            "Name": "Polish",
+            "ParentFosId": "Languages"
+        },
+        {
+            "Code": "Languages.Turkish",
+            "Name": "Turksih",
+            "ParentFosId": "Languages"
+        },
+        {
+            "Code": "Languages.Portugese",
+            "Name": "Portugese",
+            "ParentFosId": "Languages"
+        },
+        {
+            "Code": "Languages.Bengali",
+            "Name": "Bengali",
+            "ParentFosId": "Languages"
+        }
+    ]
+}

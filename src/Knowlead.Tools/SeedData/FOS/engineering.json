@@ -1,0 +1,36 @@
+{
+    "model": "FOS",
+    "importConfig": {
+        "key": "Code",
+        "clearTable": false,
+        "saveAfterEachRow": true,
+        "references": [{
+            "fromProperty": "CoreLookupId",
+            "toProperty": "ParentFosId",
+            "searchProperty": "Code",
+            "searchModel": "FOS"
+        }]
+    },
+    "data": [
+        {
+            "Code": "Engineering.Electrical",
+            "Name": "Electrical and Electronics Engineering",
+            "ParentFosId": "Engineering"
+        },
+        {
+            "Code": "Engineering.Mechanical",
+            "Name": "Mechanical Engineering",
+            "ParentFosId": "Engineering"
+        },
+        {
+            "Code": "Engineering.Civil",
+            "Name": "Civil Engineering",
+            "ParentFosId": "Engineering"
+        },
+        {
+            "Code": "Engineering.Architecture",
+            "Name": "Architecure Engineering",
+            "ParentFosId": "Engineering"
+        }
+    ]
+    }

@@ -1,0 +1,46 @@
+{
+    "model": "FOS",
+    "importConfig": {
+        "key": "Code",
+        "clearTable": false,
+        "saveAfterEachRow": true,
+        "references": [{
+            "fromProperty": "CoreLookupId",
+            "toProperty": "ParentFosId",
+            "searchProperty": "Code",
+            "searchModel": "FOS"
+        }]
+    },
+    "data": [
+        {
+            "Code": "Engineering.Architecture.TechnicalDrawing",
+            "Name": "Technical Drawing",
+            "ParentFosId": "Engineering.Architecture"
+        },
+        {
+            "Code": "Engineering.Architecture.ComputerAidedDrawing",
+            "Name": "Computer Aided Drawing",
+            "ParentFosId": "Engineering.Architecture"
+        },
+        {
+            "Code": "Engineering.Architecture.MaterialsInArchitecture",
+            "Name": "Materials In Architecture",
+            "ParentFosId": "Engineering.Architecture"
+        },
+        {
+            "Code": "Engineering.Architecture.EarthquakeResistantBuildingDesign",
+            "Name": "Earthquake Resistant Building Design",
+            "ParentFosId": "Engineering.Architecture"
+        },
+        {
+            "Code": "Engineering.Architecture.StructuralSystems",
+            "Name": "Structural Systems",
+            "ParentFosId": "Engineering.Architecture"
+        },
+        {
+            "Code": "Engineering.Architecture.Simulations",
+            "Name": "Simulations",
+            "ParentFosId": "Engineering.Architecture"
+        }
+    ]
+}
