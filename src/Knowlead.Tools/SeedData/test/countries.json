@@ -1,0 +1,26 @@
+{
+    "model": "Country",
+    "importConfig": {
+        "key": "Code",
+        "clearTable": false,
+        "saveAfterEachRow": false
+    },
+    "data": [
+        {
+            "Name": "Bosnia and Herzegovina",
+            "Code": "ba"
+        },
+        {
+            "Name": "United States of America",
+            "Code": "us"
+        },
+        {
+            "Name": "Great Britain",
+            "Code": "gb"
+        },
+        {
+            "Name": "Germany",
+            "Code": "de"
+        }
+    ]
+}

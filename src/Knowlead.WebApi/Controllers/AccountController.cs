@@ -41,7 +41,7 @@ namespace Knowlead.Controllers
         [HttpGet("me"), ReallyAuthorize]
         public async Task<IActionResult> me()
         {
-            var applicationUser = await _auth.GetUser();
+            var applicationUser = await _auth.GetUser(true);
             var applicationUserModel = Mapper.Map<ApplicationUserModel>(applicationUser);
             
             return Ok(new ResponseModel{
@@ -60,6 +60,18 @@ namespace Knowlead.Controllers
         public async Task<IActionResult> Details([FromBody] JsonPatchDocument<ApplicationUserModel> userDetailsPatch)
         {
             var currentUser = await _auth.GetUser();
+
+            // var e = new ApplicationUserModel();
+            // userDetailsPatch.ApplyTo(e);
+
+            // var b = TryValidateModel(e);
+
+            // var o = new ResponseModel(ModelState);
+            // if(!b)
+            // o.AddError(new ErrorModel("b is false"));
+
+            // return new OkObjectResult(o);
+
             return (await _accountRepository.UpdateUserDetails(currentUser, userDetailsPatch));
         }
 
