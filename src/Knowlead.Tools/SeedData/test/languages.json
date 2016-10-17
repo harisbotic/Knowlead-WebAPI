@@ -2,13 +2,8 @@
     "model": "Language",
     "importConfig": {
         "key": "Code",
-<<<<<<< HEAD:src/Knowlead.Tools/SeedData/languages.json
-        "clearTable": true,
-        "saveAfterEachRow": true
-=======
         "clearTable": false,
-        "saveAfterEachRow": false
->>>>>>> e64f7a263b41c46cf9be44c04b53fedf6c428b21:src/Knowlead.Tools/SeedData/test/languages.json
+        "saveAfterEachRow": true
     },
     "data": [
         {
