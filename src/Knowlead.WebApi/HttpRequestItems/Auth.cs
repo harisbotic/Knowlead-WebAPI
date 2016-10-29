@@ -45,7 +45,7 @@ namespace Knowlead.Common.HttpRequestItems
 
                     userQuery.Where(x => x.Id == new Guid(userId));
 
-                    user = await userQuery.SingleOrDefaultAsync();
+                    user = await userQuery.FirstOrDefaultAsync();
 
                     if (user == null)
                         return null;

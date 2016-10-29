@@ -70,8 +70,8 @@ namespace Knowlead.BLL
             else if(op.OperationType == OperationType.Remove)
             {
                 var id = int.Parse((op.path.Substring(opPath.Length)));
-                var lang = langs.Where(x => x.LanguageId == id).SingleOrDefault();
-                var langModel = applicationUserModel.Languages.Where(x => x.CoreLookupId == id).SingleOrDefault();
+                var lang = langs.Where(x => x.LanguageId == id).FirstOrDefault();
+                var langModel = applicationUserModel.Languages.Where(x => x.CoreLookupId == id).FirstOrDefault();
 
                 if(lang == null || langModel == null)
                     throw new Exception("Language not found to be removed");

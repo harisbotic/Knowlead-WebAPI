@@ -90,7 +90,7 @@ namespace Knowlead.BLL
             {
                 var newState = _context.States
                                     .Where(x => x.GeoLookupId == applicationUserModel.StateId)
-                                    .SingleOrDefault();
+                                    .FirstOrDefault();
 
                 if(newState == null)
                     return new BadRequestObjectResult(new ResponseModel(new FormErrorModel(nameof(ApplicationUserModel.StateId), Constants.ErrorCodes.IncorrectValue)));
