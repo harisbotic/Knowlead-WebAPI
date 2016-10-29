@@ -8,6 +8,7 @@
       "target": "project"
     },
     "OpenIddict": "1.0.0-*",
+    "OpenIddict.Mvc": "1.0.0-*",
     "Microsoft.AspNetCore.Mvc.DataAnnotations": "1.0.1"
   },
   "frameworks": {

@@ -4,11 +4,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Knowlead.Common.DataAnnotations;
 using Knowlead.DomainModel.LookupModels.Core;
 using Knowlead.DomainModel.LookupModels.Geo;
-using OpenIddict;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Knowlead.DomainModel.UserModels
 {
-    public class ApplicationUser : OpenIddictUser<Guid>
+    public class ApplicationUser : IdentityUser<Guid>
     {
         [MyRequired]
         [MyEmailAddress]

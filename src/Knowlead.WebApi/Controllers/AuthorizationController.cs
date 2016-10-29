@@ -5,7 +5,7 @@
  */
 
 using System;
-using System.Security.Claims;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AspNet.Security.OpenIdConnect.Extensions;
@@ -15,7 +15,6 @@ using Knowlead.DomainModel.UserModels;
 using Knowlead.DTO.ResponseModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -26,12 +25,12 @@ namespace Mvc.Server
     public class AuthorizationController : Controller {
         private readonly OpenIddictApplicationManager<OpenIddictApplication<Guid>> _applicationManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly OpenIddictUserManager<ApplicationUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         public AuthorizationController(
             OpenIddictApplicationManager<OpenIddictApplication<Guid>> applicationManager,
             SignInManager<ApplicationUser> signInManager,
-            OpenIddictUserManager<ApplicationUser> userManager) {
+            UserManager<ApplicationUser> userManager) {
             _applicationManager = applicationManager;
             _signInManager = signInManager;
             _userManager = userManager;
@@ -39,10 +38,8 @@ namespace Mvc.Server
 
         [HttpPost("~/connect/token")]
         [Produces("application/json")]
-        public async Task<IActionResult> Exchange() 
+        public async Task<IActionResult> Exchange(OpenIdConnectRequest request) 
         {
-            var request = HttpContext.GetOpenIdConnectRequest();
-        
             if (request.IsPasswordGrantType())
             {
                 var user = await _userManager.FindByEmailAsync(request.Username);
@@ -52,6 +49,14 @@ namespace Mvc.Server
                     }));
                 }
         
+              // Ensure the user is allowed to sign in.
+                if (!await _signInManager.CanSignInAsync(user)) {
+                    return BadRequest(new OpenIdConnectResponse {
+                        Error = OpenIdConnectConstants.Errors.InvalidGrant,
+                        ErrorDescription = "The specified user is not allowed to sign in."
+                    });
+                }
+
                 // Ensure the password is valid.
                 if (!await _userManager.CheckPasswordAsync(user, request.Password)) {
                     if (_userManager.SupportsUserLockout) {
@@ -74,17 +79,9 @@ namespace Mvc.Server
                     await _userManager.ResetAccessFailedCountAsync(user);
                 }
         
-                var identity = await _userManager.CreateIdentityAsync(user, request.GetScopes());
-        
-                // Create a new authentication ticket holding the user identity.
-                var ticket = new AuthenticationTicket(
-                    new ClaimsPrincipal(identity),
-                    new AuthenticationProperties(),
-                    OpenIdConnectServerDefaults.AuthenticationScheme);
-        
-                ticket.SetResources(request.GetResources());
-                ticket.SetScopes(request.GetScopes());
-        
+                // Create a new authentication ticket.
+                var ticket = await CreateTicketAsync(request, user);
+
                 return SignIn(ticket.Principal, ticket.Properties, ticket.AuthenticationScheme);
             }
 
@@ -112,6 +109,46 @@ namespace Mvc.Server
             // Returning a SignOutResult will ask OpenIddict to redirect the user agent
             // to the post_logout_redirect_uri specified by the client application.
             return SignOut(OpenIdConnectServerDefaults.AuthenticationScheme);
+        }
+
+         private async Task<AuthenticationTicket> CreateTicketAsync(OpenIdConnectRequest request, ApplicationUser user) {
+            // Create a new ClaimsPrincipal containing the claims that
+            // will be used to create an id_token, a token or a code.
+            var principal = await _signInManager.CreateUserPrincipalAsync(user);
+
+            // Note: by default, claims are NOT automatically included in the access and identity tokens.
+            // To allow OpenIddict to serialize them, you must attach them a destination, that specifies
+            // whether they should be included in access tokens, in identity tokens or in both.
+
+            foreach (var claim in principal.Claims) {
+                // In this sample, every claim is serialized in both the access and the identity tokens.
+                // In a real world application, you'd probably want to exclude confidential claims
+                // or apply a claims policy based on the scopes requested by the client application.
+                claim.SetDestinations(OpenIdConnectConstants.Destinations.AccessToken,
+                                      OpenIdConnectConstants.Destinations.IdentityToken);
+            }
+
+            // Create a new authentication ticket holding the user identity.
+            var ticket = new AuthenticationTicket(
+                principal, new AuthenticationProperties(),
+                OpenIdConnectServerDefaults.AuthenticationScheme);
+
+            // Set the list of scopes granted to the client application.
+            // Note: the offline_access scope must be granted
+            // to allow OpenIddict to return a refresh token.
+            ticket.SetScopes(new[] {
+                OpenIdConnectConstants.Scopes.OpenId,
+                OpenIdConnectConstants.Scopes.Email,
+                OpenIdConnectConstants.Scopes.Profile,
+                OpenIdConnectConstants.Scopes.OfflineAccess,
+                OpenIddictConstants.Scopes.Roles
+            }.Intersect(request.GetScopes()));
+
+            //ADDED MANUALLY
+            ticket.SetResources(request.GetResources());
+            ticket.SetScopes(request.GetScopes());
+
+            return ticket;
         }
 
        /* [Authorize, HttpGet, Route("~/connect/authorize")]

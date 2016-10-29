@@ -7,11 +7,11 @@ using Knowlead.DomainModel.CoreModels;
 using Knowlead.DomainModel.FeedbackModels;
 using Knowlead.DomainModel.LookupModels.FeedbackModels;
 using OpenIddict;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using System;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
 using Knowlead.DomainModel.FriendshipModels;
 using Knowlead.DomainModel.P2PModels;
+using System;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Knowlead.DAL
 {
