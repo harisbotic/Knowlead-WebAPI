@@ -80,5 +80,24 @@ namespace Knowlead.Controllers
             });
         }
 
+        // GET api/lookup/state?countryId=5
+        [HttpGet("allfos")]
+        public IActionResult GetAllFOS()
+        {
+            var foss = _context.Fos.ToList();
+
+            var fossModel = new List<FOSModel>();
+
+            foreach (var fos in foss)
+            {
+                fossModel.Add(Mapper.Map<FOSModel>(fos));
+            }
+
+            return new OkObjectResult(new ResponseModel{
+                Object = fossModel
+            });
+
+        }
+
     }
 }
