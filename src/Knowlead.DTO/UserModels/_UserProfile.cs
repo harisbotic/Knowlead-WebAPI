@@ -15,7 +15,10 @@ namespace Knowlead.DTO.UserModels
 
             CreateMap<ApplicationUserModel, ApplicationUser>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
-                .ForMember(dest => dest.ApplicationUserLanguages, opt => opt.Ignore());
+                .ForMember(dest => dest.ApplicationUserLanguages, opt => opt.Ignore())
+                .ForMember(dest => dest.Country, opt => opt.Ignore())
+                .ForMember(dest => dest.MotherTongue, opt => opt.Ignore())
+                .ForMember(dest => dest.State, opt => opt.Ignore());
 
             CreateMap<ApplicationUserLanguage, LanguageModel>()
                 .ForMember(dest => dest.CoreLookupId, opt => opt.MapFrom(src => src.LanguageId))
