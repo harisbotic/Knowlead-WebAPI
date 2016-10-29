@@ -68,12 +68,23 @@ public static class SeedScript
         public ReferenceClass[] References { get; set; }
         public bool SaveAfterEachRow { get; set; } = false;
     }
+
+    private static ApplicationDbContext context;
     public static void Seed(string[] args)
     {
-        
+        Console.WriteLine("Seeding: " + args[1]);
         if (args.Length < 2)
         {
             Console.WriteLine("Error: Missing file argument. Usage: seed filename.json");
+            return;
+        }
+        if (Directory.Exists(args[1]))
+        {
+            IEnumerable<string> targets = Directory.GetFiles(args[1]).Concat(Directory.GetDirectories(args[1]));
+            foreach (var target in targets) 
+            {
+                Seed(new String[]{args[0], target});
+            }
             return;
         }
         string text = "";
@@ -127,7 +138,8 @@ public static class SeedScript
             data.ImportConfig = new ImportConfig();
         }
         Console.WriteLine("Debug: Using class: '" + entityType.Name + "'");
-        ApplicationDbContext context = ScriptUtils.InitializeContext();
+        if (context == null)
+            context = ScriptUtils.InitializeContext();
         ISeeder seeder = SeederFactory(entityType, context, data.ImportConfig);
         if (data.ImportConfig.ClearTable)
         {
