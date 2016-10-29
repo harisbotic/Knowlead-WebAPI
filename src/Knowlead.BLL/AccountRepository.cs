@@ -80,13 +80,18 @@ namespace Knowlead.BLL
                                                                .Where(x => x.ApplicationUserId == applicationUser.Id)
                                                                .ToList();
 
+            applicationUser.ApplicationUserInterests = _context.ApplicationUserInterests
+                                                               .Where(x => x.ApplicationUserId == applicationUser.Id)
+                                                               .ToList();
+
             var applicationUserModel = Mapper.Map<ApplicationUserModel>(applicationUser);
             
             var k = new Dictionary<string, Object>();
             k.Add(nameof(ApplicationUserModel.Languages), applicationUser.ApplicationUserLanguages);
+            k.Add(nameof(ApplicationUserModel.Interests), applicationUser.ApplicationUserInterests);
             applicationUserPatch.CustomApplyTo(applicationUserModel, k, applicationUser);
             
-            if(applicationUserModel.StateId != null && applicationUserModel?.StateId != applicationUser?.StateId)
+            if(applicationUserModel.StateId != null && applicationUserModel.StateId != applicationUser?.StateId)
             {
                 var newState = _context.States
                                     .Where(x => x.GeoLookupId == applicationUserModel.StateId)

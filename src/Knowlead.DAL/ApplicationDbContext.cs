@@ -44,7 +44,6 @@ namespace Knowlead.DAL
             public DbSet<ApplicationUser> ApplicationUsers { get; set; }
             public DbSet<ApplicationUserInterest> ApplicationUserInterests { get; set; }
             public DbSet<ApplicationUserLanguage> ApplicationUserLanguages { get; set; }
-            public DbSet<ApplicationUserSkill> ApplicationUserSkills { get; set; }
             public DbSet<UserAchievement> UserAchievements { get; set; }
             public DbSet<UserCertificate> UserCertificates { get; set; }
             public DbSet<UserNotebook> UserNotebooks { get; set; }
@@ -117,9 +116,6 @@ namespace Knowlead.DAL
                 .HasKey(t => new { t.ApplicationUserId, t.LanguageId });
 
             modelBuilder.Entity<ApplicationUserInterest>()
-                .HasKey(t => new { t.ApplicationUserId, t.FosId });
-
-            modelBuilder.Entity<ApplicationUserSkill>()
                 .HasKey(t => new { t.ApplicationUserId, t.FosId });
 
             //*** Friendship ***

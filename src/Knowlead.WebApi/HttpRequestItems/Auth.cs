@@ -39,6 +39,8 @@ namespace Knowlead.Common.HttpRequestItems
                     if(includeDetails)
                         userQuery = userQuery.Include(x => x.ApplicationUserLanguages)
                                                 .ThenInclude(x => x.Language)
+                                             .Include(x => x.ApplicationUserInterests)
+                                                .ThenInclude(x => x.Fos)
                                              .Include(x => x.MotherTongue)
                                              .Include(x => x.Country)
                                              .Include(x => x.State);

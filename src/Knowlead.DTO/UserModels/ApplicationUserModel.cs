@@ -31,6 +31,7 @@ namespace Knowlead.DTO.UserModels
         public LanguageModel MotherTongue { get; set; }
 
         public List<LanguageModel> Languages { get; set; }
+        public List<InterestModel> Interests { get; set; }
 
 
         [MyRequired]
@@ -44,7 +45,8 @@ namespace Knowlead.DTO.UserModels
         public ApplicationUserModel()
         {
             this.Status = UserStatus.Offline;
-            Languages = new List<LanguageModel>();
+            this.Languages = new List<LanguageModel>();
+            this.Interests = new List<InterestModel>();
         }
     }
 }

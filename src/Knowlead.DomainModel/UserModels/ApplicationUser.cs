@@ -32,6 +32,7 @@ namespace Knowlead.DomainModel.UserModels
         public Language MotherTongue { get; set; }
 
         public ICollection<ApplicationUserLanguage> ApplicationUserLanguages { get; set; }
+        public ICollection<ApplicationUserInterest> ApplicationUserInterests { get; set; }
 
         [MyRequired]
         public UserStatus Status { get; set; }
