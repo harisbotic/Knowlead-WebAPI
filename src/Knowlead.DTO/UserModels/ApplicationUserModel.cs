@@ -16,7 +16,7 @@ namespace Knowlead.DTO.UserModels
         public string Surname { get; set; }
         public DateTime? Birthdate { get; set; }
         public Boolean? IsMale { get; set; }
-        public string Timezone { get; set; } //TimezoneInfo.Id
+        public string Timezone { get; set; }
         public string AboutMe { get; set; }
 
 

@@ -15,9 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using Knowlead.Common;
 using System.Linq;
 using System;
-using Knowlead.DTO.LookupModels.Core;
-using Microsoft.AspNetCore.JsonPatch.Operations;
-using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 
 namespace Knowlead.BLL
 {
@@ -78,51 +76,29 @@ namespace Knowlead.BLL
 
         public async Task<IActionResult> UpdateUserDetails(ApplicationUser applicationUser, JsonPatchDocument<ApplicationUserModel> applicationUserPatch)
         {
-            var langs = _context.ApplicationUserLanguages
-                                .Where(x => x.ApplicationUserId == applicationUser.Id)
-                                .ToList();
+            applicationUser.ApplicationUserLanguages = _context.ApplicationUserLanguages
+                                                               .Where(x => x.ApplicationUserId == applicationUser.Id)
+                                                               .ToList();
 
             var applicationUserModel = Mapper.Map<ApplicationUserModel>(applicationUser);
             
-            applicationUserPatch.ApplyTo(applicationUserModel);
-
-            var varName = nameof(ApplicationUserModel.Languages);
-            var varPath = $"/{varName}/";
-            foreach (var operation in applicationUserPatch.Operations)
+            var k = new Dictionary<string, Object>();
+            k.Add(nameof(ApplicationUserModel.Languages), applicationUser.ApplicationUserLanguages);
+            applicationUserPatch.CustomApplyTo(applicationUserModel, k, applicationUser);
+            
+            if(applicationUserModel?.StateId != applicationUser?.StateId)
             {
-                if(operation.path.StartsWith(varPath, StringComparison.CurrentCultureIgnoreCase))
-                {
-                    switch (operation.OperationType)
-                    {
-                        case OperationType.Add:
-                            var @value = operation.value as JObject;
-                            langs.Add(new ApplicationUserLanguage
-                            {
-                                LanguageId = (int)(@value.GetValue(nameof(LanguageModel.CoreLookupId), StringComparison.CurrentCultureIgnoreCase)),  
-                                ApplicationUserId = applicationUser.Id
-                            });
-                        break;
+                var newState = _context.States
+                                    .Where(x => x.GeoLookupId == applicationUserModel.StateId)
+                                    .SingleOrDefault();
 
-                        case OperationType.Remove:
-                            var index = int.Parse((operation.path.Substring(varPath.Length)));
-                            langs.RemoveAt(index);
-                        break;
-                    }
-                }
+                if(newState == null)
+                    return new BadRequestObjectResult(new ResponseModel(new FormErrorModel(nameof(ApplicationUserModel.StateId), Constants.ErrorCodes.IncorrectValue)));
+
+                applicationUserModel.CountryId = newState.StatesCountryId;
             }
 
-            applicationUser.Name = applicationUserModel?.Name;
-            applicationUser.Surname = applicationUserModel?.Surname;
-            applicationUser.Birthdate = applicationUserModel?.Birthdate;
-            applicationUser.IsMale = applicationUserModel?.IsMale;
-            applicationUser.Timezone = applicationUserModel?.Timezone;
-            applicationUser.AboutMe = applicationUserModel?.AboutMe;
-
-            applicationUser.CountryId = applicationUserModel?.CountryId;
-            applicationUser.StateId = applicationUserModel?.StateId;
-            applicationUser.MotherTongueId = applicationUserModel?.MotherTongueId;
-
-            applicationUser.ApplicationUserLanguages = langs;
+            applicationUser = Mapper.Map<ApplicationUserModel, ApplicationUser>(applicationUserModel, applicationUser);
 
             var result = await _userManager.UpdateAsync(applicationUser);
 

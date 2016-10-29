@@ -4,6 +4,7 @@ using Knowlead.BLL.Interfaces;
 using Knowlead.DAL;
 using Knowlead.DomainModel.UserModels;
 using Knowlead.Services;
+using Knowlead.WebApi.Attributes;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,11 +17,16 @@ namespace Knowlead.WebApi.Config
     
         public static IServiceCollection AddCustomizedMvc(this IServiceCollection services)
         {
-                services.AddMvc()
+                services.AddMvc(options =>
+                {
+                    options.Filters.Add(new HandleExceptionsAttribute());
+                    
+                })
                 .AddJsonOptions(config => 
                 {
                     config.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                 });
+                
                 services.Configure<IdentityOptions>(options=>
                 {
                     options.Cookies.ApplicationCookie.LoginPath = null;

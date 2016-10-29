@@ -27,6 +27,8 @@ namespace Knowlead.Common
             public const string NotLoggedIn = "NOT_LOGGED_IN";
             [TSInitialize]
             public const string LoginCredentialsIncorrect = "LOGIN_CREDENTIALS_INCORRECT";
+            [TSInitialize]
+            public const string IncorrectValue = "INCORRECT_VALUE";
 
         }
 

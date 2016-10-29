@@ -80,7 +80,7 @@ namespace Knowlead.Controllers
             });
         }
 
-        // GET api/lookup/state?countryId=5
+        // GET api/lookup/allfos
         [HttpGet("allfos")]
         public IActionResult GetAllFOS()
         {

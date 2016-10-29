@@ -20,6 +20,9 @@ namespace Knowlead.WebApi.Attributes
             {
                 responseModel.AddError(new ErrorModel(ex.Message));
             }
+            //If no specific exception occured
+            else
+                responseModel.AddError(new ErrorModel(ex.Message));
             
             filterContext.Result = new BadRequestObjectResult(responseModel);
         }
