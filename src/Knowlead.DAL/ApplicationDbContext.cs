@@ -87,16 +87,23 @@ namespace Knowlead.DAL
             
             modelBuilder.HasPostgresExtension("uuid-ossp");
 
-            modelBuilder.Entity<_CoreLookup>()
-                .HasDiscriminator<string>("Category")
-                .HasValue<Achievement>("Achievement")
-                .HasValue<FOS>("Fos")
-                .HasValue<Language>("Language");
+            modelBuilder.Entity<Country>().ToTable("Countries");  
+            modelBuilder.Entity<State>().ToTable("States");
 
-            modelBuilder.Entity<_GeoLookup>()
-                .HasDiscriminator<string>("Category")
-                .HasValue<State>("State")
-                .HasValue<Country>("Country");
+            modelBuilder.Entity<Achievement>().ToTable("Achievements");  
+            modelBuilder.Entity<FOS>().ToTable("FOS");
+            modelBuilder.Entity<Language>().ToTable("Languages");
+
+            // modelBuilder.Entity<_CoreLookup>()
+            //     .HasDiscriminator<string>("Category")
+            //     .HasValue<Achievement>("Achievement")
+            //     .HasValue<FOS>("Fos")
+            //     .HasValue<Language>("Language");
+
+            // modelBuilder.Entity<_GeoLookup>()
+            //     .HasDiscriminator<string>("Category")
+            //     .HasValue<State>("State")
+            //     .HasValue<Country>("Country");
 
             modelBuilder.Entity<_Feedback>()
                 .HasDiscriminator<string>("Category")
