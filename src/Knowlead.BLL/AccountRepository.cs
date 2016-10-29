@@ -86,7 +86,7 @@ namespace Knowlead.BLL
             k.Add(nameof(ApplicationUserModel.Languages), applicationUser.ApplicationUserLanguages);
             applicationUserPatch.CustomApplyTo(applicationUserModel, k, applicationUser);
             
-            if(applicationUserModel?.StateId != applicationUser?.StateId)
+            if(applicationUserModel?.StateId != null || applicationUserModel?.StateId != applicationUser?.StateId)
             {
                 var newState = _context.States
                                     .Where(x => x.GeoLookupId == applicationUserModel.StateId)

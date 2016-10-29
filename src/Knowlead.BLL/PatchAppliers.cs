@@ -57,7 +57,7 @@ namespace Knowlead.BLL
 
                 //Check if already exists
                 if(langs.Where(x => x.ApplicationUserId == applicationUser.Id && x.LanguageId == languageId).FirstOrDefault() != null)
-                    throw new Exception("Item Already exists");
+                    throw new Exception("Language Already added");
 
                 langs.Add(new ApplicationUserLanguage
                 {
