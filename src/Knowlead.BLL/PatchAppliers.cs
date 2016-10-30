@@ -30,6 +30,9 @@ namespace Knowlead.BLL
                     if(z.Value.GetType() == typeof(List<ApplicationUserLanguage>))
                         ApplyToApplicationUserLanguage(op, objectToApplyTo as ApplicationUserModel, (ICollection<ApplicationUserLanguage>)z.Value, applicationUser);
                     
+                    if(z.Value.GetType() == typeof(List<ApplicationUserInterest>))
+                        ApplyToApplicationUserInterests(op, objectToApplyTo as ApplicationUserModel, (ICollection<ApplicationUserInterest>)z.Value, applicationUser);
+                    
 
                 }
                 else 
@@ -43,7 +46,6 @@ namespace Knowlead.BLL
         {
             if(applicationUser == null)
             {
-                //TODO: Make a custom exception and throw/catch that
                 throw new ArgumentNullException(nameof(applicationUser));
             }
 
@@ -57,7 +59,7 @@ namespace Knowlead.BLL
 
                 //Check if already exists
                 if(langs.Where(x => x.ApplicationUserId == applicationUser.Id && x.LanguageId == languageId).FirstOrDefault() != null)
-                    throw new Exception("Language Already added");
+                    throw new Exception($"Language {languageId} Already added");
 
                 langs.Add(new ApplicationUserLanguage
                 {
@@ -78,6 +80,66 @@ namespace Knowlead.BLL
 
                 langs.Remove(lang);
                 applicationUserModel.Languages.Remove(langModel);
+            }
+        }
+
+        // "ApplyTo" + name of class
+        private static void ApplyToApplicationUserInterests(Operation op, ApplicationUserModel applicationUserModel, ICollection<ApplicationUserInterest> interests, ApplicationUser applicationUser) 
+        {
+            if(applicationUser == null)
+            {
+                throw new ArgumentNullException(nameof(applicationUser));
+            }
+
+            var varName = nameof(ApplicationUserModel.Interests);
+            var opPath = $"/{varName}/";
+
+            if(op.OperationType == OperationType.Add)
+            {
+                var @value = op.value as JObject;
+                var fosId = (int)(@value.GetValue(nameof(InterestModel.FosId), StringComparison.CurrentCultureIgnoreCase));
+                var stars = (int)(@value.GetValue(nameof(InterestModel.Stars), StringComparison.CurrentCultureIgnoreCase));
+
+                //Check if already exists
+                if(interests.Where(x => x.ApplicationUserId == applicationUser.Id && x.FosId == fosId).FirstOrDefault() != null)
+                    throw new Exception($"Interest {fosId} Already added");
+
+                interests.Add(new ApplicationUserInterest
+                {  
+                    ApplicationUserId = applicationUser.Id,
+                    FosId = fosId,
+                    Stars = stars
+                });
+                applicationUserModel.Interests.Add(new InterestModel{FosId = fosId, Stars = stars});
+            }
+
+            else if(op.OperationType == OperationType.Remove)
+            {
+                var id = int.Parse((op.path.Substring(opPath.Length)));
+                var interest = interests.Where(x => x.FosId == id).FirstOrDefault();
+                var interestModel = applicationUserModel.Interests.Where(x => x.FosId == id).FirstOrDefault();
+
+                if(interest == null || interestModel == null)
+                    throw new Exception("Interest not found to be removed");
+
+                interests.Remove(interest);
+                applicationUserModel.Interests.Remove(interestModel);
+            }
+
+            else if(op.OperationType == OperationType.Replace)
+            {
+                var id = int.Parse((op.path.Substring(opPath.Length)));
+                var @value = op.value as JObject;
+                var stars = (int)(@value.GetValue(nameof(InterestModel.Stars), StringComparison.CurrentCultureIgnoreCase));
+
+                var interest = interests.Where(x => x.FosId == id).FirstOrDefault();
+                var interestModel = applicationUserModel.Interests.Where(x => x.FosId == id).FirstOrDefault();
+
+                if(interest == null || interestModel == null)
+                    throw new Exception("Interest not found to be removed");
+
+                interest.Stars = stars;
+                interestModel.Stars = stars;
             }
         }
     }
