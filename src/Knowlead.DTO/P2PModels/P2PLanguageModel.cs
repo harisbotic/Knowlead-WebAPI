@@ -3,7 +3,7 @@ using Knowlead.DTO.LookupModels.Core;
 
 namespace Knowlead.DTO.P2PModels
 {
-    public class P2PLangugageModel
+    public class P2PLanguageModel
     {
         [MyRequired]
         public int P2pId { get; set; }

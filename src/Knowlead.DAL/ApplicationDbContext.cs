@@ -61,7 +61,7 @@ namespace Knowlead.DAL
             public DbSet<P2PDiscussion> P2PDiscussions { get; set; }
             public DbSet<P2PFile> P2PFiles { get; set; }
             public DbSet<P2PImage> P2PImages { get; set; }
-            public DbSet<P2PLangugage> P2PLangugages { get; set; }
+            public DbSet<P2PLanguage> P2PLanguages { get; set; }
         #endregion 
 
         #region Core Models
@@ -132,7 +132,7 @@ namespace Knowlead.DAL
             modelBuilder.Entity<P2PImage>()
                 .HasKey(t => new { t.P2pId, t.ImageId });
            
-            modelBuilder.Entity<P2PLangugage>()
+            modelBuilder.Entity<P2PLanguage>()
                 .HasKey(t => new { t.P2pId, t.LanguageId });
 
         }

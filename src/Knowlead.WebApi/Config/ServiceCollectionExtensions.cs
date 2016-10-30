@@ -108,6 +108,7 @@ namespace Knowlead.WebApi.Config
         public static IServiceCollection AddRepositories(this IServiceCollection services)
         {
             services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddScoped<IP2PRepository, P2PRepository>();
 
             return services;
         }
