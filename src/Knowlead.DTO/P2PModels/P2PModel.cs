@@ -1,22 +1,36 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using Knowlead.Common.DataAnnotations;
 using Knowlead.DTO.LookupModels.Core;
+using Knowlead.DTO.UserModels;
 
 namespace Knowlead.DTO.P2PModels
 {
     public class P2PModel
     {        
         [MyRequired]
-        public string Title { get; set; }
+        public string Title { get; set; }      
+          
+        [MyRequired]
+        public string Text { get; set; }
         
         [MyRequired]
         public float ChargePerMinute { get; set; }
         
-        [MyRequired]
-        public DateTime Deadline { get; set; }
+        public DateTime? Deadline { get; set; }
         
-        public DateTime ScheduledAt { get; set; }
+        public DateTime? ScheduledAt { get; set; }
+
+        public Guid? ScheduledWithId { get; set; }
+        [ForeignKey("ScheduledWithId")]
+        public ApplicationUserModel ScheduledWith { get; set; }
+
+
+        public Guid? CreatedById { get; set; }
+        [ForeignKey("CreatedById")]
+        public ApplicationUserModel CreatedBy { get; set; }
+
 
         public List<LanguageModel> Languages { get; set; }
         

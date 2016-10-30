@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 using Knowlead.DomainModel.LookupModels.Core;
+using Knowlead.DomainModel.UserModels;
 
 namespace Knowlead.DomainModel.P2PModels
 {
@@ -17,12 +18,24 @@ namespace Knowlead.DomainModel.P2PModels
         public string Title { get; set; }
         
         [MyRequired]
-        public float ChargePerMinute { get; set; }
+        public string Text { get; set; }
         
         [MyRequired]
-        public DateTime Deadline { get; set; }
+        public float ChargePerMinute { get; set; }
         
-        public DateTime ScheduledAt { get; set; }
+        public DateTime? Deadline { get; set; }
+        
+        public DateTime? ScheduledAt { get; set; }
+
+        public Guid? ScheduledWithId { get; set; }
+        [ForeignKey("ScheduledWithId")]
+        public ApplicationUser ScheduledWith { get; set; }
+
+        [MyRequired]
+        public Guid CreatedById { get; set; }
+        [ForeignKey("CreatedById")]
+        public ApplicationUser CreatedBy { get; set; }
+        
 
         public ICollection<P2PLanguage> P2PLanguages { get; set; }
         
