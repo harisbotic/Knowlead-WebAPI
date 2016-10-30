@@ -8,6 +8,8 @@ using Knowlead.Common;
 using Knowlead.DTO.ResponseModels;
 using TypeScriptBuilder;
 
+namespace Knowlead.Tools
+{
 public static class GenerateScript
 {
     public static void Generate(string[] args)
@@ -63,5 +65,6 @@ public static class GenerateScript
             t.GetTypeInfo().BaseType != typeof(Profile)
         ).ToList();
     }
+}
 
 }

@@ -159,11 +159,6 @@
             "ParentFosId":"Languages"
         },
         {
-            "Code": "Languages.Hindi",
-            "Name": "Hindi",
-            "ParentFosId":"Languages"
-        },
-        {
             "Code": "Languages.Hungarian",
             "Name": "Hungarian",
             "ParentFosId":"Languages"
@@ -326,11 +321,6 @@
          {
             "Code": "Languages.Persian",
             "Name": "Persian",
-            "ParentFosId":"Languages"
-        },
-         {
-            "Code": "Languages.Polish",
-            "Name": "Polish",
             "ParentFosId":"Languages"
         },
          {

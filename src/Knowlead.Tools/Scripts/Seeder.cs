@@ -10,20 +10,28 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
+namespace Knowlead.Tools {
 public interface ISeeder
 {
     void ImportSingleRow(JObject row);
     void ClearTable();
     void SaveChanges();
     void Validate();
+    int Same { get; set; }
+    int Updated { get; set; }
+    int New { get; set; }
 }
 
 public class Seeder<T> : ISeeder where T : class 
 {
+    public int Same { get; set; }
+    public int Updated { get; set; }
+    public int New { get; set; }
     ApplicationDbContext _context;
     DbSet<T> _dbset;
     SeedScript.ImportConfig config;
-    public Seeder(ApplicationDbContext context, SeedScript.ImportConfig importConfig)
+    bool verbose;
+    public Seeder(ApplicationDbContext context, SeedScript.ImportConfig importConfig, bool verbose)
     {
         this.config = importConfig;
         _context = context;
@@ -31,19 +39,25 @@ public class Seeder<T> : ISeeder where T : class
         Mapper.Initialize(config => {
             config.CreateMap<T, T>();
             config.ShouldMapProperty = p =>
-                p.GetCustomAttribute(typeof(KeyAttribute)) == null;
+                p.GetCustomAttribute(typeof(KeyAttribute)) == null &&
+                Utils.IsSimple(p.PropertyType);
         });
+        this.verbose = verbose;
     }
     public void ClearTable()
     {
-        Console.WriteLine("Warning: Clearing table ...");
+        if (verbose)
+            Console.WriteLine("Warning: Clearing table ...");
         _dbset.RemoveRange(_dbset.ToList());
-        Console.WriteLine("OK");
+        if (verbose)
+            Console.WriteLine("OK");
     }
 
     public void ImportSingleRow(JObject row)
     {
-        Console.WriteLine("Debug: Importing row: " + row.ToString(Formatting.None));
+        if (verbose)
+            Console.WriteLine("Debug: Importing row: " + row.ToString(Formatting.None));
+        string[] includes = new string[]{};
         if (config.References != null && config.References.Length > 0)
         {
             foreach (var reference in config.References)
@@ -89,7 +103,8 @@ public class Seeder<T> : ISeeder where T : class
                     Console.WriteLine("Error: Model " + reference.SearchModel + " doesn't contain property " + reference.FromProperty);
                     return;
                 }
-                Console.WriteLine(row[reference.ToProperty].ToString() + " -> " + prop.GetValue(objs[0]) + " (expression: " + expression + ")");
+                if (verbose)
+                    Console.WriteLine(row[reference.ToProperty].ToString() + " -> " + prop.GetValue(objs[0]) + " (expression: " + expression + ")");
                 row.GetValue(reference.ToProperty)
                     .Replace(new JValue(prop.GetValue(objs[0])));
             }
@@ -131,8 +146,10 @@ public class Seeder<T> : ISeeder where T : class
 
     private void DoImportRow(T obj)
     {
-        Console.WriteLine("Debug: Importing new row");
+        if (verbose)
+            Console.WriteLine("Debug: Importing new row");
         _dbset.Add(obj);
+        New++;
         if (config.SaveAfterEachRow)
         {
             SaveChanges();
@@ -141,8 +158,16 @@ public class Seeder<T> : ISeeder where T : class
 
     private void DoUpdateRow(T from, ref T to)
     {
-        Console.WriteLine("Debug: Updating a row");
-        Mapper.Map(from, to, typeof(T), typeof(T));
+        if (verbose)
+            Console.WriteLine("Debug: Updating a row");
+        if (from.PublicInstancePropertiesEqual(to))
+        {
+            Same++;
+        } else
+        {
+            Mapper.Map(from, to, typeof(T), typeof(T));
+            Updated++;
+        }
         if (config.SaveAfterEachRow)
         {
             SaveChanges();
@@ -150,9 +175,11 @@ public class Seeder<T> : ISeeder where T : class
     }
     public void SaveChanges()
     {
-        Console.WriteLine("Saving changes ... ");
+        if (verbose)
+            Console.WriteLine("Saving changes ... ");
         _context.SaveChanges();
-        Console.WriteLine("OK");
+        if (verbose)
+            Console.WriteLine("OK");
     }
     public void Validate()
     {
@@ -169,4 +196,6 @@ public class Seeder<T> : ISeeder where T : class
             }
         }
     }
+}
+
 }

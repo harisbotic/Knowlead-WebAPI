@@ -54,7 +54,8 @@
         },
         {
             "Code": "Languages.French",
-            "Name": "French"
+            "Name": "French",
+            "ParentFosId": "Languages"
         },
         {
             "Code": "Languages.German",

@@ -9,29 +9,32 @@ using Knowlead.DomainModel.LookupModels.Core;
 using System.Linq;
 using System.Collections.Generic;
 
+namespace Knowlead.Tools
+{
+
 public static class SeedScript
 {
-    public static ISeeder SeederFactory(Type type, ApplicationDbContext context, ImportConfig config)
+    public static ISeeder SeederFactory(Type type, ApplicationDbContext context, ImportConfig config, bool verbose)
     {
         if (type == typeof(State))
         {
-            return new Seeder<State>(context, config);
+            return new Seeder<State>(context, config, verbose);
         }
         else if (type == typeof(Country))
         {
-            return new Seeder<Country>(context, config);
+            return new Seeder<Country>(context, config, verbose);
         }
         else if (type == typeof(OpenIddict.OpenIddictApplication<Guid>))
         {
-            return new Seeder<OpenIddict.OpenIddictApplication<Guid>>(context, config);
+            return new Seeder<OpenIddict.OpenIddictApplication<Guid>>(context, config, verbose);
         }
         else if (type == typeof(Language))
         {
-            return new Seeder<Language>(context, config);
+            return new Seeder<Language>(context, config, verbose);
         }
         else if (type == typeof(FOS))
         {
-            return new Seeder<FOS>(context, config);
+            return new Seeder<FOS>(context, config, verbose);
         }
         else
         {
@@ -78,6 +81,7 @@ public static class SeedScript
             Console.WriteLine("Error: Missing file argument. Usage: seed filename.json");
             return;
         }
+        bool verbose = args.Contains("--verbose");
         if (Directory.Exists(args[1]))
         {
             IEnumerable<string> targets = Directory.GetFiles(args[1]).Concat(Directory.GetDirectories(args[1]));
@@ -137,29 +141,36 @@ public static class SeedScript
         {
             data.ImportConfig = new ImportConfig();
         }
-        Console.WriteLine("Debug: Using class: '" + entityType.Name + "'");
+        if (verbose)
+            Console.WriteLine("Debug: Using class: '" + entityType.Name + "'");
         if (context == null)
             context = ScriptUtils.InitializeContext();
-        ISeeder seeder = SeederFactory(entityType, context, data.ImportConfig);
+        ISeeder seeder = SeederFactory(entityType, context, data.ImportConfig, verbose);
         if (data.ImportConfig.ClearTable)
         {
             seeder.ClearTable();
             seeder.SaveChanges();
         }
-        Console.WriteLine("Importing ... ");
+        if (verbose)
+            Console.WriteLine("Importing ... ");
         foreach (JObject row in data.Data)
         {
             seeder.ImportSingleRow(row);
         }
         if (!data.ImportConfig.SaveAfterEachRow)
         {
-            Console.WriteLine("OK");
             seeder.SaveChanges();
         }
         if (data.ImportConfig.Key != null)
         {
-            Console.WriteLine("Validating ...");
+            if (verbose)
+                Console.WriteLine("Validating ...");
             seeder.Validate();
         }
+        Console.Write($"New: {seeder.New}\t");
+        Console.Write($"Same: {seeder.Same}\t");
+        Console.WriteLine($"Updated: {seeder.Updated}");
     }
+}
+
 }

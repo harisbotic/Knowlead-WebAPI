@@ -7,7 +7,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             "program": "${workspaceRoot}/src/Knowlead-WebApi/bin/Debug/netcoreapp1.0/Knowlead-WebAPI.dll",
-            "args": ["generate", "Knowlead", "output.ts"],
+            "args": ["seed", "SeedData"],
             "cwd": "${workspaceRoot}",
             "stopAtEntry": false,
             "internalConsoleOptions": "openOnSessionStart",

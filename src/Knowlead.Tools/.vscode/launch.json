@@ -7,7 +7,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             "program": "${workspaceRoot}/bin/Debug/netcoreapp1.0/Knowlead.Tools.dll",
-            "args": ["seed", "SeedData/languages.json"],
+            "args": ["seed", "SeedData"],
             "cwd": "${workspaceRoot}",
             "externalConsole": false,
             "stopAtEntry": false,
