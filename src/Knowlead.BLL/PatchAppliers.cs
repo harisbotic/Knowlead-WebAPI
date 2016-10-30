@@ -13,7 +13,7 @@ namespace Knowlead.BLL
 {
     public static class PatchAppliers
     {
-        public static void CustomApplyTo<T>(this JsonPatchDocument<T> patchDoc, T objectToApplyTo, Dictionary<string, Object> vars, ApplicationUser applicationUser = null) where T : class
+        public static void CustomApplyTo<T>(this JsonPatchDocument<T> patchDoc, T objectToApplyTo, Dictionary<string, Object> forManualPatch, ApplicationUser applicationUser = null) where T : class
         {
             if (objectToApplyTo == null)
             {
@@ -24,7 +24,7 @@ namespace Knowlead.BLL
 
             foreach (var op in patchDoc.Operations)
             {
-                var z = vars.Where(x => op.path.StartsWith($"/{x.Key}/", StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
+                var z = forManualPatch.Where(x => op.path.StartsWith($"/{x.Key}/", StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
                 if(z.Value != null)
                 {
                     if(z.Value.GetType() == typeof(List<ApplicationUserLanguage>))
@@ -54,8 +54,8 @@ namespace Knowlead.BLL
 
             if(op.OperationType == OperationType.Add)
             {
-                var @value = op.value as JObject;
-                var languageId = (int)(@value.GetValue(nameof(LanguageModel.CoreLookupId), StringComparison.CurrentCultureIgnoreCase));
+                var jObject = op.value as JObject;
+                var languageId = jObject.GetValue(nameof(LanguageModel.CoreLookupId), StringComparison.CurrentCultureIgnoreCase).Value<int>();
 
                 //Check if already exists
                 if(langs.Where(x => x.ApplicationUserId == applicationUser.Id && x.LanguageId == languageId).FirstOrDefault() != null)
@@ -96,9 +96,9 @@ namespace Knowlead.BLL
 
             if(op.OperationType == OperationType.Add)
             {
-                var @value = op.value as JObject;
-                var fosId = (int)(@value.GetValue(nameof(InterestModel.FosId), StringComparison.CurrentCultureIgnoreCase));
-                var stars = (int)(@value.GetValue(nameof(InterestModel.Stars), StringComparison.CurrentCultureIgnoreCase));
+                var jObject = op.value as JObject;
+                var fosId = jObject.GetValue(nameof(InterestModel.FosId), StringComparison.CurrentCultureIgnoreCase).Value<int>();
+                var stars = jObject.GetValue(nameof(InterestModel.Stars), StringComparison.CurrentCultureIgnoreCase).Value<int>();
 
                 //Check if already exists
                 if(interests.Where(x => x.ApplicationUserId == applicationUser.Id && x.FosId == fosId).FirstOrDefault() != null)
@@ -129,8 +129,8 @@ namespace Knowlead.BLL
             else if(op.OperationType == OperationType.Replace)
             {
                 var id = int.Parse((op.path.Substring(opPath.Length)));
-                var @value = op.value as JObject;
-                var stars = (int)(@value.GetValue(nameof(InterestModel.Stars), StringComparison.CurrentCultureIgnoreCase));
+                var jObject = op.value as JObject;
+                var stars = jObject.GetValue(nameof(InterestModel.Stars), StringComparison.CurrentCultureIgnoreCase).Value<int>();
 
                 var interest = interests.Where(x => x.FosId == id).FirstOrDefault();
                 var interestModel = applicationUserModel.Interests.Where(x => x.FosId == id).FirstOrDefault();

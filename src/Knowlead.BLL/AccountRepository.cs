@@ -86,10 +86,10 @@ namespace Knowlead.BLL
 
             var applicationUserModel = Mapper.Map<ApplicationUserModel>(applicationUser);
             
-            var k = new Dictionary<string, Object>();
-            k.Add(nameof(ApplicationUserModel.Languages), applicationUser.ApplicationUserLanguages);
-            k.Add(nameof(ApplicationUserModel.Interests), applicationUser.ApplicationUserInterests);
-            applicationUserPatch.CustomApplyTo(applicationUserModel, k, applicationUser);
+            var forManualPatch = new Dictionary<string, Object>();
+            forManualPatch.Add(nameof(ApplicationUserModel.Languages), applicationUser.ApplicationUserLanguages);
+            forManualPatch.Add(nameof(ApplicationUserModel.Interests), applicationUser.ApplicationUserInterests);
+            applicationUserPatch.CustomApplyTo(applicationUserModel, forManualPatch, applicationUser);
             
             if(applicationUserModel.StateId != null && applicationUserModel.StateId != applicationUser?.StateId)
             {
@@ -105,6 +105,13 @@ namespace Knowlead.BLL
 
             applicationUser = Mapper.Map<ApplicationUserModel, ApplicationUser>(applicationUserModel, applicationUser);
 
+            if(String.IsNullOrEmpty(applicationUser.Name))
+                    return new BadRequestObjectResult(new ResponseModel(new FormErrorModel(nameof(ApplicationUserModel.Name), Constants.ErrorCodes.RequiredField)));
+            
+            if(String.IsNullOrEmpty(applicationUser.Surname))
+                    return new BadRequestObjectResult(new ResponseModel(new FormErrorModel(nameof(ApplicationUserModel.Surname), Constants.ErrorCodes.RequiredField)));
+            
+            
             var result = await _userManager.UpdateAsync(applicationUser);
 
             if(!result.Succeeded)
