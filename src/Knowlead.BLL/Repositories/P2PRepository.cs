@@ -10,7 +10,7 @@ using Knowlead.DTO.P2PModels;
 using Knowlead.DTO.ResponseModels;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Knowlead.BLL
+namespace Knowlead.BLL.Repositories
 {
     public class P2PRepository : IP2PRepository
     {

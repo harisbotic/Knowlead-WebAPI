@@ -17,7 +17,7 @@ using System.Linq;
 using System;
 using System.Collections.Generic;
 
-namespace Knowlead.BLL
+namespace Knowlead.BLL.Repositories
 {
     public class AccountRepository : IAccountRepository
     {

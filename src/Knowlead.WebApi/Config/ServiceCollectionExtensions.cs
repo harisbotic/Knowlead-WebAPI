@@ -1,5 +1,5 @@
 using System;
-using Knowlead.BLL;
+using Knowlead.BLL.Repositories;
 using Knowlead.BLL.Interfaces;
 using Knowlead.DAL;
 using Knowlead.DomainModel.UserModels;
