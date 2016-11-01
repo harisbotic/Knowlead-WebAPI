@@ -1,3 +1,4 @@
+using System;
 using Knowlead.Common.DataAnnotations;
 using Knowlead.DomainModel.BlobModels;
 
@@ -10,7 +11,7 @@ namespace Knowlead.DomainModel.P2PModels
         public P2P P2p{ get; set; }
 
         [MyRequired]
-        public int FileBlobId { get; set; }
+        public Guid FileBlobId { get; set; }
         public FileBlob FileBlob { get; set; }
       
     }
