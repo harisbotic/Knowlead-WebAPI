@@ -10,8 +10,8 @@ namespace Knowlead.DTO.P2PModels
         public P2PModel P2p{ get; set; }
 
         [MyRequired]
-        public int UploadedFileId { get; set; }
-        public UploadedFileModel UploadedFile { get; set; }
+        public int FileBlobId { get; set; }
+        public FileBlobModel FileBlob { get; set; }
       
     }
 }

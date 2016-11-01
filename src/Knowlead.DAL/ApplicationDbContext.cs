@@ -66,7 +66,7 @@ namespace Knowlead.DAL
 
         #region Blob Models
             public DbSet<ImageBlob> ImageBlobs {get; set; }
-            public DbSet<UploadedFile> UploadedFiles { get; set; }
+            public DbSet<FileBlob> FileBlobs { get; set; }
 
         #endregion 
 
@@ -127,7 +127,7 @@ namespace Knowlead.DAL
             
             //*** P2P ***
             modelBuilder.Entity<P2PFile>()
-                .HasKey(t => new { t.P2pId, t.UploadedFileId });
+                .HasKey(t => new { t.P2pId, t.FileBlobId });
            
             modelBuilder.Entity<P2PImageBlob>()
                 .HasKey(t => new { t.P2pId, t.ImageBlobId });

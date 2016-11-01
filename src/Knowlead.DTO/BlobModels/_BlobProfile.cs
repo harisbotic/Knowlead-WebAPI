@@ -10,7 +10,7 @@ namespace Knowlead.DTO.UserModels
         {
             CreateMap<ImageBlob, ImageBlobModel>().ReverseMap();
 
-            CreateMap<UploadedFile, UploadedFileModel>().ReverseMap();
+            CreateMap<FileBlob, FileBlobModel>().ReverseMap();
         }
     }
 }

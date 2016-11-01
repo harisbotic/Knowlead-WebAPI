@@ -5,7 +5,7 @@ using Knowlead.DomainModel.UserModels;
 
 namespace Knowlead.DomainModel.BlobModels
 {
-    public class UploadedFile
+    public class FileBlob
     {
         [Key]
         public Guid Filename { get; set; }

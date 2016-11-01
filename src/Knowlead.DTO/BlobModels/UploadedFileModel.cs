@@ -4,7 +4,7 @@ using Knowlead.DTO.UserModels;
 
 namespace Knowlead.DTO.BlobModels
 {
-    public class UploadedFileModel
+    public class FileBlobModel
     {
         [MyRequired]
         public Guid Filename { get; set; }
