@@ -1,6 +1,6 @@
 using System;
 using Knowlead.Common.DataAnnotations;
-using Knowlead.DTO.CoreModels;
+using Knowlead.DTO.BlobModels;
 
 namespace Knowlead.DTO.UserModels
 {
@@ -20,8 +20,8 @@ namespace Knowlead.DTO.UserModels
         public Guid ApplicationUserId { get; set; }
         public ApplicationUserModel ApplicationUser { get; set; }
 
-        public Guid ImageId { get; set; }
-        public ImageModel Image { get; set; }
+        public Guid ImageBlobId { get; set; }
+        public ImageBlobModel ImageBlob { get; set; }
 
         public UserNotebookModel()
         {

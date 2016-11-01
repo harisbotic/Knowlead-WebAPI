@@ -1,5 +1,5 @@
 using Knowlead.Common.DataAnnotations;
-using Knowlead.DTO.CoreModels;
+using Knowlead.DTO.BlobModels;
 
 namespace Knowlead.DTO.P2PModels
 {

@@ -3,9 +3,9 @@ using System.ComponentModel.DataAnnotations;
 using Knowlead.Common.DataAnnotations;
 using Knowlead.DomainModel.UserModels;
 
-namespace Knowlead.DomainModel.CoreModels
+namespace Knowlead.DomainModel.BlobModels
 {
-    public class Image
+    public class ImageBlob
     {
         [Key]
         public Guid Filename { get; set; }

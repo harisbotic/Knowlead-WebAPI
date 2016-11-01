@@ -1,6 +1,6 @@
 using System;
 using Knowlead.Common.DataAnnotations;
-using Knowlead.DTO.CoreModels;
+using Knowlead.DTO.BlobModels;
 
 namespace Knowlead.DTO.LookupModels.Core
 {
@@ -8,7 +8,7 @@ namespace Knowlead.DTO.LookupModels.Core
     {
         [MyRequired]
         public string Desc { get; set; }
-        public Guid ImageId { get; set; }
-        public ImageModel Image { get; set; }
+        public Guid ImageBlobId { get; set; }
+        public ImageBlobModel ImageBlob { get; set; }
     }
 }

@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using Knowlead.Common.DataAnnotations;
-using Knowlead.DomainModel.CoreModels;
+using Knowlead.DomainModel.BlobModels;
 
 namespace Knowlead.DomainModel.UserModels
 {
@@ -20,8 +20,8 @@ namespace Knowlead.DomainModel.UserModels
         public Guid ApplicationUserId { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
 
-        public int ImageId { get; set; }
-        public Image Image { get; set; }
+        public int ImageBlobId { get; set; }
+        public ImageBlob ImageBlob { get; set; }
 
         public UserCertificate()
         {
