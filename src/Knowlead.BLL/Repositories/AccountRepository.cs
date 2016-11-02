@@ -1,6 +1,5 @@
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Knowlead.BLL.Interfaces;
 using Knowlead.DAL;
 using Knowlead.DomainModel.UserModels;
 using Knowlead.DTO.ResponseModels;
@@ -16,6 +15,7 @@ using Knowlead.Common;
 using System.Linq;
 using System;
 using System.Collections.Generic;
+using Knowlead.BLL.Repositories.Interfaces;
 
 namespace Knowlead.BLL.Repositories
 {

@@ -3,8 +3,8 @@ using Knowlead.Common.Attributes;
 using Microsoft.AspNetCore.Mvc;
 using Knowlead.Common.HttpRequestItems;
 using Knowlead.DTO.P2PModels;
-using Knowlead.BLL.Interfaces;
 using Knowlead.WebApi.Attributes;
+using Knowlead.BLL.Repositories.Interfaces;
 
 namespace Knowlead.Controllers
 {

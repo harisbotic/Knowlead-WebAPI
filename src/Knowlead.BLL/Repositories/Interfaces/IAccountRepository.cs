@@ -5,7 +5,7 @@ using Knowlead.DTO.UserModels;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Knowlead.BLL.Interfaces
+namespace Knowlead.BLL.Repositories.Interfaces
 {
     public interface IAccountRepository
     {

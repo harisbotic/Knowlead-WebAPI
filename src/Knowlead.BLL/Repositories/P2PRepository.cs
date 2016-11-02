@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using AutoMapper;
-using Knowlead.BLL.Interfaces;
+using Knowlead.BLL.Repositories.Interfaces;
 using Knowlead.Common;
 using Knowlead.DAL;
 using Knowlead.DomainModel.P2PModels;

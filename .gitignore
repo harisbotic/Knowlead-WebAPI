@@ -11,6 +11,7 @@
 *.userprefs
 
 project.lock.json
+src/Knowlead.WebApi/wwwroot/LOCAL_STORAGE/
 
 # Build results
 [Dd]ebug/

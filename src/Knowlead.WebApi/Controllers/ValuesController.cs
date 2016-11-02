@@ -3,7 +3,7 @@ using Knowlead.DAL;
 using Microsoft.AspNetCore.Mvc;
 using Knowlead.DomainModel.LookupModels.Geo;
 using Microsoft.AspNetCore.Authorization;
-using Knowlead.BLL.Interfaces;
+using Knowlead.BLL.Repositories.Interfaces;
 
 namespace Knowlead.Controllers
 {

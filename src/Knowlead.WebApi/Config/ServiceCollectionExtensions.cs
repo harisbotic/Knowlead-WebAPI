@@ -1,6 +1,5 @@
 using System;
 using Knowlead.BLL.Repositories;
-using Knowlead.BLL.Interfaces;
 using Knowlead.DAL;
 using Knowlead.DomainModel.UserModels;
 using Knowlead.Services;
@@ -9,6 +8,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
+using Knowlead.Services.Interfaces;
+using Knowlead.BLL.Repositories.Interfaces;
 
 namespace Knowlead.WebApi.Config
 {
@@ -100,6 +101,7 @@ namespace Knowlead.WebApi.Config
         public static IServiceCollection AddMessageServices(this IServiceCollection services)
         {
             services.AddSingleton<MessageServices>();
+            services.AddSingleton<IBlobServices, BlobServices>();
 
             return services;
         }

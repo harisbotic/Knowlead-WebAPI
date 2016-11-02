@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace Knowlead.Services
+namespace Knowlead.Services.Interfaces
 {
     public interface IEmailSender
     {

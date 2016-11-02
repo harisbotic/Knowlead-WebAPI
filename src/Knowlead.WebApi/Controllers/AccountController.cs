@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using Knowlead.BLL.Interfaces;
 using Knowlead.WebApi.Attributes;
 using Knowlead.DomainModel.UserModels;
 using Knowlead.DTO.ResponseModels;
@@ -11,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Knowlead.DTO.UserModels;
 using AutoMapper;
 using Knowlead.Common.HttpRequestItems;
+using Knowlead.BLL.Repositories.Interfaces;
 
 namespace Knowlead.Controllers
 {
