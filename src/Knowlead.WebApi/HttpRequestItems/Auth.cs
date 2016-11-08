@@ -2,10 +2,9 @@ using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Knowlead.DAL;
+using Knowlead.BLL.Repositories.Interfaces;
 using Knowlead.DomainModel.UserModels;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 
 namespace Knowlead.Common.HttpRequestItems
 {
@@ -14,13 +13,13 @@ namespace Knowlead.Common.HttpRequestItems
         private const string UserKey = "Knowlead.Auth.UserKey";
     
         private readonly IHttpContextAccessor _accessor;
-        private readonly ApplicationDbContext _context;
+        private readonly IAccountRepository _accountRepository;
 
         public Auth(IHttpContextAccessor accessor,
-                    ApplicationDbContext context)
+                    IAccountRepository accountRepository)
         {
             _accessor = accessor;
-            _context = context;
+            _accountRepository = accountRepository;
         }
         public async Task<ApplicationUser> GetUser(bool includeDetails = false)
         {
@@ -34,20 +33,7 @@ namespace Knowlead.Common.HttpRequestItems
                     var userId = _accessor.HttpContext.User.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier)
                                                                   .Select(c => c.Value).FirstOrDefault();
 
-                    IQueryable<ApplicationUser> userQuery = _context.ApplicationUsers;
-                    
-                    if(includeDetails)
-                        userQuery = userQuery.Include(x => x.ApplicationUserLanguages)
-                                                .ThenInclude(x => x.Language)
-                                             .Include(x => x.ApplicationUserInterests)
-                                                .ThenInclude(x => x.Fos)
-                                             .Include(x => x.MotherTongue)
-                                             .Include(x => x.Country)
-                                             .Include(x => x.State);
-
-                    userQuery.Where(x => x.Id == new Guid(userId));
-
-                    user = await userQuery.FirstOrDefaultAsync();
+                    user = await _accountRepository.GetApplicationUserById(Guid.Parse(userId), includeDetails);
 
                     if (user == null)
                         return null;

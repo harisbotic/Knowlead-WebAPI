@@ -1,4 +1,3 @@
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Knowlead.DAL;
 using Knowlead.DomainModel.UserModels;
@@ -16,6 +15,7 @@ using System.Linq;
 using System;
 using System.Collections.Generic;
 using Knowlead.BLL.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Knowlead.BLL.Repositories
 {
@@ -69,21 +69,8 @@ namespace Knowlead.BLL.Repositories
             });
         }
 
-        public async Task<ApplicationUser> GetUserByPrincipal(ClaimsPrincipal principal)
-        {
-            return await _userManager.GetUserAsync(principal);
-        }
-
         public async Task<IActionResult> UpdateUserDetails(ApplicationUser applicationUser, JsonPatchDocument<ApplicationUserModel> applicationUserPatch)
         {
-            applicationUser.ApplicationUserLanguages = _context.ApplicationUserLanguages
-                                                               .Where(x => x.ApplicationUserId == applicationUser.Id)
-                                                               .ToList();
-
-            applicationUser.ApplicationUserInterests = _context.ApplicationUserInterests
-                                                               .Where(x => x.ApplicationUserId == applicationUser.Id)
-                                                               .ToList();
-
             var applicationUserModel = Mapper.Map<ApplicationUserModel>(applicationUser);
             
             var forManualPatch = new Dictionary<string, Object>();
@@ -113,6 +100,8 @@ namespace Knowlead.BLL.Repositories
             
             
             var result = await _userManager.UpdateAsync(applicationUser);
+            
+            var updatedUser = Mapper.Map<ApplicationUserModel>(await GetApplicationUserById(applicationUser.Id, true));
 
             if(!result.Succeeded)
             {
@@ -120,7 +109,7 @@ namespace Knowlead.BLL.Repositories
             }
             
             return new OkObjectResult(new ResponseModel{
-                Object = applicationUserModel
+                Object = updatedUser
             });
             
         }
@@ -151,17 +140,22 @@ namespace Knowlead.BLL.Repositories
             return new OkObjectResult(new ResponseModel());
         }
 
-        public async Task<IActionResult> SaveChangesAsync()
+        public async Task<ApplicationUser> GetApplicationUserById(Guid userId, bool includeDetails = false)
         {
-            bool hasChanges = (await _context.SaveChangesAsync() > 0);
+            IQueryable<ApplicationUser> userQuery = _context.ApplicationUsers;
+                    
+            if(includeDetails)
+                userQuery = userQuery.Include(x => x.ApplicationUserLanguages)
+                                        .ThenInclude(x => x.Language)
+                                        .Include(x => x.ApplicationUserInterests)
+                                        .ThenInclude(x => x.Fos)
+                                        .Include(x => x.MotherTongue)
+                                        .Include(x => x.Country)
+                                        .Include(x => x.State);
 
-            if (!hasChanges)
-            {
-                var error = new ErrorModel(Constants.ErrorCodes.DatabaseError);
-                return new BadRequestObjectResult(new ResponseModel(error));
-            }
+                userQuery.Where(x => x.Id == userId);
 
-            return new OkObjectResult(new ResponseModel());
+            return await userQuery.FirstOrDefaultAsync();
         }
     }
 }

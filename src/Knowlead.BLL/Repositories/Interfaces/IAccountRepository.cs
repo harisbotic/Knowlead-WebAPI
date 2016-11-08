@@ -1,4 +1,4 @@
-using System.Security.Claims;
+using System;
 using System.Threading.Tasks;
 using Knowlead.DomainModel.UserModels;
 using Knowlead.DTO.UserModels;
@@ -10,9 +10,8 @@ namespace Knowlead.BLL.Repositories.Interfaces
     public interface IAccountRepository
     {
         Task<IActionResult> RegisterApplicationUserAsync(RegisterUserModel registerUserModel);
-        Task<ApplicationUser> GetUserByPrincipal(ClaimsPrincipal principal);
+        Task<ApplicationUser> GetApplicationUserById(Guid userId, bool includeDetails = false);
         Task<IActionResult> UpdateUserDetails(ApplicationUser applicationUser, JsonPatchDocument<ApplicationUserModel> applicationUserPatch);
         Task<IActionResult> ConfirmEmail(ConfirmEmailModel confirmEmailModel);
-        Task<IActionResult> SaveChangesAsync();
     }
 }

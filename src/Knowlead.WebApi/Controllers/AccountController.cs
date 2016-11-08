@@ -59,7 +59,7 @@ namespace Knowlead.Controllers
         [HttpPatch("details"), ReallyAuthorize, ValidateModel]
         public async Task<IActionResult> Details([FromBody] JsonPatchDocument<ApplicationUserModel> userDetailsPatch)
         {
-            var currentUser = await _auth.GetUser();
+            var currentUser = await _auth.GetUser(true);
 
             // var e = new ApplicationUserModel();
             // userDetailsPatch.ApplyTo(e);
