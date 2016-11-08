@@ -101,7 +101,7 @@ namespace Knowlead.WebApi.Config
         public static IServiceCollection AddMessageServices(this IServiceCollection services)
         {
             services.AddSingleton<MessageServices>();
-            services.AddSingleton<IBlobServices, BlobServices>();
+            services.AddScoped<IBlobServices, BlobServices>();
 
             return services;
         }
@@ -111,6 +111,7 @@ namespace Knowlead.WebApi.Config
         {
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IP2PRepository, P2PRepository>();
+            services.AddScoped<IBlobRepository, BlobRepository>();
 
             return services;
         }

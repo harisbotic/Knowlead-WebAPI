@@ -3,12 +3,11 @@ using Knowlead.Common.Attributes;
 using Microsoft.AspNetCore.Mvc;
 using Knowlead.Common.HttpRequestItems;
 using Knowlead.WebApi.Attributes;
-using System.IO;
 using Microsoft.AspNetCore.Http;
 using System.Linq;
 using System;
 using Knowlead.Services.Interfaces;
-using Knowlead.DTO.ResponseModels;
+using Knowlead.BLL.Repositories.Interfaces;
 
 namespace Knowlead.Controllers
 {
@@ -17,11 +16,14 @@ namespace Knowlead.Controllers
     {
         private readonly static string[] ImageFileExtensions = {".jpg", ".jpeg", ".gif", ".png"};
         private readonly IBlobServices _blobServices;
+        private readonly IBlobRepository _blobRepository;
         private readonly Auth _auth;
         public BlobController(IBlobServices blobServices,
+                              IBlobRepository blobRepository,
                              Auth auth)
         {
             _blobServices = blobServices;
+            _blobRepository = blobRepository;
             _auth = auth;
         }
 
@@ -33,19 +35,17 @@ namespace Knowlead.Controllers
             var filename = file.FileName;
             var isImage = ImageFileExtensions.Any(ex => filename.EndsWith(ex, StringComparison.CurrentCultureIgnoreCase));
 
-            using (Stream stream = file.OpenReadStream())
+            if(isImage)
             {
-                using (var binaryReader = new BinaryReader(stream))
-                {
-                    var fileContent = binaryReader.ReadBytes((int)file.Length);
-                    if(isImage)
-                        _blobServices.SaveImageToLocalStorage(filename, fileContent);
-                    else
-                        _blobServices.SaveFileToLocalStorage(filename, fileContent);
-                }
-            }
+                var i = await _blobServices.SaveImageOnAzureAsync(file);
+                return await _blobRepository.CreateImage(i, applicationUser);
 
-            return Ok(new ResponseModel());
+            }
+            else
+            {
+                var i = await _blobServices.SaveFileOnAzureAsync(file);
+                return await _blobRepository.CreateFile(i, applicationUser);
+            }
         }
     }
 }

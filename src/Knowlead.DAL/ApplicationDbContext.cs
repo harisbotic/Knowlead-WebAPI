@@ -86,23 +86,18 @@ namespace Knowlead.DAL
             
             modelBuilder.HasPostgresExtension("uuid-ossp");
 
+            /* GeoLookups */
             modelBuilder.Entity<Country>().ToTable("Countries");  
             modelBuilder.Entity<State>().ToTable("States");
 
+            /* CoreLookups */
             modelBuilder.Entity<Achievement>().ToTable("Achievements");  
             modelBuilder.Entity<FOS>().ToTable("FOS");
             modelBuilder.Entity<Language>().ToTable("Languages");
 
-            // modelBuilder.Entity<_CoreLookup>()
-            //     .HasDiscriminator<string>("Category")
-            //     .HasValue<Achievement>("Achievement")
-            //     .HasValue<FOS>("Fos")
-            //     .HasValue<Language>("Language");
-
-            // modelBuilder.Entity<_GeoLookup>()
-            //     .HasDiscriminator<string>("Category")
-            //     .HasValue<State>("State")
-            //     .HasValue<Country>("Country");
+            /* Blobs */
+            modelBuilder.Entity<ImageBlob>().ToTable("ImageBlobs");
+            modelBuilder.Entity<FileBlob>().ToTable("FileBlobs");
 
             modelBuilder.Entity<_Feedback>()
                 .HasDiscriminator<string>("Category")
@@ -111,21 +106,21 @@ namespace Knowlead.DAL
                 .HasValue<FeedbackP2P>("P2P")
                 .HasValue<FeedbackQuestion>("Question");
             
-            //** Application User ***
+            /* Application User */
             modelBuilder.Entity<ApplicationUserLanguage>()
                 .HasKey(t => new { t.ApplicationUserId, t.LanguageId });
 
             modelBuilder.Entity<ApplicationUserInterest>()
                 .HasKey(t => new { t.ApplicationUserId, t.FosId });
 
-            //*** Friendship ***
+            /* Friendship */
             modelBuilder.Entity<Friendship>()
                 .HasKey(t => new { t.UserSentId, t.UserAcceptedId });
 
             modelBuilder.Entity<FriendshipRequest>()
                 .HasKey(t => new { t.UserSentId, t.UserReceivedId });
             
-            //*** P2P ***
+            /* P2P */
             modelBuilder.Entity<P2PFile>()
                 .HasKey(t => new { t.P2pId, t.FileBlobId });
            
