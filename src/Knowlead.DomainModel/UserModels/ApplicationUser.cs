@@ -46,6 +46,7 @@ namespace Knowlead.DomainModel.UserModels
         {
             this.Status = UserStatus.Offline;
             this.ApplicationUserLanguages = new List<ApplicationUserLanguage>();
+            this.ApplicationUserInterests = new List<ApplicationUserInterest>();
         }
     }
 }

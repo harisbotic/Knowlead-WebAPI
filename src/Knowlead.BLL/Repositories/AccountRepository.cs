@@ -101,13 +101,13 @@ namespace Knowlead.BLL.Repositories
             
             var result = await _userManager.UpdateAsync(applicationUser);
             
-            var updatedUser = Mapper.Map<ApplicationUserModel>(await GetApplicationUserById(applicationUser.Id, true));
-
             if(!result.Succeeded)
             {
                 return new BadRequestObjectResult(new ResponseModel(result.Errors));
             }
             
+            var updatedUser = Mapper.Map<ApplicationUserModel>(await GetApplicationUserById(applicationUser.Id, true));
+
             return new OkObjectResult(new ResponseModel{
                 Object = updatedUser
             });

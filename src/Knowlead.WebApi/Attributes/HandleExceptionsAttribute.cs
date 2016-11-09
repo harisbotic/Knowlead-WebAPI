@@ -25,7 +25,8 @@ namespace Knowlead.WebApi.Attributes
             else
             {
                 responseModel.AddError(new ErrorModel(ex.Message));
-                responseModel.AddError(new ErrorModel(ex?.InnerException.Message));
+                if(ex?.InnerException != null)
+                    responseModel.AddError(new ErrorModel(ex.InnerException.Message));
                 statusCode = 500;
             }
             

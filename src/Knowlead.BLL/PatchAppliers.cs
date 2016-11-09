@@ -33,7 +33,6 @@ namespace Knowlead.BLL
                     if(z.Value.GetType() == typeof(List<ApplicationUserInterest>))
                         ApplyToApplicationUserInterests(op, objectToApplyTo as ApplicationUserModel, (ICollection<ApplicationUserInterest>)z.Value, applicationUser);
                     
-
                 }
                 else 
                 {
@@ -69,8 +68,11 @@ namespace Knowlead.BLL
                 applicationUserModel.Languages.Add(new LanguageModel{CoreLookupId = languageId});
             }
 
-            else if(op.OperationType == OperationType.Remove)
+            else if(op.OperationType == OperationType.Remove || op.OperationType == OperationType.Replace)
             {
+                //Element should be removed if operation is "replace" and value is null
+                if(op.value != null)
+                    return;
                 var id = int.Parse((op.path.Substring(opPath.Length)));
                 var lang = langs.Where(x => x.LanguageId == id).FirstOrDefault();
                 var langModel = applicationUserModel.Languages.Where(x => x.CoreLookupId == id).FirstOrDefault();
@@ -98,7 +100,7 @@ namespace Knowlead.BLL
             {
                 var jObject = op.value as JObject;
                 var fosId = jObject.GetValue(nameof(InterestModel.FosId), StringComparison.CurrentCultureIgnoreCase).Value<int>();
-                var stars = jObject.GetValue(nameof(InterestModel.Stars), StringComparison.CurrentCultureIgnoreCase).Value<int>();
+                var stars = jObject.GetValue(nameof(InterestModel.Stars), StringComparison.CurrentCultureIgnoreCase).Value<int>().LimitToRange(0,5);
 
                 //Check if already exists
                 if(interests.Where(x => x.ApplicationUserId == applicationUser.Id && x.FosId == fosId).FirstOrDefault() != null)
@@ -113,20 +115,7 @@ namespace Knowlead.BLL
                 applicationUserModel.Interests.Add(new InterestModel{FosId = fosId, Stars = stars});
             }
 
-            else if(op.OperationType == OperationType.Remove)
-            {
-                var id = int.Parse((op.path.Substring(opPath.Length)));
-                var interest = interests.Where(x => x.FosId == id).FirstOrDefault();
-                var interestModel = applicationUserModel.Interests.Where(x => x.FosId == id).FirstOrDefault();
-
-                if(interest == null || interestModel == null)
-                    throw new Exception("Interest not found to be removed");
-
-                interests.Remove(interest);
-                applicationUserModel.Interests.Remove(interestModel);
-            }
-
-            else if(op.OperationType == OperationType.Replace)
+            else if(op.OperationType == OperationType.Replace && op.value != null)
             {
                 var id = int.Parse((op.path.Substring(opPath.Length)));
                 var jObject = op.value as JObject;
@@ -140,6 +129,19 @@ namespace Knowlead.BLL
 
                 interest.Stars = stars;
                 interestModel.Stars = stars;
+            }
+
+            else if(op.OperationType == OperationType.Remove || op.OperationType == OperationType.Replace)
+            {
+                var id = int.Parse((op.path.Substring(opPath.Length)));
+                var interest = interests.Where(x => x.FosId == id).FirstOrDefault();
+                var interestModel = applicationUserModel.Interests.Where(x => x.FosId == id).FirstOrDefault();
+
+                if(interest == null || interestModel == null)
+                    throw new Exception("Interest not found to be removed");
+
+                interests.Remove(interest);
+                applicationUserModel.Interests.Remove(interestModel);
             }
         }
     }
