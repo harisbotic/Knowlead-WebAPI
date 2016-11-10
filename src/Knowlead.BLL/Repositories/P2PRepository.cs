@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Knowlead.BLL.Repositories.Interfaces;
@@ -8,17 +9,21 @@ using Knowlead.DomainModel.P2PModels;
 using Knowlead.DomainModel.UserModels;
 using Knowlead.DTO.P2PModels;
 using Knowlead.DTO.ResponseModels;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Knowlead.BLL.Repositories
 {
     public class P2PRepository : IP2PRepository
     {
-        private ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
+        private readonly IHostingEnvironment _environment;
 
-        public P2PRepository(ApplicationDbContext context)
+        public P2PRepository(ApplicationDbContext context,
+                             IHostingEnvironment environment)
         {
             _context = context;
+            _environment = environment;
         }
 
         public async Task<IActionResult> Create(P2PModel p2pModel, ApplicationUser applicationUser)
@@ -47,9 +52,21 @@ namespace Knowlead.BLL.Repositories
 
             _context.P2p.Add(p2p);
             return await SaveChangesAsync();
-
         }
 
+
+        public IActionResult ListAll()
+        {
+            if(!_environment.IsDevelopment())
+                return new BadRequestObjectResult(new ResponseModel(new ErrorModel("Development only endpoint")));
+
+            var p2ps = _context.P2p.ToList();
+
+            return new OkObjectResult(new ResponseModel{
+                Object = p2ps
+            });
+
+        }
         private async Task<IActionResult> SaveChangesAsync()
         {
             bool hasChanges = (await _context.SaveChangesAsync() > 0);

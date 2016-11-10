@@ -13,6 +13,7 @@ namespace Knowlead.Controllers
     {
         private readonly IP2PRepository _p2pRepository;
         private readonly Auth _auth;
+
         public P2PController(IP2PRepository p2pRespository,
                              Auth auth)
         {
@@ -26,6 +27,12 @@ namespace Knowlead.Controllers
             var applicationUser = await _auth.GetUser();
 
             return await _p2pRepository.Create(p2pModel, applicationUser);
+        }
+
+        [HttpGet("list"), ReallyAuthorize]
+        public IActionResult List()
+        {
+            return _p2pRepository.ListAll();
         }
     }
 }
