@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using Knowlead.Common.DataAnnotations;
+using Knowlead.DTO.BlobModels;
 using Knowlead.DTO.LookupModels.Core;
 using Knowlead.DTO.UserModels;
 
@@ -33,6 +34,8 @@ namespace Knowlead.DTO.P2PModels
 
 
         public List<LanguageModel> Languages { get; set; }
+        public List<ImageBlobModel> Images { get; set; }
+        public List<FileBlobModel> Files { get; set; }
         
         [MyRequired]
         public int FosId { get; set; }
@@ -49,6 +52,8 @@ namespace Knowlead.DTO.P2PModels
         {
             this.Status = P2PStatus.Inactive;
             this.Languages = new List<LanguageModel>();
+            this.Images = new List<ImageBlobModel>();
+            this.Files = new List<FileBlobModel>();
         }
     }
 }

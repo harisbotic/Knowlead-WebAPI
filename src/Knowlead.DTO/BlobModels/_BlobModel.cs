@@ -7,7 +7,7 @@ namespace Knowlead.DTO.BlobModels
     public class _BlobModel
     {
         [MyRequired]
-        public Guid Id { get; set; }
+        public Guid BlobId { get; set; }
         public string Filename { get; set; }
         public string Extension { get; set; }
 
@@ -17,7 +17,7 @@ namespace Knowlead.DTO.BlobModels
 
         public _BlobModel()
         {
-            this.Id = Guid.NewGuid();
+            this.BlobId = Guid.NewGuid();
         }
     }
 }

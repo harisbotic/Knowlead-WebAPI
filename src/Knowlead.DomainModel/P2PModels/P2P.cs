@@ -38,6 +38,9 @@ namespace Knowlead.DomainModel.P2PModels
         
 
         public ICollection<P2PLanguage> P2PLanguages { get; set; }
+        public ICollection<P2PImage> P2PImages { get; set; }
+        public ICollection<P2PFile> P2PFiles { get; set; }
+
         
         [MyRequired]
         public int FosId { get; set; }
@@ -54,6 +57,9 @@ namespace Knowlead.DomainModel.P2PModels
         {
             this.Status = P2PStatus.Inactive;
             this.P2PLanguages = new List<P2PLanguage>();
+            this.P2PImages = new List<P2PImage>();
+            this.P2PFiles = new List<P2PFile>();
+
         }
     }
 }

@@ -24,11 +24,26 @@ namespace Knowlead.BLL.Repositories
         public async Task<IActionResult> Create(P2PModel p2pModel, ApplicationUser applicationUser)
         {
             var p2p = Mapper.Map<P2P>(p2pModel);
-
             p2p.CreatedById = applicationUser.Id;
             
             if(p2p.Deadline != null && p2p.Deadline < DateTime.Now.AddMinutes(1))
                     return new BadRequestObjectResult(new ResponseModel(new FormErrorModel(nameof(P2P.Deadline), Constants.ErrorCodes.IncorrectValue)));
+
+            foreach (var img in p2pModel.Images)
+            {
+                p2p.P2PImages.Add(new P2PImage{
+                    P2p = p2p,
+                    ImageBlobId = img.BlobId
+                });
+            }
+
+            foreach (var file in p2pModel.Files)
+            {
+                p2p.P2PFiles.Add(new P2PFile{
+                    P2p = p2p,
+                    FileBlobId = file.BlobId
+                });
+            }
 
             _context.P2p.Add(p2p);
             return await SaveChangesAsync();

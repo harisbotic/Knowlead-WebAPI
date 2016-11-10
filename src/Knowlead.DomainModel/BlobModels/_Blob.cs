@@ -8,7 +8,7 @@ namespace Knowlead.DomainModel.BlobModels
     public class _Blob
     {
         [Key]
-        public Guid Id { get; set; }
+        public Guid BlobId { get; set; }
         public string Filename { get; set; }
         public string Extension { get; set; }
 
@@ -19,7 +19,7 @@ namespace Knowlead.DomainModel.BlobModels
 
         public _Blob()
         {
-            this.Id = Guid.NewGuid();
+            this.BlobId = Guid.NewGuid();
         }
     }
 }

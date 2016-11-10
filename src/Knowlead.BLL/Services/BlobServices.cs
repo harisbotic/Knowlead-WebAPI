@@ -41,7 +41,7 @@ namespace Knowlead.Services
 
             await _imageContainer.CreateIfNotExistsAsync(BlobContainerPublicAccessType.Blob, null, null);
 
-            CloudBlockBlob blockBlob = _imageContainer.GetBlockBlobReference($"{imageBlobModel.Id}.{imageBlobModel.Extension}");
+            CloudBlockBlob blockBlob = _imageContainer.GetBlockBlobReference($"{imageBlobModel.BlobId}.{imageBlobModel.Extension}");
 
             using (Stream stream = formFile.OpenReadStream())
             {
@@ -58,7 +58,7 @@ namespace Knowlead.Services
 
             await _fileContainer.CreateIfNotExistsAsync(BlobContainerPublicAccessType.Blob, null, null);
 
-            CloudBlockBlob blockBlob = _fileContainer.GetBlockBlobReference($"{fileBlobModel.Id}.{fileBlobModel.Extension}");
+            CloudBlockBlob blockBlob = _fileContainer.GetBlockBlobReference($"{fileBlobModel.BlobId}.{fileBlobModel.Extension}");
 
             using (Stream stream = formFile.OpenReadStream())
             {
