@@ -20,31 +20,23 @@ namespace Knowlead.DTO.ResponseModels {
             InitLists();
         }
 
-        public ResponseModel(FormErrorModel formError)
+        public ResponseModel(FormErrorModel formError) : this()
         {
-            InitLists();
-
             AddFormError(formError);
         }
 
-        public ResponseModel(ErrorModel error)
+        public ResponseModel(ErrorModel error) : this()
         {
-            InitLists();
-            
             AddError(error);
         }
 
-        public ResponseModel(ModelStateDictionary modelState)
-        {
-            InitLists();
-            
+        public ResponseModel(ModelStateDictionary modelState) : this()
+        {   
             AddErrors(modelState);
         }
 
-        public ResponseModel(IEnumerable<IdentityError> identityErrors)
-        {
-            InitLists();
-            
+        public ResponseModel(IEnumerable<IdentityError> identityErrors) : this()
+        {   
             AddErrors(identityErrors);
         }
 
@@ -87,7 +79,7 @@ namespace Knowlead.DTO.ResponseModels {
             {
                 if(error.Code != null)
                     AddFormError(new FormErrorModel(error.Code, error.Description));
-                else
+                else if (error.Description != null)
                     AddError(new ErrorModel(error.Description));
             }
         }
