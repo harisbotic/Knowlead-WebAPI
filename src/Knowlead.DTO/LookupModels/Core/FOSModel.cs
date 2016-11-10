@@ -7,5 +7,6 @@ namespace Knowlead.DTO.LookupModels.Core
         // public FOSModel ParentFos { get; set; }  removed for DTO only
         public int? ParentFosId { get; set; }
         public ICollection<FOSModel> Children;
+        public FOSModel Parent; //For frontend only
     }
 }
