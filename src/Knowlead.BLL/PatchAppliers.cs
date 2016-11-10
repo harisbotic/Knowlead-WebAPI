@@ -68,11 +68,8 @@ namespace Knowlead.BLL
                 applicationUserModel.Languages.Add(new LanguageModel{CoreLookupId = languageId});
             }
 
-            else if(op.OperationType == OperationType.Remove || op.OperationType == OperationType.Replace)
+            else if(op.OperationType == OperationType.Remove)
             {
-                //Element should be removed if operation is "replace" and value is null
-                if(op.value != null)
-                    return;
                 var id = int.Parse((op.path.Substring(opPath.Length)));
                 var lang = langs.Where(x => x.LanguageId == id).FirstOrDefault();
                 var langModel = applicationUserModel.Languages.Where(x => x.CoreLookupId == id).FirstOrDefault();
@@ -115,7 +112,7 @@ namespace Knowlead.BLL
                 applicationUserModel.Interests.Add(new InterestModel{FosId = fosId, Stars = stars});
             }
 
-            else if(op.OperationType == OperationType.Replace && op.value != null)
+            else if(op.OperationType == OperationType.Replace)
             {
                 var id = int.Parse((op.path.Substring(opPath.Length)));
                 var jObject = op.value as JObject;
@@ -131,7 +128,7 @@ namespace Knowlead.BLL
                 interestModel.Stars = stars;
             }
 
-            else if(op.OperationType == OperationType.Remove || op.OperationType == OperationType.Replace)
+            else if(op.OperationType == OperationType.Remove)
             {
                 var id = int.Parse((op.path.Substring(opPath.Length)));
                 var interest = interests.Where(x => x.FosId == id).FirstOrDefault();
