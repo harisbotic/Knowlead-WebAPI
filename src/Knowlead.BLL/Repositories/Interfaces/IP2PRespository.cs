@@ -8,6 +8,7 @@ namespace Knowlead.BLL.Repositories.Interfaces
     public interface IP2PRepository
     {
         Task<IActionResult> Create(P2PModel p2pModel, ApplicationUser applicationUser);
+        Task<IActionResult> Delete(int p2pId, ApplicationUser applicationUser);
         IActionResult ListAll();
     }
 }

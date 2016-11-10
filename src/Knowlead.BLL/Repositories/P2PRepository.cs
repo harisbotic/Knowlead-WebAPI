@@ -54,6 +54,23 @@ namespace Knowlead.BLL.Repositories
             return await SaveChangesAsync();
         }
 
+        public async Task<IActionResult> Delete(int p2pInt, ApplicationUser applicationUser)
+        {
+            var p2p = _context.P2p.Where(x => x.P2pId == p2pInt).FirstOrDefault();
+
+            if (p2p == null)
+                return new BadRequestObjectResult(new ResponseModel(new ErrorModel(Common.Constants.ErrorCodes.P2PNotFound)));
+
+            if(p2p.CreatedById != applicationUser.Id)
+                return new BadRequestObjectResult(new ResponseModel(new ErrorModel(Common.Constants.ErrorCodes.OwnershipProblem)));
+
+            if(p2p.IsDeleted)
+                return new BadRequestObjectResult(new ResponseModel(new ErrorModel(Common.Constants.ErrorCodes.P2PAlreadyDeleted)));
+
+            p2p.IsDeleted = true;
+            return await SaveChangesAsync();
+                
+        }
 
         public IActionResult ListAll()
         {
@@ -65,7 +82,6 @@ namespace Knowlead.BLL.Repositories
             return new OkObjectResult(new ResponseModel{
                 Object = p2ps
             });
-
         }
         private async Task<IActionResult> SaveChangesAsync()
         {

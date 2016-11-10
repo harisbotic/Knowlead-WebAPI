@@ -20,6 +20,10 @@ namespace Knowlead.Common
             [TSInitialize]
             public const string UserNotFound = "USER_NOT_FOUND";
             [TSInitialize]
+            public const string P2PNotFound = "P2P_NOT_FOUND";
+            [TSInitialize]
+            public const string P2PAlreadyDeleted = "P2P_ALREADY_DELETED";
+            [TSInitialize]
             public const string PasswordIncorrect = "INCORRECT_PASSWORD";
             [TSInitialize]
             public const string ConfirmationCodeIncorrect = "CONFIRMATION_CODE_INCORRECT";
@@ -29,6 +33,8 @@ namespace Knowlead.Common
             public const string LoginCredentialsIncorrect = "LOGIN_CREDENTIALS_INCORRECT";
             [TSInitialize]
             public const string IncorrectValue = "INCORRECT_VALUE";
+            [TSInitialize]
+            public const string OwnershipProblem = "OWNERSHIP_PROBLEM";
 
         }
 

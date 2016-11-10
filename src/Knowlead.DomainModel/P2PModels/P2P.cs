@@ -27,6 +27,8 @@ namespace Knowlead.DomainModel.P2PModels
         
         public DateTime? ScheduledAt { get; set; }
 
+        public bool IsDeleted { get; set; }
+
         public Guid? ScheduledWithId { get; set; }
         [ForeignKey("ScheduledWithId")]
         public ApplicationUser ScheduledWith { get; set; }
