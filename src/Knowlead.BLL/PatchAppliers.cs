@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Knowlead.DomainModel.UserModels;
 using Knowlead.DTO.LookupModels.Core;
 using Knowlead.DTO.UserModels;
@@ -114,15 +115,14 @@ namespace Knowlead.BLL
 
             else if(op.OperationType == OperationType.Replace)
             {
-                var id = int.Parse((op.path.Substring(opPath.Length)));
-                var jObject = op.value as JObject;
-                var stars = jObject.GetValue(nameof(InterestModel.Stars), StringComparison.CurrentCultureIgnoreCase).Value<int>();
+                var id = int.Parse(Regex.Match(op.path, @"\d+").Value);
+                var stars = Convert.ToInt32(op.value);
 
                 var interest = interests.Where(x => x.FosId == id).FirstOrDefault();
                 var interestModel = applicationUserModel.Interests.Where(x => x.FosId == id).FirstOrDefault();
 
                 if(interest == null || interestModel == null)
-                    throw new Exception("Interest not found to be removed");
+                    throw new Exception("Interest not found");
 
                 interest.Stars = stars;
                 interestModel.Stars = stars;
