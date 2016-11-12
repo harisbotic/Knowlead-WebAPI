@@ -5,6 +5,9 @@ using Knowlead.Common.HttpRequestItems;
 using Knowlead.DTO.P2PModels;
 using Knowlead.WebApi.Attributes;
 using Knowlead.BLL.Repositories.Interfaces;
+using Knowlead.DTO.ResponseModels;
+using Knowlead.Common;
+using Knowlead.DomainModel.P2PModels;
 
 namespace Knowlead.Controllers
 {
@@ -19,6 +22,19 @@ namespace Knowlead.Controllers
         {
             _p2pRepository = p2pRespository;
             _auth = auth;
+        }
+
+        [HttpGet("{p2pId}"), ReallyAuthorize]
+        public IActionResult Get(int p2pId)
+        {
+            var p2pModel = _p2pRepository.Get(p2pId);
+            
+            if(p2pModel == null )
+                return BadRequest(new ResponseModel(new ErrorModel(Constants.ErrorCodes.EntityNotFound, nameof(P2P))));
+
+            return Ok(new ResponseModel{
+                Object = p2pModel
+            });
         }
 
         [HttpPost("create"), ReallyAuthorize, ValidateModel]

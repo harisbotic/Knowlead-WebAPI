@@ -11,6 +11,9 @@ namespace Knowlead.DTO.P2PModels
     public class P2PModel
     {        
         [MyRequired]
+        public int P2pId { get; set; }
+        
+        [MyRequired]
         public string Title { get; set; }      
           
         [MyRequired]
@@ -36,8 +39,7 @@ namespace Knowlead.DTO.P2PModels
 
 
         public List<LanguageModel> Languages { get; set; }
-        public List<ImageBlobModel> Images { get; set; }
-        public List<FileBlobModel> Files { get; set; }
+        public List<_BlobModel> Blobs { get; set; }
         
         [MyRequired]
         public int FosId { get; set; }
@@ -54,8 +56,7 @@ namespace Knowlead.DTO.P2PModels
         {
             this.Status = P2PStatus.Inactive;
             this.Languages = new List<LanguageModel>();
-            this.Images = new List<ImageBlobModel>();
-            this.Files = new List<FileBlobModel>();
+            this.Blobs = new List<_BlobModel>();
         }
     }
 }

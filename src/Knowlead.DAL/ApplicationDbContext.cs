@@ -99,8 +99,8 @@ namespace Knowlead.DAL
             /* Blobs */
             modelBuilder.Entity<_Blob>()
                 .HasDiscriminator<string>("BlobType")
-                .HasValue<ImageBlob>("File")
-                .HasValue<FileBlob>("Image");
+                .HasValue<ImageBlob>("Image")
+                .HasValue<FileBlob>("File");
 
             modelBuilder.Entity<_Feedback>()
                 .HasDiscriminator<string>("Category")

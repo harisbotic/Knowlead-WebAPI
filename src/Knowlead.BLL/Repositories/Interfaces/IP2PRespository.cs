@@ -9,6 +9,7 @@ namespace Knowlead.BLL.Repositories.Interfaces
     {
         Task<IActionResult> Create(P2PModel p2pModel, ApplicationUser applicationUser);
         Task<IActionResult> Delete(int p2pId, ApplicationUser applicationUser);
+        P2PModel Get(int p2pId);
         IActionResult ListAll();
     }
 }

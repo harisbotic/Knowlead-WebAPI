@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using AutoMapper;
 using Knowlead.DomainModel.P2PModels;
 using Knowlead.DTO.BlobModels;
@@ -17,7 +18,9 @@ namespace Knowlead.DTO.UserModels
                 .ForMember(dest => dest.CreatedById, opt => opt.Ignore());
 
             CreateMap<P2P, P2PModel>()
-                .ForMember(dest => dest.Languages, opt => opt.MapFrom(src => src.P2PLanguages));
+                .ForMember(dest => dest.Languages, opt => opt.MapFrom(src => src.P2PLanguages))
+                .ForMember(dest => dest.Blobs, opt => opt.MapFrom(src => src.P2PFiles))
+                .AfterMap((p, m) => m.Blobs.AddRange(Mapper.Map<List<_BlobModel>>(p.P2PImages)));
                 
             CreateMap<P2PLanguageModel, LanguageModel>()
                 .ForMember(dest => dest.CoreLookupId, opt => opt.MapFrom(src => src.LanguageId))
