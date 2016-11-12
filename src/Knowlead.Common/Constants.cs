@@ -18,13 +18,11 @@ namespace Knowlead.Common
             [TSInitialize]
             public const string ModelEmpty = "MODEL_EMPTY";
             [TSInitialize]
-            public const string UserNotFound = "USER_NOT_FOUND";
-            [TSInitialize]
-            public const string P2PNotFound = "P2P_NOT_FOUND";
-            [TSInitialize]
-            public const string P2PAlreadyDeleted = "P2P_ALREADY_DELETED";
+            public const string EntityNotFound = "ENTITY_NOT_FOUND";
             [TSInitialize]
             public const string PasswordIncorrect = "INCORRECT_PASSWORD";
+            [TSInitialize]
+            public const string AlreadyDeleted = "ALREADY_DELETED";
             [TSInitialize]
             public const string ConfirmationCodeIncorrect = "CONFIRMATION_CODE_INCORRECT";
             [TSInitialize]

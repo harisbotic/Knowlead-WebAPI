@@ -119,7 +119,7 @@ namespace Knowlead.BLL.Repositories
             var user = await _userManager.FindByEmailAsync(confirmEmailModel.Email);
             if (user == null)
             {
-                var formError = new FormErrorModel(nameof(confirmEmailModel.Email), Constants.ErrorCodes.UserNotFound);
+                var formError = new FormErrorModel(nameof(confirmEmailModel.Email), Constants.ErrorCodes.EntityNotFound, nameof(ApplicationUser));
                 return new BadRequestObjectResult(new ResponseModel(formError));
             }
 

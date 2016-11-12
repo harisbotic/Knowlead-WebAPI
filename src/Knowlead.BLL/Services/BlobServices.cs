@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using AutoMapper;
+using Knowlead.DomainModel.BlobModels;
 using Knowlead.DomainModel.UserModels;
 using Knowlead.DTO.BlobModels;
 using Knowlead.Services.Interfaces;
@@ -35,13 +36,13 @@ namespace Knowlead.Services
             _fileContainer = _storageClient.GetContainerReference(FILE_CONTAINER_NAME);
         }
 
-        public async Task<ImageBlobModel> SaveImageOnAzureAsync(IFormFile formFile)
+        public async Task<ImageBlob> SaveImageOnAzureAsync(IFormFile formFile)
         {
-            ImageBlobModel imageBlobModel = Mapper.Map<ImageBlobModel>(formFile);
+            ImageBlob imageBlob = Mapper.Map<ImageBlob>(formFile);
 
             await _imageContainer.CreateIfNotExistsAsync(BlobContainerPublicAccessType.Blob, null, null);
 
-            CloudBlockBlob blockBlob = _imageContainer.GetBlockBlobReference($"{imageBlobModel.BlobId}.{imageBlobModel.Extension}");
+            CloudBlockBlob blockBlob = _imageContainer.GetBlockBlobReference($"{imageBlob.BlobId}.{imageBlob.Extension}");
 
             using (Stream stream = formFile.OpenReadStream())
             {
@@ -49,16 +50,16 @@ namespace Knowlead.Services
                 await blockBlob.UploadFromStreamAsync(stream);
             }
 
-            return imageBlobModel;
+            return imageBlob;
         }
         
-        public async Task<FileBlobModel> SaveFileOnAzureAsync (IFormFile formFile)
+        public async Task<FileBlob> SaveFileOnAzureAsync (IFormFile formFile)
         {
-            FileBlobModel fileBlobModel = Mapper.Map<FileBlobModel>(formFile);
+            FileBlob fileBlob = Mapper.Map<FileBlob>(formFile);
 
             await _fileContainer.CreateIfNotExistsAsync(BlobContainerPublicAccessType.Blob, null, null);
 
-            CloudBlockBlob blockBlob = _fileContainer.GetBlockBlobReference($"{fileBlobModel.BlobId}.{fileBlobModel.Extension}");
+            CloudBlockBlob blockBlob = _fileContainer.GetBlockBlobReference($"{fileBlob.BlobId}.{fileBlob.Extension}");
 
             using (Stream stream = formFile.OpenReadStream())
             {
@@ -66,7 +67,7 @@ namespace Knowlead.Services
                 await blockBlob.UploadFromStreamAsync(stream);
             }
 
-            return fileBlobModel;
+            return fileBlob;
         }
 
         public async Task<bool> DeleteImageOnAzureAsync(ImageBlobModel imageBlobModel, ApplicationUser applicationUser)

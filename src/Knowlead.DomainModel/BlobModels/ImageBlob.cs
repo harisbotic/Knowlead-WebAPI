@@ -4,6 +4,11 @@ namespace Knowlead.DomainModel.BlobModels
     {
         public int Width { get; set; }
         public int Height { get; set; }
+
+        public ImageBlob() : base("Image")
+        {
+            
+        }
     }
 }
 

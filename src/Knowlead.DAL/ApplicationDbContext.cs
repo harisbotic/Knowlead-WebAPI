@@ -65,7 +65,8 @@ namespace Knowlead.DAL
         #endregion 
 
         #region Blob Models
-            public DbSet<ImageBlob> ImageBlobs {get; set; }
+            public DbSet<_Blob> Blobs { get; set; }
+            public DbSet<ImageBlob> ImageBlobs { get; set; }
             public DbSet<FileBlob> FileBlobs { get; set; }
 
         #endregion 
@@ -96,8 +97,10 @@ namespace Knowlead.DAL
             modelBuilder.Entity<Language>().ToTable("Languages");
 
             /* Blobs */
-            modelBuilder.Entity<ImageBlob>().ToTable("ImageBlobs");
-            modelBuilder.Entity<FileBlob>().ToTable("FileBlobs");
+            modelBuilder.Entity<_Blob>()
+                .HasDiscriminator<string>("BlobType")
+                .HasValue<ImageBlob>("File")
+                .HasValue<FileBlob>("Image");
 
             modelBuilder.Entity<_Feedback>()
                 .HasDiscriminator<string>("Category")

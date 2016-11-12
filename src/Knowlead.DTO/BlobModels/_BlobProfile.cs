@@ -11,18 +11,26 @@ namespace Knowlead.DTO.UserModels
         public _BlobProfile()
         {
             CreateMap<ImageBlob, ImageBlobModel>().ReverseMap();
-            CreateMap<IFormFile, ImageBlobModel>()
+            CreateMap<IFormFile, ImageBlob>()
+                .ForMember(dest => dest.Filesize, opt => opt.MapFrom(src => src.Length))
                 .ForMember(dest => dest.Extension, opt => opt.MapFrom(src => GetExtension(src.FileName)))
                 .ForMember(dest => dest.Filename, opt => opt.MapFrom(src => Path.GetFileNameWithoutExtension(src.FileName)));
 
             CreateMap<FileBlob, FileBlobModel>().ReverseMap();
-            CreateMap<IFormFile, FileBlobModel>()
+            CreateMap<IFormFile, FileBlob>()
                 .ForMember(dest => dest.Filesize, opt => opt.MapFrom(src => src.Length))
-                .ForMember(dest => dest.Filename, opt => opt.MapFrom(src => Path.GetFileNameWithoutExtension(src.FileName)))
-                .ForMember(dest => dest.Extension, opt => opt.MapFrom(src => GetExtension(src.FileName)));
+                .ForMember(dest => dest.Extension, opt => opt.MapFrom(src => GetExtension(src.FileName)))
+                .ForMember(dest => dest.Filename, opt => opt.MapFrom(src => Path.GetFileNameWithoutExtension(src.FileName)));
         
         }
-        private string GetExtension(string filename) => Path.GetExtension(filename).Substring(1);
+        private string GetExtension(string filename)
+        {
+            var extension = Path.GetExtension(filename);
+            if(!string.IsNullOrWhiteSpace(extension))
+                return extension.Substring(1);
+            else
+                return "file";
+        }
     }
 }
 

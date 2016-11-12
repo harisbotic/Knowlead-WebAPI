@@ -9,8 +9,10 @@ namespace Knowlead.DomainModel.BlobModels
     {
         [Key]
         public Guid BlobId { get; set; }
+        public string BlobType { get; set; }
         public string Filename { get; set; }
         public string Extension { get; set; }
+        public long Filesize { get; set; }
 
 
         [MyRequired]
@@ -20,6 +22,10 @@ namespace Knowlead.DomainModel.BlobModels
         public _Blob()
         {
             this.BlobId = Guid.NewGuid();
+        }
+        public _Blob(string blobType) : this()
+        {
+            BlobType = blobType;
         }
     }
 }

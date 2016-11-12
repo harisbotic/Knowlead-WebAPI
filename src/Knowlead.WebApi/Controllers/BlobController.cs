@@ -47,5 +47,13 @@ namespace Knowlead.Controllers
                 return await _blobRepository.CreateFile(i, applicationUser);
             }
         }
+
+        [HttpDelete("delete"), ReallyAuthorize]
+        public async Task<IActionResult> Delete(Guid filename)
+        {
+            var applicationUser = await _auth.GetUser();
+
+            return await _blobRepository.DeleteBlob(filename, applicationUser);
+        }
     }
 }

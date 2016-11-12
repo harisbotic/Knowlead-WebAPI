@@ -59,13 +59,13 @@ namespace Knowlead.BLL.Repositories
             var p2p = _context.P2p.Where(x => x.P2pId == p2pInt).FirstOrDefault();
 
             if (p2p == null)
-                return new BadRequestObjectResult(new ResponseModel(new ErrorModel(Common.Constants.ErrorCodes.P2PNotFound)));
+                return new BadRequestObjectResult(new ResponseModel(new ErrorModel(Common.Constants.ErrorCodes.EntityNotFound, nameof(P2P))));
 
             if(p2p.CreatedById != applicationUser.Id)
                 return new BadRequestObjectResult(new ResponseModel(new ErrorModel(Common.Constants.ErrorCodes.OwnershipProblem)));
 
             if(p2p.IsDeleted)
-                return new BadRequestObjectResult(new ResponseModel(new ErrorModel(Common.Constants.ErrorCodes.P2PAlreadyDeleted)));
+                return new BadRequestObjectResult(new ResponseModel(new ErrorModel(Common.Constants.ErrorCodes.AlreadyDeleted, nameof(P2P))));
 
             p2p.IsDeleted = true;
             return await SaveChangesAsync();

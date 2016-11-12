@@ -17,6 +17,9 @@
         "Dockerfile": true,
         "README.md": true,
         "NuGet.Config": true,
+        "global.json": true,
+        "run.bat": true,
+        "seed.bat": true,
 
         //Git things
         ".gitignore": true

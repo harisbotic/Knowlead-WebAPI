@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Knowlead.BLL.Repositories.Interfaces;
@@ -20,12 +22,11 @@ namespace Knowlead.BLL.Repositories
             _context = context;
         }
 
-        public async Task<IActionResult> CreateFile(FileBlobModel fileBlobModel, ApplicationUser applicationUser)
+        public async Task<IActionResult> CreateFile(FileBlob fileBlob, ApplicationUser applicationUser)
         {
-            FileBlob fileBlob = Mapper.Map<FileBlob>(fileBlobModel);
             fileBlob.UploadedById = applicationUser.Id;
 
-            _context.Add(fileBlob);
+            _context.FileBlobs.Add(fileBlob);
 
             if (!await SaveChangesAsync())
             {
@@ -34,16 +35,15 @@ namespace Knowlead.BLL.Repositories
             }
 
             return new OkObjectResult(new ResponseModel{
-                Object = fileBlob
+                Object = Mapper.Map<FileBlobModel>(fileBlob)
             });
         }
 
-        public async Task<IActionResult> CreateImage(ImageBlobModel imageBlobModel, ApplicationUser applicationUser)
+        public async Task<IActionResult> CreateImage(ImageBlob imageBlob, ApplicationUser applicationUser)
         {
-            ImageBlob imageBlob = Mapper.Map<ImageBlob>(imageBlobModel);
             imageBlob.UploadedById = applicationUser.Id;
 
-            _context.Add(imageBlob);
+            _context.ImageBlobs.Add(imageBlob);
 
             if (!await SaveChangesAsync())
             {
@@ -52,8 +52,29 @@ namespace Knowlead.BLL.Repositories
             }
 
             return new OkObjectResult(new ResponseModel{
-                Object = imageBlob
+                Object = Mapper.Map<ImageBlobModel>(imageBlob)
             });
+        }
+
+        public async Task<IActionResult> DeleteBlob(Guid filename, ApplicationUser applicationUser)
+        {
+            var blob = _context.Blobs.Where(x => x.BlobId == filename).FirstOrDefault();
+
+            if(blob == null)
+                return new BadRequestObjectResult(new ResponseModel(new ErrorModel(Common.Constants.ErrorCodes.EntityNotFound, nameof(_Blob))));
+
+            if(blob.UploadedById != applicationUser.Id)
+                return new BadRequestObjectResult(new ResponseModel(new ErrorModel(Common.Constants.ErrorCodes.OwnershipProblem)));
+
+            _context.Blobs.Remove(blob);
+
+            if (!await SaveChangesAsync())
+            {
+                var error = new ErrorModel(Constants.ErrorCodes.DatabaseError);
+                return new BadRequestObjectResult(new ResponseModel(error));
+            }
+
+            return new OkObjectResult(new ResponseModel{});
         }
 
         private async Task<bool> SaveChangesAsync()

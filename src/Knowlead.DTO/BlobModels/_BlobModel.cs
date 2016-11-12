@@ -8,8 +8,10 @@ namespace Knowlead.DTO.BlobModels
     {
         [MyRequired]
         public Guid BlobId { get; set; }
+        public string BlobType { get; set; }
         public string Filename { get; set; }
         public string Extension { get; set; }
+        public long Filesize { get; set; }
 
         [MyRequired]
         public Guid UploadedById { get; set; }
@@ -17,7 +19,7 @@ namespace Knowlead.DTO.BlobModels
 
         public _BlobModel()
         {
-            this.BlobId = Guid.NewGuid();
+            
         }
     }
 }
