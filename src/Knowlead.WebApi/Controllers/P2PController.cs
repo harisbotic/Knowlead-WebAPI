@@ -45,7 +45,7 @@ namespace Knowlead.Controllers
             return await _p2pRepository.Create(p2pModel, applicationUser);
         }
 
-        [HttpDelete("delete"), ReallyAuthorize]
+        [HttpDelete("delete/{p2pId}"), ReallyAuthorize]
         public async Task<IActionResult> Delete(int p2pId)
         {
             var applicationUser = await _auth.GetUser();

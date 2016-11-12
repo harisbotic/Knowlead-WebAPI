@@ -48,7 +48,7 @@ namespace Knowlead.Controllers
             }
         }
 
-        [HttpDelete("delete"), ReallyAuthorize]
+        [HttpDelete("delete/{filename}"), ReallyAuthorize]
         public async Task<IActionResult> Delete(Guid filename)
         {
             var applicationUser = await _auth.GetUser();

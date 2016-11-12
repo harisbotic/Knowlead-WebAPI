@@ -61,39 +61,7 @@ namespace Knowlead.Controllers
         {
             var currentUser = await _auth.GetUser(true);
 
-            // var e = new ApplicationUserModel();
-            // userDetailsPatch.ApplyTo(e);
-
-            // var b = TryValidateModel(e);
-
-            // var o = new ResponseModel(ModelState);
-            // if(!b)
-            // o.AddError(new ErrorModel("b is false"));
-
-            // return new OkObjectResult(o);
-
             return (await _accountRepository.UpdateUserDetails(currentUser, userDetailsPatch));
-        }
-
-        [HttpPost("/account/login"), ValidateModelAttribute]
-        public IActionResult dummy([FromBody] ConfirmEmailModel confirmEmailModel)
-        {
-            
-            // _ResponseModel.AddFormError("code", "val", "par");
-            // _ResponseModel.AddFormError("key", "val", "par");
-            // _ResponseModel.AddFormError("key2", "val2", "par2");
-            // _ResponseModel.AddErrors(ModelState);
-            // _ResponseModel.AddError("hey");
-            
-
-            return Ok(new ResponseModel());
-            
-        }
-
-        [HttpGet("/authorizetest"), ReallyAuthorize]
-        public IActionResult AuthorizeTest()
-        {
-            return Ok(new ResponseModel());
         }
     }
 }

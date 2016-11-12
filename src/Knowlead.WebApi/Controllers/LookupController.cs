@@ -80,8 +80,8 @@ namespace Knowlead.Controllers
             });
         }
 
-        // GET api/lookup/allfos
-        [HttpGet("allfos")]
+        // GET api/lookup/foses
+        [HttpGet("foses")]
         public IActionResult GetAllFOS()
         {
             var foss = _context.Fos.ToList();
