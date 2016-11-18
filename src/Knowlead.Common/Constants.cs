@@ -24,7 +24,7 @@ namespace Knowlead.Common
             [TSInitialize]
             public const string EntityNotFound = "ENTITY_NOT_FOUND";
             [TSInitialize]
-            public const string PasswordIncorrect = "INCORRECT_PASSWORD";
+            public const string PasswordIncorrect = "PASSWORD_INCORRECT";
             [TSInitialize]
             public const string PasswordLenghtValidation = "PASSWORD_LENGHT_VALIDATION";
             [TSInitialize]
@@ -33,6 +33,8 @@ namespace Knowlead.Common
             public const string PasswordDigitValidation = "PASSWORD_DIGIT_VALIDATION";
             [TSInitialize]
             public const string PasswordUppercaseValidation = "PASSWORD_UPPERCASE_VALIDATION";
+            [TSInitialize]
+            public const string PasswordLowercaseValidation = "PASSWORD_LOWERCASE_VALIDATION";
             [TSInitialize]
             public const string AlreadyDeleted = "ALREADY_DELETED";
             [TSInitialize]
