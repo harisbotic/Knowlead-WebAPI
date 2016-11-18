@@ -80,6 +80,7 @@ namespace Knowlead.WebApi.Config
                 config.Password.RequireUppercase = false;
                 config.Password.RequireDigit = false;
                 config.Password.RequireNonAlphanumeric = false;
+                config.Password.RequireLowercase = true;
             })
                 .AddEntityFrameworkStores<ApplicationDbContext, Guid>()
                 .AddDefaultTokenProviders()
