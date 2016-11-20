@@ -16,13 +16,13 @@
     "Knowlead.DTO": {
       "target": "project"
     },
-    "Microsoft.AspNetCore.JsonPatch": "1.0.0",
+    "Microsoft.AspNetCore.JsonPatch": "1.1.0",
     "WindowsAzure.Storage": "7.2.1" 
   },
   "frameworks": {
     "netstandard1.6": {
       "dependencies": {
-        "NETStandard.Library": "1.6.0"
+        "NETStandard.Library": "1.6.1"
       },
       "imports": [
         "dnxcore50",

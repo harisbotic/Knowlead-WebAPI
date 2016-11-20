@@ -4,14 +4,14 @@
     "debugType": "portable"
   },
   "dependencies": {
-    "Microsoft.AspNetCore.Mvc.DataAnnotations": "1.0.1",
-    "Microsoft.AspNetCore.Identity": "1.0.0",
+    "Microsoft.AspNetCore.Mvc.DataAnnotations": "1.1.0",
+    "Microsoft.AspNetCore.Identity": "1.1.0",
     "TypeScriptBuilder": "0.1.10"
   },
   "frameworks": {
     "netstandard1.6": {
       "dependencies": {
-        "NETStandard.Library": "1.6.0"
+        "NETStandard.Library": "1.6.1"
       }
     }
   }
