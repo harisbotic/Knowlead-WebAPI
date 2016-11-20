@@ -26,15 +26,15 @@ namespace Knowlead.Common
             [TSInitialize]
             public const string PasswordIncorrect = "PASSWORD_INCORRECT";
             [TSInitialize]
-            public const string PasswordLenghtValidation = "PASSWORD_LENGHT_VALIDATION";
+            public const string TooShort = "TOO_SHORT";
             [TSInitialize]
-            public const string PasswordAlphanumericValidation = "PASSWORD_ALPHANUMERIC_VALIDATION";
+            public const string RequiresNonAlphanumeric = "REQUIRES_NON_ALPHANUMERIC";
             [TSInitialize]
-            public const string PasswordDigitValidation = "PASSWORD_DIGIT_VALIDATION";
+            public const string RequiresDigit = "REQUIRES_DIGIT";
             [TSInitialize]
-            public const string PasswordUppercaseValidation = "PASSWORD_UPPERCASE_VALIDATION";
+            public const string RequiresUppercase = "REQUIRES_UPPERCASE";
             [TSInitialize]
-            public const string PasswordLowercaseValidation = "PASSWORD_LOWERCASE_VALIDATION";
+            public const string RequiresLowercase = "REQUIRES_LOWERCASE";
             [TSInitialize]
             public const string AlreadyDeleted = "ALREADY_DELETED";
             [TSInitialize]
