@@ -90,6 +90,12 @@ namespace Knowlead.WebApi.Config
             return services;
         }
 
+        public static IServiceCollection AddSingnalR(this IServiceCollection services) 
+        {
+            services.AddSingnalR();
+
+            return services;
+        }
 
         public static IServiceCollection AddDbContext(this IServiceCollection services) 
         {

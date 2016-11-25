@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using AutoMapper;
 using Knowlead.WebApi.Config;
 using Knowlead.Common.HttpRequestItems;
+using Knowlead.WebApi.Hubs;
 
 namespace Knowlead
 {
@@ -13,13 +14,15 @@ namespace Knowlead
     {
         private IConfigurationRoot _config;
         public static string _configPath = "./Config/Appsettings";
-        public static IConfigurationRoot GetConfiguration(IHostingEnvironment env) {
-            
+        public static IConfigurationRoot GetConfiguration(IHostingEnvironment env)
+        {
+
             var builder = new ConfigurationBuilder()
                 .SetBasePath(System.IO.Directory.GetCurrentDirectory())
                 .AddJsonFile($"{_configPath}/appsettings.json", optional: false, reloadOnChange: true)
                 .AddEnvironmentVariables();
-            if (env != null) {
+            if (env != null)
+            {
                 builder
                     .SetBasePath(env.ContentRootPath)
                     .AddJsonFile($"{_configPath}/appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
@@ -44,6 +47,7 @@ namespace Knowlead
             services.AddAutoMapper();
             services.AddMessageServices();
             services.AddCustomizedMvc();
+            services.AddSignalR();
             services.AddDbContext();
             services.AddIdentityFramework();
             services.AddOpenIdDict();
@@ -67,6 +71,12 @@ namespace Knowlead
                 Audience = "http://localhost:5000",
                 Authority = "http://localhost:5000/"
             });
+
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<ChatHub>("/chat");
+            });
+
             app.UseMvc();
         }
     }
