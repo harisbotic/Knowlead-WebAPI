@@ -68,8 +68,8 @@ namespace Knowlead
                 AutomaticAuthenticate = true,
                 AutomaticChallenge = true,
                 RequireHttpsMetadata = false,
-                Audience = "http://localhost:5000",
-                Authority = "http://localhost:5000/"
+                Audience = "http://knowlead.com:5000",
+                Authority = "http://knowlead.com:5000"
             });
 
             app.UseSignalR(routes =>
