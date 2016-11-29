@@ -1,10 +1,8 @@
 using System.Threading.Tasks;
 using Knowlead.WebApi.Attributes;
-using Knowlead.DomainModel.UserModels;
 using Knowlead.DTO.ResponseModels;
 using Knowlead.Common.Attributes;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Knowlead.DTO.UserModels;
@@ -16,18 +14,12 @@ namespace Knowlead.Controllers
 {
     [Route("api/[controller]")]
     public class AccountController : Controller {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IAccountRepository _accountRepository;
         private readonly Auth _auth;
 
-        public AccountController(UserManager<ApplicationUser> userManager,
-                                 SignInManager<ApplicationUser> signInManager,
-                                 IAccountRepository accountRepository,
+        public AccountController(IAccountRepository accountRepository,
                                  Auth auth)
         {
-            _signInManager = signInManager;
-            _userManager = userManager;
             _accountRepository = accountRepository;
             _auth = auth;
         }

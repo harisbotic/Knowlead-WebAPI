@@ -13,7 +13,7 @@ namespace Knowlead.Controllers
     [Route("api/[controller]")]
     public class LookupController : Controller
     {
-        private ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
         
         public LookupController(ApplicationDbContext context)
         {
