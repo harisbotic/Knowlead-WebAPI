@@ -5,8 +5,6 @@ using Knowlead.Common.HttpRequestItems;
 using Knowlead.DTO.P2PModels;
 using Knowlead.WebApi.Attributes;
 using Knowlead.BLL.Repositories.Interfaces;
-using Knowlead.DTO.ResponseModels;
-using Knowlead.Common;
 using Knowlead.DomainModel.P2PModels;
 
 namespace Knowlead.Controllers
@@ -25,16 +23,17 @@ namespace Knowlead.Controllers
         }
 
         [HttpGet("{p2pId}"), ReallyAuthorize]
-        public IActionResult Get(int p2pId)
+        public async Task<IActionResult> GetP2P(int p2pId)
         {
-            var p2pModel = _p2pRepository.Get(p2pId);
-            
-            if(p2pModel == null )
-                return BadRequest(new ResponseModel(new ErrorModel(Constants.ErrorCodes.EntityNotFound, nameof(P2P))));
+            return await _p2pRepository.GetP2P(p2pId);
+        }
 
-            return Ok(new ResponseModel{
-                Object = p2pModel
-            });
+        [HttpGet("messages/{p2pId}"), ReallyAuthorize]
+        public async Task<IActionResult> GetMessages(int p2pId)
+        {
+            var applicationUser = await _auth.GetUser();
+
+            return await _p2pRepository.GetMessages(p2pId, applicationUser);
         }
 
         [HttpPost("create"), ReallyAuthorize, ValidateModel]
@@ -43,6 +42,14 @@ namespace Knowlead.Controllers
             var applicationUser = await _auth.GetUser();
 
             return await _p2pRepository.Create(p2pModel, applicationUser);
+        }
+
+        [HttpPost("message"), ReallyAuthorize, ValidateModel]
+        public async Task<IActionResult> Message([FromBody] P2PMessageModel p2pMessageModel)
+        {
+            var applicationUser = await _auth.GetUser();
+
+            return await _p2pRepository.Message(p2pMessageModel, applicationUser);
         }
 
         [HttpDelete("delete/{p2pId}"), ReallyAuthorize]
@@ -54,9 +61,9 @@ namespace Knowlead.Controllers
         }
 
         [HttpGet("list"), ReallyAuthorize]
-        public IActionResult List()
+        public async Task<IActionResult> List()
         {
-            return _p2pRepository.ListAll();
+            return await _p2pRepository.ListAll();
         }
     }
 }

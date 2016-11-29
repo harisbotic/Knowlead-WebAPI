@@ -64,7 +64,7 @@ namespace Knowlead.BLL.Repositories
                 return new BadRequestObjectResult(new ResponseModel(new ErrorModel(Common.Constants.ErrorCodes.EntityNotFound, nameof(_Blob))));
 
             if(blob.UploadedById != applicationUser.Id)
-                return new BadRequestObjectResult(new ResponseModel(new ErrorModel(Common.Constants.ErrorCodes.OwnershipProblem)));
+                return new BadRequestObjectResult(new ResponseModel(new ErrorModel(Common.Constants.ErrorCodes.OwnershipError)));
 
             _context.Blobs.Remove(blob);
 

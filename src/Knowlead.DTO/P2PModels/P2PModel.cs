@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using Knowlead.Common.DataAnnotations;
+using Knowlead.DomainModel.P2PModels;
 using Knowlead.DTO.BlobModels;
 using Knowlead.DTO.LookupModels.Core;
 using Knowlead.DTO.UserModels;
@@ -40,6 +41,7 @@ namespace Knowlead.DTO.P2PModels
 
         public List<LanguageModel> Languages { get; set; }
         public List<_BlobModel> Blobs { get; set; }
+        public List<P2PMessageModel> P2pMessageModels { get; set; }
         
         [MyRequired]
         public int FosId { get; set; }

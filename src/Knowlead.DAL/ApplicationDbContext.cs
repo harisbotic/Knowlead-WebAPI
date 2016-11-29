@@ -58,7 +58,7 @@ namespace Knowlead.DAL
 
         #region Peer to Peer
             public DbSet<P2P> P2p { get; set; }
-            public DbSet<P2PDiscussion> P2PDiscussions { get; set; }
+            public DbSet<P2PMessage> P2PMessages { get; set; }
             public DbSet<P2PFile> P2PFiles { get; set; }
             public DbSet<P2PImage> P2PImages{ get; set; }
             public DbSet<P2PLanguage> P2PLanguages { get; set; }

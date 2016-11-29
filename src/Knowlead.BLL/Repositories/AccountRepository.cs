@@ -23,19 +23,16 @@ namespace Knowlead.BLL.Repositories
     {
         private ApplicationDbContext _context;
         private UserManager<ApplicationUser> _userManager;
-        private SignInManager<ApplicationUser> _signInManager;
         private MessageServices _messageServices;
         private IConfigurationRoot _config;
 
         public AccountRepository(ApplicationDbContext context,
                 UserManager<ApplicationUser> userManager,
-                SignInManager<ApplicationUser> signInManager,
                 MessageServices messageServices,
                 IConfigurationRoot config)
         {
             _context = context;
             _userManager = userManager;
-            _signInManager = signInManager;
             _messageServices = messageServices;
             _config = config;
         }
@@ -142,7 +139,8 @@ namespace Knowlead.BLL.Repositories
 
         public async Task<ApplicationUser> GetApplicationUserById(Guid userId, bool includeDetails = false)
         {
-            IQueryable<ApplicationUser> userQuery = _context.ApplicationUsers;
+            IQueryable<ApplicationUser> userQuery = _context.ApplicationUsers
+                                                            .Where(x => x.Id.Equals(userId));;
                     
             if(includeDetails)
                 userQuery = userQuery.Include(x => x.ApplicationUserLanguages)
@@ -153,9 +151,7 @@ namespace Knowlead.BLL.Repositories
                                         .Include(x => x.Country)
                                         .Include(x => x.State);
 
-                userQuery.Where(x => x.Id == userId);
-
-            return await userQuery.FirstOrDefaultAsync();
+            return await userQuery.FirstAsync();
         }
     }
 }

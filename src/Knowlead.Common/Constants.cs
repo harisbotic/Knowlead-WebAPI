@@ -46,7 +46,11 @@ namespace Knowlead.Common
             [TSInitialize]
             public const string IncorrectValue = "INCORRECT_VALUE";
             [TSInitialize]
-            public const string OwnershipProblem = "OWNERSHIP_PROBLEM";
+            public const string OwnershipError = "OWNERSHIP_ERROR";
+            [TSInitialize]
+            public const string AuthorityError = "AUTHORITY_ERROR";
+            [TSInitialize]
+            public const string HackAttempt = "HACK_ATTEMPT";
 
         }
 

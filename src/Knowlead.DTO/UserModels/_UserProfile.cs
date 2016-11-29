@@ -11,7 +11,6 @@ namespace Knowlead.DTO.UserModels
             CreateMap<RegisterUserModel, ApplicationUser>();
 
             CreateMap<ApplicationUserModel, ApplicationUser>()
-                .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ForMember(dest => dest.ApplicationUserLanguages, opt => opt.Ignore())
                 .ForMember(dest => dest.ApplicationUserInterests, opt => opt.Ignore())
                 .ForMember(dest => dest.Country, opt => opt.Ignore())

@@ -27,6 +27,15 @@ namespace Knowlead.DTO.UserModels
                 .ForMember(dest => dest.Code, opt => opt.MapFrom(src => src.Language.Code))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Language.Name));
 
+            CreateMap<P2PMessage, P2PMessageModel>();
+
+            CreateMap<P2PMessageModel, P2PMessage>()
+                .ForMember(dest => dest.MessageFromId, opt => opt.Ignore())
+                .ForMember(dest => dest.MessageFrom, opt => opt.Ignore())
+                .ForMember(dest => dest.Timestamp, opt => opt.Ignore())
+                .ForMember(dest => dest.P2pMessageId, opt => opt.Ignore())
+                .ForMember(dest => dest.P2p, opt => opt.Ignore());
+
             CreateMap<P2PFileModel, FileBlobModel>();
             //Fill in
 

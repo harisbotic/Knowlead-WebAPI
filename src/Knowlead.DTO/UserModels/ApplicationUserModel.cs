@@ -9,6 +9,8 @@ namespace Knowlead.DTO.UserModels
 {
     public class ApplicationUserModel
     {
+        public Guid Id { get; set;}
+
         [MyRequired]
         [MyEmailAddress]
         public string Email { get; set; }
