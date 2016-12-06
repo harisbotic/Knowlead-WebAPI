@@ -51,6 +51,10 @@ namespace Knowlead.Common
             public const string AuthorityError = "AUTHORITY_ERROR";
             [TSInitialize]
             public const string HackAttempt = "HACK_ATTEMPT";
+            [TSInitialize]
+            public const string AgeTooYoung = "AGE_TOO_YOUNG";
+            [TSInitialize]
+            public const string AgeTooOld = "AGE_TOO_OLD";
 
         }
 
