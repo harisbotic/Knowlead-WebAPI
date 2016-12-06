@@ -34,7 +34,7 @@ namespace Knowlead.Controllers
                 return BadRequest(new ResponseModel(new ErrorModel(ErrorCodes.EntityNotFound)));
             
             return Ok(new ResponseModel {
-                Object = user
+                Object = Mapper.Map<ApplicationUserModel>(user)
             });
 
         }
