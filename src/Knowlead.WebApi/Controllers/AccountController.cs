@@ -7,8 +7,10 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Knowlead.DTO.UserModels;
 using AutoMapper;
+using static Knowlead.Common.Constants;
 using Knowlead.Common.HttpRequestItems;
 using Knowlead.BLL.Repositories.Interfaces;
+using System;
 
 namespace Knowlead.Controllers
 {
@@ -22,6 +24,19 @@ namespace Knowlead.Controllers
         {
             _accountRepository = accountRepository;
             _auth = auth;
+        }
+
+        [HttpGet("{userId}")]
+        public async Task<IActionResult> GetApplicationUserById(Guid userId)
+        {
+            var user = await _accountRepository.GetApplicationUserById(userId, true);
+            if(user == null)
+                return BadRequest(new ResponseModel(new ErrorModel(ErrorCodes.EntityNotFound)));
+            
+            return Ok(new ResponseModel {
+                Object = user
+            });
+
         }
 
         [HttpPost("register"), ValidateModel]
