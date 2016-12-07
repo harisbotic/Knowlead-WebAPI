@@ -95,10 +95,11 @@ namespace Knowlead.BLL.Repositories
             if(String.IsNullOrEmpty(applicationUser.Surname))
                     return new BadRequestObjectResult(new ResponseModel(new FormErrorModel(nameof(ApplicationUserModel.Surname), Constants.ErrorCodes.RequiredField)));
             
+            if(applicationUser.Birthdate.HasValue)
             if(DateTime.UtcNow.Year - applicationUser.Birthdate.GetValueOrDefault().Year < 6)
                      return new BadRequestObjectResult(new ResponseModel(new FormErrorModel(nameof(ApplicationUserModel.Birthdate), Constants.ErrorCodes.AgeTooYoung)));
 
-            if(DateTime.UtcNow.Year - applicationUser.Birthdate.GetValueOrDefault().Year > 99)
+            else if(DateTime.UtcNow.Year - applicationUser.Birthdate.GetValueOrDefault().Year > 99)
                      return new BadRequestObjectResult(new ResponseModel(new FormErrorModel(nameof(ApplicationUserModel.Birthdate), Constants.ErrorCodes.AgeTooOld)));
 
             var result = await _userManager.UpdateAsync(applicationUser);

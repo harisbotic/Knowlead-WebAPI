@@ -12,7 +12,6 @@ namespace Knowlead.WebApi.Attributes
         {
             Exception ex = filterContext.Exception;
             int statusCode = 400;
-            filterContext.ExceptionHandled = true;
 
             var exType = filterContext.Exception.GetType();
             var responseModel = new ResponseModel();
