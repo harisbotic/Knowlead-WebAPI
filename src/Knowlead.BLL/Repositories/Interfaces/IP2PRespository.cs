@@ -13,6 +13,10 @@ namespace Knowlead.BLL.Repositories.Interfaces
         Task<IActionResult> Delete(int p2pId, ApplicationUser applicationUser);
         Task<IActionResult> GetP2P(int p2pId);
         Task<IActionResult> GetMessages(int p2pId, ApplicationUser applicationUser);
+        Task<IActionResult> ListMine(ApplicationUser applicationUser);
+        Task<IActionResult> ListSchedulded(ApplicationUser applicationUser);
+        Task<IActionResult> ListBookmarked(ApplicationUser applicationUser);
+        Task<IActionResult> ListActionRequired(ApplicationUser applicationUser);
         Task<IActionResult> ListAll();
     }
 }

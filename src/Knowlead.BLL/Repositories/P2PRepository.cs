@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Knowlead.BLL.QueryExtensions;
 using Knowlead.BLL.Repositories.Interfaces;
 using Knowlead.Common;
 using Knowlead.DAL;
@@ -30,12 +31,7 @@ namespace Knowlead.BLL.Repositories
 
         public async Task<IActionResult> GetP2P(int p2pId)
         {
-            var p2p = await _context.P2p.Where(x => x.P2pId == p2pId)
-                                  .Include(x => x.P2PFiles)
-                                    .ThenInclude(x => x.FileBlob)
-                                  .Include(x => x.P2PImages)
-                                    .ThenInclude(x => x.ImageBlob)
-                                  .FirstAsync();
+            var p2p = await _context.P2p.IncludeEverything().Where(x => x.P2pId == p2pId).FirstOrDefaultAsync();
             
             if(p2p == null && !p2p.IsDeleted)
                 return new BadRequestObjectResult(new ResponseModel(new ErrorModel(Constants.ErrorCodes.EntityNotFound, nameof(P2P))));
@@ -51,13 +47,11 @@ namespace Knowlead.BLL.Repositories
             IQueryable<P2PMessage> messagesQuery = _context.P2PMessages
                                                            .Where(x => x.P2pId == p2pId)
                                                            .Include(x => x.MessageFrom)
-                                                           .Include(x => x.MessageTo);
+                                                           .Include(x => x.MessageTo); //TODO: Probably optimization is required
 
-            if(p2p.CreatedById == applicationUser.Id)
-                messagesQuery = messagesQuery.Where(x => x.P2pId == p2pId);
-            else
+            if(p2p.CreatedById != applicationUser.Id)
                 messagesQuery = messagesQuery
-                                    .Where(x => x.P2pId == p2pId && (x.MessageFromId == applicationUser.Id || x.MessageToId == applicationUser.Id));
+                                    .Where(x => x.MessageFromId == applicationUser.Id || x.MessageToId == applicationUser.Id);
                 
             var messages = await messagesQuery.ToListAsync();
 
@@ -172,20 +166,63 @@ namespace Knowlead.BLL.Repositories
                 
         }
 
+        private async Task<bool> SaveChangesAsync()
+        {
+            return (await _context.SaveChangesAsync() > 0);
+        }
+
+        public async Task<IActionResult> ListMine(ApplicationUser applicationUser)
+        {
+            var p2ps = await _context.P2p.IncludeEverything().Where(x => x.CreatedById == applicationUser.Id).ToListAsync();
+            // var p2pModels = new List<P2PModel>();
+            // var applicationUserModel = Mapper.Map<ApplicationUserModel>(applicationUser);
+
+            // //Optimization
+            // foreach (var p2p in p2ps)
+            // {
+            //     var p2pModel = Mapper.Map<P2PModel>(p2p);
+            //     p2pModel.CreatedBy = applicationUserModel;
+            //     p2pModels.Add(p2pModel);
+            // }
+
+            return new OkObjectResult(new ResponseModel{
+                Object = Mapper.Map<List<P2PModel>>(p2ps)
+            });
+        }
+
+        public async Task<IActionResult> ListSchedulded(ApplicationUser applicationUser)
+        {
+            var p2ps = await _context.P2p
+                    .IncludeEverything()
+                    .Where(x => x.ScheduledAt.HasValue)
+                    .Where(x => x.CreatedById == applicationUser.Id || x.ScheduledWithId == applicationUser.Id)
+                    .ToListAsync();
+
+            return new OkObjectResult(new ResponseModel {
+                Object = Mapper.Map<List<P2PModel>>(p2ps)
+            });
+        }
+
+        public Task<IActionResult> ListBookmarked(ApplicationUser applicationUser)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IActionResult> ListActionRequired(ApplicationUser applicationUser)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<IActionResult> ListAll()
         {
             if(!_environment.IsDevelopment())
                 return new BadRequestObjectResult(new ResponseModel(new ErrorModel("Development only endpoint")));
 
-            var p2ps = await _context.P2p.ToListAsync();
+            var p2ps = await _context.P2p.IncludeEverything().ToListAsync();
 
             return new OkObjectResult(new ResponseModel{
                 Object = p2ps
             });
-        }
-        private async Task<bool> SaveChangesAsync()
-        {
-            return (await _context.SaveChangesAsync() > 0);
         }
     }
 }
