@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Knowlead.BLL.Repositories.Interfaces;
 using Knowlead.Common;
+using Knowlead.Common.Exceptions;
 using Knowlead.DAL;
 using Knowlead.DomainModel.BlobModels;
 using Knowlead.DomainModel.UserModels;
@@ -61,7 +62,7 @@ namespace Knowlead.BLL.Repositories
             var blob = _context.Blobs.Where(x => x.BlobId == filename).FirstOrDefault();
 
             if(blob == null)
-                return new BadRequestObjectResult(new ResponseModel(new ErrorModel(Common.Constants.ErrorCodes.EntityNotFound, nameof(_Blob))));
+                throw new EntityNotFoundException(nameof(_Blob));
 
             if(blob.UploadedById != applicationUser.Id)
                 return new BadRequestObjectResult(new ResponseModel(new ErrorModel(Common.Constants.ErrorCodes.OwnershipError)));

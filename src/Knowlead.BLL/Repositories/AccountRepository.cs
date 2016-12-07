@@ -10,12 +10,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.JsonPatch;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Knowlead.Common;
+using static Knowlead.Common.Constants;
 using System.Linq;
 using System;
 using System.Collections.Generic;
 using Knowlead.BLL.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Knowlead.Common.Exceptions;
 
 namespace Knowlead.BLL.Repositories
 {
@@ -82,7 +83,7 @@ namespace Knowlead.BLL.Repositories
                                     .FirstOrDefault();
 
                 if(newState == null)
-                    return new BadRequestObjectResult(new ResponseModel(new FormErrorModel(nameof(ApplicationUserModel.StateId), Constants.ErrorCodes.IncorrectValue)));
+                    return new BadRequestObjectResult(new ResponseModel(new FormErrorModel(nameof(ApplicationUserModel.StateId), ErrorCodes.IncorrectValue)));
 
                 applicationUserModel.CountryId = newState.StatesCountryId;
             }
@@ -90,17 +91,17 @@ namespace Knowlead.BLL.Repositories
             applicationUser = Mapper.Map<ApplicationUserModel, ApplicationUser>(applicationUserModel, applicationUser);
 
             if(String.IsNullOrEmpty(applicationUser.Name))
-                    return new BadRequestObjectResult(new ResponseModel(new FormErrorModel(nameof(ApplicationUserModel.Name), Constants.ErrorCodes.RequiredField)));
+                    return new BadRequestObjectResult(new ResponseModel(new FormErrorModel(nameof(ApplicationUserModel.Name), ErrorCodes.RequiredField)));
             
             if(String.IsNullOrEmpty(applicationUser.Surname))
-                    return new BadRequestObjectResult(new ResponseModel(new FormErrorModel(nameof(ApplicationUserModel.Surname), Constants.ErrorCodes.RequiredField)));
+                    return new BadRequestObjectResult(new ResponseModel(new FormErrorModel(nameof(ApplicationUserModel.Surname), ErrorCodes.RequiredField)));
             
             if(applicationUser.Birthdate.HasValue)
             if(DateTime.UtcNow.Year - applicationUser.Birthdate.GetValueOrDefault().Year < 6)
-                     return new BadRequestObjectResult(new ResponseModel(new FormErrorModel(nameof(ApplicationUserModel.Birthdate), Constants.ErrorCodes.AgeTooYoung)));
+                     return new BadRequestObjectResult(new ResponseModel(new FormErrorModel(nameof(ApplicationUserModel.Birthdate), ErrorCodes.AgeTooYoung, "6")));
 
             else if(DateTime.UtcNow.Year - applicationUser.Birthdate.GetValueOrDefault().Year > 99)
-                     return new BadRequestObjectResult(new ResponseModel(new FormErrorModel(nameof(ApplicationUserModel.Birthdate), Constants.ErrorCodes.AgeTooOld)));
+                     return new BadRequestObjectResult(new ResponseModel(new FormErrorModel(nameof(ApplicationUserModel.Birthdate), ErrorCodes.AgeTooOld, "99")));
 
             var result = await _userManager.UpdateAsync(applicationUser);
             
@@ -122,21 +123,20 @@ namespace Knowlead.BLL.Repositories
             var user = await _userManager.FindByEmailAsync(confirmEmailModel.Email);
             if (user == null)
             {
-                var formError = new FormErrorModel(nameof(confirmEmailModel.Email), Constants.ErrorCodes.EntityNotFound, nameof(ApplicationUser));
-                return new BadRequestObjectResult(new ResponseModel(formError));
+                throw new EntityNotFoundException(nameof(confirmEmailModel.Email), nameof(ApplicationUser));
             }
 
             var correctPassword = await _userManager.CheckPasswordAsync(user, confirmEmailModel.Password);
             if(!correctPassword)
             {
-                var formError = new FormErrorModel(nameof(confirmEmailModel.Email), Constants.ErrorCodes.PasswordIncorrect);
+                var formError = new FormErrorModel(nameof(confirmEmailModel.Email), ErrorCodes.PasswordIncorrect);
                 return new BadRequestObjectResult(new ResponseModel(formError));
             }
 
             var result = await _userManager.ConfirmEmailAsync(user, confirmEmailModel.Code);
             if(!result.Succeeded)
             {
-                var formError = new FormErrorModel(nameof(confirmEmailModel.Code), Constants.ErrorCodes.ConfirmationCodeIncorrect);
+                var formError = new FormErrorModel(nameof(confirmEmailModel.Code), ErrorCodes.ConfirmationCodeIncorrect);
                 return new BadRequestObjectResult(new ResponseModel(formError));
             }
 
@@ -157,8 +157,12 @@ namespace Knowlead.BLL.Repositories
                                         .Include(x => x.Country)
                                         .Include(x => x.State);
 
-            var e = await userQuery.FirstOrDefaultAsync();
-            return e;
+            var user = await userQuery.FirstOrDefaultAsync();
+
+            if(user == null)
+                throw new EntityNotFoundException(nameof(ApplicationUser));
+
+            return user;   
         }
     }
 }

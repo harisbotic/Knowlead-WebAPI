@@ -55,6 +55,8 @@ namespace Knowlead.Common
             public const string AgeTooYoung = "AGE_TOO_YOUNG";
             [TSInitialize]
             public const string AgeTooOld = "AGE_TOO_OLD";
+            [TSInitialize]
+            public const string DiscussionClosed = "DISCUSSION_CLOSED";
 
         }
 

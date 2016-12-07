@@ -79,6 +79,12 @@ namespace Knowlead.Controllers
             return await _p2pRepository.ListSchedulded(await _auth.GetUser());
         }
 
+        [HttpGet("deleted"), ReallyAuthorize]
+        public async Task<IActionResult> ListDeleted()
+        {
+            return await _p2pRepository.ListDeleted(await _auth.GetUser());
+        }
+
         [HttpGet("actionrequired"), ReallyAuthorize]
         public async Task<IActionResult> ListActionRequired()
         {

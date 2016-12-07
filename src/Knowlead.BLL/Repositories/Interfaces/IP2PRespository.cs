@@ -16,6 +16,7 @@ namespace Knowlead.BLL.Repositories.Interfaces
         Task<IActionResult> ListMine(ApplicationUser applicationUser);
         Task<IActionResult> ListSchedulded(ApplicationUser applicationUser);
         Task<IActionResult> ListBookmarked(ApplicationUser applicationUser);
+        Task<IActionResult> ListDeleted(ApplicationUser applicationUser);
         Task<IActionResult> ListActionRequired(ApplicationUser applicationUser);
         Task<IActionResult> ListAll();
     }
