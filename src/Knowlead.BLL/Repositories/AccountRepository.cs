@@ -123,7 +123,7 @@ namespace Knowlead.BLL.Repositories
             var user = await _userManager.FindByEmailAsync(confirmEmailModel.Email);
             if (user == null)
             {
-                throw new EntityNotFoundException(nameof(confirmEmailModel.Email), nameof(ApplicationUser));
+                throw new EntityNotFoundException(nameof(ApplicationUser), nameof(confirmEmailModel.Email));
             }
 
             var correctPassword = await _userManager.CheckPasswordAsync(user, confirmEmailModel.Password);

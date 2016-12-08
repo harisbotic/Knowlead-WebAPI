@@ -109,6 +109,51 @@ namespace Knowlead.BLL.Repositories
             });
         }
 
+        public async Task<IActionResult> Schedule(P2PScheduleModel p2pScheduleModel, ApplicationUser applicationUser)
+        {
+            var p2p = await _context.P2p.Where(x => x.P2pId == p2pScheduleModel.P2pId).FirstOrDefaultAsync();
+
+            if(p2p.CreatedById != applicationUser.Id)
+                return new BadRequestObjectResult(new ResponseModel(new ErrorModel(ErrorCodes.OwnershipError)));
+
+            if(p2p.CreatedById == p2pScheduleModel.ScheduleWithId)
+                return new BadRequestObjectResult(new ResponseModel(new ErrorModel(ErrorCodes.HackAttempt)));
+
+            if(p2p.IsDeleted)
+                throw new EntityNotFoundException(nameof(P2P));
+
+            if(!p2pScheduleModel.ScheduleWithId.HasValue && !p2p.ScheduledWithId.HasValue)
+                return new BadRequestObjectResult(new ResponseModel(new ErrorModel(ErrorCodes.IncorrectValue, nameof(P2P))));
+
+            if(p2p.ScheduledAt.HasValue || //Already scheduled with someone and with specific time
+               (p2p.ScheduledWithId.HasValue && !p2pScheduleModel.ScheduleTime.HasValue)) //Scheduled with someone, and no specific time provided 
+                return new BadRequestObjectResult(new ResponseModel(new ErrorModel(ErrorCodes.AlreadyScheduled, nameof(P2P))));
+
+            if(!p2p.ScheduledWithId.HasValue)
+                p2p.ScheduledWithId = p2pScheduleModel.ScheduleWithId;
+
+            if(p2pScheduleModel.ScheduleTime.HasValue && 
+               p2pScheduleModel.ScheduleTime.GetValueOrDefault() < DateTime.UtcNow) //Check with p2p deadline too?
+                return new BadRequestObjectResult(new ResponseModel(new ErrorModel(ErrorCodes.DateInPast, nameof(P2P.ScheduledAt)))); 
+            
+            p2p.ScheduledAt = p2pScheduleModel.ScheduleTime;
+
+            _context.P2p.Update(p2p);
+            
+            if (!await SaveChangesAsync())
+            {
+                var error = new ErrorModel(ErrorCodes.DatabaseError);
+                return new BadRequestObjectResult(new ResponseModel(error));
+            }
+
+            return new OkObjectResult(new ResponseModel{
+                Object = Mapper.Map<P2PModel>(p2p)
+            });
+
+
+
+        }
+        
         public async Task<IActionResult> Message(P2PMessageModel p2pMessageModel, ApplicationUser applicationUser)
         {
             var p2pMessage = Mapper.Map<P2PMessage>(p2pMessageModel);
@@ -148,8 +193,6 @@ namespace Knowlead.BLL.Repositories
             return new OkObjectResult(new ResponseModel{
                 Object = Mapper.Map<P2PMessageModel>(p2pMessage)
             });
-
-            throw new NotImplementedException();
         }
 
         public async Task<IActionResult> Delete(int p2pInt, ApplicationUser applicationUser)
@@ -160,10 +203,10 @@ namespace Knowlead.BLL.Repositories
                 throw new EntityNotFoundException(nameof(P2P));
 
             if(p2p.CreatedById != applicationUser.Id)
-                return new BadRequestObjectResult(new ResponseModel(new ErrorModel(Common.Constants.ErrorCodes.OwnershipError)));
+                return new BadRequestObjectResult(new ResponseModel(new ErrorModel(ErrorCodes.OwnershipError)));
 
             if(p2p.IsDeleted)
-                return new BadRequestObjectResult(new ResponseModel(new ErrorModel(Common.Constants.ErrorCodes.AlreadyDeleted, nameof(P2P))));
+                return new BadRequestObjectResult(new ResponseModel(new ErrorModel(ErrorCodes.AlreadyDeleted, nameof(P2P))));
 
             p2p.IsDeleted = true;
 

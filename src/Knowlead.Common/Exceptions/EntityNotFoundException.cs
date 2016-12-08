@@ -20,11 +20,11 @@ namespace Knowlead.Common.Exceptions
             EntityName = entityName;
         }
 
-        public EntityNotFoundException(string formName, string entityName)
+        public EntityNotFoundException(string entityName, string formName)
             : base(staticMessage)
         {
-            FormName = formName;
             EntityName = entityName;
+            FormName = formName;
         }
 
         public EntityNotFoundException(string entityName, Exception inner)
