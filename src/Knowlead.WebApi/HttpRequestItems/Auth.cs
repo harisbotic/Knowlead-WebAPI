@@ -24,23 +24,32 @@ namespace Knowlead.Common.HttpRequestItems
         public async Task<ApplicationUser> GetUser(bool includeDetails = false)
         {
             if (!_accessor.HttpContext.User.Identity.IsAuthenticated)
+                return null;
+
+            var user = _accessor.HttpContext.Items[UserKey] as ApplicationUser;
+            if (user == null)
+            {
+                var userId = GetUserId().GetValueOrDefault();
+
+                user = await _accountRepository.GetApplicationUserById(userId, includeDetails);
+
+                if (user == null)
                     return null;
 
-                var user = _accessor.HttpContext.Items[UserKey] as ApplicationUser;
-                if (user == null)
-                {
+                _accessor.HttpContext.Items[UserKey] = user;
+            }
+            return user;
+        }
 
-                    var userId = _accessor.HttpContext.User.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier)
-                                                                  .Select(c => c.Value).FirstOrDefault();
+        public Guid? GetUserId()
+        {
+            if (!_accessor.HttpContext.User.Identity.IsAuthenticated)
+                return null;
 
-                    user = await _accountRepository.GetApplicationUserById(Guid.Parse(userId), includeDetails);
-
-                    if (user == null)
-                        return null;
-
-                    _accessor.HttpContext.Items[UserKey] = user;
-                }
-                return user;
+            var userId = _accessor.HttpContext.User.Claims
+                                                    .Where(c => c.Type == ClaimTypes.NameIdentifier)
+                                                        .Select(c => c.Value).FirstOrDefault();
+            return Guid.Parse(userId);
 
         }
     }

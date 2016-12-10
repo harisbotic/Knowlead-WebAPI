@@ -30,6 +30,11 @@ namespace Knowlead.BLL.Repositories
             _environment = environment;
         }
 
+        public async Task<P2P> GetP2PTemp(int p2pId)
+        {
+            return await _context.P2p.IncludeEverything().Where(x => x.P2pId == p2pId).FirstOrDefaultAsync();
+        }
+
         public async Task<IActionResult> GetP2P(int p2pId)
         {
             var p2p = await _context.P2p.IncludeEverything().Where(x => x.P2pId == p2pId).FirstOrDefaultAsync();

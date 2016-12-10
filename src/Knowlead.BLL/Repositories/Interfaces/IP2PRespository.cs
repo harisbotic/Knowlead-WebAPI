@@ -8,6 +8,7 @@ namespace Knowlead.BLL.Repositories.Interfaces
 {
     public interface IP2PRepository
     {
+        Task<P2P> GetP2PTemp(int p2pId);
         Task<IActionResult> Create(P2PModel p2pModel, ApplicationUser applicationUser);
         Task<IActionResult> Schedule(P2PScheduleModel p2pScheduleModel, ApplicationUser applicationUser);
         Task<IActionResult> Message(P2PMessageModel p2pMessageModel, ApplicationUser applicationUser);

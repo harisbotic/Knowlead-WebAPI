@@ -12,6 +12,7 @@ using Knowlead.DomainModel.FriendshipModels;
 using Knowlead.DomainModel.P2PModels;
 using System;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Knowlead.DomainModel.CallModels;
 
 namespace Knowlead.DAL
 {
@@ -69,6 +70,13 @@ namespace Knowlead.DAL
             public DbSet<ImageBlob> ImageBlobs { get; set; }
             public DbSet<FileBlob> FileBlobs { get; set; }
 
+        #endregion
+
+        #region Call Models
+            public DbSet<_Call> Calls { get; set; }
+            public DbSet<P2PCall> P2PCalls { get; set; }
+            public DbSet<FriendCall> FriendCalls { get; set; }
+
         #endregion 
 
 
@@ -101,6 +109,12 @@ namespace Knowlead.DAL
                 .HasDiscriminator<string>("BlobType")
                 .HasValue<ImageBlob>("Image")
                 .HasValue<FileBlob>("File");
+
+            /* Calls */
+            modelBuilder.Entity<_Call>()
+                .HasDiscriminator<string>("CallType")
+                .HasValue<P2PCall>("Image")
+                .HasValue<FriendCall>("File");
 
             modelBuilder.Entity<_Feedback>()
                 .HasDiscriminator<string>("Category")

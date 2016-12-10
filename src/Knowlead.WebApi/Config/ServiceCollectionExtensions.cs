@@ -90,9 +90,9 @@ namespace Knowlead.WebApi.Config
             return services;
         }
 
-        public static IServiceCollection AddSingnalR(this IServiceCollection services) 
+        public static IServiceCollection AddCustomSignalR(this IServiceCollection services) 
         {
-            services.AddSingnalR();
+            services.AddSignalR();
 
             return services;
         }

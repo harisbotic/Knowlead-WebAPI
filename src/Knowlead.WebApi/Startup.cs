@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using AutoMapper;
 using Knowlead.WebApi.Config;
 using Knowlead.Common.HttpRequestItems;
+using System.Linq;
 using Knowlead.WebApi.Hubs;
 
 namespace Knowlead
@@ -47,7 +48,7 @@ namespace Knowlead
             services.AddAutoMapper();
             services.AddMessageServices();
             services.AddCustomizedMvc();
-            services.AddSignalR();
+            services.AddCustomSignalR();
             services.AddDbContext();
             services.AddIdentityFramework();
             services.AddOpenIdDict();
@@ -62,6 +63,27 @@ namespace Knowlead
             app.UseCors("AllowAll");
             app.UseIdentity();
             //app.UseOAuthValidation();
+
+            app.Use(async (context, next) =>
+            {
+                if(context.Request.Path.Value.Contains("/ws"))
+                if (string.IsNullOrWhiteSpace(context.Request.Headers["Authorization"]))
+                {
+                    if (context.Request.QueryString.HasValue)
+                    {
+                        var token = context.Request.QueryString.Value
+                            .Split('&').SingleOrDefault(x => x.Contains("accessToken"))?.Split('=')[1];
+
+                        if (!string.IsNullOrWhiteSpace(token))
+                        {
+                            context.Request.Headers.Add("Authorization", new[] {$"Bearer {token}"});
+                        }
+                    }
+                }
+
+                await next.Invoke();
+            });
+
             app.UseOpenIddict();
             app.UseJwtBearerAuthentication(new JwtBearerOptions
             {
@@ -72,9 +94,11 @@ namespace Knowlead
                 Authority = "http://knowlead.com:5000"
             });
 
+            app.UseWebSockets();
+            
             app.UseSignalR(routes =>
             {
-                routes.MapHub<ChatHub>("/chat");
+                routes.MapHub<MainHub>("/mainHub");
             });
 
             app.UseMvc();
