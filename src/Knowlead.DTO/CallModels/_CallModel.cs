@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Knowlead.Common.DataAnnotations;
-using Knowlead.DomainModel.UserModels;
+using Knowlead.DTO.UserModels;
 
 namespace Knowlead.DTO.CallModels
 {
@@ -13,16 +13,22 @@ namespace Knowlead.DTO.CallModels
         public string FailReason { get; set; }
         [MyRequired]
         public Guid CallerId { get; set; }
-        public ApplicationUser Caller { get; set; }
-        public Dictionary<Guid, string> Participants { get; set; }
+        public ApplicationUserModel Caller { get; set; }
         public int Duration { get; set; }
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
 
-        public _CallModel()
+
+        public bool CallStarted { get; set; }
+        //Call Status ? Paused, InProgress, WaitingFor
+        public List<PeerInfoModel> Peers { get; set; }
+
+        public _CallModel(Guid callerId, String connectionId)
         {
-            this.CallId = Guid.NewGuid(); //DTO only
             this.Failed = false;
-            this.EndDate = DateTime.UtcNow;
+            this.CallId = Guid.NewGuid();
+            this.CallerId = callerId;
+            this.Peers = new List<PeerInfoModel>(){new PeerInfoModel(callerId, connectionId, PeerInfoModel.PeerStatus.Accepted)};
+            this.CallStarted = false;
         }
     }
 }

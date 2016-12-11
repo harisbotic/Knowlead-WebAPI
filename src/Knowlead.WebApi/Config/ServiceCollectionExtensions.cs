@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
 using Knowlead.Services.Interfaces;
 using Knowlead.BLL.Repositories.Interfaces;
+using Knowlead.WebApi.Hubs;
 
 namespace Knowlead.WebApi.Config
 {
@@ -105,10 +106,12 @@ namespace Knowlead.WebApi.Config
         }
 
 
-        public static IServiceCollection AddMessageServices(this IServiceCollection services)
+        public static IServiceCollection AddCustomServices(this IServiceCollection services)
         {
             services.AddSingleton<MessageServices>();
             services.AddScoped<IBlobServices, BlobServices>();
+            services.AddSingleton<ICallServices, CallServices<MainHub>>();
+
 
             return services;
         }

@@ -46,7 +46,7 @@ namespace Knowlead
             services.AddCrossOrigin();
             services.AddRepositories();
             services.AddAutoMapper();
-            services.AddMessageServices();
+            services.AddCustomServices();
             services.AddCustomizedMvc();
             services.AddCustomSignalR();
             services.AddDbContext();

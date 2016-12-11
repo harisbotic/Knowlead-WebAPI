@@ -1,6 +1,6 @@
 using System;
 using Knowlead.Common.DataAnnotations;
-using Knowlead.DomainModel.UserModels;
+using Knowlead.DTO.UserModels;
 
 namespace Knowlead.DTO.CallModels
 {
@@ -8,9 +8,9 @@ namespace Knowlead.DTO.CallModels
     {
         [MyRequired]
         public Guid ReceiverId { get; set; }
-        public ApplicationUser Receiver { get; set; }
+        public ApplicationUserModel Receiver { get; set; }
 
-        public FriendCallModel() : base()
+        public FriendCallModel(Guid callerId, String connectionId) : base(callerId, connectionId)
         {
         }
     }
