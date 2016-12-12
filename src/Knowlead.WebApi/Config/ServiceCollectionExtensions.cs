@@ -110,7 +110,7 @@ namespace Knowlead.WebApi.Config
         {
             services.AddSingleton<MessageServices>();
             services.AddScoped<IBlobServices, BlobServices>();
-            services.AddSingleton<ICallServices, CallServices<MainHub>>();
+            services.AddTransient<ICallServices, CallServices<MainHub>>();
 
 
             return services;

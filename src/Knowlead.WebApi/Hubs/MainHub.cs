@@ -27,14 +27,14 @@ namespace Knowlead.WebApi.Hubs
         }
         public async override Task OnConnectedAsync()
         {
-            System.Console.WriteLine("SOMEONE CONNECTED");
+            System.Console.WriteLine($"{Context.ConnectionId} {Context.User.Identity.Name} CONNECTED");
  
             await Clients.User(Context.User.Identity.Name).InvokeAsync("setConnectionId", Context.ConnectionId);
         }
 
         public override Task OnDisconnectedAsync()
         {
-            System.Console.WriteLine("SOMEONE DISCONNECTED");
+            System.Console.WriteLine($"{Context.ConnectionId} {Context.User.Identity.Name} DISCONNECTED");
             
             return Task.CompletedTask;
         }
@@ -57,7 +57,7 @@ namespace Knowlead.WebApi.Hubs
 
             var p2p = await _p2pRepo.GetP2PTemp(p2pId);
 
-            var p2pCallModel = new P2PCallModel(callerId, Context.ConnectionId);
+            var p2pCallModel = new P2PCallModel(p2pId, callerId, Context.ConnectionId);
             p2pCallModel.Peers.Add(new PeerInfoModel(p2p.ScheduledWithId.GetValueOrDefault()));
 
             _callServices.AddCall(p2pCallModel);
@@ -93,7 +93,7 @@ namespace Knowlead.WebApi.Hubs
             return Task.CompletedTask;
         }
 
-        public Task SetSDP(Guid callId, string sdp) //callId -> callModelId
+        public Task SetSDP(Guid callId, String sdp) //callId -> callModelId
         {
             var callModel = _callServices.GetCall(callId);
 

@@ -66,7 +66,7 @@ namespace Knowlead
 
             app.Use(async (context, next) =>
             {
-                if(context.Request.Path.Value.Contains("/ws"))
+                //if(context.Request.Path.Value.Contains("/ws"))
                 if (string.IsNullOrWhiteSpace(context.Request.Headers["Authorization"]))
                 {
                     if (context.Request.QueryString.HasValue)

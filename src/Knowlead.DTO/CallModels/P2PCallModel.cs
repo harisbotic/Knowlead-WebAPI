@@ -10,8 +10,9 @@ namespace Knowlead.DTO.CallModels
         public int P2pId { get; set; }
         public P2PModel P2p { get; set; }
 
-        public P2PCallModel(Guid callerId, String connectionId) : base(callerId, connectionId)
+        public P2PCallModel(int p2pId, Guid callerId, String connectionId) : base(callerId, connectionId)
         {
+            P2pId = p2pId;
         }
     }
 }
