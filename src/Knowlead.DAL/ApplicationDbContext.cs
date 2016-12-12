@@ -7,12 +7,14 @@ using Knowlead.DomainModel.BlobModels;
 using Knowlead.DomainModel.FeedbackModels;
 using Knowlead.DomainModel.LookupModels.FeedbackModels;
 using OpenIddict;
-using Npgsql.EntityFrameworkCore.PostgreSQL;
 using Knowlead.DomainModel.FriendshipModels;
 using Knowlead.DomainModel.P2PModels;
 using System;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Knowlead.DomainModel.CallModels;
+using System.Linq;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Npgsql.EntityFrameworkCore.PostgreSQL;
 
 namespace Knowlead.DAL
 {
@@ -84,7 +86,7 @@ namespace Knowlead.DAL
         {
             base.OnConfiguring(optionsBuilder);
             
-            optionsBuilder.UseNpgsql(_config["ConnectionStrings:DefaultContextConnection"],
+            optionsBuilder.UseNpgsql(_config["ConnectionStrings:LocalPostgreSQL"],
                                             b => b.MigrationsAssembly("Knowlead.WebApi"));
 
         }
@@ -146,6 +148,11 @@ namespace Knowlead.DAL
            
             modelBuilder.Entity<P2PLanguage>()
                 .HasKey(t => new { t.P2pId, t.LanguageId });
+
+            foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+            {
+                relationship.DeleteBehavior = DeleteBehavior.Restrict;
+            }
 
         }
     }

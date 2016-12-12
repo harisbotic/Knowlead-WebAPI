@@ -8,7 +8,9 @@
       "target": "project"
     },
     "Npgsql.EntityFrameworkCore.PostgreSQL": "1.1.0",
-    "Npgsql.EntityFrameworkCore.PostgreSQL.Design": "1.1.0"
+    "Npgsql.EntityFrameworkCore.PostgreSQL.Design": "1.1.0",
+    "Microsoft.EntityFrameworkCore.SqlServer": "1.1.0",
+    "Microsoft.EntityFrameworkCore.SqlServer.Design": "1.1.0"
   },
   "frameworks": {
     "netstandard1.6": {
