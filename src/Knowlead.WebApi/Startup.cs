@@ -51,7 +51,7 @@ namespace Knowlead
             services.AddCustomSignalR();
             services.AddDbContext();
             services.AddIdentityFramework();
-            services.AddOpenIdDict();
+            services.AddCustomOpenIddict();
 
         }
 

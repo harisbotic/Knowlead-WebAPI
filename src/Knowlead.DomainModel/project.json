@@ -7,8 +7,7 @@
     "Knowlead.Common": {
       "target": "project"
     },
-    "OpenIddict": "1.0.0-*",
-    "OpenIddict.Mvc": "1.0.0-*",
+    "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "1.1.0",
     "Microsoft.AspNetCore.Mvc.DataAnnotations": "1.1.0"
   },
   "frameworks": {

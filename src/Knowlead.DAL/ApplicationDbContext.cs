@@ -6,7 +6,6 @@ using Knowlead.DomainModel.LookupModels.Geo;
 using Knowlead.DomainModel.BlobModels;
 using Knowlead.DomainModel.FeedbackModels;
 using Knowlead.DomainModel.LookupModels.FeedbackModels;
-using OpenIddict;
 using Knowlead.DomainModel.FriendshipModels;
 using Knowlead.DomainModel.P2PModels;
 using System;
@@ -15,10 +14,11 @@ using Knowlead.DomainModel.CallModels;
 using System.Linq;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Knowlead.DAL
 {
-    public class ApplicationDbContext : OpenIddictDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
     {
         private IConfigurationRoot _config;
         public ApplicationDbContext(IConfigurationRoot config, DbContextOptions options) : base(options) 
@@ -93,8 +93,10 @@ namespace Knowlead.DAL
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.UseOpenIddict<Guid>();
+
             base.OnModelCreating(modelBuilder);
-            
+
             modelBuilder.HasPostgresExtension("uuid-ossp");
 
             /* GeoLookups */

@@ -4,7 +4,6 @@
  * the license and the contributors participating to this project.
  */
 
-using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,20 +18,17 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using OpenIddict;
+using OpenIddict.Core;
 
 namespace Mvc.Server
 {
     public class AuthorizationController : Controller {
-        private readonly OpenIddictApplicationManager<OpenIddictApplication<Guid>> _applicationManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
 
         public AuthorizationController(
-            OpenIddictApplicationManager<OpenIddictApplication<Guid>> applicationManager,
             SignInManager<ApplicationUser> signInManager,
             UserManager<ApplicationUser> userManager) {
-            _applicationManager = applicationManager;
             _signInManager = signInManager;
             _userManager = userManager;
         }
@@ -151,60 +147,5 @@ namespace Mvc.Server
 
             return ticket;
         }
-
-       /* [Authorize, HttpGet, Route("~/connect/authorize")]
-        public async Task<IActionResult> Authorize() {
-            // Extract the authorization request from the ASP.NET environment.
-            var request = HttpContext.GetOpenIdConnectRequest();
-
-            // Retrieve the application details from the database.
-            var application = await _applicationManager.FindByClientIdAsync(request.ClientId);
-            if (application == null) {
-                return View("Error", new ErrorViewModel {
-                    Error = OpenIdConnectConstants.Errors.InvalidClient,
-                    ErrorDescription = "Details concerning the calling client application cannot be found in the database"
-                });
-            }
-
-            // Flow the request_id to allow OpenIddict to restore
-            // the original authorization request from the cache.
-            return View(new AuthorizeViewModel {
-                ApplicationName = application.DisplayName,
-                RequestId = request.RequestId,
-                Scope = request.Scope
-            });
-        }
-
-        [Authorize, HttpPost("~/connect/authorize/accept")]
-        public async Task<IActionResult> Accept() {
-            // Extract the authorization request from the ASP.NET environment.
-            var request = HttpContext.GetOpenIdConnectRequest();
-
-            // Retrieve the profile of the logged in user.
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null) {
-                return View("Error", new ErrorViewModel {
-                    Error = OpenIdConnectConstants.Errors.ServerError,
-                    ErrorDescription = "An internal error has occurred"
-                });
-            }
-
-            // Create a new ClaimsIdentity containing the claims that
-            // will be used to create an id_token, a token or a code.
-            var identity = await _userManager.CreateIdentityAsync(user, request.GetScopes());
-
-            // Create a new authentication ticket holding the user identity.
-            var ticket = new AuthenticationTicket(
-                new ClaimsPrincipal(identity),
-                new AuthenticationProperties(),
-                OpenIdConnectServerDefaults.AuthenticationScheme);
-
-            ticket.SetResources(request.GetResources());
-            ticket.SetScopes(request.GetScopes());
-
-            // Returning a SignInResult will ask OpenIddict to issue the appropriate access/identity tokens.
-            return SignIn(ticket.Principal, ticket.Properties, ticket.AuthenticationScheme);
-        }
-        */   
     }
 }

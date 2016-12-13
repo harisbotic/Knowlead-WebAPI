@@ -24,9 +24,9 @@ public static class SeedScript
         {
             return new Seeder<Country>(context, config, verbose);
         }
-        else if (type == typeof(OpenIddict.OpenIddictApplication<Guid>))
+        else if (type == typeof(OpenIddict.Models.OpenIddictApplication<Guid>))
         {
-            return new Seeder<OpenIddict.OpenIddictApplication<Guid>>(context, config, verbose);
+            return new Seeder<OpenIddict.Models.OpenIddictApplication<Guid>>(context, config, verbose);
         }
         else if (type == typeof(Language))
         {
@@ -46,7 +46,7 @@ public static class SeedScript
     public static Dictionary<string, Type> models = new Dictionary<string, Type>()
     {
         {"State", typeof(State)},
-        {"OpenIddictApplication", typeof(OpenIddict.OpenIddictApplication<Guid>)},
+        {"OpenIddictApplication", typeof(OpenIddict.Models.OpenIddictApplication<Guid>)},
         {"Language", typeof(Language)},
         {"FOS", typeof(FOS)},
         {"Country", typeof(Country)}

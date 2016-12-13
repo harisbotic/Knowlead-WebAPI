@@ -12,6 +12,7 @@ using Knowlead.Services.Interfaces;
 using Knowlead.BLL.Repositories.Interfaces;
 using Knowlead.WebApi.Hubs;
 
+
 namespace Knowlead.WebApi.Config
 {
     public static class ServiceCollectionExtensions
@@ -39,10 +40,11 @@ namespace Knowlead.WebApi.Config
 
 
         // Register the OpenIddict services, including the default Entity Framework stores.
-        public static IServiceCollection AddOpenIdDict(this IServiceCollection services) 
+        public static IServiceCollection AddCustomOpenIddict(this IServiceCollection services) 
         {
-        services.AddOpenIddict<ApplicationDbContext, Guid>()
-        
+        services.AddOpenIddict<Guid>()
+            .AddEntityFrameworkCoreStores<ApplicationDbContext>()
+
             // Register the ASP.NET Core MVC binder used by OpenIddict.
             // Note: if you don't call this method, you won't be able to
             // bind OpenIdConnectRequest or OpenIdConnectResponse parameters.
@@ -62,6 +64,13 @@ namespace Knowlead.WebApi.Config
 
             // During development, you can disable the HTTPS requirement.
             .DisableHttpsRequirement()
+
+            // When request caching is enabled, authorization and logout requests
+            // are stored in the distributed cache by OpenIddict and the user agent
+            // is redirected to the same page with a single parameter (request_id).
+            // This allows flowing large OpenID Connect requests even when using
+            // an external authentication provider like Google, Facebook or Twitter.
+            .EnableRequestCaching()
 
             // Register a new ephemeral key, that is discarded when the application
             // shuts down. Tokens signed using this key are automatically invalidated.
@@ -86,7 +95,6 @@ namespace Knowlead.WebApi.Config
                 .AddEntityFrameworkStores<ApplicationDbContext, Guid>()
                 .AddDefaultTokenProviders()
                 .AddErrorDescriber<CustomIdentityErrorDescriber>();
-        
 
             return services;
         }
@@ -100,7 +108,8 @@ namespace Knowlead.WebApi.Config
 
         public static IServiceCollection AddDbContext(this IServiceCollection services) 
         {
-            services.AddDbContext<ApplicationDbContext>();
+            services.AddDbContext<ApplicationDbContext>(options =>
+            options.UseOpenIddict<Guid>());
 
             return services;
         }
@@ -111,7 +120,6 @@ namespace Knowlead.WebApi.Config
             services.AddSingleton<MessageServices>();
             services.AddScoped<IBlobServices, BlobServices>();
             services.AddTransient<ICallServices, CallServices<MainHub>>();
-
 
             return services;
         }
@@ -132,6 +140,7 @@ namespace Knowlead.WebApi.Config
             {
                 options.AddPolicy("AllowAll", p => p.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().AllowCredentials());
             });
+
             return services;
         }
     }
