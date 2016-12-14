@@ -11,7 +11,9 @@ using Newtonsoft.Json.Serialization;
 using Knowlead.Services.Interfaces;
 using Knowlead.BLL.Repositories.Interfaces;
 using Knowlead.WebApi.Hubs;
-
+using Hangfire;
+using Microsoft.Extensions.Configuration;
+using Hangfire.PostgreSql;
 
 namespace Knowlead.WebApi.Config
 {
@@ -110,6 +112,14 @@ namespace Knowlead.WebApi.Config
         {
             services.AddDbContext<ApplicationDbContext>(options =>
             options.UseOpenIddict<Guid>());
+
+            return services;
+        }
+
+        public static IServiceCollection AddHangfire(this IServiceCollection services, IConfigurationRoot config) 
+        {
+            services.AddHangfire(options => 
+                options.UsePostgreSqlStorage(config["ConnectionStrings:LocalPostgreSQL"]));
 
             return services;
         }

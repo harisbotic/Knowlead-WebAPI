@@ -19,7 +19,8 @@
     "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "1.1.0",
     "Microsoft.AspNetCore.JsonPatch": "1.1.0",
     "Microsoft.AspNetCore.SignalR": "1.0.0-*",
-    "WindowsAzure.Storage": "7.2.1" 
+    "WindowsAzure.Storage": "7.2.1",
+    "Hangfire.Core": "1.6.7"
   },
   "frameworks": {
     "netstandard1.6": {

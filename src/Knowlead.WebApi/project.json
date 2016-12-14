@@ -38,7 +38,10 @@
     "OpenIddict": "1.0.0-*",
     "OpenIddict.EntityFrameworkCore": "1.0.0-*",
     "OpenIddict.Mvc": "1.0.0-*",
-    "AutoMapper": "5.1.1"
+    "AutoMapper": "5.1.1",
+    "Hangfire.AspNetCore": "1.6.7",
+    "Hangfire.SqlServer": "1.6.7",
+    "Hangfire.PostgreSql": "1.4.5"
   },
 
   "tools": {

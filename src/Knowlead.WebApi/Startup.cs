@@ -8,6 +8,7 @@ using Knowlead.WebApi.Config;
 using Knowlead.Common.HttpRequestItems;
 using System.Linq;
 using Knowlead.WebApi.Hubs;
+using Hangfire;
 
 namespace Knowlead
 {
@@ -50,6 +51,7 @@ namespace Knowlead
             services.AddCustomizedMvc();
             services.AddCustomSignalR();
             services.AddDbContext();
+            services.AddHangfire(_config);
             services.AddIdentityFramework();
             services.AddCustomOpenIddict();
 
@@ -100,6 +102,9 @@ namespace Knowlead
             {
                 routes.MapHub<MainHub>("/mainHub");
             });
+
+            // app.UseHangfireDashboard(); // Will be available under http://localhost:5000/hangfire
+            // app.UseHangfireServer();
 
             app.UseMvc();
         }
