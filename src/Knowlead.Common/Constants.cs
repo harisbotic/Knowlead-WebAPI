@@ -44,6 +44,8 @@ namespace Knowlead.Common
             [TSInitialize]
             public const string LoginCredentialsIncorrect = "LOGIN_CREDENTIALS_INCORRECT";
             [TSInitialize]
+            public const string SthWentWrong = "STH_WENT_WRONG";
+            [TSInitialize]
             public const string IncorrectValue = "INCORRECT_VALUE";
             [TSInitialize]
             public const string OwnershipError = "OWNERSHIP_ERROR";
@@ -61,7 +63,10 @@ namespace Knowlead.Common
             public const string AlreadyScheduled = "ALREADY_SCHEDULED";
             [TSInitialize]
             public const string DateInPast = "DATE_IN_PAST";
-
+            [TSInitialize]
+            public const string UserBlocked = "USER_BLOCKED";
+            [TSInitialize]
+            public const string AlreadyFriend = "ALREADY_FRIENDS";
         }
 
     }

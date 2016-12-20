@@ -3,7 +3,7 @@ using Knowlead.DTO.ResponseModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.JsonPatch.Exceptions;
-using Knowlead.Common.Exceptions;
+using Knowlead.BLL.Exceptions;
 
 namespace Knowlead.WebApi.Attributes
 {
@@ -21,13 +21,15 @@ namespace Knowlead.WebApi.Attributes
             {
                 responseModel.AddError(new ErrorModel(ex.Message));
             }
-            else if(exType == typeof(EntityNotFoundException))
+            else if(exType == typeof(ErrorModelException))
             {
-                var enfe = ex as EntityNotFoundException;
-                if(string.IsNullOrEmpty(enfe.FormName))
-                    responseModel.AddError(new ErrorModel(enfe.Message, enfe.EntityName));
-                else
-                    responseModel.AddFormError(new FormErrorModel(enfe.FormName, enfe.Message, enfe.EntityName));
+                var eme = ex as ErrorModelException;
+                responseModel.AddError(eme.Error);
+            }
+            else if(exType == typeof(FormErrorModelException))
+            {
+                var feme = ex as FormErrorModelException;
+                responseModel.AddError(feme.FormError);
             }
 
             //If no specific exception occured

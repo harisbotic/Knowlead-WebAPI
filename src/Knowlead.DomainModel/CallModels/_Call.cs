@@ -8,7 +8,6 @@ namespace Knowlead.DomainModel.CallModels
     public class _Call
     {
         [Key]
-        [MyRequired]
         public Guid CallId { get; set; }
         public bool Failed { get; set; }
         public string FailReason { get; set; }

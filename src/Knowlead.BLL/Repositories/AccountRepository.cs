@@ -16,7 +16,7 @@ using System;
 using System.Collections.Generic;
 using Knowlead.BLL.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Knowlead.Common.Exceptions;
+using Knowlead.BLL.Exceptions;
 
 namespace Knowlead.BLL.Repositories
 {
@@ -123,7 +123,7 @@ namespace Knowlead.BLL.Repositories
             var user = await _userManager.FindByEmailAsync(confirmEmailModel.Email);
             if (user == null)
             {
-                throw new EntityNotFoundException(nameof(ApplicationUser), nameof(confirmEmailModel.Email));
+                throw new FormErrorModelException(nameof(confirmEmailModel.Email), ErrorCodes.EmailInvalid, nameof(ApplicationUser));
             }
 
             var correctPassword = await _userManager.CheckPasswordAsync(user, confirmEmailModel.Password);
@@ -160,7 +160,7 @@ namespace Knowlead.BLL.Repositories
             var user = await userQuery.FirstOrDefaultAsync();
 
             if(user == null)
-                throw new EntityNotFoundException(nameof(ApplicationUser));
+                throw new ErrorModelException(ErrorCodes.EntityNotFound, nameof(ApplicationUser));
 
             return user;   
         }

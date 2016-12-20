@@ -14,7 +14,7 @@ using Knowlead.DTO.ResponseModels;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Knowlead.Common.Exceptions;
+using Knowlead.BLL.Exceptions;
 
 namespace Knowlead.BLL.Repositories
 {
@@ -40,7 +40,7 @@ namespace Knowlead.BLL.Repositories
             var p2p = await _context.P2p.IncludeEverything().Where(x => x.P2pId == p2pId).FirstOrDefaultAsync();
             
             if(p2p == null && !p2p.IsDeleted)
-                throw new EntityNotFoundException(nameof(P2P));
+                throw new ErrorModelException(ErrorCodes.EntityNotFound, nameof(P2P));
 
             return new OkObjectResult(new ResponseModel{
                 Object = Mapper.Map<P2PModel>(p2p)
@@ -53,7 +53,7 @@ namespace Knowlead.BLL.Repositories
             var p2p = await _context.P2p.Where(x => x.P2pId == p2pId).FirstOrDefaultAsync();
 
             if(p2p == null)
-                throw new EntityNotFoundException(nameof(P2P));
+                throw new ErrorModelException(ErrorCodes.EntityNotFound, nameof(P2P));
 
             IQueryable<P2PMessage> messagesQuery = _context.P2PMessages
                                                            .Where(x => x.P2pId == p2pId)
@@ -125,7 +125,7 @@ namespace Knowlead.BLL.Repositories
                 return new BadRequestObjectResult(new ResponseModel(new ErrorModel(ErrorCodes.HackAttempt)));
 
             if(p2p.IsDeleted)
-                throw new EntityNotFoundException(nameof(P2P));
+                throw new ErrorModelException(ErrorCodes.EntityNotFound, nameof(P2P));
 
             if(!p2pScheduleModel.ScheduleWithId.HasValue && !p2p.ScheduledWithId.HasValue)
                 return new BadRequestObjectResult(new ResponseModel(new ErrorModel(ErrorCodes.IncorrectValue, nameof(P2P))));
@@ -165,7 +165,7 @@ namespace Knowlead.BLL.Repositories
             var p2p = await _context.P2p.Where(x => x.P2pId == p2pMessageModel.P2pId).FirstOrDefaultAsync();
 
             if(p2p == null)
-                throw new EntityNotFoundException(nameof(P2P));
+                throw new ErrorModelException(ErrorCodes.EntityNotFound, nameof(P2P));
 
             if(p2p.IsDeleted)
                 return new BadRequestObjectResult(new ResponseModel(new ErrorModel(ErrorCodes.DiscussionClosed, nameof(P2P))));
@@ -205,7 +205,7 @@ namespace Knowlead.BLL.Repositories
             var p2p = await _context.P2p.Where(x => x.P2pId == p2pInt).FirstOrDefaultAsync();
 
             if (p2p == null)
-                throw new EntityNotFoundException(nameof(P2P));
+                throw new ErrorModelException(ErrorCodes.EntityNotFound, nameof(P2P));
 
             if(p2p.CreatedById != applicationUser.Id)
                 return new BadRequestObjectResult(new ResponseModel(new ErrorModel(ErrorCodes.OwnershipError)));

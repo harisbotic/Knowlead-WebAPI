@@ -53,7 +53,7 @@ namespace Knowlead.WebApi.Hubs
 
         public async Task CallP2p(int p2pId)
         {
-            Guid callerId = _auth.GetUserId().GetValueOrDefault();
+            Guid callerId = _auth.GetUserId();
 
             var p2p = await _p2pRepo.GetP2PTemp(p2pId);
 

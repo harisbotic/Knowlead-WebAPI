@@ -2,9 +2,11 @@ using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Knowlead.BLL.Exceptions;
 using Knowlead.BLL.Repositories.Interfaces;
 using Knowlead.DomainModel.UserModels;
 using Microsoft.AspNetCore.Http;
+using static Knowlead.Common.Constants;
 
 namespace Knowlead.Common.HttpRequestItems
 {
@@ -24,12 +26,12 @@ namespace Knowlead.Common.HttpRequestItems
         public async Task<ApplicationUser> GetUser(bool includeDetails = false)
         {
             if (!_accessor.HttpContext.User.Identity.IsAuthenticated)
-                return null;
+                throw new ErrorModelException(ErrorCodes.NotLoggedIn);
 
             var user = _accessor.HttpContext.Items[UserKey] as ApplicationUser;
             if (user == null)
             {
-                var userId = GetUserId().GetValueOrDefault();
+                var userId = GetUserId();
 
                 user = await _accountRepository.GetApplicationUserById(userId, includeDetails);
 
@@ -41,10 +43,10 @@ namespace Knowlead.Common.HttpRequestItems
             return user;
         }
 
-        public Guid? GetUserId()
+        public Guid GetUserId()
         {
             if (!_accessor.HttpContext.User.Identity.IsAuthenticated)
-                return null;
+                throw new ErrorModelException(ErrorCodes.NotLoggedIn);
 
             var userId = _accessor.HttpContext.User.Claims
                                                     .Where(c => c.Type == ClaimTypes.NameIdentifier)

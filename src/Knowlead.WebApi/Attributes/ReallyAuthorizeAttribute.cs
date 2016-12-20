@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc.Filters;
-using Knowlead.DTO.ResponseModels;
-using Microsoft.AspNetCore.Mvc;
-using Knowlead.Common;
+using static Knowlead.Common.Constants;
+using Knowlead.BLL.Exceptions;
 
 namespace Knowlead.WebApi.Attributes
 {
@@ -11,8 +10,7 @@ namespace Knowlead.WebApi.Attributes
         {
             if (!context.HttpContext.User.Identity.IsAuthenticated)
             {
-                var error = new ErrorModel(Constants.ErrorCodes.NotLoggedIn);
-                context.Result = new BadRequestObjectResult(new ResponseModel(error));
+                throw new ErrorModelException(ErrorCodes.NotLoggedIn);
             }
         }
     }

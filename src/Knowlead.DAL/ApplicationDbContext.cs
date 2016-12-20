@@ -47,6 +47,7 @@ namespace Knowlead.DAL
             public DbSet<ApplicationUser> ApplicationUsers { get; set; }
             public DbSet<ApplicationUserInterest> ApplicationUserInterests { get; set; }
             public DbSet<ApplicationUserLanguage> ApplicationUserLanguages { get; set; }
+            public DbSet<ApplicationUserRelationship> ApplicationUserRelationships { get; set; }
             public DbSet<UserAchievement> UserAchievements { get; set; }
             public DbSet<UserCertificate> UserCertificates { get; set; }
             public DbSet<UserNotebook> UserNotebooks { get; set; }
@@ -128,11 +129,14 @@ namespace Knowlead.DAL
                 .HasValue<FeedbackQuestion>("Question");
             
             /* Application User */
+            modelBuilder.Entity<ApplicationUserInterest>()
+                .HasKey(t => new { t.ApplicationUserId, t.FosId });
+
             modelBuilder.Entity<ApplicationUserLanguage>()
                 .HasKey(t => new { t.ApplicationUserId, t.LanguageId });
 
-            modelBuilder.Entity<ApplicationUserInterest>()
-                .HasKey(t => new { t.ApplicationUserId, t.FosId });
+            modelBuilder.Entity<ApplicationUserRelationship>()
+                .HasKey(t => new { t.ApplicationUserSmallerId, t.ApplicationUserBiggerId });
 
             /* Friendship */
             modelBuilder.Entity<Friendship>()

@@ -27,9 +27,9 @@ namespace Knowlead.Controllers
         }
 
         [HttpGet("{userId}")]
-        public async Task<IActionResult> GetApplicationUserById(Guid userId)
+        public async Task<IActionResult> GetApplicationUserById(Guid userId, bool includeDetails = true)
         {
-            var user = await _accountRepository.GetApplicationUserById(userId, true);
+            var user = await _accountRepository.GetApplicationUserById(userId, includeDetails);
             if(user == null)
                 return BadRequest(new ResponseModel(new ErrorModel(ErrorCodes.EntityNotFound)));
             
@@ -56,7 +56,7 @@ namespace Knowlead.Controllers
             });
         }
 
-        [HttpPost("confirmEmail"), ValidateModel]
+        [HttpPost("confirmEmail"), ValidateModel] //TODO: rename to confirmemail
         [AllowAnonymous]
         public async Task<IActionResult> ConfirmEmail([FromBody] ConfirmEmailModel confirmEmailModel)
         {
