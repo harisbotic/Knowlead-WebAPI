@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 using Knowlead.DomainModel.LookupModels.Core;
 using Knowlead.DomainModel.UserModels;
+using static Knowlead.Common.Constants.EnumStatuses;
 
 namespace Knowlead.DomainModel.P2PModels
 {
@@ -50,10 +51,6 @@ namespace Knowlead.DomainModel.P2PModels
         
         [MyRequired]
         public P2PStatus Status { get; set; }
-        public enum P2PStatus 
-        {
-            Inactive, Action, Scheduled, Finsihed
-        }
 
         public P2P()
         {

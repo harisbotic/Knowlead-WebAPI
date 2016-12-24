@@ -5,7 +5,7 @@ namespace Knowlead.Common
     public static class Constants
     {
         [TSClass]
-        public static class ErrorCodes
+        public static class ErrorCodes //TODO: Turn into enums??
         {
             [TSInitialize]
             public const string RequiredField = "REQUIRED_FIELD";
@@ -73,5 +73,39 @@ namespace Knowlead.Common
             public const string NotInFriendlist = "NOT_IN_FRIENDLIST";
         }
 
+        [TSClass]
+        public static class EnumStatuses
+        {
+            public enum UserStatus 
+            {
+                Online = 0, Offline = 1, Busy = 2
+            }
+
+            public enum P2PStatus 
+            {
+                Inactive = 0, Active = 1, Scheduled = 2, Finsihed = 3
+            }
+
+            //Call Status ? Paused, InProgress, WaitingFor
+            public enum PeerStatus 
+            {
+                Accepted = 0, Rejected = 1, Waiting = 2
+            }
+
+            public enum FriendshipStatus 
+            {
+                Pending = 0, Accepted = 1, Declined = 2, Blocked = 3
+            }
+        }
+
+        [TSClass]
+        public static class EnumActions
+        {
+            public enum FriendshipDTOActions 
+            {
+                NewRequest = 0, AcceptRequest = 1, DeclineRequest = 2, CancelRequest = 3,
+                RemoveFriend = 4, BlockUser = 5, UnblockUser = 6
+            }
+        }
     }
 }

@@ -5,6 +5,7 @@ using Knowlead.Common.DataAnnotations;
 using Knowlead.DomainModel.LookupModels.Core;
 using Knowlead.DomainModel.LookupModels.Geo;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using static Knowlead.Common.Constants.EnumStatuses;
 
 namespace Knowlead.DomainModel.UserModels
 {
@@ -36,11 +37,6 @@ namespace Knowlead.DomainModel.UserModels
 
         [MyRequired]
         public UserStatus Status { get; set; }
-
-        public enum UserStatus 
-        {
-            Online, Offline, Busy
-        }
         
         public ApplicationUser()
         {

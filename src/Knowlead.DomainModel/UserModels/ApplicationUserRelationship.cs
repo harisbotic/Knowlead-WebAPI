@@ -1,5 +1,6 @@
 using System;
 using Knowlead.Common.DataAnnotations;
+using static Knowlead.Common.Constants.EnumStatuses;
 
 namespace Knowlead.DomainModel.UserModels
 {
@@ -15,7 +16,7 @@ namespace Knowlead.DomainModel.UserModels
         public ApplicationUser ApplicationUserSmaller { get; set; }
 
         [MyRequired]
-        public UserRelationshipStatus Status { get; set; }
+        public FriendshipStatus Status { get; set; }
 
         [MyRequired]
         public Guid LastActionById { get; set; }
@@ -24,16 +25,7 @@ namespace Knowlead.DomainModel.UserModels
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        public enum UserRelationshipStatus 
-        {
-            Pending = 0,
-            Accepted = 1,
-            Declined = 2,
-            Blocked = 3
-        }
-
-        public ApplicationUserRelationship(Guid currentUserId, Guid otherUserId,
-                                           ApplicationUserRelationship.UserRelationshipStatus Status)
+        public ApplicationUserRelationship(Guid currentUserId, Guid otherUserId, FriendshipStatus Status)
         {
             if(currentUserId.Equals(otherUserId))
                 throw new Exception(); // TODO: Should be ErrorModelException

@@ -8,6 +8,7 @@ using Knowlead.DomainModel.UserModels;
 using Microsoft.EntityFrameworkCore;
 using Knowlead.BLL.Exceptions;
 using System.Collections.Generic;
+using static Knowlead.Common.Constants.EnumStatuses;
 
 namespace Knowlead.BLL.Repositories
 {
@@ -35,20 +36,20 @@ namespace Knowlead.BLL.Repositories
             {
                 switch (relationship.Status) 
                 {
-                    case(ApplicationUserRelationship.UserRelationshipStatus.Accepted): //TODO: StatusEnums
+                    case(FriendshipStatus.Accepted):
                         throw new ErrorModelException(ErrorCodes.AlreadyFriends, otherUserId.ToString());
                     
-                    case(ApplicationUserRelationship.UserRelationshipStatus.Pending):
+                    case(FriendshipStatus.Pending):
                         if(relationship.LastActionById == currentUserId)
                             return relationship;
                         throw new ErrorModelException(ErrorCodes.SthWentWrong);
                     
-                    case(ApplicationUserRelationship.UserRelationshipStatus.Declined):
+                    case(FriendshipStatus.Declined):
                         if(relationship.LastActionById != currentUserId)
                             throw new ErrorModelException(ErrorCodes.HackAttempt);
                         break;
 
-                    case(ApplicationUserRelationship.UserRelationshipStatus.Blocked):
+                    case(FriendshipStatus.Blocked):
                         if(relationship.LastActionById == currentUserId)
                             throw new ErrorModelException(ErrorCodes.UserBlocked, otherUserId.ToString());
                         throw new ErrorModelException(ErrorCodes.EntityNotFound, nameof(ApplicationUser));
@@ -57,7 +58,7 @@ namespace Knowlead.BLL.Repositories
 
             if(relationship == null)
             {
-                relationship = new ApplicationUserRelationship(currentUserId, otherUserId, ApplicationUserRelationship.UserRelationshipStatus.Pending);
+                relationship = new ApplicationUserRelationship(currentUserId, otherUserId, FriendshipStatus.Pending);
                 
                 _context.ApplicationUserRelationships.Add(relationship);
             }
@@ -75,30 +76,30 @@ namespace Knowlead.BLL.Repositories
 
             switch (relationship.Status) 
             {
-                case(ApplicationUserRelationship.UserRelationshipStatus.Accepted):
+                case(FriendshipStatus.Accepted):
                     throw new ErrorModelException(ErrorCodes.AlreadyFriends, otherUserId.ToString());
                 
-                case(ApplicationUserRelationship.UserRelationshipStatus.Pending):
+                case(FriendshipStatus.Pending):
                     if(relationship.LastActionById == currentUserId)
                         throw new ErrorModelException(ErrorCodes.HackAttempt);
                     break;
                 
-                case(ApplicationUserRelationship.UserRelationshipStatus.Declined):
+                case(FriendshipStatus.Declined):
                     throw new ErrorModelException(ErrorCodes.RequestNotFound);
 
-                case(ApplicationUserRelationship.UserRelationshipStatus.Blocked):
+                case(FriendshipStatus.Blocked):
                     if(relationship.LastActionById == currentUserId)
                         throw new ErrorModelException(ErrorCodes.UserBlocked, otherUserId.ToString());
                     throw new ErrorModelException(ErrorCodes.EntityNotFound, nameof(ApplicationUser));
             }
 
-            if(relationship.Status == ApplicationUserRelationship.UserRelationshipStatus.Pending)
+            if(relationship.Status == FriendshipStatus.Pending)
                 if(relationship.LastActionById == otherUserId)
                 {
                     if(isAccepting)
-                        ChangeFriendshipStatusTo(relationship,currentUserId, ApplicationUserRelationship.UserRelationshipStatus.Accepted);
+                        ChangeFriendshipStatusTo(relationship,currentUserId, FriendshipStatus.Accepted);
                     else
-                        ChangeFriendshipStatusTo(relationship,currentUserId, ApplicationUserRelationship.UserRelationshipStatus.Declined);
+                        ChangeFriendshipStatusTo(relationship,currentUserId, FriendshipStatus.Declined);
                 }
 
             await SaveChangesAsync();
@@ -114,24 +115,24 @@ namespace Knowlead.BLL.Repositories
 
             switch (relationship.Status) 
             {
-                case(ApplicationUserRelationship.UserRelationshipStatus.Accepted):
+                case(FriendshipStatus.Accepted):
                     throw new ErrorModelException(ErrorCodes.AlreadyFriends, otherUserId.ToString());
                 
-                case(ApplicationUserRelationship.UserRelationshipStatus.Pending):
+                case(FriendshipStatus.Pending):
                     if(relationship.LastActionById != currentUserId)
                         throw new ErrorModelException(ErrorCodes.SthWentWrong);
                     break;
                 
-                case(ApplicationUserRelationship.UserRelationshipStatus.Declined):
+                case(FriendshipStatus.Declined):
                     throw new ErrorModelException(ErrorCodes.RequestNotFound);
 
-                case(ApplicationUserRelationship.UserRelationshipStatus.Blocked):
+                case(FriendshipStatus.Blocked):
                     if(relationship.LastActionById == currentUserId)
                         throw new ErrorModelException(ErrorCodes.UserBlocked, otherUserId.ToString());
                     throw new ErrorModelException(ErrorCodes.EntityNotFound, nameof(ApplicationUser));
             }
 
-            if(relationship.Status == ApplicationUserRelationship.UserRelationshipStatus.Pending)
+            if(relationship.Status == FriendshipStatus.Pending)
                 if(relationship.LastActionById == currentUserId)
                 {
                     _context.ApplicationUserRelationships.Remove(relationship);
@@ -149,10 +150,10 @@ namespace Knowlead.BLL.Repositories
             if(relationship == null)
                 return relationship;
             
-            if(relationship.Status != ApplicationUserRelationship.UserRelationshipStatus.Accepted)
+            if(relationship.Status != FriendshipStatus.Accepted)
                 throw new ErrorModelException(ErrorCodes.NotInFriendlist, otherUserId.ToString());
 
-            if(relationship.Status == ApplicationUserRelationship.UserRelationshipStatus.Blocked)
+            if(relationship.Status == FriendshipStatus.Blocked)
             {
                 if(relationship.LastActionById == currentUserId)
                     throw new ErrorModelException(ErrorCodes.UserBlocked, otherUserId.ToString());
@@ -172,19 +173,19 @@ namespace Knowlead.BLL.Repositories
 
             if(relationship != null)
             {
-                if(relationship.Status == ApplicationUserRelationship.UserRelationshipStatus.Blocked)
+                if(relationship.Status == FriendshipStatus.Blocked)
                 {
                     if(relationship.LastActionById != currentUserId)
                         throw new ErrorModelException(ErrorCodes.EntityNotFound, nameof(ApplicationUser));
                     return relationship;
                 }
 
-                ChangeFriendshipStatusTo(relationship,currentUserId, ApplicationUserRelationship.UserRelationshipStatus.Blocked);
+                ChangeFriendshipStatusTo(relationship,currentUserId, FriendshipStatus.Blocked);
             }
 
             if(relationship == null)
             {
-                relationship = new ApplicationUserRelationship(currentUserId, otherUserId, ApplicationUserRelationship.UserRelationshipStatus.Blocked);
+                relationship = new ApplicationUserRelationship(currentUserId, otherUserId, FriendshipStatus.Blocked);
                 _context.ApplicationUserRelationships.Add(relationship);
             }
 
@@ -199,7 +200,7 @@ namespace Knowlead.BLL.Repositories
             if(relationship == null)    
                 return relationship;
             
-            if (relationship.Status == ApplicationUserRelationship.UserRelationshipStatus.Blocked)
+            if (relationship.Status == FriendshipStatus.Blocked)
                 if(relationship.LastActionById != currentUserId)
                     throw new ErrorModelException(ErrorCodes.EntityNotFound, nameof(ApplicationUser));
 
@@ -231,7 +232,7 @@ namespace Knowlead.BLL.Repositories
             return new Tuple<Guid,Guid> (biggerGuid, smallerGuid);
         }
 
-        private void ChangeFriendshipStatusTo(ApplicationUserRelationship relationship, Guid currentUserId, ApplicationUserRelationship.UserRelationshipStatus newStatus)
+        private void ChangeFriendshipStatusTo(ApplicationUserRelationship relationship, Guid currentUserId, FriendshipStatus newStatus)
         {
             relationship.Status = newStatus;
             relationship.LastActionById = currentUserId;

@@ -8,6 +8,7 @@ using static Knowlead.Common.Constants;
 using Knowlead.DTO.ResponseModels;
 using Knowlead.DomainModel.UserModels;
 using Knowlead.DTO.ChatModels;
+using static Knowlead.Common.Constants.EnumActions;
 
 namespace Knowlead.Controllers
 {
@@ -34,36 +35,36 @@ namespace Knowlead.Controllers
             ApplicationUserRelationship result = null;
             switch (action) 
             {
-                case(ChangeFriendshipStatusModel.FriendshipDTOActions.NewRequest):
+                case(FriendshipDTOActions.NewRequest):
                     result = await _userRelationshipRepository.SendFriendRequest(currentUserId, otherUserId);
                     break;
                 
-                case(ChangeFriendshipStatusModel.FriendshipDTOActions.AcceptRequest):
+                case(FriendshipDTOActions.AcceptRequest):
                     result = await _userRelationshipRepository.RespondToFriendRequest(currentUserId, otherUserId, true);
                     break;
                 
-                case(ChangeFriendshipStatusModel.FriendshipDTOActions.DeclineRequest):
+                case(FriendshipDTOActions.DeclineRequest):
                     result = await _userRelationshipRepository.RespondToFriendRequest(currentUserId, otherUserId, false);
                     break;
 
-                case(ChangeFriendshipStatusModel.FriendshipDTOActions.CancelRequest):
+                case(FriendshipDTOActions.CancelRequest):
                     result = await _userRelationshipRepository.CancelFriendRequest(currentUserId, otherUserId);
                     break;
 
-                case(ChangeFriendshipStatusModel.FriendshipDTOActions.RemoveFriend):
+                case(FriendshipDTOActions.RemoveFriend):
                     result = await _userRelationshipRepository.RemoveFriend(currentUserId, otherUserId);
                     break;
 
-                case(ChangeFriendshipStatusModel.FriendshipDTOActions.BlockUser):
+                case(FriendshipDTOActions.BlockUser):
                     result = await _userRelationshipRepository.BlockUser(currentUserId, otherUserId);
                     break;
 
-                case(ChangeFriendshipStatusModel.FriendshipDTOActions.UnblockUser):
+                case(FriendshipDTOActions.UnblockUser):
                     result = await _userRelationshipRepository.UnblockUser(currentUserId, otherUserId);
                     break;
                 
                 default:
-                    throw new ErrorModelException(ErrorCodes.IncorrectValue, nameof(ChangeFriendshipStatusModel.FriendshipDTOActions));
+                    throw new ErrorModelException(ErrorCodes.IncorrectValue, nameof(FriendshipDTOActions));
             }
             
             return new OkObjectResult(new ResponseModel{

@@ -1,5 +1,6 @@
 using System;
 using Knowlead.DTO.UserModels;
+using static Knowlead.Common.Constants.EnumStatuses;
 
 namespace Knowlead.DTO.CallModels
 {
@@ -12,11 +13,6 @@ namespace Knowlead.DTO.CallModels
         public String SDP { get; private set; }
 
         public PeerStatus Status { get; private set; }
-
-        public enum PeerStatus 
-        {
-            Accepted, Rejected, Waiting
-        }
 
         public bool UpdateInfo(String connectionId = null, String sdp = null)
         {

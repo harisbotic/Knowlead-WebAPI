@@ -6,6 +6,7 @@ using Knowlead.Services.Interfaces;
 using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using static Knowlead.Common.Constants.EnumStatuses;
 
 namespace Knowlead.Services
 {
@@ -43,8 +44,8 @@ namespace Knowlead.Services
 
             foreach (var peer in callModel.Peers)
             {
-                if(peer.Status == PeerInfoModel.PeerStatus.Accepted ||
-                    peer.Status == PeerInfoModel.PeerStatus.Rejected)
+                if(peer.Status == PeerStatus.Accepted ||
+                    peer.Status == PeerStatus.Rejected)
                     await _hubContext.Clients.Client(peer.ConnectionId).InvokeAsync("callModelUpdate", json);
             }
         }

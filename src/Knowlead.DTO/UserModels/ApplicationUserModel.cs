@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Knowlead.Common.DataAnnotations;
 using Knowlead.DTO.LookupModels.Core;
 using Knowlead.DTO.LookupModels.Geo;
+using static Knowlead.Common.Constants.EnumStatuses;
 
 namespace Knowlead.DTO.UserModels
 {
@@ -38,11 +39,6 @@ namespace Knowlead.DTO.UserModels
 
         [MyRequired]
         public UserStatus Status { get; set; }
-
-        public enum UserStatus 
-        {
-            Online, Offline, Busy
-        }
         
         public ApplicationUserModel()
         {

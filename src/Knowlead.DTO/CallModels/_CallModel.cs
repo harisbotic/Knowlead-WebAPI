@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Knowlead.Common.DataAnnotations;
 using Knowlead.DTO.UserModels;
+using static Knowlead.Common.Constants.EnumStatuses;
 
 namespace Knowlead.DTO.CallModels
 {
@@ -19,7 +20,6 @@ namespace Knowlead.DTO.CallModels
 
 
         public bool CallStarted { get; set; }
-        //Call Status ? Paused, InProgress, WaitingFor
         public List<PeerInfoModel> Peers { get; set; }
 
         public _CallModel(Guid callerId, String connectionId)
@@ -27,7 +27,7 @@ namespace Knowlead.DTO.CallModels
             this.Failed = false;
             this.CallId = Guid.NewGuid();
             this.CallerId = callerId;
-            this.Peers = new List<PeerInfoModel>(){new PeerInfoModel(callerId, connectionId, PeerInfoModel.PeerStatus.Accepted)};
+            this.Peers = new List<PeerInfoModel>(){new PeerInfoModel(callerId, connectionId, PeerStatus.Accepted)};
             this.CallStarted = false;
         }
     }

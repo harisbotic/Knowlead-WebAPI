@@ -1,5 +1,6 @@
 using System;
 using Knowlead.Common.DataAnnotations;
+using static Knowlead.Common.Constants.EnumStatuses;
 
 namespace Knowlead.DTO.UserModels
 {
@@ -14,7 +15,7 @@ namespace Knowlead.DTO.UserModels
         public ApplicationUserModel ApplicationUserSmaller { get; set; }
 
         [MyRequired]
-        public UserRelationshipStatus Status { get; set; }
+        public FriendshipStatus Status { get; set; }
 
         [MyRequired]
         public Guid LastActionById { get; set; }
@@ -22,13 +23,5 @@ namespace Knowlead.DTO.UserModels
 
         public DateTime UpdatedAt { get; set; }
         public DateTime CreatedAt { get; set; }
-
-        public enum UserRelationshipStatus 
-        {
-            Pending = 0,
-            Accepted = 1,
-            Declined = 2,
-            Blocked = 3
-        }
     }
 }
