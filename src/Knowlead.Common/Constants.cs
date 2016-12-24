@@ -66,7 +66,11 @@ namespace Knowlead.Common
             [TSInitialize]
             public const string UserBlocked = "USER_BLOCKED";
             [TSInitialize]
-            public const string AlreadyFriend = "ALREADY_FRIENDS";
+            public const string AlreadyFriends = "ALREADY_FRIENDS";
+            [TSInitialize]
+            public const string RequestNotFound = "REQUEST_NOT_FOUND";
+            [TSInitialize]
+            public const string NotInFriendlist = "NOT_IN_FRIENDLIST";
         }
 
     }

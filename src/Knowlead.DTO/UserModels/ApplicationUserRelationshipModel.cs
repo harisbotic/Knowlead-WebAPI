@@ -6,12 +6,12 @@ namespace Knowlead.DTO.UserModels
     public class ApplicationUserRelationshipModel
     {
         [MyRequired]
-        public Guid ApplicationUserSmallerId { get; set; }
-        public ApplicationUserModel ApplicationUserSmaller { get; set; }
-
-        [MyRequired]
         public Guid ApplicationUserBiggerId { get; set; }
         public ApplicationUserModel ApplicationUserBigger { get; set; }
+
+        [MyRequired]
+        public Guid ApplicationUserSmallerId { get; set; }
+        public ApplicationUserModel ApplicationUserSmaller { get; set; }
 
         [MyRequired]
         public UserRelationshipStatus Status { get; set; }
