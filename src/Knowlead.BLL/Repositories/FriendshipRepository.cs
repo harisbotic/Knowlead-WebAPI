@@ -26,6 +26,7 @@ namespace Knowlead.BLL.Repositories
         {
             return await _context.Friendships
                                         .Where(x => x.ApplicationUserBiggerId == applicationUserId || x.ApplicationUserSmallerId == applicationUserId)
+                                        .Where(x => x.Status == FriendshipStatus.Accepted)
                                         .ToListAsync();
         }
 

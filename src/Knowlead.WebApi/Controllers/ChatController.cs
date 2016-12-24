@@ -9,6 +9,8 @@ using Knowlead.DTO.ResponseModels;
 using Knowlead.DomainModel.ChatModels;
 using Knowlead.DTO.ChatModels;
 using static Knowlead.Common.Constants.EnumActions;
+using AutoMapper;
+using System.Collections.Generic;
 
 namespace Knowlead.Controllers
 {
@@ -68,16 +70,16 @@ namespace Knowlead.Controllers
             }
             
             return new OkObjectResult(new ResponseModel{
-                Object = result
+                Object = Mapper.Map<FriendshipModel>(result)
             });
         }
 
-        [HttpGet("list"), ReallyAuthorize]
-        public async Task<IActionResult> List()
+        [HttpGet("getallfriends"), ReallyAuthorize] //TODO: Temp endoint
+        public async Task<IActionResult> GetAllFriends()
         {
             var friends = await _friendshipRepository.GetAllFriends(_auth.GetUserId());
             return new OkObjectResult(new ResponseModel{
-                Object = friends
+                Object = Mapper.Map<List<FriendshipModel>>(friends)
             });
         }
     }
