@@ -1,10 +1,11 @@
 using System;
 using Knowlead.Common.DataAnnotations;
+using Knowlead.DomainModel.UserModels;
 using static Knowlead.Common.Constants.EnumStatuses;
 
-namespace Knowlead.DomainModel.UserModels
+namespace Knowlead.DomainModel.ChatModels
 {
-    public class ApplicationUserRelationship
+    public class Friendship
     {
 
         [MyRequired]
@@ -25,7 +26,7 @@ namespace Knowlead.DomainModel.UserModels
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        public ApplicationUserRelationship(Guid currentUserId, Guid otherUserId, FriendshipStatus Status)
+        public Friendship(Guid currentUserId, Guid otherUserId, FriendshipStatus Status)
         {
             if(currentUserId.Equals(otherUserId))
                 throw new Exception(); // TODO: Should be ErrorModelException
@@ -39,7 +40,7 @@ namespace Knowlead.DomainModel.UserModels
             this.Status = Status;
             this.LastActionById = currentUserId;
         }
-        public ApplicationUserRelationship()
+        public Friendship()
         { //Just for EF
         }
     }

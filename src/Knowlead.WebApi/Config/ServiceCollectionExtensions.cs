@@ -140,7 +140,7 @@ namespace Knowlead.WebApi.Config
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IP2PRepository, P2PRepository>();
             services.AddScoped<IBlobRepository, BlobRepository>();
-            services.AddScoped<IUserRelationshipRepository, UserRelationshipRepository>();
+            services.AddScoped<IFriendshipRepository, FriendshipRepository>();
 
             return services;
         }

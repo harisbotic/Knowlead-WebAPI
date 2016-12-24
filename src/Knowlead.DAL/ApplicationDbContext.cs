@@ -6,7 +6,6 @@ using Knowlead.DomainModel.LookupModels.Geo;
 using Knowlead.DomainModel.BlobModels;
 using Knowlead.DomainModel.FeedbackModels;
 using Knowlead.DomainModel.LookupModels.FeedbackModels;
-using Knowlead.DomainModel.FriendshipModels;
 using Knowlead.DomainModel.P2PModels;
 using System;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -15,6 +14,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
 using Microsoft.Extensions.DependencyInjection;
+using Knowlead.DomainModel.ChatModels;
 
 namespace Knowlead.DAL
 {
@@ -47,18 +47,12 @@ namespace Knowlead.DAL
             public DbSet<ApplicationUser> ApplicationUsers { get; set; }
             public DbSet<ApplicationUserInterest> ApplicationUserInterests { get; set; }
             public DbSet<ApplicationUserLanguage> ApplicationUserLanguages { get; set; }
-            public DbSet<ApplicationUserRelationship> ApplicationUserRelationships { get; set; }
+            public DbSet<Friendship> Friendships { get; set; }
             public DbSet<UserAchievement> UserAchievements { get; set; }
             public DbSet<UserCertificate> UserCertificates { get; set; }
             public DbSet<UserNotebook> UserNotebooks { get; set; }
 
         #endregion      
-        
-        #region Friendship
-            public DbSet<Friendship> Friendships { get; set; }
-            public DbSet<FriendshipRequest> FriendshipRequests { get; set; }
-            
-        #endregion 
 
         #region Peer to Peer
             public DbSet<P2P> P2p { get; set; }
@@ -135,15 +129,9 @@ namespace Knowlead.DAL
             modelBuilder.Entity<ApplicationUserLanguage>()
                 .HasKey(t => new { t.ApplicationUserId, t.LanguageId });
 
-            modelBuilder.Entity<ApplicationUserRelationship>()
-                .HasKey(t => new { t.ApplicationUserSmallerId, t.ApplicationUserBiggerId });
-
-            /* Friendship */
+            /* Chat */
             modelBuilder.Entity<Friendship>()
-                .HasKey(t => new { t.UserSentId, t.UserAcceptedId });
-
-            modelBuilder.Entity<FriendshipRequest>()
-                .HasKey(t => new { t.UserSentId, t.UserReceivedId });
+                .HasKey(t => new { t.ApplicationUserSmallerId, t.ApplicationUserBiggerId });
             
             /* P2P */
             modelBuilder.Entity<P2PFile>()

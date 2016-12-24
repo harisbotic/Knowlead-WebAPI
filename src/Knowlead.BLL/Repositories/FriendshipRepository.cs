@@ -9,78 +9,79 @@ using Microsoft.EntityFrameworkCore;
 using Knowlead.BLL.Exceptions;
 using System.Collections.Generic;
 using static Knowlead.Common.Constants.EnumStatuses;
+using Knowlead.DomainModel.ChatModels;
 
 namespace Knowlead.BLL.Repositories
 {
-    public class UserRelationshipRepository : IUserRelationshipRepository
+    public class FriendshipRepository : IFriendshipRepository
     {
         private readonly ApplicationDbContext _context;
 
-        public UserRelationshipRepository(ApplicationDbContext context)
+        public FriendshipRepository(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        public async Task<List<ApplicationUserRelationship>> GetAllFriends(Guid applicationUserId)
+        public async Task<List<Friendship>> GetAllFriends(Guid applicationUserId)
         {
-            return await _context.ApplicationUserRelationships
+            return await _context.Friendships
                                         .Where(x => x.ApplicationUserBiggerId == applicationUserId || x.ApplicationUserSmallerId == applicationUserId)
                                         .ToListAsync();
         }
 
-        public async Task<ApplicationUserRelationship> SendFriendRequest(Guid currentUserId, Guid otherUserId)
+        public async Task<Friendship> SendFriendRequest(Guid currentUserId, Guid otherUserId)
         {
-            var relationship = await GetApplicationUserRelationship(currentUserId, otherUserId);
+            var friendship = await GetFriendship(currentUserId, otherUserId);
 
-            if(relationship != null)
+            if(friendship != null)
             {
-                switch (relationship.Status) 
+                switch (friendship.Status) 
                 {
                     case(FriendshipStatus.Accepted):
                         throw new ErrorModelException(ErrorCodes.AlreadyFriends, otherUserId.ToString());
                     
                     case(FriendshipStatus.Pending):
-                        if(relationship.LastActionById == currentUserId)
-                            return relationship;
+                        if(friendship.LastActionById == currentUserId)
+                            return friendship;
                         throw new ErrorModelException(ErrorCodes.SthWentWrong);
                     
                     case(FriendshipStatus.Declined):
-                        if(relationship.LastActionById != currentUserId)
+                        if(friendship.LastActionById != currentUserId)
                             throw new ErrorModelException(ErrorCodes.HackAttempt);
                         break;
 
                     case(FriendshipStatus.Blocked):
-                        if(relationship.LastActionById == currentUserId)
+                        if(friendship.LastActionById == currentUserId)
                             throw new ErrorModelException(ErrorCodes.UserBlocked, otherUserId.ToString());
                         throw new ErrorModelException(ErrorCodes.EntityNotFound, nameof(ApplicationUser));
                 }
             }
 
-            if(relationship == null)
+            if(friendship == null)
             {
-                relationship = new ApplicationUserRelationship(currentUserId, otherUserId, FriendshipStatus.Pending);
+                friendship = new Friendship(currentUserId, otherUserId, FriendshipStatus.Pending);
                 
-                _context.ApplicationUserRelationships.Add(relationship);
+                _context.Friendships.Add(friendship);
             }
 
             await SaveChangesAsync();
-            return relationship;
+            return friendship;
         }
 
-        public async Task<ApplicationUserRelationship> RespondToFriendRequest(Guid currentUserId, Guid otherUserId, bool isAccepting)
+        public async Task<Friendship> RespondToFriendRequest(Guid currentUserId, Guid otherUserId, bool isAccepting)
         {
-            var relationship = await GetApplicationUserRelationship(currentUserId, otherUserId);
+            var friendship = await GetFriendship(currentUserId, otherUserId);
 
-            if(relationship == null)
+            if(friendship == null)
                 throw new ErrorModelException(ErrorCodes.RequestNotFound);
 
-            switch (relationship.Status) 
+            switch (friendship.Status) 
             {
                 case(FriendshipStatus.Accepted):
                     throw new ErrorModelException(ErrorCodes.AlreadyFriends, otherUserId.ToString());
                 
                 case(FriendshipStatus.Pending):
-                    if(relationship.LastActionById == currentUserId)
+                    if(friendship.LastActionById == currentUserId)
                         throw new ErrorModelException(ErrorCodes.HackAttempt);
                     break;
                 
@@ -88,38 +89,38 @@ namespace Knowlead.BLL.Repositories
                     throw new ErrorModelException(ErrorCodes.RequestNotFound);
 
                 case(FriendshipStatus.Blocked):
-                    if(relationship.LastActionById == currentUserId)
+                    if(friendship.LastActionById == currentUserId)
                         throw new ErrorModelException(ErrorCodes.UserBlocked, otherUserId.ToString());
                     throw new ErrorModelException(ErrorCodes.EntityNotFound, nameof(ApplicationUser));
             }
 
-            if(relationship.Status == FriendshipStatus.Pending)
-                if(relationship.LastActionById == otherUserId)
+            if(friendship.Status == FriendshipStatus.Pending)
+                if(friendship.LastActionById == otherUserId)
                 {
                     if(isAccepting)
-                        ChangeFriendshipStatusTo(relationship,currentUserId, FriendshipStatus.Accepted);
+                        ChangeFriendshipStatusTo(friendship, currentUserId, FriendshipStatus.Accepted);
                     else
-                        ChangeFriendshipStatusTo(relationship,currentUserId, FriendshipStatus.Declined);
+                        ChangeFriendshipStatusTo(friendship, currentUserId, FriendshipStatus.Declined);
                 }
 
             await SaveChangesAsync();
-            return relationship;
+            return friendship;
         }
 
-        public async Task<ApplicationUserRelationship> CancelFriendRequest(Guid currentUserId, Guid otherUserId)
+        public async Task<Friendship> CancelFriendRequest(Guid currentUserId, Guid otherUserId)
         {
-            var relationship = await GetApplicationUserRelationship(currentUserId, otherUserId);
+            var friendship = await GetFriendship(currentUserId, otherUserId);
 
-            if(relationship == null)
-                return relationship;
+            if(friendship == null)
+                return friendship;
 
-            switch (relationship.Status) 
+            switch (friendship.Status) 
             {
                 case(FriendshipStatus.Accepted):
                     throw new ErrorModelException(ErrorCodes.AlreadyFriends, otherUserId.ToString());
                 
                 case(FriendshipStatus.Pending):
-                    if(relationship.LastActionById != currentUserId)
+                    if(friendship.LastActionById != currentUserId)
                         throw new ErrorModelException(ErrorCodes.SthWentWrong);
                     break;
                 
@@ -127,95 +128,95 @@ namespace Knowlead.BLL.Repositories
                     throw new ErrorModelException(ErrorCodes.RequestNotFound);
 
                 case(FriendshipStatus.Blocked):
-                    if(relationship.LastActionById == currentUserId)
+                    if(friendship.LastActionById == currentUserId)
                         throw new ErrorModelException(ErrorCodes.UserBlocked, otherUserId.ToString());
                     throw new ErrorModelException(ErrorCodes.EntityNotFound, nameof(ApplicationUser));
             }
 
-            if(relationship.Status == FriendshipStatus.Pending)
-                if(relationship.LastActionById == currentUserId)
+            if(friendship.Status == FriendshipStatus.Pending)
+                if(friendship.LastActionById == currentUserId)
                 {
-                    _context.ApplicationUserRelationships.Remove(relationship);
-                    relationship = null;
+                    _context.Friendships.Remove(friendship);
+                    friendship = null;
                 }
 
             await SaveChangesAsync();
-            return relationship;
+            return friendship;
         }
 
-        public async Task<ApplicationUserRelationship> RemoveFriend(Guid currentUserId, Guid otherUserId)
+        public async Task<Friendship> RemoveFriend(Guid currentUserId, Guid otherUserId)
         {
-            var relationship = await GetApplicationUserRelationship(currentUserId, otherUserId);
+            var friendship = await GetFriendship(currentUserId, otherUserId);
 
-            if(relationship == null)
-                return relationship;
+            if(friendship == null)
+                return friendship;
             
-            if(relationship.Status != FriendshipStatus.Accepted)
+            if(friendship.Status != FriendshipStatus.Accepted)
                 throw new ErrorModelException(ErrorCodes.NotInFriendlist, otherUserId.ToString());
 
-            if(relationship.Status == FriendshipStatus.Blocked)
+            if(friendship.Status == FriendshipStatus.Blocked)
             {
-                if(relationship.LastActionById == currentUserId)
+                if(friendship.LastActionById == currentUserId)
                     throw new ErrorModelException(ErrorCodes.UserBlocked, otherUserId.ToString());
                 throw new ErrorModelException(ErrorCodes.EntityNotFound, nameof(ApplicationUser));
             }
 
-            _context.ApplicationUserRelationships.Remove(relationship);
-            relationship = null;
+            _context.Friendships.Remove(friendship);
+            friendship = null;
 
             await SaveChangesAsync();
-            return relationship;
+            return friendship;
         }
 
-        public async Task<ApplicationUserRelationship> BlockUser(Guid currentUserId, Guid otherUserId)
+        public async Task<Friendship> BlockUser(Guid currentUserId, Guid otherUserId)
         {
-            var relationship = await GetApplicationUserRelationship(currentUserId, otherUserId);
+            var friendship = await GetFriendship(currentUserId, otherUserId);
 
-            if(relationship != null)
+            if(friendship != null)
             {
-                if(relationship.Status == FriendshipStatus.Blocked)
+                if(friendship.Status == FriendshipStatus.Blocked)
                 {
-                    if(relationship.LastActionById != currentUserId)
+                    if(friendship.LastActionById != currentUserId)
                         throw new ErrorModelException(ErrorCodes.EntityNotFound, nameof(ApplicationUser));
-                    return relationship;
+                    return friendship;
                 }
 
-                ChangeFriendshipStatusTo(relationship,currentUserId, FriendshipStatus.Blocked);
+                ChangeFriendshipStatusTo(friendship, currentUserId, FriendshipStatus.Blocked);
             }
 
-            if(relationship == null)
+            if(friendship == null)
             {
-                relationship = new ApplicationUserRelationship(currentUserId, otherUserId, FriendshipStatus.Blocked);
-                _context.ApplicationUserRelationships.Add(relationship);
+                friendship = new Friendship(currentUserId, otherUserId, FriendshipStatus.Blocked);
+                _context.Friendships.Add(friendship);
             }
 
             await SaveChangesAsync();
-            return relationship;
+            return friendship;
         }
 
-        public async Task<ApplicationUserRelationship> UnblockUser(Guid currentUserId, Guid otherUserId)
+        public async Task<Friendship> UnblockUser(Guid currentUserId, Guid otherUserId)
         {
-            var relationship = await GetApplicationUserRelationship(currentUserId, otherUserId);
+            var friendship = await GetFriendship(currentUserId, otherUserId);
 
-            if(relationship == null)    
-                return relationship;
+            if(friendship == null)    
+                return friendship;
             
-            if (relationship.Status == FriendshipStatus.Blocked)
-                if(relationship.LastActionById != currentUserId)
+            if (friendship.Status == FriendshipStatus.Blocked)
+                if(friendship.LastActionById != currentUserId)
                     throw new ErrorModelException(ErrorCodes.EntityNotFound, nameof(ApplicationUser));
 
-            _context.ApplicationUserRelationships.Remove(relationship);
-            relationship = null;
+            _context.Friendships.Remove(friendship);
+            friendship = null;
 
             await SaveChangesAsync();
-            return relationship;
+            return friendship;
         }
 
-        private async Task<ApplicationUserRelationship> GetApplicationUserRelationship(Guid userIdOne, Guid userIdTwo)
+        private async Task<Friendship> GetFriendship(Guid userIdOne, Guid userIdTwo)
         {
             var bsTuple = GetBiggerSmallerGuidTuple(userIdOne, userIdTwo);
 
-            return await _context.ApplicationUserRelationships
+            return await _context.Friendships
                                         .Where(x => x.ApplicationUserBiggerId == bsTuple.Item1 && x.ApplicationUserSmallerId == bsTuple.Item2)
                                         .FirstOrDefaultAsync();
         }
@@ -232,10 +233,10 @@ namespace Knowlead.BLL.Repositories
             return new Tuple<Guid,Guid> (biggerGuid, smallerGuid);
         }
 
-        private void ChangeFriendshipStatusTo(ApplicationUserRelationship relationship, Guid currentUserId, FriendshipStatus newStatus)
+        private void ChangeFriendshipStatusTo(Friendship friendship, Guid currentUserId, FriendshipStatus newStatus)
         {
-            relationship.Status = newStatus;
-            relationship.LastActionById = currentUserId;
+            friendship.Status = newStatus;
+            friendship.LastActionById = currentUserId;
         }
 
         private async Task SaveChangesAsync()

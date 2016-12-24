@@ -6,7 +6,7 @@ using Knowlead.BLL.Repositories.Interfaces;
 using Knowlead.BLL.Exceptions;
 using static Knowlead.Common.Constants;
 using Knowlead.DTO.ResponseModels;
-using Knowlead.DomainModel.UserModels;
+using Knowlead.DomainModel.ChatModels;
 using Knowlead.DTO.ChatModels;
 using static Knowlead.Common.Constants.EnumActions;
 
@@ -15,13 +15,13 @@ namespace Knowlead.Controllers
     [Route("api/[controller]")]
     public class ChatController : Controller
     {
-        private readonly IUserRelationshipRepository _userRelationshipRepository;
+        private readonly IFriendshipRepository _friendshipRepository;
         private readonly Auth _auth;
 
-        public ChatController(IUserRelationshipRepository userRelationshipRepository,
+        public ChatController(IFriendshipRepository friendshipRepository,
                                           Auth auth)
         {
-            _userRelationshipRepository = userRelationshipRepository;
+            _friendshipRepository = friendshipRepository;
             _auth = auth;
         }
 
@@ -32,35 +32,35 @@ namespace Knowlead.Controllers
             var otherUserId = cfsm.ApplicationUserId;
             
             var action = cfsm.Action;
-            ApplicationUserRelationship result = null;
+            Friendship result = null;
             switch (action) 
             {
                 case(FriendshipDTOActions.NewRequest):
-                    result = await _userRelationshipRepository.SendFriendRequest(currentUserId, otherUserId);
+                    result = await _friendshipRepository.SendFriendRequest(currentUserId, otherUserId);
                     break;
                 
                 case(FriendshipDTOActions.AcceptRequest):
-                    result = await _userRelationshipRepository.RespondToFriendRequest(currentUserId, otherUserId, true);
+                    result = await _friendshipRepository.RespondToFriendRequest(currentUserId, otherUserId, true);
                     break;
                 
                 case(FriendshipDTOActions.DeclineRequest):
-                    result = await _userRelationshipRepository.RespondToFriendRequest(currentUserId, otherUserId, false);
+                    result = await _friendshipRepository.RespondToFriendRequest(currentUserId, otherUserId, false);
                     break;
 
                 case(FriendshipDTOActions.CancelRequest):
-                    result = await _userRelationshipRepository.CancelFriendRequest(currentUserId, otherUserId);
+                    result = await _friendshipRepository.CancelFriendRequest(currentUserId, otherUserId);
                     break;
 
                 case(FriendshipDTOActions.RemoveFriend):
-                    result = await _userRelationshipRepository.RemoveFriend(currentUserId, otherUserId);
+                    result = await _friendshipRepository.RemoveFriend(currentUserId, otherUserId);
                     break;
 
                 case(FriendshipDTOActions.BlockUser):
-                    result = await _userRelationshipRepository.BlockUser(currentUserId, otherUserId);
+                    result = await _friendshipRepository.BlockUser(currentUserId, otherUserId);
                     break;
 
                 case(FriendshipDTOActions.UnblockUser):
-                    result = await _userRelationshipRepository.UnblockUser(currentUserId, otherUserId);
+                    result = await _friendshipRepository.UnblockUser(currentUserId, otherUserId);
                     break;
                 
                 default:
@@ -75,7 +75,7 @@ namespace Knowlead.Controllers
         [HttpGet("list"), ReallyAuthorize]
         public async Task<IActionResult> List()
         {
-            var friends = await _userRelationshipRepository.GetAllFriends(_auth.GetUserId());
+            var friends = await _friendshipRepository.GetAllFriends(_auth.GetUserId());
             return new OkObjectResult(new ResponseModel{
                 Object = friends
             });
