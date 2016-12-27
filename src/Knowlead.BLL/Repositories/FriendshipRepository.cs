@@ -8,6 +8,7 @@ using Knowlead.DomainModel.UserModels;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using static Knowlead.Common.Constants.EnumStatuses;
+using static Knowlead.Common.Utils;
 using Knowlead.DomainModel.ChatModels;
 using Knowlead.Common.Exceptions;
 
@@ -220,18 +221,6 @@ namespace Knowlead.BLL.Repositories
             return await _context.Friendships
                                         .Where(x => x.ApplicationUserBiggerId == bsTuple.Item1 && x.ApplicationUserSmallerId == bsTuple.Item2)
                                         .FirstOrDefaultAsync();
-        }
-
-        private Tuple<Guid, Guid> GetBiggerSmallerGuidTuple(Guid guidOne, Guid guidTwo)
-        { 
-            //TODO: put this in utils and use for UserFriendship constructor
-            if(guidOne.Equals(guidTwo))
-                throw new ErrorModelException(ErrorCodes.HackAttempt);
-
-            var biggerGuid = (guidOne.CompareTo(guidTwo) > 0)? guidOne : guidTwo;
-            var smallerGuid = (guidOne.CompareTo(guidTwo) < 0)? guidOne : guidTwo;
-
-            return new Tuple<Guid,Guid> (biggerGuid, smallerGuid);
         }
 
         private void ChangeFriendshipStatusTo(Friendship friendship, Guid currentUserId, FriendshipStatus newStatus)

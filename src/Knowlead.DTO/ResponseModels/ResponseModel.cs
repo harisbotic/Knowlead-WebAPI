@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Knowlead.DTO.ResponseModels {
-    public class ResponseModel 
-        {
+    public class ResponseModel //TODO: rename to BasicResponseModel
+    {
         public Dictionary<string, ICollection<string>> FormErrors { get; set; }
         public ICollection<string> Errors { get; set; }
         public object Object {get; set;}

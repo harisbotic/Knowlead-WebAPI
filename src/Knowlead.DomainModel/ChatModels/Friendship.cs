@@ -1,4 +1,5 @@
 using System;
+using static Knowlead.Common.Utils;
 using Knowlead.Common.DataAnnotations;
 using Knowlead.DomainModel.UserModels;
 using static Knowlead.Common.Constants.EnumStatuses;
@@ -12,7 +13,7 @@ namespace Knowlead.DomainModel.ChatModels
         public Guid ApplicationUserBiggerId { get; set; }
         public ApplicationUser ApplicationUserBigger { get; set; }
 
-        [MyRequired] //GuidBiggerThen() attribute or through model validation
+        [MyRequired]
         public Guid ApplicationUserSmallerId { get; set; }
         public ApplicationUser ApplicationUserSmaller { get; set; }
 
@@ -28,20 +29,16 @@ namespace Knowlead.DomainModel.ChatModels
 
         public Friendship(Guid currentUserId, Guid otherUserId, FriendshipStatus Status)
         {
-            if(currentUserId.Equals(otherUserId))
-                throw new Exception(); // TODO: Should be ErrorModelException
+            var bsTuple = GetBiggerSmallerGuidTuple(currentUserId, otherUserId);
 
-            var biggerGuid = (currentUserId.CompareTo(otherUserId) > 0)? currentUserId : otherUserId;
-            var smallerGuid = (currentUserId.CompareTo(otherUserId) < 0)? currentUserId : otherUserId;
-
-            this.ApplicationUserBiggerId = biggerGuid;
-            this.ApplicationUserSmallerId = smallerGuid;
+            this.ApplicationUserBiggerId = bsTuple.Item1;
+            this.ApplicationUserSmallerId = bsTuple.Item2;
 
             this.Status = Status;
             this.LastActionById = currentUserId;
         }
-        public Friendship()
-        { //Just for EF
+        public Friendship() //Just for EF
+        {
         }
     }
 }
