@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using AutoMapper;
 using Knowlead.Common;
-using Knowlead.DTO.ResponseModels;
+using Knowlead.Common.Exceptions;
 using TypeScriptBuilder;
 
 namespace Knowlead.Tools

@@ -11,6 +11,7 @@ using AspNet.Security.OpenIdConnect.Extensions;
 using AspNet.Security.OpenIdConnect.Primitives;
 using AspNet.Security.OpenIdConnect.Server;
 using Knowlead.Common;
+using Knowlead.Common.Exceptions;
 using Knowlead.DomainModel.UserModels;
 using Knowlead.DTO.ResponseModels;
 using Microsoft.AspNetCore.Authentication;

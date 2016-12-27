@@ -1,4 +1,4 @@
-namespace Knowlead.DTO.ResponseModels
+namespace Knowlead.Common.Exceptions
 {
     public class FormErrorModel : ErrorModel
     {

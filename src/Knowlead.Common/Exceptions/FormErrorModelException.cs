@@ -1,7 +1,6 @@
 using System;
-using Knowlead.DTO.ResponseModels;
 
-namespace Knowlead.BLL.Exceptions
+namespace Knowlead.Common.Exceptions
 {
     public class FormErrorModelException: Exception
     {

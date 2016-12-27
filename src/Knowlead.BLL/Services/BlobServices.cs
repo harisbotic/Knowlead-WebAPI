@@ -6,7 +6,6 @@ using Knowlead.DomainModel.BlobModels;
 using Knowlead.DomainModel.UserModels;
 using Knowlead.DTO.BlobModels;
 using Knowlead.Services.Interfaces;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.WindowsAzure.Storage;
@@ -18,16 +17,14 @@ namespace Knowlead.Services
     {
         private const string IMG_CONTAINER_NAME = "images";
         private const string FILE_CONTAINER_NAME = "files";
-        private readonly IHostingEnvironment _hostingEnvironment;
         private readonly IConfigurationRoot _config;
         private CloudStorageAccount _storageAccount;
         private CloudBlobClient _storageClient;
         private CloudBlobContainer _imageContainer;
         private CloudBlobContainer _fileContainer;
 
-        public BlobServices(IHostingEnvironment hostingEnvironment, IConfigurationRoot config)
+        public BlobServices(IConfigurationRoot config)
         {
-            _hostingEnvironment = hostingEnvironment;
             _config = config;
             
             _storageAccount = new CloudStorageAccount(new Microsoft.WindowsAzure.Storage.Auth.StorageCredentials(_config["AzureStorageAccount:accName"], _config["AzureStorageAccount:key"]), false);

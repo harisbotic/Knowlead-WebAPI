@@ -11,6 +11,7 @@ using static Knowlead.Common.Constants;
 using Knowlead.Common.HttpRequestItems;
 using Knowlead.BLL.Repositories.Interfaces;
 using System;
+using Knowlead.Common.Exceptions;
 
 namespace Knowlead.Controllers
 {

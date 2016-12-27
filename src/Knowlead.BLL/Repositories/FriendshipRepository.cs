@@ -6,10 +6,10 @@ using static Knowlead.Common.Constants;
 using Knowlead.DAL;
 using Knowlead.DomainModel.UserModels;
 using Microsoft.EntityFrameworkCore;
-using Knowlead.BLL.Exceptions;
 using System.Collections.Generic;
 using static Knowlead.Common.Constants.EnumStatuses;
 using Knowlead.DomainModel.ChatModels;
+using Knowlead.Common.Exceptions;
 
 namespace Knowlead.BLL.Repositories
 {

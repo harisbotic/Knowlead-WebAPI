@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Knowlead.Common;
 using Knowlead.DomainModel.UserModels;
 using Knowlead.DTO.LookupModels.Core;
 using Knowlead.DTO.UserModels;

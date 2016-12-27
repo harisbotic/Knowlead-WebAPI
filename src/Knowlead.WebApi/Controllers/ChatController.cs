@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Knowlead.Common.HttpRequestItems;
 using Knowlead.WebApi.Attributes;
 using Knowlead.BLL.Repositories.Interfaces;
-using Knowlead.BLL.Exceptions;
 using static Knowlead.Common.Constants;
 using Knowlead.DTO.ResponseModels;
 using Knowlead.DomainModel.ChatModels;
@@ -11,6 +10,7 @@ using Knowlead.DTO.ChatModels;
 using static Knowlead.Common.Constants.EnumActions;
 using AutoMapper;
 using System.Collections.Generic;
+using Knowlead.Common.Exceptions;
 
 namespace Knowlead.Controllers
 {

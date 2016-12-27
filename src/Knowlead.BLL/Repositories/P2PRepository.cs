@@ -14,7 +14,7 @@ using Knowlead.DTO.ResponseModels;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Knowlead.BLL.Exceptions;
+using Knowlead.Common.Exceptions;
 
 namespace Knowlead.BLL.Repositories
 {

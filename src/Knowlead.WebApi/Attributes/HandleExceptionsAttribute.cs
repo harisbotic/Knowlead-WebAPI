@@ -3,7 +3,7 @@ using Knowlead.DTO.ResponseModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.JsonPatch.Exceptions;
-using Knowlead.BLL.Exceptions;
+using Knowlead.Common.Exceptions;
 
 namespace Knowlead.WebApi.Attributes
 {

@@ -16,7 +16,7 @@ using System;
 using System.Collections.Generic;
 using Knowlead.BLL.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Knowlead.BLL.Exceptions;
+using Knowlead.Common.Exceptions;
 
 namespace Knowlead.BLL.Repositories
 {

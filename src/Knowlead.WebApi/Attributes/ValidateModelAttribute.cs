@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Knowlead.Common.Exceptions;
 using Knowlead.DTO.ResponseModels;
 using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Mvc;

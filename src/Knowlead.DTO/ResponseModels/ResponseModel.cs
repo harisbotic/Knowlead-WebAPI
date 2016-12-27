@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Knowlead.Common.Exceptions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 

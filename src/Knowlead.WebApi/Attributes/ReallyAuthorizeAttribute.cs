@@ -1,6 +1,6 @@
+using Knowlead.Common.Exceptions;
 using Microsoft.AspNetCore.Mvc.Filters;
 using static Knowlead.Common.Constants;
-using Knowlead.BLL.Exceptions;
 
 namespace Knowlead.WebApi.Attributes
 {
