@@ -11,6 +11,7 @@ using static Knowlead.Common.Constants.EnumActions;
 using AutoMapper;
 using System.Collections.Generic;
 using Knowlead.Common.Exceptions;
+using Knowlead.Services.Interfaces;
 
 namespace Knowlead.Controllers
 {
@@ -19,11 +20,13 @@ namespace Knowlead.Controllers
     {
         private readonly IFriendshipRepository _friendshipRepository;
         private readonly Auth _auth;
+        private readonly IChatServices _chatServices;
 
-        public ChatController(IFriendshipRepository friendshipRepository,
+        public ChatController(IFriendshipRepository friendshipRepository, IChatServices chatServices,
                                           Auth auth)
         {
             _friendshipRepository = friendshipRepository;
+            _chatServices = chatServices;
             _auth = auth;
         }
 
@@ -81,6 +84,15 @@ namespace Knowlead.Controllers
             return new OkObjectResult(new ResponseModel{
                 Object = Mapper.Map<List<FriendshipModel>>(friends)
             });
+        }
+
+        [HttpPost("message")]
+        public async Task<IActionResult> SendChatMessage([FromBody] NewChatMessage newChatMessage)
+        {
+            var senderId = _auth.GetUserId();
+            var tableResult = await _chatServices.SendChatMessage(senderId, newChatMessage.SendToId, newChatMessage.Message);
+            
+            return StatusCode(tableResult.HttpStatusCode);
         }
     }
 }

@@ -1,20 +1,28 @@
 using System;
 using Microsoft.WindowsAzure.Storage.Table;
+using static Knowlead.Common.Utils;
 
 namespace Knowlead.DomainModel.ChatModels
 {
     public class ChatMessage : TableEntity
     {
-        public string Message { get; private set; }
+        public string Message { get; set; }
         public Guid SenderId { get; set; }
 
-        public ChatMessage(Guid userOneId, string userTwoId, string message)
+        public ChatMessage(Guid senderId, Guid sendToId)
         {
-            PartitionKey = $"{userOneId} {userTwoId}";
-            RowKey = Guid.NewGuid().ToString();
+            var bsTuple = GetBiggerSmallerGuidTuple(senderId, sendToId);
+            this.PartitionKey = $"{bsTuple.Item1}{bsTuple.Item2}";
+            this.RowKey = Guid.NewGuid().ToString();
 
-            Message = message;
-            Timestamp = DateTime.UtcNow;
+            SenderId = senderId;
         }
+
+        public ChatMessage(Guid senderId, Guid sendToId, string message): this(senderId, sendToId)
+        {
+            Message = message;
+        }
+
+        public ChatMessage() { } // TableEntity requires parameter-less constructor
     }
 }

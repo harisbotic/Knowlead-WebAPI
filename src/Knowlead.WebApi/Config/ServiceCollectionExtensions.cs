@@ -129,6 +129,7 @@ namespace Knowlead.WebApi.Config
         {
             services.AddSingleton<MessageServices>();
             services.AddScoped<IBlobServices, BlobServices>();
+            services.AddScoped<IChatServices, ChatServices>();
             services.AddTransient<ICallServices, CallServices<MainHub>>();
 
             return services;
