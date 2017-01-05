@@ -1,6 +1,6 @@
 using System;
 using Knowlead.Common.DataAnnotations;
-using Knowlead.DomainModel.UserModels;
+using Knowlead.DTO.UserModels;
 using static Knowlead.Common.Constants.EnumStatuses;
 
 namespace Knowlead.DTO.ChatModels
@@ -9,18 +9,18 @@ namespace Knowlead.DTO.ChatModels
     {
         [MyRequired]
         public Guid ApplicationUserBiggerId { get; set; }
-        public ApplicationUser ApplicationUserBigger { get; set; }
+        public ApplicationUserModel ApplicationUserBigger { get; set; }
 
         [MyRequired]
         public Guid ApplicationUserSmallerId { get; set; }
-        public ApplicationUser ApplicationUserSmaller { get; set; }
+        public ApplicationUserModel ApplicationUserSmaller { get; set; }
 
         [MyRequired]
         public FriendshipStatus Status { get; set; }
 
         [MyRequired]
         public Guid LastActionById { get; set; }
-        public ApplicationUser LastActionBy { get; set; }
+        public ApplicationUserModel LastActionBy { get; set; }
 
         public DateTime UpdatedAt { get; set; }
         public DateTime CreatedAt { get; set; }
