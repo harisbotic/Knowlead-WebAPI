@@ -25,10 +25,14 @@ namespace Knowlead.BLL.Repositories
 
         public async Task<List<Friendship>> GetAllFriends(Guid applicationUserId, FriendshipStatus status)
         {
-            return await _context.Friendships
-                                        .Where(x => x.ApplicationUserBiggerId == applicationUserId || x.ApplicationUserSmallerId == applicationUserId)
-                                        .Where(x => x.Status == status)
-                                        .ToListAsync();
+            var query = _context.Friendships
+                        .Where(x => x.ApplicationUserBiggerId == applicationUserId || x.ApplicationUserSmallerId == applicationUserId)
+                        .Where(x => x.Status == status);
+
+            if(status == FriendshipStatus.Blocked)
+                query = _context.Friendships.Where(x => x.LastActionById == applicationUserId);
+
+            return await query.ToListAsync();
         }
 
         public async Task<Friendship> SendFriendRequest(Guid currentUserId, Guid otherUserId)
