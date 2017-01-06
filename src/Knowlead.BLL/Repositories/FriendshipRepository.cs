@@ -23,11 +23,11 @@ namespace Knowlead.BLL.Repositories
             _context = context;
         }
 
-        public async Task<List<Friendship>> GetAllFriends(Guid applicationUserId)
+        public async Task<List<Friendship>> GetAllFriends(Guid applicationUserId, FriendshipStatus status)
         {
             return await _context.Friendships
                                         .Where(x => x.ApplicationUserBiggerId == applicationUserId || x.ApplicationUserSmallerId == applicationUserId)
-                                        .Where(x => x.Status == FriendshipStatus.Accepted)
+                                        .Where(x => x.Status == status)
                                         .ToListAsync();
         }
 

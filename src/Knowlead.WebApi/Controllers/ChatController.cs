@@ -12,6 +12,7 @@ using AutoMapper;
 using System.Collections.Generic;
 using Knowlead.Common.Exceptions;
 using Knowlead.Services.Interfaces;
+using static Knowlead.Common.Constants.EnumStatuses;
 
 namespace Knowlead.Controllers
 {
@@ -78,9 +79,9 @@ namespace Knowlead.Controllers
         }
 
         [HttpGet("getallfriends"), ReallyAuthorize] //TODO: Temp endoint
-        public async Task<IActionResult> GetAllFriends()
+        public async Task<IActionResult> GetAllFriends(FriendshipStatus filter = FriendshipStatus.Accepted)
         {
-            var friends = await _friendshipRepository.GetAllFriends(_auth.GetUserId());
+            var friends = await _friendshipRepository.GetAllFriends(_auth.GetUserId(), filter);
             return new OkObjectResult(new ResponseModel{
                 Object = Mapper.Map<List<FriendshipModel>>(friends)
             });
