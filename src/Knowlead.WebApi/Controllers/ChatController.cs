@@ -79,7 +79,7 @@ namespace Knowlead.Controllers
         }
 
         [HttpGet("getallfriends"), ReallyAuthorize] //TODO: Temp endoint needs pagination
-        public async Task<IActionResult> GetAllFriends(FriendshipStatus status = FriendshipStatus.Accepted)
+        public async Task<IActionResult> GetAllFriends(FriendshipStatus? status)
         {
             var friends = await _friendshipRepository.GetAllFriends(_auth.GetUserId(), status);
             return new OkObjectResult(new ResponseModel{
