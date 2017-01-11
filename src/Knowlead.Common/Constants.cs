@@ -74,6 +74,17 @@ namespace Knowlead.Common
         }
 
         [TSClass]
+        public static class NotificationCodes //TODO: Turn into enums??
+        {
+            [TSInitialize]
+            public const string NewP2PComment = "NEW_P2P_COMMENT";
+            [TSInitialize]
+            public const string P2PExpired = "P2P_EXPIRED";
+            [TSInitialize]
+            public const string PrepareForP2P = "PREPARE_FOR_P2P";
+        }
+
+        [TSClass]
         public static class EnumStatuses
         {
             public enum UserStatus 

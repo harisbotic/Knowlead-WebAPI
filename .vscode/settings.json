@@ -17,7 +17,7 @@
         "Dockerfile": true,
         "README.md": true,
         "NuGet.Config": true,
-        "global.json": true,
+        "global.json": false,
         "run.bat": true,
         "seed.bat": true,
 

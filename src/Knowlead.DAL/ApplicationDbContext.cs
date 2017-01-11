@@ -15,75 +15,71 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
 using Microsoft.Extensions.DependencyInjection;
 using Knowlead.DomainModel.ChatModels;
+using Knowlead.DomainModel.NotificationModels;
 
 namespace Knowlead.DAL
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
     {
         private IConfigurationRoot _config;
-        public ApplicationDbContext(IConfigurationRoot config, DbContextOptions options) : base(options) 
+        public ApplicationDbContext(IConfigurationRoot config, DbContextOptions options) : base(options)
         {
             _config = config;
         }
-        //No need to put base classes in dbset
+
         #region Lookup Models
-            public DbSet<Achievement> Achievements {get; set; }
-            public DbSet<State> States {get; set; }
-            public DbSet<Country> Countries {get; set; }
-            public DbSet<FOS> Fos {get; set; }
-            public DbSet<Language> Languages {get; set; }
-            
-        #endregion 
+        public DbSet<Achievement> Achievements { get; set; }
+        public DbSet<State> States { get; set; }
+        public DbSet<Country> Countries { get; set; }
+        public DbSet<FOS> Fos { get; set; }
+        public DbSet<Language> Languages { get; set; }
+        #endregion
 
         #region Feedback Models
-            public DbSet<FeedbackClass> FeedbackClasses {get; set;}
-            public DbSet<FeedbackCourse> FeedbackCourses {get; set;}
-            public DbSet<FeedbackP2P> FeedbackP2P {get; set;}
-            public DbSet<FeedbackQuestion> FeedbackQuestions {get; set;}    
-
-        #endregion   
+        public DbSet<FeedbackClass> FeedbackClasses { get; set; }
+        public DbSet<FeedbackCourse> FeedbackCourses { get; set; }
+        public DbSet<FeedbackP2P> FeedbackP2P { get; set; }
+        public DbSet<FeedbackQuestion> FeedbackQuestions { get; set; }
+        #endregion
 
         #region User Models
-            public DbSet<ApplicationUser> ApplicationUsers { get; set; }
-            public DbSet<ApplicationUserInterest> ApplicationUserInterests { get; set; }
-            public DbSet<ApplicationUserLanguage> ApplicationUserLanguages { get; set; }
-            public DbSet<Friendship> Friendships { get; set; }
-            public DbSet<UserAchievement> UserAchievements { get; set; }
-            public DbSet<UserCertificate> UserCertificates { get; set; }
-            public DbSet<UserNotebook> UserNotebooks { get; set; }
-
-        #endregion      
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<ApplicationUserInterest> ApplicationUserInterests { get; set; }
+        public DbSet<ApplicationUserLanguage> ApplicationUserLanguages { get; set; }
+        public DbSet<Friendship> Friendships { get; set; }
+        public DbSet<UserAchievement> UserAchievements { get; set; }
+        public DbSet<UserCertificate> UserCertificates { get; set; }
+        public DbSet<UserNotebook> UserNotebooks { get; set; }
+        #endregion
 
         #region Peer to Peer
-            public DbSet<P2P> P2p { get; set; }
-            public DbSet<P2PMessage> P2PMessages { get; set; }
-            public DbSet<P2PFile> P2PFiles { get; set; }
-            public DbSet<P2PImage> P2PImages{ get; set; }
-            public DbSet<P2PLanguage> P2PLanguages { get; set; }
-        #endregion 
+        public DbSet<P2P> P2p { get; set; }
+        public DbSet<P2PMessage> P2PMessages { get; set; }
+        public DbSet<P2PFile> P2PFiles { get; set; }
+        public DbSet<P2PImage> P2PImages { get; set; }
+        public DbSet<P2PLanguage> P2PLanguages { get; set; }
+        #endregion
 
         #region Blob Models
-            public DbSet<_Blob> Blobs { get; set; }
-            public DbSet<ImageBlob> ImageBlobs { get; set; }
-            public DbSet<FileBlob> FileBlobs { get; set; }
-
+        public DbSet<_Blob> Blobs { get; set; }
+        public DbSet<ImageBlob> ImageBlobs { get; set; }
+        public DbSet<FileBlob> FileBlobs { get; set; }
         #endregion
 
         #region Call Models
-            public DbSet<_Call> Calls { get; set; }
-            public DbSet<P2PCall> P2PCalls { get; set; }
-            public DbSet<FriendCall> FriendCalls { get; set; }
+        public DbSet<_Call> Calls { get; set; }
+        public DbSet<P2PCall> P2PCalls { get; set; }
+        public DbSet<FriendCall> FriendCalls { get; set; }
+        #endregion
 
-        #endregion 
-
+        public DbSet<Notification> Notifications { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            
+
             optionsBuilder.UseNpgsql(_config["ConnectionStrings:LocalPostgreSQL"],
                                             b => b.MigrationsAssembly("Knowlead.WebApi"));
-
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -95,11 +91,11 @@ namespace Knowlead.DAL
             modelBuilder.HasPostgresExtension("uuid-ossp");
 
             /* GeoLookups */
-            modelBuilder.Entity<Country>().ToTable("Countries");  
+            modelBuilder.Entity<Country>().ToTable("Countries");
             modelBuilder.Entity<State>().ToTable("States");
 
             /* CoreLookups */
-            modelBuilder.Entity<Achievement>().ToTable("Achievements");  
+            modelBuilder.Entity<Achievement>().ToTable("Achievements");
             modelBuilder.Entity<FOS>().ToTable("FOS");
             modelBuilder.Entity<Language>().ToTable("Languages");
 
@@ -121,7 +117,7 @@ namespace Knowlead.DAL
                 .HasValue<FeedbackCourse>("Course")
                 .HasValue<FeedbackP2P>("P2P")
                 .HasValue<FeedbackQuestion>("Question");
-            
+
             /* Application User */
             modelBuilder.Entity<ApplicationUserInterest>()
                 .HasKey(t => new { t.ApplicationUserId, t.FosId });
@@ -132,14 +128,14 @@ namespace Knowlead.DAL
             /* Chat */
             modelBuilder.Entity<Friendship>()
                 .HasKey(t => new { t.ApplicationUserSmallerId, t.ApplicationUserBiggerId });
-            
+
             /* P2P */
             modelBuilder.Entity<P2PFile>()
                 .HasKey(t => new { t.P2pId, t.FileBlobId });
-           
+
             modelBuilder.Entity<P2PImage>()
                 .HasKey(t => new { t.P2pId, t.ImageBlobId });
-           
+
             modelBuilder.Entity<P2PLanguage>()
                 .HasKey(t => new { t.P2pId, t.LanguageId });
 

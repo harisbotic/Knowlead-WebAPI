@@ -58,7 +58,6 @@ namespace Knowlead.DomainModel.P2PModels
             this.P2PLanguages = new List<P2PLanguage>();
             this.P2PImages = new List<P2PImage>();
             this.P2PFiles = new List<P2PFile>();
-
         }
     }
 }

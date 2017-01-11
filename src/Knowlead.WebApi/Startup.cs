@@ -104,7 +104,7 @@ namespace Knowlead
             });
 
             // app.UseHangfireDashboard(); // Will be available under http://localhost:5000/hangfire
-            // app.UseHangfireServer();
+            app.UseHangfireServer();
 
             app.UseMvc();
         }

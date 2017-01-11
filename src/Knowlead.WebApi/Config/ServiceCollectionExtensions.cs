@@ -131,6 +131,7 @@ namespace Knowlead.WebApi.Config
             services.AddScoped<IBlobServices, BlobServices>();
             services.AddScoped<IChatServices, ChatServices>();
             services.AddTransient<ICallServices, CallServices<MainHub>>();
+            services.AddTransient<INotificationServices, NotificationServices<MainHub>>();
 
             return services;
         }
@@ -142,6 +143,7 @@ namespace Knowlead.WebApi.Config
             services.AddScoped<IP2PRepository, P2PRepository>();
             services.AddScoped<IBlobRepository, BlobRepository>();
             services.AddScoped<IFriendshipRepository, FriendshipRepository>();
+            services.AddScoped<INotificationRepository, NotificationRepository>();
 
             return services;
         }
