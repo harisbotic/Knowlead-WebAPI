@@ -32,12 +32,12 @@ namespace Knowlead.WebApi.Hubs
             await Clients.User(Context.User.Identity.Name).InvokeAsync("setConnectionId", Context.ConnectionId);
         }
 
-        public override Task OnDisconnectedAsync()
-        {
-            System.Console.WriteLine($"{Context.ConnectionId} {Context.User.Identity.Name} DISCONNECTED");
+        // public override Task OnDisconnectedAsync()
+        // {
+        //     System.Console.WriteLine($"{Context.ConnectionId} {Context.User.Identity.Name} DISCONNECTED");
             
-            return Task.CompletedTask;
-        }
+        //     return Task.CompletedTask;
+        // }
 
         public async Task Send(string message)
         {
