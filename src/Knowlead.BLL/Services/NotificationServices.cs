@@ -23,33 +23,34 @@ namespace Knowlead.Services
             _notificationRepository = notificationRepository;
         }
 
-        public Task Notify (List<Guid> userIds, String notificationType, TimeSpan delay)
+        public async Task Notify (Guid userId, String notificationType, DateTime scheduleAt)
         {
-            //Save to database
-            var notifications = _notificationRepository.NewNotification(userIds, notificationType);
-            //Fire using hangfire
-            if(TimeSpan.Equals(delay, TimeSpan.Zero))
+            await NotifyMore(new List<Guid>(){userId}, notificationType, scheduleAt);
+        }
+
+        public async Task NotifyMore (List<Guid> userIds, String notificationType, DateTime scheduleAt)
+        {
+            var notifications = await _notificationRepository.NewNotification(userIds, notificationType, scheduleAt);
+
+            if(scheduleAt.Subtract(DateTime.UtcNow).TotalSeconds < 30)
             {
-                BackgroundJob.Enqueue(
-                () => Console.WriteLine("Fire-and-forget!"));
+                await PublishNotifications(notifications, true);
             }
             else
             {
-                BackgroundJob.Schedule(
-                () => _notificationRepository.NewNotification(userIds, ""), delay);
+                BackgroundJob.Schedule<INotificationServices>(
+                (x) => x.PublishNotifications(notifications, false), scheduleAt.Subtract(DateTime.UtcNow));
             }
-
-            //needs to receive all notification and send id or whole object of those notifications to hangfire, also if its instant notification
-            //fire it imidietely with details from object, if its scheduled, read the details from database using id sent to the function
-            return Task.CompletedTask;
         }
 
-        public Task ScheduleNotifications(List<Notification> notifications)
+        public Task PublishNotifications(List<Notification> notifications, bool now = false)
         {
             foreach (var notification in notifications)
             {
-                
+                //if(now || notification.ScheduledAt.CompareTo(DateTime.UtcNow) < 0)
+                _hubContext.Clients.User(notification.ForApplicationUserId.ToString()).InvokeAsync("newNotification", notification);  
             }
+
             return Task.CompletedTask;
         }
     }

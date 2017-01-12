@@ -18,12 +18,13 @@ namespace Knowlead.BLL.Repositories
             _context = context;
         }
 
-        public async Task<List<Notification>> NewNotification(List<Guid> userIds, String notificationType)
+        public async Task<List<Notification>> NewNotification(List<Guid> userIds, String notificationType, DateTime scheduledAt)
         {
             var notifications = new List<Notification>();
             foreach (var userId in userIds)
             {
-                var notification = new Notification(userId, notificationType);
+                var notification = new Notification(userId, notificationType, scheduledAt);
+                notification.FromApplicationUserId = userId;
                 notifications.Add(notification);
                 _context.Notifications.Add(notification);
             }

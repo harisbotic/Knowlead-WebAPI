@@ -17,23 +17,24 @@ namespace Knowlead.DomainModel.NotificationModels
         public Guid ForApplicationUserId { get; set; }
         public ApplicationUser ForApplicationUser { get; set; }
         
-        [MyRequired]
         public Guid FromApplicationUserId { get; set; }
         public ApplicationUser FromApplicationUser { get; set; }
         
-        [MyRequired]
-        public int P2PId { get; set; }
+        public int? P2PId { get; set; }
         public P2P P2P { get; set; }
 
-        public DateTime? SentAt { get; set; }
+        [MyRequired]
+        public DateTime ScheduledAt { get; set; }
         public DateTime? SeenAt { get; set; }
 
-        public Notification(Guid forApplicationUser, String notificationType)
-        {
-            this.SentAt = DateTime.UtcNow;
-            
+        public Notification(Guid forApplicationUser, String notificationType, DateTime scheduledAt)
+        {   
             this.ForApplicationUserId = forApplicationUser;
             this.NotificationType = notificationType;
+            this.ScheduledAt = scheduledAt;
         }
+
+        public Notification()
+        {   }
     }
 }

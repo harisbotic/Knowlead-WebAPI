@@ -14,6 +14,7 @@ using Knowlead.WebApi.Hubs;
 using Hangfire;
 using Microsoft.Extensions.Configuration;
 using Hangfire.PostgreSql;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Knowlead.WebApi.Config
 {
@@ -104,6 +105,7 @@ namespace Knowlead.WebApi.Config
         public static IServiceCollection AddCustomSignalR(this IServiceCollection services) 
         {
             services.AddSignalR();
+            services.AddSingleton(typeof(HubLifetimeManager<>), typeof(KLHubLifetimeManager<>));
 
             return services;
         }

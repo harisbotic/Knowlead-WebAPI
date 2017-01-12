@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "Microsoft.NETCore.App": {
-      "version": "1.2.0-*",
+      "version": "1.2.0-beta-001289-00",
       "type": "platform"
     },
     "Knowlead.BLL": {
@@ -39,8 +39,8 @@
     "OpenIddict.EntityFrameworkCore": "1.0.0-*",
     "OpenIddict.Mvc": "1.0.0-*",
     "AutoMapper": "5.1.1",
-    "Hangfire.AspNetCore": "1.6.7",
-    "Hangfire.SqlServer": "1.6.7",
+    "Hangfire.AspNetCore": "1.6.8",
+    "Hangfire.SqlServer": "1.6.8",
     "Hangfire.PostgreSql": "1.4.5"
   },
 

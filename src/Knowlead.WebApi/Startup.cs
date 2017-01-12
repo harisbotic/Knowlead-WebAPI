@@ -103,7 +103,7 @@ namespace Knowlead
                 routes.MapHub<MainHub>("/mainHub");
             });
 
-            // app.UseHangfireDashboard(); // Will be available under http://localhost:5000/hangfire
+            app.UseHangfireDashboard(); // Will be available under http://localhost:5000/hangfire
             app.UseHangfireServer();
 
             app.UseMvc();
