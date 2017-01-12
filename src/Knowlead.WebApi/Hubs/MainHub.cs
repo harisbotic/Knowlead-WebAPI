@@ -73,40 +73,60 @@ namespace Knowlead.WebApi.Hubs
 
             //Start a 1 minute timer, that will send Call Rejected to both if call didn't start
         }
-        public Task CallRespond(Guid callId, bool accepted) //callId -> callModelId
+
+        private void GetPeerInfoModel(Guid callId, out PeerInfoModel peerInfoModel, out _CallModel callModel)
         {
-            var callModel = _callServices.GetCall(callId);
+            callModel = _callServices.GetCall(callId);
 
             if(callModel == null)
-                return Task.CompletedTask;
+            {
+                peerInfoModel = null;
+                return;
+            }
 
-            var peerInfoModel = callModel.Peers.Where(x => x.PeerId == _auth.GetUserId()).FirstOrDefault();
+            peerInfoModel = callModel.Peers.Where(x => x.PeerId == _auth.GetUserId()).FirstOrDefault();
 
             if(peerInfoModel == null)
+                return;
+        }
+
+        public Task CallRespond(Guid callId, bool accepted) //callId -> callModelId
+        {
+            PeerInfoModel peerInfoModel;
+            _CallModel callModel;
+            GetPeerInfoModel(callId, out peerInfoModel, out callModel);
+            if (peerInfoModel == null || callModel == null)
                 return Task.CompletedTask;
-
-            peerInfoModel.UpdateInfo(connectionId: Context.ConnectionId);
+            peerInfoModel.ConnectionId = Context.ConnectionId;
             peerInfoModel.UpdateStatus(accepted);
-
             _callServices.CallModelUpdate(callModel);
             
             return Task.CompletedTask;
         }
 
-        public Task SetSDP(Guid callId, String sdp) //callId -> callModelId
+        public Task AddSDP(Guid callId, String sdp) //callId -> callModelId
         {
-            var callModel = _callServices.GetCall(callId);
-
-            if(callModel == null)
+            PeerInfoModel peerInfoModel;
+            _CallModel callModel;
+            GetPeerInfoModel(callId, out peerInfoModel, out callModel);
+            if (peerInfoModel == null || callModel == null)
                 return Task.CompletedTask;
 
-            var peerInfoModel = callModel.Peers.Where(x => x.PeerId == _auth.GetUserId()).FirstOrDefault();
+            peerInfoModel.sdps.Add(sdp);
+            _callServices.CallModelUpdate(callModel);
+            
+            return Task.CompletedTask;
+        }
 
-            if(peerInfoModel == null)
+        public Task ClearSDP(Guid callId) //callId -> callModelId
+        {
+            PeerInfoModel peerInfoModel;
+            _CallModel callModel;
+            GetPeerInfoModel(callId, out peerInfoModel, out callModel);
+            if (peerInfoModel == null || callModel == null)
                 return Task.CompletedTask;
 
-            peerInfoModel.UpdateInfo(sdp: sdp);
-
+            peerInfoModel.sdps.Clear();
             _callServices.CallModelUpdate(callModel);
             
             return Task.CompletedTask;

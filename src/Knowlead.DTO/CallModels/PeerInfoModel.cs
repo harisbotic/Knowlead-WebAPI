@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Knowlead.DTO.UserModels;
 using static Knowlead.Common.Constants.EnumStatuses;
 
@@ -9,29 +10,10 @@ namespace Knowlead.DTO.CallModels
         public Guid PeerId { get; private set; }
         public ApplicationUserModel Peer { get; private set; }
 
-        public String ConnectionId { get; private set; }
-        public String SDP { get; private set; }
+        public String ConnectionId { get; set; }
+        public List<String> sdps { get; private set; } = new List<String>();
 
         public PeerStatus Status { get; private set; }
-
-        public bool UpdateInfo(String connectionId = null, String sdp = null)
-        {
-            bool changes = false;
-
-            if(connectionId != null)
-            {
-                ConnectionId = connectionId;
-                changes = true;
-            }
-            
-            if(sdp != null)
-            {
-                SDP = sdp;
-                changes = true;
-            }
-            
-            return changes;
-        }
 
         public bool UpdateStatus(PeerStatus peerStatus)
         {
