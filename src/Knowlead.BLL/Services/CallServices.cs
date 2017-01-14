@@ -20,9 +20,22 @@ namespace Knowlead.Services
             _hubContext = hubContext;
         }
 
-        public void AddCall(_CallModel callModel)
+        public async void StartCall(_CallModel callModel)
         {
             Calls.Add(callModel);
+
+            var json = JsonConvert.SerializeObject(callModel, new JsonSerializerSettings 
+            { 
+                ContractResolver = new CamelCasePropertyNamesContractResolver() 
+            });
+
+            await _hubContext.Clients.Client(callModel.Peers.FirstOrDefault().ConnectionId).InvokeAsync("startCall", json);
+
+            foreach (var peer in callModel.Peers)
+            {
+                if(peer.PeerId != callModel.Caller.PeerId)
+                    await _hubContext.Clients.User(peer.PeerId.ToString()).InvokeAsync("callInvitation", json);
+            }
         }
 
         public _CallModel GetCall(Guid callModelId)
@@ -30,9 +43,14 @@ namespace Knowlead.Services
             return Calls.Where(x => x.CallId == callModelId).FirstOrDefault();
         }
 
-        public PeerInfoModel GetPeer(Guid callModelId, Guid userId)
+        public PeerInfoModel GetPeer(_CallModel callModel, Guid userId)
         {
-            return GetCall(callModelId).Peers.Where(x => x.PeerId == userId).FirstOrDefault();
+            return callModel.Peers.Where(x => x.PeerId == userId).FirstOrDefault();
+        }
+
+        public void CloseCall(_CallModel callModel)
+        {
+            Calls.Remove(callModel);
         }
 
         public async void CallModelUpdate(_CallModel callModel)
@@ -48,6 +66,25 @@ namespace Knowlead.Services
                     peer.Status == PeerStatus.Rejected)
                     await _hubContext.Clients.Client(peer.ConnectionId).InvokeAsync("callModelUpdate", json);
             }
+        }
+
+        public bool RemoveConnectionFromCall(string connectionId)
+        {
+            foreach (var call in Calls)
+                foreach (var peer in call.Peers)
+                    if(peer.ConnectionId == connectionId)
+                    {
+                        peer.UpdateStatus(PeerStatus.Disconnected);
+                        peer.ConnectionId = null;
+                        peer.sdps.Clear();
+
+                        if(call.Peers.Count == 0)
+                            CloseCall(call);
+
+                        return true;
+                    }
+            
+            return false;
         }
     }
 }

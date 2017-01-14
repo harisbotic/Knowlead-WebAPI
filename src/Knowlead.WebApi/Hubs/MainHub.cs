@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Knowlead.BLL.Repositories.Interfaces;
 using Knowlead.Common.HttpRequestItems;
@@ -32,12 +31,14 @@ namespace Knowlead.WebApi.Hubs
             await Clients.User(Context.User.Identity.Name).InvokeAsync("setConnectionId", Context.ConnectionId);
         }
 
-        // public override Task OnDisconnectedAsync()
-        // {
-        //     System.Console.WriteLine($"{Context.ConnectionId} {Context.User.Identity.Name} DISCONNECTED");
+        public override Task OnDisconnectedAsync(Exception e)
+        {
+            System.Console.WriteLine($"{Context.ConnectionId} {Context.User.Identity.Name} DISCONNECTED");
             
-        //     return Task.CompletedTask;
-        // }
+            _callServices.RemoveConnectionFromCall(Context.ConnectionId);
+
+            return Task.CompletedTask;
+        }
 
         public async Task Send(string message)
         {
@@ -51,65 +52,44 @@ namespace Knowlead.WebApi.Hubs
             await Clients.All.InvokeAsync("notify", e);
         }
 
-        public async Task CallP2p(int p2pId)
+        public async Task StartP2pCall(int p2pId)
         {
             Guid callerId = _auth.GetUserId();
 
             var p2p = await _p2pRepo.GetP2PTemp(p2pId);
 
-            var p2pCallModel = new P2PCallModel(p2pId, callerId, Context.ConnectionId);
-            p2pCallModel.Peers.Add(new PeerInfoModel(p2p.ScheduledWithId.GetValueOrDefault()));
+            //Is he related to this p2p
+            if(!p2p.CreatedById.Equals(callerId) && !p2p.ScheduledWithId.GetValueOrDefault().Equals(callerId))
+                return;
 
-            _callServices.AddCall(p2pCallModel);
+            var p2pCallModel = new P2PCallModel(p2p, callerId, Context.ConnectionId);
 
-            var json = JsonConvert.SerializeObject(p2pCallModel, new JsonSerializerSettings 
-            { 
-                ContractResolver = new CamelCasePropertyNamesContractResolver() 
-            });
-
-            //TODO: make a function which will call all peers in call
-            await Clients.User(p2p.ScheduledWith.UserName).InvokeAsync("receiveCall",json);
-            await Clients.Client(Context.ConnectionId).InvokeAsync("receiveCall",json);
-
-            //Start a 1 minute timer, that will send Call Rejected to both if call didn't start
+            _callServices.StartCall(p2pCallModel);
+            //TODO: Start a 1 minute timer, that will send CallCanceled to both if call didn't start
         }
 
-        private void GetPeerInfoModel(Guid callId, out PeerInfoModel peerInfoModel, out _CallModel callModel)
+        public Task CallRespond(Guid callModelId, bool accepted)
         {
-            callModel = _callServices.GetCall(callId);
-
-            if(callModel == null)
-            {
-                peerInfoModel = null;
-                return;
-            }
-
-            peerInfoModel = callModel.Peers.Where(x => x.PeerId == _auth.GetUserId()).FirstOrDefault();
+            var callModel = _callServices.GetCall(callModelId);
+            var peerInfoModel = _callServices.GetPeer(callModel, _auth.GetUserId());
 
             if(peerInfoModel == null)
-                return;
-        }
-
-        public Task CallRespond(Guid callId, bool accepted) //callId -> callModelId
-        {
-            PeerInfoModel peerInfoModel;
-            _CallModel callModel;
-            GetPeerInfoModel(callId, out peerInfoModel, out callModel);
-            if (peerInfoModel == null || callModel == null)
                 return Task.CompletedTask;
+
             peerInfoModel.ConnectionId = Context.ConnectionId;
             peerInfoModel.UpdateStatus(accepted);
+
             _callServices.CallModelUpdate(callModel);
             
             return Task.CompletedTask;
         }
 
-        public Task AddSDP(Guid callId, String sdp) //callId -> callModelId
+        public Task AddSDP(Guid callModelId, String sdp)
         {
-            PeerInfoModel peerInfoModel;
-            _CallModel callModel;
-            GetPeerInfoModel(callId, out peerInfoModel, out callModel);
-            if (peerInfoModel == null || callModel == null)
+            var callModel = _callServices.GetCall(callModelId);
+            var peerInfoModel = _callServices.GetPeer(callModel, _auth.GetUserId());
+
+            if(peerInfoModel == null)
                 return Task.CompletedTask;
 
             peerInfoModel.sdps.Add(sdp);
@@ -118,12 +98,12 @@ namespace Knowlead.WebApi.Hubs
             return Task.CompletedTask;
         }
 
-        public Task ClearSDP(Guid callId) //callId -> callModelId
+        public Task ClearSDP(Guid callModelId)
         {
-            PeerInfoModel peerInfoModel;
-            _CallModel callModel;
-            GetPeerInfoModel(callId, out peerInfoModel, out callModel);
-            if (peerInfoModel == null || callModel == null)
+            var callModel = _callServices.GetCall(callModelId);
+            var peerInfoModel = _callServices.GetPeer(callModel, _auth.GetUserId());
+
+            if(peerInfoModel == null)
                 return Task.CompletedTask;
 
             peerInfoModel.sdps.Clear();
@@ -132,9 +112,9 @@ namespace Knowlead.WebApi.Hubs
             return Task.CompletedTask;
         }
 
-        public String GetCallModel(Guid callId)
+        public String GetCallModel(Guid callModelId) //Is this used?
         {
-            var callModel = _callServices.GetCall(callId);
+            var callModel = _callServices.GetCall(callModelId);
 
             var json = JsonConvert.SerializeObject(callModel, new JsonSerializerSettings 
             { 

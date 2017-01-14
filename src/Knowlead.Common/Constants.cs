@@ -100,7 +100,7 @@ namespace Knowlead.Common
             //Call Status ? Paused, InProgress, WaitingFor
             public enum PeerStatus 
             {
-                Accepted = 0, Rejected = 1, Waiting = 2
+                Accepted = 0, Rejected = 1, Waiting = 2, Disconnected = 3
             }
 
             public enum FriendshipStatus 

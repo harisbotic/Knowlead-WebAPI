@@ -5,9 +5,11 @@ namespace Knowlead.Services.Interfaces
 {
     public interface ICallServices
     {
-        void AddCall(_CallModel callModel);
+        void StartCall(_CallModel callModel);
         _CallModel GetCall(Guid callModelId);
-        PeerInfoModel GetPeer(Guid callModelId, Guid userId);
+        PeerInfoModel GetPeer(_CallModel callModel, Guid userId);
+        void CloseCall(_CallModel callModel);
         void CallModelUpdate(_CallModel callModel);
+        bool RemoveConnectionFromCall(String connectionId);
     }
 }
