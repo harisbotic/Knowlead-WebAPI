@@ -12,6 +12,9 @@
     "Knowlead.BLL": {
       "target": "project"
     },
+    "Knowlead.Common": {
+      "target": "project"
+    },
     "Knowlead.DAL": {
       "target": "project"
     },
@@ -25,6 +28,7 @@
       "target": "project"
     },
     "TypeScriptBuilder": "0.1.10",
+    "Microsoft.EntityFrameworkCore.Design": "1.1.0",
     "AutoMapper": "5.1.1"
   },
   "frameworks": {
