@@ -27,8 +27,7 @@ namespace Knowlead.WebApi.Hubs
         public async override Task OnConnectedAsync()
         {
             System.Console.WriteLine($"{Context.ConnectionId} {Context.User.Identity.Name} CONNECTED");
- 
-            await Clients.User(Context.User.Identity.Name).InvokeAsync("setConnectionId", Context.ConnectionId);
+            await Clients.Client(Context.ConnectionId).InvokeAsync("setConnectionId", Context.ConnectionId);
         }
 
         public override Task OnDisconnectedAsync(Exception e)
