@@ -152,20 +152,20 @@ namespace Knowlead.Tools
                 context = ScriptUtils.InitializeContext();
             
             /** Seeding roles and roleclaims **/
-            Console.WriteLine("Seeding roles...");
-            var roles = GetConstants(typeof(UserRoles));
-            foreach (var role in roles)
-            {
-                var exists = context.Roles.Where(x => x.Name.Equals(role)).Count() > 0;
-                if(!exists)
-                {
-                    var r = new IdentityRole<Guid>(role);
-                    r.NormalizedName = role.Normalize();
-                    context.Roles.Add(r);
-                }
-            }
-            context.SaveChanges();
-            Console.WriteLine("Done seeding roles");
+            // Console.WriteLine("Seeding roles...");
+            // var roles = GetConstants(typeof(UserRoles));
+            // foreach (var role in roles)
+            // {
+            //     var exists = context.Roles.Where(x => x.Name.Equals(role)).Count() > 0;
+            //     if(!exists)
+            //     {
+            //         var r = new IdentityRole<Guid>(role);
+            //         r.NormalizedName = role.Normalize();
+            //         context.Roles.Add(r);
+            //     }
+            // }
+            // context.SaveChanges();
+            // Console.WriteLine("Done seeding roles");
             /** Done seeding roles **/
 
             ISeeder seeder = SeederFactory(entityType, context, data.ImportConfig, verbose);

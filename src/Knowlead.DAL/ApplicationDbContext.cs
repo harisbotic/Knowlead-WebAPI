@@ -16,6 +16,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL;
 using Microsoft.Extensions.DependencyInjection;
 using Knowlead.DomainModel.ChatModels;
 using Knowlead.DomainModel.NotificationModels;
+using Knowlead.DomainModel.StatisticsModels;
 
 namespace Knowlead.DAL
 {
@@ -70,6 +71,10 @@ namespace Knowlead.DAL
         public DbSet<_Call> Calls { get; set; }
         public DbSet<P2PCall> P2PCalls { get; set; }
         public DbSet<FriendCall> FriendCalls { get; set; }
+        #endregion
+
+        #region Statistics Models
+        public DbSet<PlatformFeedback> PlatformFeedbacks { get; set; }
         #endregion
 
         public DbSet<Notification> Notifications { get; set; }
