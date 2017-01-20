@@ -64,7 +64,6 @@ namespace Knowlead
             loggerFactory.AddDebug();
             app.UseCors("AllowAll");
             app.UseIdentity();
-            //app.UseOAuthValidation();
 
             app.Use(async (context, next) =>
             {

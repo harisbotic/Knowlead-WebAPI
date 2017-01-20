@@ -112,7 +112,7 @@ namespace Microsoft.AspNetCore.SignalR
 
             return InvokeAllWhere(methodName, args, connection =>
             {
-                return userIdGuid.Equals(connection.User.Claims
+                return userId.Equals(connection.User.Claims
                                                     .Where(c => c.Type == ClaimTypes.NameIdentifier)
                                                         .Select(c => c.Value).FirstOrDefault());
             });

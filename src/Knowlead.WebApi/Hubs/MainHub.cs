@@ -48,7 +48,7 @@ namespace Knowlead.WebApi.Hubs
                 title = "Title",
                 subtitle = "Subtitle"
             };             
-            await Clients.All.InvokeAsync("notify", e);
+            await Clients.User(_auth.GetUserId().ToString()).InvokeAsync("notify", e);
         }
 
         public async Task StartP2pCall(int p2pId)

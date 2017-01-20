@@ -118,5 +118,19 @@ namespace Knowlead.Common
                 RemoveFriend = 4, BlockUser = 5, UnblockUser = 6
             }
         }
+
+        [TSClass]
+        public static class CustomClaimTypes
+        {
+            [TSInitialize]
+            public const string Permission = "CustomClaimTypes.Permission";
+        }
+
+        [TSClass]
+        public static class UserRoles
+        {
+            [TSInitialize]
+            public const string KLUser = "UserRoles.KLUser";
+        }
     }
 }

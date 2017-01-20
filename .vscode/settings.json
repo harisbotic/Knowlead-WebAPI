@@ -20,6 +20,7 @@
         "global.json": true,
         "run.bat": true,
         "seed.bat": true,
+        "update.bat": true,
 
         //Git things
         ".gitignore": true

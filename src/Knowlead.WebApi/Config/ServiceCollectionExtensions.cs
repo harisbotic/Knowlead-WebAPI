@@ -15,6 +15,7 @@ using Hangfire;
 using Microsoft.Extensions.Configuration;
 using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.Identity;
 
 namespace Knowlead.WebApi.Config
 {
@@ -98,6 +99,8 @@ namespace Knowlead.WebApi.Config
                 .AddEntityFrameworkStores<ApplicationDbContext, Guid>()
                 .AddDefaultTokenProviders()
                 .AddErrorDescriber<CustomIdentityErrorDescriber>();
+
+            services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, AppClaimsPrincipalFactory>();
 
             return services;
         }
