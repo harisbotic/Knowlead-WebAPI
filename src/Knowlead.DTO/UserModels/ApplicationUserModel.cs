@@ -23,8 +23,9 @@ namespace Knowlead.DTO.UserModels
         public string Timezone { get; set; }
         public string AboutMe { get; set; }
 
+
+        public Guid? ProfilePictureId { get; set; }
         public ImageBlobModel ProfilePicture { get; set; }
-        public Guid ProfilePictureId { get; set; }
 
         public int? CountryId { get; set; }
         public CountryModel Country { get; set; }

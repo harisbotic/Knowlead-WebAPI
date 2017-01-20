@@ -22,8 +22,9 @@ namespace Knowlead.DomainModel.UserModels
         public string Timezone { get; set; }
         public string AboutMe { get; set; }
 
+
+        public Guid? ProfilePictureId { get; set; }
         public ImageBlob ProfilePicture { get; set; }
-        public Guid ProfilePictureId { get; set; }
 
         public int? CountryId { get; set; }
         public Country Country { get; set; }
