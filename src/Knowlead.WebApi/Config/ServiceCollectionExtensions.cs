@@ -146,6 +146,7 @@ namespace Knowlead.WebApi.Config
             services.AddScoped<IBlobRepository, BlobRepository>();
             services.AddScoped<IFriendshipRepository, FriendshipRepository>();
             services.AddScoped<INotificationRepository, NotificationRepository>();
+            services.AddScoped<IStatisticsRepository, StatisticsRepository>();
 
             return services;
         }
