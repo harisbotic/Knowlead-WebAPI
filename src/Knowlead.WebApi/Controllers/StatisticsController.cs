@@ -11,20 +11,23 @@ namespace Knowlead.Controllers
     [Route("api/[controller]")]
     public class StatisticsController : Controller
     {
-        IStatisticsRepository _statisticsRepository;
-        Auth _auth;
+        private readonly IStatisticsRepository _statisticsRepository;
+        private readonly Auth _auth;
+
         public StatisticsController(IStatisticsRepository statisticsRepository, Auth auth)
         {
-            this._statisticsRepository = statisticsRepository;
-            this._auth = auth;
+            _statisticsRepository = statisticsRepository;
+            _auth = auth;
         }
         
         [HttpPost("feedback"), ReallyAuthorize]
-        public async Task<IActionResult> Feedback([FromBody]PlatformFeedbackModel feedback)
+        public async Task<IActionResult> Feedback([FromBody]PlatformFeedbackModel feedbackModel)
         {
-            return new OkObjectResult(new ResponseModel()
+            var platformFeedback = await _statisticsRepository.SubmitPlatformFeedback(feedbackModel.Feedback, _auth.GetUserId());
+
+            return Ok(new ResponseModel()
             {
-                Object = await this._statisticsRepository.SubmitFeedback(feedback.Text, this._auth.GetUserId())
+                Object = AutoMapper.Mapper.Map<PlatformFeedbackModel>(platformFeedback)
             });
         }
     }

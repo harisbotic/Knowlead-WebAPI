@@ -8,18 +8,21 @@ namespace Knowlead.BLL.Repositories
 {
     public class StatisticsRepository : IStatisticsRepository
     {
-        ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
+        
         public StatisticsRepository(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        async Task<PlatformFeedback> IStatisticsRepository.SubmitFeedback(string text, Guid ApplicationUserId)
+        public async Task<PlatformFeedback> SubmitPlatformFeedback(String feedback, Guid ApplicationUserId)
         {
-            var temp = new PlatformFeedback() { Text = text, SubmittedById = ApplicationUserId };
-            _context.PlatformFeedbacks.Add(temp);
+            var platformFeedback = new PlatformFeedback() { Feedback = feedback, SubmittedById = ApplicationUserId };
+            
+            _context.PlatformFeedbacks.Add(platformFeedback);
             await _context.SaveChangesAsync();
-            return temp;
+            
+            return platformFeedback;
         }
     }
 }

@@ -7,9 +7,10 @@ namespace Knowlead.DomainModel.StatisticsModels
     public class PlatformFeedback
     {
         [Key]
-        public int FeedbackId { get; set; }
-        public Guid SubmittedById { get; set; }
-        public String Text { get; set; }
+        public Guid PlatformFeedbackId { get; set; }
+        public String Feedback { get; set; }
+        
         public ApplicationUser SubmittedBy { get; set; }
+        public Guid SubmittedById { get; set; }
     }
 }

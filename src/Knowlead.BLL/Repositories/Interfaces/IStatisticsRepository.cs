@@ -6,6 +6,6 @@ namespace Knowlead.BLL.Repositories.Interfaces
 {
     public interface IStatisticsRepository
     {
-        Task<PlatformFeedback> SubmitFeedback(String text, Guid ApplicationUserId);
+        Task<PlatformFeedback> SubmitPlatformFeedback(String feedback, Guid ApplicationUserId);
     }
 }
