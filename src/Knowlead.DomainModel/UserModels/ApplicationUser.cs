@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using Knowlead.Common.DataAnnotations;
+using Knowlead.DomainModel.BlobModels;
 using Knowlead.DomainModel.LookupModels.Core;
 using Knowlead.DomainModel.LookupModels.Geo;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -21,6 +22,8 @@ namespace Knowlead.DomainModel.UserModels
         public string Timezone { get; set; }
         public string AboutMe { get; set; }
 
+        public ImageBlob ProfilePicture { get; set; }
+        public Guid ProfilePictureId { get; set; }
 
         public int? CountryId { get; set; }
         public Country Country { get; set; }
