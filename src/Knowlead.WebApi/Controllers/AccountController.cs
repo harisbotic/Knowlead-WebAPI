@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using Knowlead.WebApi.Attributes;
 using Knowlead.DTO.ResponseModels;
 using Knowlead.Common.Attributes;
 using Microsoft.AspNetCore.Authorization;
@@ -28,6 +27,7 @@ namespace Knowlead.Controllers
         }
 
         [HttpGet("{userId}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetApplicationUserById(Guid userId, bool includeDetails = true)
         {
             var user = await _accountRepository.GetApplicationUserById(userId, includeDetails);
@@ -41,12 +41,14 @@ namespace Knowlead.Controllers
         }
 
         [HttpPost("register"), ValidateModel]
+        [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] RegisterUserModel userModel)
         {
             return (await _accountRepository.RegisterApplicationUserAsync(userModel));
         }
 
-        [HttpGet("me"), ReallyAuthorize]
+        [HttpGet("me")]
+        [Authorize(Policy = Policies.RegisteredUser)]
         public async Task<IActionResult> me()
         {
             var applicationUser = await _auth.GetUser(true);
@@ -57,14 +59,15 @@ namespace Knowlead.Controllers
             });
         }
 
-        [HttpPost("confirmEmail"), ValidateModel] //TODO: rename to confirmemail
+        [HttpPost("confirmEmail"), ValidateModel]
         [AllowAnonymous]
         public async Task<IActionResult> ConfirmEmail([FromBody] ConfirmEmailModel confirmEmailModel)
         {
             return (await _accountRepository.ConfirmEmail(confirmEmailModel));
         }
 
-        [HttpPatch("details"), ReallyAuthorize, ValidateModel]
+        [HttpPatch("details"), ValidateModel]
+        [Authorize]
         public async Task<IActionResult> Details([FromBody] JsonPatchDocument<ApplicationUserModel> userDetailsPatch)
         {
             var currentUser = await _auth.GetUser(true);

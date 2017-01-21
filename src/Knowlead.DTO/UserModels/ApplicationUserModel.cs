@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using Knowlead.Common.DataAnnotations;
+using Knowlead.DTO.BlobModels;
 using Knowlead.DTO.LookupModels.Core;
 using Knowlead.DTO.LookupModels.Geo;
 using static Knowlead.Common.Constants.EnumStatuses;
@@ -22,6 +23,9 @@ namespace Knowlead.DTO.UserModels
         public string Timezone { get; set; }
         public string AboutMe { get; set; }
 
+
+        public Guid? ProfilePictureId { get; set; }
+        public ImageBlobModel ProfilePicture { get; set; }
 
         public int? CountryId { get; set; }
         public CountryModel Country { get; set; }

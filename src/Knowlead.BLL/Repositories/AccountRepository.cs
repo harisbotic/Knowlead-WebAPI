@@ -76,6 +76,17 @@ namespace Knowlead.BLL.Repositories
             forManualPatch.Add(nameof(ApplicationUserModel.Interests), applicationUser.ApplicationUserInterests);
             applicationUserPatch.CustomApplyTo(applicationUserModel, forManualPatch, applicationUser);
             
+            //TODO: These checkings should be in service, or another place ment for ApplicationUserValidations
+            if(applicationUserModel.ProfilePictureId != null && !applicationUserModel.ProfilePictureId.Equals(applicationUser?.ProfilePictureId))
+            {
+                var imageBlob = _context.ImageBlobs
+                                    .Where(x => x.BlobId == applicationUserModel.ProfilePictureId)
+                                    .FirstOrDefault();
+
+                if(imageBlob == null)
+                    return new BadRequestObjectResult(new ResponseModel(new FormErrorModel(nameof(ApplicationUserModel.ProfilePictureId), ErrorCodes.IncorrectValue)));
+            }
+
             if(applicationUserModel.StateId != null && applicationUserModel.StateId != applicationUser?.StateId)
             {
                 var newState = _context.States

@@ -6,6 +6,6 @@ namespace Knowlead.DTO.StatisticsModels
     public class PlatformFeedbackModel
     {
         [MyRequired]
-        public String Text { get; set; }
+        public String Feedback { get; set; }
     }
 }

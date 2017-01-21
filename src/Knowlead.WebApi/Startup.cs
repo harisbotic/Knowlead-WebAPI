@@ -49,12 +49,12 @@ namespace Knowlead
             services.AddAutoMapper();
             services.AddCustomServices();
             services.AddCustomizedMvc();
+            services.AddCustomPolicies();
             services.AddCustomSignalR();
             services.AddDbContext();
             services.AddHangfire(_config);
             services.AddIdentityFramework();
             services.AddCustomOpenIddict();
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

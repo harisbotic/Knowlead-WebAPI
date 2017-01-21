@@ -127,6 +127,13 @@ namespace Knowlead.Common
         }
 
         [TSClass]
+        public static class Policies
+        {
+            [TSInitialize]
+            public const string RegisteredUser = "Policies.RegisteredUser";
+        }
+
+        [TSClass]
         public static class UserRoles
         {
             [TSInitialize]

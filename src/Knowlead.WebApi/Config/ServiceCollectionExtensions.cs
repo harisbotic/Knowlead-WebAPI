@@ -15,33 +15,43 @@ using Hangfire;
 using Microsoft.Extensions.Configuration;
 using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
+using static Knowlead.Common.Constants;
 
 namespace Knowlead.WebApi.Config
 {
     public static class ServiceCollectionExtensions
     {
-    
         public static IServiceCollection AddCustomizedMvc(this IServiceCollection services)
         {
-                services.AddMvc(options =>
-                {
-                    options.Filters.Add(new HandleExceptionsAttribute());
-                    
-                })
-                .AddJsonOptions(config => 
-                {
-                    config.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-                });
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(new HandleExceptionsAttribute());
                 
-                services.Configure<IdentityOptions>(options=>
-                {
-                    options.Cookies.ApplicationCookie.LoginPath = null;
-                });
-    
+            })
+            .AddJsonOptions(config => 
+            {
+                config.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            });
+            
+            services.Configure<IdentityOptions>(options=>
+            {
+                options.Cookies.ApplicationCookie.LoginPath = null;
+            });
+
             return services;
         }
 
+        public static IServiceCollection AddCustomPolicies(this IServiceCollection services)
+        {
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(Policies.RegisteredUser,
+                    policyBuilder => policyBuilder.RequireClaim(ClaimTypes.GivenName));
+            });
+                
+            return services;
+        }
 
         // Register the OpenIddict services, including the default Entity Framework stores.
         public static IServiceCollection AddCustomOpenIddict(this IServiceCollection services) 
@@ -84,7 +94,6 @@ namespace Knowlead.WebApi.Config
             return services;
         }
 
-
         public static IServiceCollection AddIdentityFramework(this IServiceCollection services)
         {
             services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(config =>
@@ -98,13 +107,19 @@ namespace Knowlead.WebApi.Config
             })
                 .AddEntityFrameworkStores<ApplicationDbContext, Guid>()
                 .AddDefaultTokenProviders()
-                .AddErrorDescriber<CustomIdentityErrorDescriber>();
+                .AddErrorDescriber<CustomIdentityErrorDescriber>()
+                .AddClaimsPrincipalFactory<AppClaimsPrincipalFactory>();
 
-            services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, AppClaimsPrincipalFactory>();
+                services.Configure<IdentityOptions>(options =>
+                {
+                    options.Cookies.ApplicationCookie.Events = new CustomCookieAuthenticationEvents();
+                    // options.Cookies.ApplicationCookie.AutomaticChallenge = false;
+                });
+
+            // services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, AppClaimsPrincipalFactory>();
 
             return services;
         }
-
         public static IServiceCollection AddCustomSignalR(this IServiceCollection services) 
         {
             services.AddSignalR();
@@ -129,7 +144,6 @@ namespace Knowlead.WebApi.Config
             return services;
         }
 
-
         public static IServiceCollection AddCustomServices(this IServiceCollection services)
         {
             services.AddSingleton<MessageServices>();
@@ -141,7 +155,6 @@ namespace Knowlead.WebApi.Config
             return services;
         }
 
-        // Register Repository dependencies
         public static IServiceCollection AddRepositories(this IServiceCollection services)
         {
             services.AddScoped<IAccountRepository, AccountRepository>();
