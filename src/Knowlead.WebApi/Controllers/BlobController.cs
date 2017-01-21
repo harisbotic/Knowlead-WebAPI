@@ -2,16 +2,18 @@ using System.Threading.Tasks;
 using Knowlead.Common.Attributes;
 using Microsoft.AspNetCore.Mvc;
 using Knowlead.Common.HttpRequestItems;
-using Knowlead.WebApi.Attributes;
 using Microsoft.AspNetCore.Http;
 using System.Linq;
 using System;
 using Knowlead.Services.Interfaces;
 using Knowlead.BLL.Repositories.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using static Knowlead.Common.Constants;
 
 namespace Knowlead.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize(Policy = Policies.RegisteredUser)]
     public class BlobController : Controller
     {
         private readonly static string[] ImageFileExtensions = {".jpg", ".jpeg", ".gif", ".png"};
@@ -27,7 +29,7 @@ namespace Knowlead.Controllers
             _auth = auth;
         }
 
-        [HttpPost("upload"), ReallyAuthorize, ValidateModel]
+        [HttpPost("upload"), ValidateModel]
         public async Task<IActionResult> UploadFile(IFormFile file)
         {
             var applicationUser = await _auth.GetUser();
@@ -48,7 +50,7 @@ namespace Knowlead.Controllers
             }
         }
 
-        [HttpDelete("delete/{filename}"), ReallyAuthorize]
+        [HttpDelete("delete/{filename}")]
         public async Task<IActionResult> Delete(Guid filename)
         {
             var applicationUser = await _auth.GetUser();

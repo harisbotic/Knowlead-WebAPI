@@ -3,8 +3,9 @@ using Knowlead.BLL.Repositories.Interfaces;
 using Knowlead.Common.HttpRequestItems;
 using Knowlead.DTO.ResponseModels;
 using Knowlead.DTO.StatisticsModels;
-using Knowlead.WebApi.Attributes;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static Knowlead.Common.Constants;
 
 namespace Knowlead.Controllers
 {
@@ -20,7 +21,7 @@ namespace Knowlead.Controllers
             _auth = auth;
         }
         
-        [HttpPost("feedback"), ReallyAuthorize]
+        [HttpPost("feedback"), Authorize(Policy = Policies.RegisteredUser)]
         public async Task<IActionResult> Feedback([FromBody]PlatformFeedbackModel feedbackModel)
         {
             var platformFeedback = await _statisticsRepository.SubmitPlatformFeedback(feedbackModel.Feedback, _auth.GetUserId());

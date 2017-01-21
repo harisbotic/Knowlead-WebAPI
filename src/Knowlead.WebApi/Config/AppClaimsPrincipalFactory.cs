@@ -24,7 +24,7 @@ public class AppClaimsPrincipalFactory : UserClaimsPrincipalFactory<ApplicationU
         var claims = new List<Claim>();
 
         if(user.Name != null)
-            claims.Add(new Claim(ClaimTypes.Name, user.Name));
+            claims.Add(new Claim(ClaimTypes.GivenName, user.Name));
 
         if(user.Surname != null)
             claims.Add(new Claim(ClaimTypes.Name, user.Surname));

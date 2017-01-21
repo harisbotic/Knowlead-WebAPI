@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Knowlead.Common.HttpRequestItems;
-using Knowlead.WebApi.Attributes;
 using Knowlead.BLL.Repositories.Interfaces;
 using static Knowlead.Common.Constants;
 using Knowlead.DTO.ResponseModels;
@@ -13,10 +12,12 @@ using System.Collections.Generic;
 using Knowlead.Common.Exceptions;
 using Knowlead.Services.Interfaces;
 using static Knowlead.Common.Constants.EnumStatuses;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Knowlead.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize(Policy = Policies.RegisteredUser)]
     public class ChatController : Controller
     {
         private readonly IFriendshipRepository _friendshipRepository;
@@ -31,7 +32,7 @@ namespace Knowlead.Controllers
             _auth = auth;
         }
 
-        [HttpPost("changefriendshipstatus"), ReallyAuthorize]
+        [HttpPost("changefriendshipstatus")]
         public async Task<IActionResult> ChangeFriendshipStatus([FromBody] ChangeFriendshipStatusModel cfsm)
         {
             var currentUserId = _auth.GetUserId();
@@ -78,7 +79,7 @@ namespace Knowlead.Controllers
             });
         }
 
-        [HttpGet("getallfriends"), ReallyAuthorize] //TODO: Temp endoint needs pagination
+        [HttpGet("getallfriends")] //TODO: Temp endoint needs pagination
         public async Task<IActionResult> GetAllFriends(FriendshipStatus? status)
         {
             var friends = await _friendshipRepository.GetAllFriends(_auth.GetUserId(), status);
