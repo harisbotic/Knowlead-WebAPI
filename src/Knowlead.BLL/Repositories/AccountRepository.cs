@@ -140,7 +140,7 @@ namespace Knowlead.BLL.Repositories
                 return new BadRequestObjectResult(new ResponseModel(formError));
             }
 
-            return new OkObjectResult(new ResponseModel());
+            return new OkObjectResult(new ResponseModel(){ Object = user });
         }
 
         public async Task<ApplicationUser> GetApplicationUserById(Guid userId, bool includeDetails = false)

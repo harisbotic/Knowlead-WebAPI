@@ -53,7 +53,7 @@ namespace Knowlead.Services
             Calls.Remove(callModel);
         }
 
-        public async void CallModelUpdate(_CallModel callModel)
+        public async void CallModelUpdate(_CallModel callModel, bool reset)
         {
             var json = JsonConvert.SerializeObject(callModel, new JsonSerializerSettings 
             { 
@@ -64,7 +64,15 @@ namespace Knowlead.Services
             {
                 if(peer.Status == PeerStatus.Accepted ||
                     peer.Status == PeerStatus.Rejected)
-                    await _hubContext.Clients.Client(peer.ConnectionId).InvokeAsync("callModelUpdate", json);
+                {
+                    try
+                    {
+                        await _hubContext.Clients.Client(peer.ConnectionId).InvokeAsync((reset) ? "callReset" : "callModelUpdate", json);
+                    } catch (NullReferenceException ex)
+                    {
+                        Console.WriteLine("Tried to reset disconnected peer");
+                    }
+                }
             }
         }
 

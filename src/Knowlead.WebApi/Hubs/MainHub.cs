@@ -7,6 +7,7 @@ using Knowlead.Services.Interfaces;
 using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using static Knowlead.Common.Constants.EnumStatuses;
 
 namespace Knowlead.WebApi.Hubs
 {
@@ -78,7 +79,7 @@ namespace Knowlead.WebApi.Hubs
             peerInfoModel.ConnectionId = Context.ConnectionId;
             peerInfoModel.UpdateStatus(accepted);
 
-            _callServices.CallModelUpdate(callModel);
+            _callServices.CallModelUpdate(callModel, false);
             
             return Task.CompletedTask;
         }
@@ -92,21 +93,33 @@ namespace Knowlead.WebApi.Hubs
                 return Task.CompletedTask;
 
             peerInfoModel.sdps.Add(sdp);
-            _callServices.CallModelUpdate(callModel);
+            _callServices.CallModelUpdate(callModel, false);
             
             return Task.CompletedTask;
         }
 
-        public Task ClearSDP(Guid callModelId)
+        public Task ResetCall(Guid callModelId)
         {
             var callModel = _callServices.GetCall(callModelId);
+            foreach (var peerInfoModelEach in callModel.Peers)
+            {
+                peerInfoModelEach.sdps.Clear();
+                Console.WriteLine("Peer: " + peerInfoModelEach.PeerId + " - " + peerInfoModelEach.ConnectionId);
+            }
             var peerInfoModel = _callServices.GetPeer(callModel, _auth.GetUserId());
-
-            if(peerInfoModel == null)
-                return Task.CompletedTask;
-
-            peerInfoModel.sdps.Clear();
-            _callServices.CallModelUpdate(callModel);
+            if (peerInfoModel == null) // Will this ever happen ?
+            {
+                // If user was previously disconnected, add him to call and put his status to accepted
+                callModel.Peers.Add(new PeerInfoModel(_auth.GetUserId(), Context.ConnectionId, PeerStatus.Accepted));
+                Console.WriteLine("Re-adding " + _auth.GetUserId() + " to call - connection id " + Context.ConnectionId);
+            } else
+            {
+                // If user wasn't disconnected, just update his connection id to current connection
+                peerInfoModel.ConnectionId = Context.ConnectionId;
+                peerInfoModel.UpdateStatus(PeerStatus.Accepted);
+                Console.WriteLine("Updating connection id for " + _auth.GetUserId() + " in call to " + Context.ConnectionId);
+            }
+            _callServices.CallModelUpdate(callModel, true);
             
             return Task.CompletedTask;
         }

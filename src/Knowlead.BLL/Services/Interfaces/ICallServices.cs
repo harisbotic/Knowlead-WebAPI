@@ -9,7 +9,7 @@ namespace Knowlead.Services.Interfaces
         _CallModel GetCall(Guid callModelId);
         PeerInfoModel GetPeer(_CallModel callModel, Guid userId);
         void CloseCall(_CallModel callModel);
-        void CallModelUpdate(_CallModel callModel);
+        void CallModelUpdate(_CallModel callModel, bool reset);
         bool RemoveConnectionFromCall(String connectionId);
     }
 }
