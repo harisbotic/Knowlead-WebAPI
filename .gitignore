@@ -238,3 +238,7 @@ _Pvt_Extensions
 
 # Desktop.ini
 desktop.ini
+
+# Migrations
+# TODO: Remove this when we start using migrations
+src/Knowlead.WebApi/Migrations
