@@ -48,7 +48,7 @@ namespace Knowlead.Controllers
         }
 
         [HttpGet("me")]
-        [Authorize(Policy = Policies.RegisteredUser)]
+        [Authorize]
         public async Task<IActionResult> me()
         {
             var applicationUser = await _auth.GetUser(true);

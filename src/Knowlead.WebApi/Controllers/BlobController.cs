@@ -13,7 +13,7 @@ using static Knowlead.Common.Constants;
 namespace Knowlead.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize(Policy = Policies.RegisteredUser)]
+    [Authorize] // User needs to be able to upload profile images before he completes registration
     public class BlobController : Controller
     {
         private readonly static string[] ImageFileExtensions = {".jpg", ".jpeg", ".gif", ".png"};
