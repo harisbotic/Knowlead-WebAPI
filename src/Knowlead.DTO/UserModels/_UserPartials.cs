@@ -1,3 +1,4 @@
+using System;
 using Knowlead.Common.DataAnnotations;
 
 namespace Knowlead.DTO.UserModels
@@ -9,6 +10,7 @@ namespace Knowlead.DTO.UserModels
         public string Email { get; set; }
         [MyRequired]
         public string Password { get; set; }
+        public Guid? ReferralUserId { get; set; }
     }
 
     public class ConfirmEmailModel

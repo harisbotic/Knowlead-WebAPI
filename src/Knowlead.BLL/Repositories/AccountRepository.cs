@@ -61,6 +61,13 @@ namespace Knowlead.BLL.Repositories
                 return new BadRequestObjectResult(new ResponseModel(result.Errors));
             }
 
+            if(registerUserModel.ReferralUserId != null)
+            {
+                var referral = new ApplicationUserReferral(applicationUser.Id, registerUserModel.ReferralUserId.GetValueOrDefault());
+                _context.ApplicationUserReferrals.Add(referral);
+                await _context.SaveChangesAsync();
+            }
+
             var applicationUserModel = Mapper.Map<ApplicationUserModel>(applicationUser);
             return new OkObjectResult(new ResponseModel{
                 Object = applicationUserModel
@@ -126,7 +133,6 @@ namespace Knowlead.BLL.Repositories
             return new OkObjectResult(new ResponseModel{
                 Object = updatedUser
             });
-            
         }
 
         public async Task<IActionResult> ConfirmEmail(ConfirmEmailModel confirmEmailModel)
