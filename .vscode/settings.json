@@ -21,6 +21,8 @@
         "run.bat": true,
         "seed.bat": true,
         "update.bat": true,
+        "generate-dto.bat": true,
+        "desktop.ini": true,
 
         //Git things
         ".gitignore": true
