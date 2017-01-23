@@ -172,8 +172,8 @@ namespace Knowlead.BLL.Repositories
                                         .ThenInclude(x => x.Fos)
                                         .Include(x => x.MotherTongue)
                                         .Include(x => x.Country)
-                                        .Include(x => x.ProfilePicture)
-                                        .Include(x => x.State);
+                                        .Include(x => x.State)
+                                        .Include(x => x.ProfilePicture);
 
             var user = await userQuery.FirstOrDefaultAsync();
 

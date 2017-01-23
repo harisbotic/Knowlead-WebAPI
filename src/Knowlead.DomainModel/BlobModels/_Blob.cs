@@ -1,6 +1,5 @@
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using Knowlead.Common.DataAnnotations;
 using Knowlead.DomainModel.UserModels;
 
@@ -18,7 +17,6 @@ namespace Knowlead.DomainModel.BlobModels
 
         [MyRequired]
         public Guid UploadedById { get; set; }
-        [NotMapped]
         public ApplicationUser UploadedBy { get; set; }
 
         public _Blob()
