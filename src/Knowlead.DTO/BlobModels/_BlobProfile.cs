@@ -11,13 +11,17 @@ namespace Knowlead.DTO.UserModels
     {
         public _BlobProfile()
         {
-            CreateMap<ImageBlob, ImageBlobModel>().ReverseMap();
+            CreateMap<ImageBlob, ImageBlobModel>()
+            .ForMember(dest => dest.UploadedBy, opt => opt.Ignore())
+            .ReverseMap();
             CreateMap<IFormFile, ImageBlob>()
                 .ForMember(dest => dest.Filesize, opt => opt.MapFrom(src => src.Length))
                 .ForMember(dest => dest.Extension, opt => opt.MapFrom(src => GetExtension(src.FileName)))
                 .ForMember(dest => dest.Filename, opt => opt.MapFrom(src => Path.GetFileNameWithoutExtension(src.FileName)));
 
-            CreateMap<FileBlob, FileBlobModel>().ReverseMap();
+            CreateMap<FileBlob, FileBlobModel>()
+            .ForMember(dest => dest.UploadedBy, opt => opt.Ignore())
+            .ReverseMap();
             CreateMap<IFormFile, FileBlob>()
                 .ForMember(dest => dest.Filesize, opt => opt.MapFrom(src => src.Length))
                 .ForMember(dest => dest.Extension, opt => opt.MapFrom(src => GetExtension(src.FileName)))
