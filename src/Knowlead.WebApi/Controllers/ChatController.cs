@@ -88,7 +88,7 @@ namespace Knowlead.Controllers
             });
         }
 
-        [HttpPost("message")]
+        [HttpPost("msg")]
         public async Task<IActionResult> SendChatMessage([FromBody] NewChatMessage newChatMessage)
         {
             var senderId = _auth.GetUserId();

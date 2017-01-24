@@ -17,8 +17,8 @@ namespace Knowlead.DTO.UserModels
 
 
         [MyRequired]
-        public Guid ApplicationUserId { get; set; }
-        public ApplicationUserModel ApplicationUser { get; set; }
+        public Guid CreatedById { get; set; }
+        public ApplicationUserModel CreatedBy { get; set; }
 
         public Guid ImageBlobId { get; set; }
         public ImageBlobModel ImageBlob { get; set; }

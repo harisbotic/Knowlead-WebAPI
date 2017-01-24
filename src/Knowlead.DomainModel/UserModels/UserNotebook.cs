@@ -18,8 +18,8 @@ namespace Knowlead.DomainModel.UserModels
 
 
         [MyRequired]
-        public Guid ApplicationUserId { get; set; }
-        public ApplicationUser ApplicationUser { get; set; }
+        public Guid CreatedById { get; set; }
+        public ApplicationUser CreatedBy { get; set; }
 
         public Guid ImageBlobId { get; set; }
         public ImageBlob ImageBlob { get; set; }
