@@ -22,6 +22,7 @@
         "seed.bat": true,
         "update.bat": true,
         "generate-dto.bat": true,
+        "migrate.bat": true,
         "desktop.ini": true,
 
         //Git things
