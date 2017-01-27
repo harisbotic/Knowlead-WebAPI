@@ -34,6 +34,7 @@ namespace Knowlead.DAL
         public DbSet<Country> Countries { get; set; }
         public DbSet<FOS> Fos { get; set; }
         public DbSet<Language> Languages { get; set; }
+        public DbSet<Reward> Rewards { get; set; }
         #endregion
 
         #region Feedback Models
@@ -97,13 +98,16 @@ namespace Knowlead.DAL
             modelBuilder.HasPostgresExtension("uuid-ossp");
 
             /* GeoLookups */
+            modelBuilder.Entity<_GeoLookup>().HasAlternateKey(f => f.Code);
             modelBuilder.Entity<Country>().ToTable("Countries");
             modelBuilder.Entity<State>().ToTable("States");
 
             /* CoreLookups */
+            modelBuilder.Entity<_CoreLookup>().HasAlternateKey(f => f.Code);
             modelBuilder.Entity<Achievement>().ToTable("Achievements");
             modelBuilder.Entity<FOS>().ToTable("FOS");
             modelBuilder.Entity<Language>().ToTable("Languages");
+            modelBuilder.Entity<Reward>().ToTable("Rewards");
 
             /* Blobs */
             modelBuilder.Entity<_Blob>()

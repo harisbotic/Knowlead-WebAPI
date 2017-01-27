@@ -1,0 +1,22 @@
+{
+    "model": "Reward",
+    "importConfig": {
+        "key": "Code",
+        "clearTable": false,
+        "saveAfterEachRow": true
+    },
+    "data": [
+        {
+            "Name": "OneReferral",
+            "Code": "ref1"
+        },
+        {
+            "Name": "FiveReferrals",
+            "Code": "ref5"
+        },
+        {
+            "Name": "fiftyReferrals",
+            "Code": "ref50"
+        }
+    ]
+}
