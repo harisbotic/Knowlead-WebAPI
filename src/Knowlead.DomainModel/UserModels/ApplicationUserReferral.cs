@@ -13,8 +13,7 @@ namespace Knowlead.DomainModel.UserModels
         public Guid ReferralUserId { get; set; }
         public ApplicationUser ReferralUser { get; set; }
 
-        [MyRequired]
-        public Boolean RewardClaimed { get; set; } = false;
+        public bool UserRegistred { get; set; } = false;
 
         public ApplicationUserReferral(Guid newRegistredUserId, Guid referralUserId)
         {

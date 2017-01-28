@@ -149,6 +149,7 @@ namespace Knowlead.WebApi.Config
             services.AddSingleton<MessageServices>();
             services.AddScoped<IBlobServices, BlobServices>();
             services.AddScoped<IChatServices, ChatServices>();
+            services.AddScoped<IRewardServices, RewardServices>();
             services.AddTransient<ICallServices, CallServices<MainHub>>();
             services.AddTransient<INotificationServices, NotificationServices<MainHub>>();
 
@@ -163,6 +164,7 @@ namespace Knowlead.WebApi.Config
             services.AddScoped<IFriendshipRepository, FriendshipRepository>();
             services.AddScoped<INotificationRepository, NotificationRepository>();
             services.AddScoped<IStatisticsRepository, StatisticsRepository>();
+            services.AddScoped<IRewardRepository, RewardRepository>();
 
             return services;
         }

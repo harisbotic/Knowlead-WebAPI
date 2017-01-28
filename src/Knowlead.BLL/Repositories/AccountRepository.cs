@@ -74,6 +74,15 @@ namespace Knowlead.BLL.Repositories
             });
         }
 
+        public async Task<List<ApplicationUserReferral>> GetReferrals(Guid applicationUser, bool registrated = true)
+        {
+            return await _context.ApplicationUserReferrals.Where(x => x.ReferralUserId.Equals(applicationUser) && x.UserRegistred == registrated).Include(x => x.NewRegistredUser).ToListAsync();
+        }
+        public async Task<int> GetReferralsCount(Guid applicationUser, bool registrated = true)
+        {
+            return await _context.ApplicationUserReferrals.Where(x => x.ReferralUserId.Equals(applicationUser) && x.UserRegistred == registrated).CountAsync();
+        }
+
         public async Task<IActionResult> UpdateUserDetails(ApplicationUser applicationUser, JsonPatchDocument<ApplicationUserModel> applicationUserPatch)
         {
             var applicationUserModel = Mapper.Map<ApplicationUserModel>(applicationUser);
@@ -122,7 +131,16 @@ namespace Knowlead.BLL.Repositories
                      return new BadRequestObjectResult(new ResponseModel(new FormErrorModel(nameof(ApplicationUserModel.Birthdate), ErrorCodes.AgeTooOld, "99")));
 
             var result = await _userManager.UpdateAsync(applicationUser);
+            /* TEMP CODE */
+            var referral = await _context.ApplicationUserReferrals.Where(x => x.NewRegistredUserId.Equals(applicationUser.Id)).FirstOrDefaultAsync();
             
+            if(referral != null && !referral.UserRegistred)
+            {
+                referral.UserRegistred = true;
+                _context.Update(referral);
+                await _context.SaveChangesAsync();
+            }
+            /* TEMP CODE */
             if(!result.Succeeded)
             {
                 return new BadRequestObjectResult(new ResponseModel(result.Errors));

@@ -24,6 +24,8 @@ namespace Knowlead.DomainModel.UserModels
         public Guid ImageBlobId { get; set; }
         public ImageBlob ImageBlob { get; set; }
 
+        //fos not required
+
         public UserNotebook()
         {
             CreatedAt = DateTime.UtcNow;

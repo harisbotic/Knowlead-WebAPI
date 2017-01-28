@@ -13,8 +13,8 @@ namespace Knowlead.DTO.UserModels
             CreateMap<FOS, FOSModel>().ReverseMap();
 
             CreateMap<Language, LanguageModel>().ReverseMap();
-           
 
+            CreateMap<Reward, RewardModel>().ReverseMap();
         }
     }
 }

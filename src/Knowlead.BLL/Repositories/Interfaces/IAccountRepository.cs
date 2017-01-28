@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Knowlead.DomainModel.UserModels;
 using Knowlead.DTO.UserModels;
@@ -13,5 +14,8 @@ namespace Knowlead.BLL.Repositories.Interfaces
         Task<ApplicationUser> GetApplicationUserById(Guid userId, bool includeDetails = false);
         Task<IActionResult> UpdateUserDetails(ApplicationUser applicationUser, JsonPatchDocument<ApplicationUserModel> applicationUserPatch);
         Task<IActionResult> ConfirmEmail(ConfirmEmailModel confirmEmailModel);
+        Task<List<ApplicationUserReferral>> GetReferrals(Guid applicationUser, bool registred = false);
+        Task<int> GetReferralsCount(Guid applicationUser, bool registred = false);
+        
     }
 }
