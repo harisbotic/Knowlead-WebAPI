@@ -8,7 +8,6 @@ using System;
 using Knowlead.Services.Interfaces;
 using Knowlead.BLL.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using static Knowlead.Common.Constants;
 
 namespace Knowlead.Controllers
 {

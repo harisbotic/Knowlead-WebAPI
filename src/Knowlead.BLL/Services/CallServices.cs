@@ -68,7 +68,7 @@ namespace Knowlead.Services
                     try
                     {
                         await _hubContext.Clients.Client(peer.ConnectionId).InvokeAsync((reset) ? "callReset" : "callModelUpdate", json);
-                    } catch (NullReferenceException ex)
+                    } catch (Exception)
                     {
                         Console.WriteLine("Tried to reset disconnected peer");
                     }
