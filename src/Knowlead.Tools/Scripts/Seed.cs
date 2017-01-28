@@ -37,6 +37,10 @@ namespace Knowlead.Tools
             {
                 return new Seeder<FOS>(context, config, verbose);
             }
+            else if (type == typeof(Reward))
+            {
+                return new Seeder<Reward>(context, config, verbose);
+            }
             else
             {
                 throw new ArgumentException(type.Name + " not supported in factory", "type");
@@ -45,13 +49,14 @@ namespace Knowlead.Tools
         //private static readonly string[] AllowedClasses = {"State", "Language"};
 
         public static Dictionary<string, Type> models = new Dictionary<string, Type>()
-    {
-        {"State", typeof(State)},
-        {"OpenIddictApplication", typeof(OpenIddict.Models.OpenIddictApplication<Guid>)},
-        {"Language", typeof(Language)},
-        {"FOS", typeof(FOS)},
-        {"Country", typeof(Country)}
-    };
+        {
+            {"State", typeof(State)},
+            {"OpenIddictApplication", typeof(OpenIddict.Models.OpenIddictApplication<Guid>)},
+            {"Language", typeof(Language)},
+            {"FOS", typeof(FOS)},
+            {"Reward", typeof(Reward)},
+            {"Country", typeof(Country)}
+        };
         private class SeedClass
         {
             public string Model { get; set; }
@@ -88,7 +93,8 @@ namespace Knowlead.Tools
                 IEnumerable<string> targets = Directory.GetFiles(args[1]).Concat(Directory.GetDirectories(args[1]));
                 foreach (var target in targets)
                 {
-                    Seed(new String[] { args[0], target });
+                    if(target.EndsWith(".json") || !target.Contains('.'))
+                        Seed(new String[] { args[0], target });
                 }
                 return;
             }
