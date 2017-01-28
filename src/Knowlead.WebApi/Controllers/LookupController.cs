@@ -7,6 +7,8 @@ using Knowlead.DTO.LookupModels.Core;
 using AutoMapper;
 using Knowlead.DTO.ResponseModels;
 using Knowlead.DTO.LookupModels.Geo;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Knowlead.Controllers
 {
@@ -96,8 +98,24 @@ namespace Knowlead.Controllers
             return new OkObjectResult(new ResponseModel{
                 Object = fossModel
             });
-
         }
 
+        // GET api/lookup/rewards
+        [HttpGet("rewards")]
+        public async Task<IActionResult> GetAllRewards()
+        {
+            var rewards = await _context.Rewards.ToListAsync();
+
+            var rewardsModel = new List<RewardModel>();
+
+            foreach (var reward in rewards)
+            {
+                rewardsModel.Add(Mapper.Map<RewardModel>(reward));
+            }
+
+            return new OkObjectResult(new ResponseModel{
+                Object = rewardsModel
+            });
+        }
     }
 }

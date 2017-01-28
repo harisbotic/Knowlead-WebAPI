@@ -22,7 +22,7 @@ namespace Knowlead.Controllers
         }
         
         [HttpGet("referralStats")]
-        public async Task<IActionResult> ClaimReward()
+        public async Task<IActionResult> ReferralStats()
         {
             var refStats = await _rewardServices.GetReferralStats(_auth.GetUserId());
 
