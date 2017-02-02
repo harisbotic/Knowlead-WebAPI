@@ -75,6 +75,8 @@ namespace Knowlead.Common
             public const string ClaimRewardError = "CLAIM_REWARD_ERROR";
             [TSInitialize]
             public const string AlreadyGotReward = "ALREADY_GOT_REWARD";
+            [TSInitialize]
+            public const string NotEnoughMinutes = "NOT_ENOUGH_MINUTES";
         }
 
         [TSClass]

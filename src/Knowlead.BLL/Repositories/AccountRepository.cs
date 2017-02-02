@@ -181,7 +181,7 @@ namespace Knowlead.BLL.Repositories
         public async Task<ApplicationUser> GetApplicationUserById(Guid userId, bool includeDetails = false)
         {
             IQueryable<ApplicationUser> userQuery = _context.ApplicationUsers
-                                                            .Where(x => x.Id.Equals(userId));;
+                                                            .Where(x => x.Id.Equals(userId));
                     
             if(includeDetails)
                 userQuery = userQuery.Include(x => x.ApplicationUserLanguages)
@@ -193,12 +193,20 @@ namespace Knowlead.BLL.Repositories
                                         .Include(x => x.State)
                                         .Include(x => x.ProfilePicture);
 
-            var user = await userQuery.FirstOrDefaultAsync();
+            var QueryResult = await userQuery.GroupJoin(_context.AccountTransactions.OrderByDescending(z => z.Timestamp).Take(1),
+                                        x => x.Id,
+                                        y => y.ApplicationUserId,
+                                        (x,y) => new {User = x, Trans = y})
+                                        .FirstOrDefaultAsync();
+            
 
-            if(user == null)
+            if(QueryResult == null)
                 throw new ErrorModelException(ErrorCodes.EntityNotFound, nameof(ApplicationUser));
 
-            return user;   
+            QueryResult.User.MinutesBalance = QueryResult.Trans.FirstOrDefault()?.FinalMinuteBalance;
+            QueryResult.User.PointsBalance = QueryResult.Trans.FirstOrDefault()?.FinalPointBalance;
+
+            return QueryResult.User;   
         }
     }
 }

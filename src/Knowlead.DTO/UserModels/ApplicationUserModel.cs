@@ -18,6 +18,8 @@ namespace Knowlead.DTO.UserModels
         public string Email { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
+        public int MinutesBalance { get; set; }
+        public int PointsBalance { get; set; }
         public DateTime? Birthdate { get; set; }
         public Boolean? IsMale { get; set; }
         public string Timezone { get; set; }

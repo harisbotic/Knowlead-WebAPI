@@ -17,6 +17,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Knowlead.DomainModel.ChatModels;
 using Knowlead.DomainModel.NotificationModels;
 using Knowlead.DomainModel.StatisticsModels;
+using Knowlead.DomainModel.TransactionModels;
 
 namespace Knowlead.DAL
 {
@@ -78,6 +79,9 @@ namespace Knowlead.DAL
 
         #region Statistics Models
         public DbSet<PlatformFeedback> PlatformFeedbacks { get; set; }
+        #endregion
+        #region Transaction Models
+        public DbSet<AccountTransaction> AccountTransactions { get; set; }
         #endregion
 
         public DbSet<Notification> Notifications { get; set; }
