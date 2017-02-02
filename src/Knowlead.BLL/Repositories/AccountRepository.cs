@@ -193,7 +193,7 @@ namespace Knowlead.BLL.Repositories
                                         .Include(x => x.State)
                                         .Include(x => x.ProfilePicture);
 
-            var QueryResult = await userQuery.GroupJoin(_context.AccountTransactions.OrderByDescending(z => z.Timestamp).Take(1),
+            var QueryResult = await userQuery.GroupJoin(_context.AccountTransactions.OrderByDescending(o => o.Timestamp).Take(1),
                                         x => x.Id,
                                         y => y.ApplicationUserId,
                                         (x,y) => new {User = x, Trans = y})
@@ -203,8 +203,8 @@ namespace Knowlead.BLL.Repositories
             if(QueryResult == null)
                 throw new ErrorModelException(ErrorCodes.EntityNotFound, nameof(ApplicationUser));
 
-            QueryResult.User.MinutesBalance = QueryResult.Trans.FirstOrDefault()?.FinalMinuteBalance;
-            QueryResult.User.PointsBalance = QueryResult.Trans.FirstOrDefault()?.FinalPointBalance;
+            QueryResult.User.MinutesBalance = QueryResult.Trans.FirstOrDefault()?.FinalMinutesBalance;
+            QueryResult.User.PointsBalance = QueryResult.Trans.FirstOrDefault()?.FinalPointsBalance;
 
             return QueryResult.User;   
         }

@@ -11,14 +11,14 @@ namespace Knowlead.DomainModel.TransactionModels
         public Guid AccountTransactionId { get; set; }
 
         [MyRequired]
-        public int MinuteChangeAmount { get; set; }
+        public int MinutesChangeAmount { get; set; }
         [MyRequired]
-        public int PointChangeAmount { get; set; }
+        public int PointsChangeAmount { get; set; }
 
         [MyRequired]
-        public int FinalMinuteBalance { get; set; }
+        public int FinalMinutesBalance { get; set; }
         [MyRequired]
-        public int FinalPointBalance { get; set; }
+        public int FinalPointsBalance { get; set; }
 
         [MyRequired]
         public String Reason { get; set; }

@@ -26,17 +26,17 @@ namespace Knowlead.BLL.Repositories
             accTransaction.Reason = reason;
 
             var prevTransations = await _context.AccountTransactions.Where(x => x.ApplicationUserId.Equals(applicationUserId)).ToListAsync();
-            var currentMinutes = prevTransations.Sum(x => x.MinuteChangeAmount);
-            var currentPoints = prevTransations.Sum(x => x.PointChangeAmount);
+            var currentMinutes = prevTransations.Sum(x => x.MinutesChangeAmount);
+            var currentPoints = prevTransations.Sum(x => x.PointsChangeAmount);
 
             if(currentMinutes + minutesChange < 0)
                 throw new ErrorModelException(ErrorCodes.NotEnoughMinutes, currentMinutes.ToString());
 
-            accTransaction.MinuteChangeAmount = minutesChange;
-            accTransaction.FinalMinuteBalance = currentMinutes + minutesChange;
+            accTransaction.MinutesChangeAmount = minutesChange;
+            accTransaction.FinalMinutesBalance = currentMinutes + minutesChange;
 
-            accTransaction.PointChangeAmount = pointsChange;
-            accTransaction.FinalPointBalance = currentPoints + pointsChange;
+            accTransaction.PointsChangeAmount = pointsChange;
+            accTransaction.FinalPointsBalance = currentPoints + pointsChange;
 
             _context.AccountTransactions.Add(accTransaction);
             await SaveChangesAsync();
