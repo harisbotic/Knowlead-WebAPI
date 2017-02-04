@@ -153,6 +153,22 @@ namespace Knowlead.BLL.Repositories
             });
         }
 
+        public async Task<ApplicationUser> ChangeProfilePicture(Guid imageBlobId, ApplicationUser applicationUser)
+        {
+            var imageBlob = _context.ImageBlobs
+                                .Where(x => x.BlobId == imageBlobId)
+                                .FirstOrDefault();
+
+            if(imageBlob == null)
+                throw new ErrorModelException(ErrorCodes.IncorrectValue, nameof(ApplicationUserModel.ProfilePictureId));
+
+            applicationUser.ProfilePicture = imageBlob;
+
+            await _userManager.UpdateAsync(applicationUser);
+
+            return applicationUser;
+        }
+
         public async Task<IActionResult> ConfirmEmail(ConfirmEmailModel confirmEmailModel)
         {
             var user = await _userManager.FindByEmailAsync(confirmEmailModel.Email);

@@ -49,7 +49,7 @@ namespace Knowlead.Controllers
 
         [HttpGet("me")]
         [Authorize]
-        public async Task<IActionResult> me()
+        public async Task<IActionResult> Me()
         {
             var applicationUser = await _auth.GetUser(true);
             var applicationUserModel = Mapper.Map<ApplicationUserModel>(applicationUser);
@@ -73,6 +73,19 @@ namespace Knowlead.Controllers
             var currentUser = await _auth.GetUser(true);
 
             return (await _accountRepository.UpdateUserDetails(currentUser, userDetailsPatch));
+        }
+
+        [HttpPost("changeProfilePicture/{imageBlobId}")]
+        [Authorize]
+        public async Task<IActionResult> ChangeProfilePicture(Guid imageBlobId)
+        {
+            var applicationUser = await _auth.GetUser(false);
+
+            applicationUser = await _accountRepository.ChangeProfilePicture(imageBlobId, applicationUser);
+
+            return Ok(new ResponseModel{
+                Object = Mapper.Map<ApplicationUserModel>(applicationUser)
+            });
         }
     }
 }
