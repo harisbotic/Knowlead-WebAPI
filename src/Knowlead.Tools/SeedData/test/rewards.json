@@ -8,27 +8,39 @@
     "data": [
         {
             "Name": "OneReferral",
-            "Code": "ref1"
+            "Code": "ref1",
+            "MinutesReward": 1,
+            "PointsReward": 100
         },
         {
             "Name": "ThirtyReferrals",
-            "Code": "ref30"
+            "Code": "ref30",
+            "MinutesReward": 1,
+            "PointsReward": 100
         },
         {
             "Name": "SeventyReferrals",
-            "Code": "ref70"
+            "Code": "ref70",
+            "MinutesReward": 1,
+            "PointsReward": 100
         },
         {
             "Name": "OneHundredTwentyReferrals",
-            "Code": "ref120"
+            "Code": "ref120",
+            "MinutesReward": 1,
+            "PointsReward": 100
         },
         {
             "Name": "TwoHundredFiftyReferrals",
-            "Code": "ref250"
+            "Code": "ref250",
+            "MinutesReward": 1,
+            "PointsReward": 100
         },
         {
             "Name": "FourHundredFourReferrals",
-            "Code": "ref404"
+            "Code": "ref404",
+            "MinutesReward": 1,
+            "PointsReward": 100
         }
     ]
 }

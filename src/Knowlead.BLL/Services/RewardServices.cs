@@ -12,11 +12,16 @@ namespace Knowlead.Services
     public class RewardServices : IRewardServices
     {
         private readonly IRewardRepository _rewardRepository;
+        private readonly ITransactionServices _transactionServices;
+        private readonly INotificationServices _notificationServices;
         private readonly IAccountRepository _accountRepository;
 
-        public RewardServices(IRewardRepository rewardRepository, IAccountRepository accountRepository)
+        public RewardServices(IRewardRepository rewardRepository, ITransactionServices transactionServices,
+                              INotificationServices notificationServices, IAccountRepository accountRepository)
         {
             _rewardRepository = rewardRepository;
+            _transactionServices = transactionServices;
+            _notificationServices = notificationServices;
             _accountRepository = accountRepository;
         }
 
@@ -35,8 +40,15 @@ namespace Knowlead.Services
             if(!await CanClaimReward(applicationUserId, reward))
                 throw new ErrorModelException(ErrorCodes.ClaimRewardError);
 
+            //Claim reward
             await _rewardRepository.ClaimReward(applicationUserId, rewardId);
 
+            //Make minutes/points transaction
+            await _transactionServices.RewardMinutes(applicationUserId, reward.MinutesReward, reward.PointsReward, TransactionReasons.RewardClaimed+rewardId);
+
+            //Send notification
+            await _notificationServices.Notify(applicationUserId, NotificationTypes.RewardClaimed, DateTime.UtcNow);
+            
             return reward;
         }
 

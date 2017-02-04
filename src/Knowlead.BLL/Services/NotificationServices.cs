@@ -7,6 +7,7 @@ using Knowlead.DomainModel.NotificationModels;
 using Knowlead.Services.Interfaces;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
+using static Knowlead.Common.Constants;
 
 namespace Knowlead.Services
 {
@@ -48,7 +49,7 @@ namespace Knowlead.Services
             foreach (var notification in notifications)
             {
                 //if(now || notification.ScheduledAt.CompareTo(DateTime.UtcNow) < 0)
-                _hubContext.Clients.User(notification.ForApplicationUserId.ToString()).InvokeAsync("newNotification", notification);  
+                _hubContext.Clients.User(notification.ForApplicationUserId.ToString()).InvokeAsync(WebClientFunctionNames.DisplayNotification, notification);  
             }
 
             return Task.CompletedTask;

@@ -80,14 +80,16 @@ namespace Knowlead.Common
         }
 
         [TSClass]
-        public static class NotificationCodes //TODO: Turn into enums??
+        public static class NotificationTypes
         {
             [TSInitialize]
-            public const string NewP2PComment = "NEW_P2P_COMMENT";
+            public const string NewP2PComment = "NotificationTypes.NEW_P2P_COMMENT";
             [TSInitialize]
-            public const string P2PExpired = "P2P_EXPIRED";
+            public const string P2PExpired = "NotificationTypes.P2P_EXPIRED";
             [TSInitialize]
-            public const string PrepareForP2P = "PREPARE_FOR_P2P";
+            public const string PrepareForP2P = "NotificationTypes.PREPARE_FOR_P2P";
+            [TSInitialize]
+            public const string RewardClaimed = "NotificationTypes.REWARD_CLAIMED";
         }
 
         [TSClass]
@@ -144,6 +146,20 @@ namespace Knowlead.Common
         {
             [TSInitialize]
             public const string KLUser = "UserRoles.KLUser";
+        }
+
+        [TSClass]
+        public static class TransactionReasons
+        {
+            //!!! Insert ID after ':' for every transaction
+            
+            [TSInitialize]
+            public const string RewardClaimed = "TransactionReasons.REWARD_CLAIMED:";
+        }
+
+        public static class WebClientFunctionNames
+        {
+            public const string DisplayNotification = "displayNotification";
         }
     }
 }
