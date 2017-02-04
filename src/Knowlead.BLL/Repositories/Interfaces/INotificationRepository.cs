@@ -7,6 +7,6 @@ namespace Knowlead.BLL.Repositories.Interfaces
 {
     public interface INotificationRepository
     {
-        Task<List<Notification>> NewNotification(List<Guid> userIds, String notificationType, DateTime scheduledAt);
+        Task<List<Notification>> InsertNotification(List<Guid> userIds, String notificationType, DateTime scheduledAt);
     }
 }

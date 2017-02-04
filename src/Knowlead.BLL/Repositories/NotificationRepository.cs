@@ -18,7 +18,7 @@ namespace Knowlead.BLL.Repositories
             _context = context;
         }
 
-        public async Task<List<Notification>> NewNotification(List<Guid> userIds, String notificationType, DateTime scheduledAt)
+        public async Task<List<Notification>> InsertNotification(List<Guid> userIds, String notificationType, DateTime scheduledAt)
         {
             var notifications = new List<Notification>();
             foreach (var userId in userIds)

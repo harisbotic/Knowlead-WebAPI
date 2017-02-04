@@ -7,8 +7,8 @@ namespace Knowlead.Services.Interfaces
 {
     public interface INotificationServices
     {
-        Task Notify (Guid userId, String notificationType, DateTime ScheduleNotification);
-        Task NotifyMore (List<Guid> userIds, String notificationType, DateTime ScheduleNotification);
-        Task PublishNotifications(List<Notification> notifications, bool now);
+        Task NewNotification (Guid applicationUserId, String notificationType, DateTime scheduleAt);
+        Task NewNotification (List<Guid> applicationUserIds, String notificationType, DateTime scheduleAt);
+        Task DisplayNotifications(List<Notification> notifications, bool now);
     }
 }

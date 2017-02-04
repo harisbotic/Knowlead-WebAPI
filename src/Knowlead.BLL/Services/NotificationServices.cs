@@ -24,27 +24,27 @@ namespace Knowlead.Services
             _notificationRepository = notificationRepository;
         }
 
-        public async Task Notify (Guid userId, String notificationType, DateTime scheduleAt)
+        public async Task NewNotification (Guid applicationUserId, String notificationType, DateTime scheduleAt)
         {
-            await NotifyMore(new List<Guid>(){userId}, notificationType, scheduleAt);
+            await NewNotification(new List<Guid>(){applicationUserId}, notificationType, scheduleAt);
         }
 
-        public async Task NotifyMore (List<Guid> userIds, String notificationType, DateTime scheduleAt)
+        public async Task NewNotification (List<Guid> applicationUserIds, String notificationType, DateTime scheduleAt)
         {
-            var notifications = await _notificationRepository.NewNotification(userIds, notificationType, scheduleAt);
+            var notifications = await _notificationRepository.InsertNotification(applicationUserIds, notificationType, scheduleAt);
 
             if(scheduleAt.Subtract(DateTime.UtcNow).TotalSeconds < 30)
             {
-                await PublishNotifications(notifications, true);
+                await DisplayNotifications(notifications, true);
             }
             else
             {
                 BackgroundJob.Schedule<INotificationServices>(
-                (x) => x.PublishNotifications(notifications, false), scheduleAt.Subtract(DateTime.UtcNow));
+                (x) => x.DisplayNotifications(notifications, false), scheduleAt.Subtract(DateTime.UtcNow));
             }
         }
 
-        public Task PublishNotifications(List<Notification> notifications, bool now = false)
+        public Task DisplayNotifications(List<Notification> notifications, bool now = false)
         {
             foreach (var notification in notifications)
             {

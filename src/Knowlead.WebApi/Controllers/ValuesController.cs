@@ -43,7 +43,7 @@ namespace Knowlead.Controllers
         [HttpGet("{id}")]
         public async Task<string> Get(int id)
         {
-            await _service.NotifyMore(new List<Guid>(){_auth.GetUserId()}, Constants.NotificationTypes.NewP2PComment, DateTime.UtcNow.AddSeconds(id));
+            await _service.NewNotification(new List<Guid>(){_auth.GetUserId()}, Constants.NotificationTypes.NewP2PComment, DateTime.UtcNow.AddSeconds(id));
             return "value";
         }
 

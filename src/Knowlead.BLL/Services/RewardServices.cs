@@ -47,7 +47,7 @@ namespace Knowlead.Services
             await _transactionServices.RewardMinutes(applicationUserId, reward.MinutesReward, reward.PointsReward, TransactionReasons.RewardClaimed+rewardId);
 
             //Send notification
-            await _notificationServices.Notify(applicationUserId, NotificationTypes.RewardClaimed, DateTime.UtcNow);
+            await _notificationServices.NewNotification(applicationUserId, NotificationTypes.RewardClaimed, DateTime.UtcNow);
             
             return reward;
         }
