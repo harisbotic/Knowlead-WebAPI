@@ -18,6 +18,7 @@ using Knowlead.DomainModel.ChatModels;
 using Knowlead.DomainModel.NotificationModels;
 using Knowlead.DomainModel.StatisticsModels;
 using Knowlead.DomainModel.TransactionModels;
+using Knowlead.DomainModel.LibraryModels;
 
 namespace Knowlead.DAL
 {
@@ -45,6 +46,10 @@ namespace Knowlead.DAL
         public DbSet<FeedbackQuestion> FeedbackQuestions { get; set; }
         #endregion
 
+        #region Library Models
+        public DbSet<Notebook> Notebooks { get; set; }
+        #endregion
+
         #region User Models
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<ApplicationUserInterest> ApplicationUserInterests { get; set; }
@@ -54,7 +59,6 @@ namespace Knowlead.DAL
         public DbSet<Friendship> Friendships { get; set; }
         public DbSet<UserAchievement> UserAchievements { get; set; }
         public DbSet<UserCertificate> UserCertificates { get; set; }
-        public DbSet<UserNotebook> UserNotebooks { get; set; }
         #endregion
 
         #region Peer to Peer
