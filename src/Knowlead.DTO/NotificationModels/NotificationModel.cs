@@ -6,7 +6,7 @@ using Knowlead.DTO.UserModels;
 
 namespace Knowlead.DTO.NotificationModels
 {
-    public class Notification
+    public class NotificationModel
     {
         [Key]
         public Guid NotificationId { get; set; }
@@ -27,7 +27,7 @@ namespace Knowlead.DTO.NotificationModels
         public DateTime ScheduledAt { get; set; }
         public DateTime? SeenAt { get; set; }
 
-        public Notification()
+        public NotificationModel()
         {   }
     }
 }

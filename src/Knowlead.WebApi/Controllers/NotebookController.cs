@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using Knowlead.BLL.Repositories.Interfaces;
 using Knowlead.Common.Attributes;
 using Knowlead.Common.HttpRequestItems;
 using Knowlead.DTO.LibraryModels;
@@ -16,23 +15,37 @@ namespace Knowlead.Controllers
     [Authorize(Policy = Policies.RegisteredUser)]
     public class NotebookController : Controller
     {
-        private readonly INotebookRepository _notebookRepository;
         private readonly INotebookServices _notebookServices;
         private readonly Auth _auth;
 
-        public NotebookController(INotebookRepository notebookRepository, INotebookServices notebookServices, Auth auth)
+        public NotebookController(INotebookServices notebookServices, Auth auth)
         {
-            _notebookRepository = notebookRepository;
             _notebookServices = notebookServices;
             _auth = auth;
         }
 
-        [HttpPost("{notebookId}")]
+        [HttpGet("{notebookId}")]
         public async Task<IActionResult> Get(int notebookId)
         {
             var applicationUserId = _auth.GetUserId();
 
-            var notebook = await _notebookServices.Get(notebookId);
+            var notebook = await _notebookServices.Get(applicationUserId, notebookId);
+
+            if(notebook == null)
+                return BadRequest();
+
+            return Ok(new ResponseModel()
+            {
+                Object = AutoMapper.Mapper.Map<NotebookModel>(notebook)
+            });
+        }
+
+        [HttpGet("{notebookId}")]
+        public async Task<IActionResult> GetAll()
+        {
+            var applicationUserId = _auth.GetUserId();
+
+            var notebook = await _notebookServices.GetAllFromUser(applicationUserId);
 
             if(notebook == null)
                 return BadRequest();

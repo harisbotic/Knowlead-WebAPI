@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Knowlead.BLL.Repositories.Interfaces;
@@ -14,24 +15,28 @@ namespace Knowlead.Services
     public class NotebookServices : INotebookServices
     {
         private readonly INotebookRepository _notebookRepository;
-        private readonly ITransactionServices _transactionServices;
-        private readonly INotificationServices _notificationServices;
-        private readonly IAccountRepository _accountRepository;
 
-        public NotebookServices(INotebookRepository notebookRepository, ITransactionServices transactionServices,
-                              INotificationServices notificationServices, IAccountRepository accountRepository)
+        public NotebookServices(INotebookRepository notebookRepository)
         {
             _notebookRepository = notebookRepository;
-            _transactionServices = transactionServices;
-            _notificationServices = notificationServices;
-            _accountRepository = accountRepository;
         }
 
-        public async Task<Notebook> Get(int notebookId)
+        public async Task<Notebook> Get(Guid applicationUserId, int notebookId)
         {
             var notebook = await _notebookRepository.Get(notebookId);
 
+            //Check if is allowed to read
+            if(!notebook.CreatedById.Equals(applicationUserId))
+                throw new ErrorModelException(ErrorCodes.OwnershipError);
+
             return notebook;
+        }
+
+        public async Task<List<Notebook>> GetAllFromUser(Guid applicationUserId)
+        {
+            var notebooks = await _notebookRepository.GetAllWhere(notebook => notebook.CreatedById.Equals(applicationUserId));
+
+            return notebooks;
         }
 
         public async Task<Notebook> Create(Guid applicationUserId, CreateNotebookModel createNotebookModel)

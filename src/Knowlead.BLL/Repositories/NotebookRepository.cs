@@ -1,9 +1,12 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Knowlead.BLL.Repositories.Interfaces;
 using Knowlead.Common.Exceptions;
 using Knowlead.DAL;
 using Knowlead.DomainModel.LibraryModels;
+using Microsoft.EntityFrameworkCore;
 using static Knowlead.Common.Constants;
 
 namespace Knowlead.BLL.Repositories
@@ -17,14 +20,14 @@ namespace Knowlead.BLL.Repositories
             _context = context;
         }
 
-        public Task<Notebook> Get(int notebookId)
+        public async Task<Notebook> Get(int notebookId)
         {
-            throw new NotImplementedException();
+            return await _context.Notebooks.Where(x => x.NotebookId.Equals(notebookId)).FirstOrDefaultAsync();
         }
 
-        public Task<Notebook> Insert(Guid applicationUserId)
+        public async Task<List<Notebook>> GetAllWhere(Func<Notebook, bool> condition)
         {
-            throw new NotImplementedException();
+            return await _context.Notebooks.Where(x => condition(x)).ToListAsync();
         }
 
         public void Add(Notebook notebook)
