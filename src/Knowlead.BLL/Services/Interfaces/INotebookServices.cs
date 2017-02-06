@@ -11,7 +11,8 @@ namespace Knowlead.Services.Interfaces
     {
         Task<Notebook> Get (Guid applicationUserId, int notebookId);
         Task<List<Notebook>> GetAllFromUser (Guid applicationUserId);
-        Task<Notebook> Create (Guid applicationUserId, CreateNotebookModel createNotebookModel);
+        Task<Notebook> Create (Guid applicationUserId, NotebookModel notebookModel);
         Task<Notebook> Patch (int notebookId, JsonPatchDocument<NotebookModel> notebookPatch);
+        Task<Notebook> Send(int notebookId, Guid fromUser, Guid toUser);
     }
 }

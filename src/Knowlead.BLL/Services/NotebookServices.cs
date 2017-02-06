@@ -39,9 +39,9 @@ namespace Knowlead.Services
             return notebooks;
         }
 
-        public async Task<Notebook> Create(Guid applicationUserId, CreateNotebookModel createNotebookModel)
+        public async Task<Notebook> Create(Guid applicationUserId, NotebookModel notebookModel)
         {
-            var notebook = Mapper.Map<Notebook>(createNotebookModel);
+            var notebook = Mapper.Map<Notebook>(notebookModel);
             notebook.CreatedById = applicationUserId;
             
             _notebookRepository.Add(notebook);
@@ -66,6 +66,19 @@ namespace Knowlead.Services
             await _notebookRepository.Commit();
 
             return notebook;
+        }
+
+        public async Task<Notebook> Send(int notebookId, Guid fromUser, Guid toUser)
+        {
+            var notebookToShare = await Get(fromUser, notebookId);
+            
+            // var sharedNotebook = await Create(toUser, )
+            // _notebookRepository.Add(notebook);
+
+            // await _notebookRepository.Commit();
+
+            // return notebook;
+            throw new NotImplementedException();
         }
     }
 }

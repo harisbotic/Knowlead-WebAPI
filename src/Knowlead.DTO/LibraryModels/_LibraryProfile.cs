@@ -10,9 +10,10 @@ namespace Knowlead.DTO.LibraryModels
             CreateMap<NotebookModel, Notebook>()
                 .ForMember(dest => dest.NotebookId, opt => opt.Ignore())
                 .ForMember(dest => dest.CreatedBy, opt => opt.Ignore())
-                .ReverseMap();
+                .ForMember(dest => dest.CreatedById, opt => opt.Ignore());
 
-            CreateMap<CreateNotebookModel, Notebook>();
+            CreateMap<Notebook, NotebookModel>();
+
         }
     } 
 }

@@ -57,11 +57,11 @@ namespace Knowlead.Controllers
         }
 
         [HttpPost(""), ValidateModel]
-        public async Task<IActionResult> Create([FromBody] CreateNotebookModel createNotebookModel)
+        public async Task<IActionResult> Create([FromBody] NotebookModel notebookModel)
         {
             var applicationUserId = _auth.GetUserId();
 
-            var notebook = await _notebookServices.Create(applicationUserId, createNotebookModel);
+            var notebook = await _notebookServices.Create(applicationUserId, notebookModel);
 
             if(notebook == null)
                 return BadRequest();
