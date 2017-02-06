@@ -12,10 +12,6 @@ namespace Knowlead.DTO.NotificationModels
         public Guid NotificationId { get; set; }
         [MyRequired]
         public String NotificationType { get; private set; }
-
-        [MyRequired]
-        public Guid ForApplicationUserId { get; set; }
-        public ApplicationUserModel ForApplicationUser { get; set; }
         
         public Guid FromApplicationUserId { get; set; }
         public ApplicationUserModel FromApplicationUser { get; set; }

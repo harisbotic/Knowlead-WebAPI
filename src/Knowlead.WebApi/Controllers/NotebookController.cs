@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Knowlead.Common.Attributes;
 using Knowlead.Common.HttpRequestItems;
@@ -40,7 +41,7 @@ namespace Knowlead.Controllers
             });
         }
 
-        [HttpGet("{notebookId}")]
+        [HttpGet("")]
         public async Task<IActionResult> GetAll()
         {
             var applicationUserId = _auth.GetUserId();
@@ -52,7 +53,7 @@ namespace Knowlead.Controllers
 
             return Ok(new ResponseModel()
             {
-                Object = AutoMapper.Mapper.Map<NotebookModel>(notebook)
+                Object = AutoMapper.Mapper.Map<List<NotebookModel>>(notebook)
             });
         }
 
