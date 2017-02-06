@@ -53,6 +53,7 @@ public static class GenerateScript
 
         generator = new TypeScriptBuilder.TypeScriptGenerator(options);
         generator.AddCSType(typeof(Constants.ErrorCodes));
+        generator.AddCSType(typeof(Constants.NotificationTypes));
         Console.WriteLine("constants.ts");
         generator.Store(args[1] + "constants.ts");
     }

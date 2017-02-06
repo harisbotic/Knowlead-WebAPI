@@ -90,6 +90,8 @@ namespace Knowlead.Common
             public const string PrepareForP2P = "NotificationTypes.PREPARE_FOR_P2P";
             [TSInitialize]
             public const string RewardClaimed = "NotificationTypes.REWARD_CLAIMED";
+            [TSInitialize]
+            public const string NewFriendship = "NotificationTypes.NEW_FRIENDSHIP";
         }
 
         [TSClass]
