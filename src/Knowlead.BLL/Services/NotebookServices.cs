@@ -25,6 +25,9 @@ namespace Knowlead.Services
         {
             var notebook = await _notebookRepository.Get(notebookId);
 
+            if(notebook == null)
+                throw new ErrorModelException(ErrorCodes.EntityNotFound, nameof(Notebook));
+
             //Check if is allowed to read
             if(!notebook.CreatedById.Equals(applicationUserId))
                 throw new ErrorModelException(ErrorCodes.OwnershipError);
@@ -66,6 +69,15 @@ namespace Knowlead.Services
             await _notebookRepository.Commit();
 
             return notebook;
+        }
+
+        public async Task<Boolean> Delete(Guid applicationUserId, int notebookId )
+        {
+            var notebook = await Get(applicationUserId, notebookId);
+            notebook.IsDeleted = true;
+
+            await _notebookRepository.Commit();
+            return true;
         }
 
         public async Task<Notebook> Send(int notebookId, Guid fromUser, Guid toUser)

@@ -17,6 +17,8 @@ namespace Knowlead.DomainModel.LibraryModels
         public String SecondaryColor { get; set; } = "#007bb6";
         [MyRequired]
         public DateTime CreatedAt { get; set; }
+        [MyRequired]
+        public bool IsDeleted { get; set; } = false;
 
 
         [MyRequired]

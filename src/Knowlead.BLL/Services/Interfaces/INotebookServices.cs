@@ -9,10 +9,11 @@ namespace Knowlead.Services.Interfaces
 {
     public interface INotebookServices
     {
-        Task<Notebook> Get (Guid applicationUserId, int notebookId);
-        Task<List<Notebook>> GetAllFromUser (Guid applicationUserId);
-        Task<Notebook> Create (Guid applicationUserId, NotebookModel notebookModel);
-        Task<Notebook> Patch (int notebookId, JsonPatchDocument<NotebookModel> notebookPatch);
+        Task<Notebook> Get(Guid applicationUserId, int notebookId);
+        Task<List<Notebook>> GetAllFromUser(Guid applicationUserId);
+        Task<Notebook> Create(Guid applicationUserId, NotebookModel notebookModel);
+        Task<Notebook> Patch(int notebookId, JsonPatchDocument<NotebookModel> notebookPatch);
+        Task<Boolean> Delete(Guid applicationUserId, int notebookId);
         Task<Notebook> Send(int notebookId, Guid fromUser, Guid toUser);
     }
 }

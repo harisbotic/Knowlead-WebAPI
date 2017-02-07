@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Knowlead.BLL.Repositories.Interfaces;
 using Knowlead.Common.Exceptions;
@@ -25,9 +26,9 @@ namespace Knowlead.BLL.Repositories
             return await _context.Notebooks.Where(x => x.NotebookId.Equals(notebookId)).FirstOrDefaultAsync();
         }
 
-        public async Task<List<Notebook>> GetAllWhere(Func<Notebook, bool> condition)
+        public async Task<List<Notebook>> GetAllWhere(Expression<Func<Notebook, bool>> condition)
         {
-            return await _context.Notebooks.Where(x => condition(x)).ToListAsync();
+            return await _context.Notebooks.Where(condition).Where(x => x.IsDeleted == false).ToListAsync();
         }
 
         public void Add(Notebook notebook)
