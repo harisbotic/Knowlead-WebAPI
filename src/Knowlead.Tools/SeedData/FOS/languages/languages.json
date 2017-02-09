@@ -20,12 +20,14 @@
         {
             "Code": "Languages.English.UK",
             "Name": "UK English",
-            "ParentFosId": "Languages.English"
+            "ParentFosId": "Languages.English",
+            "Unlocked": true
         },
         {
             "Code": "Languages.English.USA",
             "Name": "USA English",
-            "ParentFosId": "Languages.English"
+            "ParentFosId": "Languages.English",
+            "Unlocked": true 
         },
         {
             "Code": "Languages.Arabic",

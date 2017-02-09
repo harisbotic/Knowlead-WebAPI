@@ -84,7 +84,7 @@ namespace Knowlead.Controllers
 
         // GET api/lookup/foses
         [HttpGet("foses")]
-        public IActionResult GetAllFOS()
+        public IActionResult GetAllFOSes()
         {
             var foss = _context.Fos.ToList();
 
@@ -97,6 +97,17 @@ namespace Knowlead.Controllers
 
             return new OkObjectResult(new ResponseModel{
                 Object = fossModel
+            });
+        }
+
+        // GET api/lookup/fosVoteCount
+        [HttpGet("fosVoteCount/{coreLookupId}")]
+        public async Task<IActionResult> GetFOSVoteCount(int coreLookupId)
+        {
+            var count = await _context.ApplicationUserInterests.Where(x => x.FosId.Equals(coreLookupId)).CountAsync();
+
+            return Ok(new ResponseModel{
+                Object = count
             });
         }
 

@@ -78,7 +78,7 @@ namespace Knowlead.Controllers
         {
             var applicationUser = await _auth.GetUser();
 
-            var notebook = _notebookServices.Patch(notebookId, notebookPatch);
+            var notebook = await _notebookServices.Patch(notebookId, notebookPatch);
 
             if(notebook == null)
                 return BadRequest();

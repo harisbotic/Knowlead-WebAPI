@@ -156,7 +156,7 @@ public class Seeder<T> : ISeeder where T : class
         }
     }
 
-    private void DoUpdateRow(T from, ref T to)
+    private void DoUpdateRow(T @from, ref T to)
     {
         if (verbose)
             Console.WriteLine("Debug: Updating a row");
@@ -165,7 +165,7 @@ public class Seeder<T> : ISeeder where T : class
             Same++;
         } else
         {
-            Mapper.Map(from, to, typeof(T), typeof(T));
+            Mapper.Map(@from, to, typeof(T), typeof(T));
             Updated++;
         }
         if (config.SaveAfterEachRow)

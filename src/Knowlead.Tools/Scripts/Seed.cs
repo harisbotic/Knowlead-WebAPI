@@ -158,6 +158,7 @@ namespace Knowlead.Tools
                 context = ScriptUtils.InitializeContext();
             
             /** Seeding roles and roleclaims **/
+            if(verbose)
             Console.WriteLine("Seeding roles...");
             var roles = GetConstants(typeof(UserRoles));
             foreach (var role in roles)
@@ -171,6 +172,7 @@ namespace Knowlead.Tools
                 }
             }
             context.SaveChanges();
+            if(verbose)
             Console.WriteLine("Done seeding roles");
             /** Done seeding roles **/
 

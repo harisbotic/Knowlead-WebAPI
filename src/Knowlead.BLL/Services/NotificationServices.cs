@@ -1,12 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using Hangfire;
 using Knowlead.BLL.Repositories.Interfaces;
 using Knowlead.DomainModel.NotificationModels;
+using Knowlead.DTO.NotificationModels;
 using Knowlead.Services.Interfaces;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using static Knowlead.Common.Constants;
 
 namespace Knowlead.Services
@@ -48,8 +52,13 @@ namespace Knowlead.Services
         {
             foreach (var notification in notifications)
             {
-                //if(now || notification.ScheduledAt.CompareTo(DateTime.UtcNow) < 0)
-                _hubContext.Clients.User(notification.ForApplicationUserId.ToString()).InvokeAsync(WebClientFunctionNames.DisplayNotification, notification);  
+                var json = JsonConvert.SerializeObject(Mapper.Map<NotificationModel>(notification), new JsonSerializerSettings 
+                { 
+                    ContractResolver = new CamelCasePropertyNamesContractResolver() 
+                });
+
+                _hubContext.Clients.User(notification.ForApplicationUserId.ToString())
+                                    .InvokeAsync(WebClientFunctionNames.DisplayNotification, json);  
             }
 
             return Task.CompletedTask;

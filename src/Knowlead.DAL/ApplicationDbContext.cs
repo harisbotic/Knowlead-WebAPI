@@ -107,12 +107,10 @@ namespace Knowlead.DAL
             modelBuilder.HasPostgresExtension("uuid-ossp");
 
             /* GeoLookups */
-            modelBuilder.Entity<_GeoLookup>().HasAlternateKey(f => f.Code);
             modelBuilder.Entity<Country>().ToTable("Countries");
             modelBuilder.Entity<State>().ToTable("States");
 
             /* CoreLookups */
-            modelBuilder.Entity<_CoreLookup>().HasAlternateKey(f => f.Code);
             modelBuilder.Entity<Achievement>().ToTable("Achievements");
             modelBuilder.Entity<FOS>().ToTable("FOS");
             modelBuilder.Entity<Language>().ToTable("Languages");
