@@ -197,7 +197,8 @@ namespace Knowlead.BLL.Repositories
         public async Task<ApplicationUser> GetApplicationUserById(Guid userId, bool includeDetails = false)
         {
             IQueryable<ApplicationUser> userQuery = _context.ApplicationUsers
-                                                            .Where(x => x.Id.Equals(userId));
+                                                            .Where(x => x.Id.Equals(userId))
+                                                            .Include(x => x.ProfilePicture);
                     
             if(includeDetails)
                 userQuery = userQuery.Include(x => x.ApplicationUserLanguages)
@@ -206,8 +207,7 @@ namespace Knowlead.BLL.Repositories
                                         .ThenInclude(x => x.Fos)
                                         .Include(x => x.MotherTongue)
                                         .Include(x => x.Country)
-                                        .Include(x => x.State)
-                                        .Include(x => x.ProfilePicture);
+                                        .Include(x => x.State);
 
             var QueryResult = await userQuery.GroupJoin(_context.AccountTransactions.OrderByDescending(o => o.Timestamp).Take(1),
                                         x => x.Id,
