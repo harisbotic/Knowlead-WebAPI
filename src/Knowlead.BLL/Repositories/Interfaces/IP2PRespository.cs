@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Knowlead.DomainModel.P2PModels;
 using Knowlead.DomainModel.UserModels;
@@ -10,7 +11,7 @@ namespace Knowlead.BLL.Repositories.Interfaces
     {
         Task<P2P> GetP2PTemp(int p2pId);
         Task<IActionResult> Create(P2PModel p2pModel, ApplicationUser applicationUser);
-        Task<IActionResult> Schedule(P2PScheduleModel p2pScheduleModel, ApplicationUser applicationUser);
+        Task<IActionResult> Schedule(int p2pMessageId, Guid applicationUserId);
         Task<IActionResult> Message(P2PMessageModel p2pMessageModel, ApplicationUser applicationUser);
         Task<IActionResult> Delete(int p2pId, ApplicationUser applicationUser);
         Task<IActionResult> GetP2P(int p2pId);

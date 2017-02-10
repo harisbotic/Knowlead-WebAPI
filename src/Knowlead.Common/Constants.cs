@@ -77,6 +77,10 @@ namespace Knowlead.Common
             public const string AlreadyGotReward = "ALREADY_GOT_REWARD";
             [TSInitialize]
             public const string NotEnoughMinutes = "NOT_ENOUGH_MINUTES";
+            [TSInitialize]
+            public const string ConsecutiveOffersLimit = "CONSECUTIVE_OFFERS_LIMIT";
+            [TSInitialize]
+            public const string NotLastOffer = "NOT_LAST_OFFER";    
         }
 
         [TSClass]

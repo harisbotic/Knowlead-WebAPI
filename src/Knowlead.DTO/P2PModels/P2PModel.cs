@@ -22,11 +22,12 @@ namespace Knowlead.DTO.P2PModels
         public string Text { get; set; }
         
         [MyRequired]
-        public float ChargePerMinute { get; set; }
+        public int InitialPrice { get; set; }
         
         public DateTime? Deadline { get; set; }
         
-        public DateTime? ScheduledAt { get; set; }
+        public int? PriceAgreed { get; set; }
+        public DateTime? DateTimeAgreed { get; set; }
 
         public bool IsDeleted { get; set; }
 

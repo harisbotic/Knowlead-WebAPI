@@ -180,7 +180,7 @@ namespace Knowlead.BLL.Repositories
             var correctPassword = await _userManager.CheckPasswordAsync(user, confirmEmailModel.Password);
             if(!correctPassword)
             {
-                var formError = new FormErrorModel(nameof(confirmEmailModel.Email), ErrorCodes.PasswordIncorrect);
+                var formError = new FormErrorModel(nameof(confirmEmailModel.Password), ErrorCodes.PasswordIncorrect);
                 return new BadRequestObjectResult(new ResponseModel(formError));
             }
 

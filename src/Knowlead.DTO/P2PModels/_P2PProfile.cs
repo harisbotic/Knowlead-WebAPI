@@ -12,6 +12,7 @@ namespace Knowlead.DTO.UserModels
         public _P2PProfile()
         {
             CreateMap<P2PModel, P2P>()
+                .ForMember(dest => dest.P2pId, opt => opt.Ignore())
                 .ForMember(dest => dest.P2PLanguages, opt => opt.Ignore())
                 .ForMember(dest => dest.Fos, opt => opt.Ignore())
                 .ForMember(dest => dest.CreatedBy, opt => opt.Ignore())

@@ -46,12 +46,12 @@ namespace Knowlead.Controllers
             return await _p2pRepository.Create(p2pModel, applicationUser);
         }
 
-        [HttpPost("schedule"), ValidateModel]
-        public async Task<IActionResult> Schedule([FromBody] P2PScheduleModel p2pScheduleModel)
+        [HttpPost("schedule")]
+        public async Task<IActionResult> Schedule(int p2pMessageId)
         {
-            var applicationUser = await _auth.GetUser();
+            var applicationUserId = _auth.GetUserId();
 
-            return await _p2pRepository.Schedule(p2pScheduleModel, applicationUser);
+            return await _p2pRepository.Schedule(p2pMessageId, applicationUserId);
         }
 
         [HttpPost("message"), ValidateModel]

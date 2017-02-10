@@ -80,6 +80,10 @@ namespace Knowlead.BLL.Repositories
             if(p2p.Deadline != null && p2p.Deadline < DateTime.Now.AddMinutes(1))
                     return new BadRequestObjectResult(new ResponseModel(new FormErrorModel(nameof(P2P.Deadline), ErrorCodes.IncorrectValue)));
             
+             if(p2p.InitialPrice < 0)
+                throw new FormErrorModelException(nameof(P2PModel.InitialPrice), ErrorCodes.IncorrectValue);
+            
+
             var blobIds = p2pModel.Blobs.Select(x => x.BlobId).ToList();
             var blobs = _context.Blobs.Where(x => blobIds.Contains(x.BlobId)).ToList();
 
@@ -114,34 +118,36 @@ namespace Knowlead.BLL.Repositories
             });
         }
 
-        public async Task<IActionResult> Schedule(P2PScheduleModel p2pScheduleModel, ApplicationUser applicationUser)
+        public async Task<IActionResult> Schedule(int p2pMessageId, Guid applicationUserId)
         {
-            var p2p = await _context.P2p.Where(x => x.P2pId == p2pScheduleModel.P2pId).FirstOrDefaultAsync();
+            var p2pMessage = await _context.P2PMessages.Where(x => x.P2pMessageId.Equals(p2pMessageId)).Include(x => x.P2p).FirstOrDefaultAsync();
+            var p2p = p2pMessage?.P2p;
 
-            if(p2p.CreatedById != applicationUser.Id)
-                return new BadRequestObjectResult(new ResponseModel(new ErrorModel(ErrorCodes.OwnershipError)));
+            if(p2pMessage == null)
+                throw new ErrorModelException(ErrorCodes.EntityNotFound, nameof(P2PMessage));
 
-            if(p2p.CreatedById == p2pScheduleModel.ScheduleWithId)
-                return new BadRequestObjectResult(new ResponseModel(new ErrorModel(ErrorCodes.HackAttempt)));
+            var lastOfferInNegotiation = await _context.P2PMessages.Where(x => x.P2pId.Equals(p2p.P2pId))
+                                                                   .Where(x => x.MessageFromId.Equals(p2pMessage.MessageFromId))
+                                                                   .Where(x => x.MessageToId.Equals(p2pMessage.MessageToId))
+                                                                   .LastOrDefaultAsync();
+
+            if(lastOfferInNegotiation.P2pMessageId.Equals(p2pMessage.P2pMessageId)) //Is this the last offer offered
+                throw new ErrorModelException(ErrorCodes.NotLastOffer, p2pMessage.P2pMessageId.ToString());
+
+            if(p2pMessage.MessageToId.Equals(applicationUserId)) //Can this user accept the offer
+                throw new ErrorModelException(ErrorCodes.HackAttempt);
 
             if(p2p.IsDeleted)
                 throw new ErrorModelException(ErrorCodes.EntityNotFound, nameof(P2P));
-
-            if(!p2pScheduleModel.ScheduleWithId.HasValue && !p2p.ScheduledWithId.HasValue)
-                return new BadRequestObjectResult(new ResponseModel(new ErrorModel(ErrorCodes.IncorrectValue, nameof(P2P))));
-
-            if(p2p.ScheduledAt.HasValue || //Already scheduled with someone and with specific time
-               (p2p.ScheduledWithId.HasValue && !p2pScheduleModel.ScheduleTime.HasValue)) //Scheduled with someone, and no specific time provided 
-                return new BadRequestObjectResult(new ResponseModel(new ErrorModel(ErrorCodes.AlreadyScheduled, nameof(P2P))));
-
-            if(!p2p.ScheduledWithId.HasValue)
-                p2p.ScheduledWithId = p2pScheduleModel.ScheduleWithId;
-
-            if(p2pScheduleModel.ScheduleTime.HasValue && 
-               p2pScheduleModel.ScheduleTime.GetValueOrDefault() < DateTime.UtcNow) //Check with p2p deadline too?
-                return new BadRequestObjectResult(new ResponseModel(new ErrorModel(ErrorCodes.DateInPast, nameof(P2P.ScheduledAt)))); 
             
-            p2p.ScheduledAt = p2pScheduleModel.ScheduleTime;
+            if(p2p.ScheduledWithId.HasValue)
+                throw new ErrorModelException(ErrorCodes.AlreadyScheduled, nameof(P2P));
+
+            if(p2pMessage.PriceOffer < 0)
+               throw new ErrorModelException(ErrorCodes.IncorrectValue, nameof(P2PMessageModel.PriceOffer));
+
+            p2p.PriceAgreed = p2pMessage.PriceOffer;
+            p2p.DateTimeAgreed = p2pMessage.DateTimeOffer;
 
             _context.P2p.Update(p2p);
             
@@ -154,9 +160,6 @@ namespace Knowlead.BLL.Repositories
             return new OkObjectResult(new ResponseModel{
                 Object = Mapper.Map<P2PModel>(p2p)
             });
-
-
-
         }
         
         public async Task<IActionResult> Message(P2PMessageModel p2pMessageModel, ApplicationUser applicationUser)
@@ -168,21 +171,25 @@ namespace Knowlead.BLL.Repositories
                 throw new ErrorModelException(ErrorCodes.EntityNotFound, nameof(P2P));
 
             if(p2p.IsDeleted)
-                return new BadRequestObjectResult(new ResponseModel(new ErrorModel(ErrorCodes.DiscussionClosed, nameof(P2P))));
+                throw new ErrorModelException(ErrorCodes.DiscussionClosed, nameof(P2P));
 
-            if(p2p.ScheduledAt.HasValue)
-                return new BadRequestObjectResult(new ResponseModel(new ErrorModel(ErrorCodes.DiscussionClosed, nameof(P2P))));
+            if(p2p.DateTimeAgreed.HasValue)
+                throw new ErrorModelException(ErrorCodes.DiscussionClosed, nameof(P2P));
 
             if(p2pMessageModel.MessageToId == applicationUser.Id)
-                return new BadRequestObjectResult(new ResponseModel(new ErrorModel(ErrorCodes.AuthorityError, nameof(P2PMessage))));
+                throw new ErrorModelException(ErrorCodes.AuthorityError, nameof(P2PMessage));
 
             if(p2p.CreatedById != applicationUser.Id && p2pMessageModel.MessageToId != p2p.CreatedById)
-                return new BadRequestObjectResult(new ResponseModel()); // outsiders can only message creator of p2p
+                throw new ErrorModelException(ErrorCodes.HackAttempt); // outsiders can only message creator of p2p
             
-            if(p2p.CreatedById == applicationUser.Id) // check if creator of p2p is messaging someone who already messaged him 
-                if(await _context.P2PMessages.Where(x => x.P2pId == p2p.P2pId && x.MessageFromId == p2pMessageModel.MessageToId).CountAsync() <= 0)
-                    return new BadRequestObjectResult(new ResponseModel(new ErrorModel(ErrorCodes.HackAttempt, nameof(P2PMessage))));
+            var pastOffers = await _context.P2PMessages.Where(x => x.P2pId == p2p.P2pId).OrderByDescending(x => x.Timestamp).Take(2).ToListAsync();
 
+            if(p2p.CreatedById == applicationUser.Id) // check if creator of p2p is messaging someone who already messaged him 
+                if(pastOffers.Count() > 0 && pastOffers.Where(x => x.MessageToId == applicationUser.Id).Count() > 0)
+                    throw new ErrorModelException(ErrorCodes.HackAttempt, nameof(P2PMessage));
+
+            if(pastOffers.FirstOrDefault().MessageFromId == pastOffers.LastOrDefault().MessageFromId) //You can't spam without anyone replying to you
+                throw new ErrorModelException(ErrorCodes.ConsecutiveOffersLimit, "2");
             
             p2pMessage.MessageFromId = applicationUser.Id;
             p2pMessage.MessageToId = p2pMessage.MessageToId;
@@ -255,7 +262,7 @@ namespace Knowlead.BLL.Repositories
         {
             var p2ps = await _context.P2p
                     .IncludeEverything()
-                    .Where(x => x.ScheduledAt.HasValue)
+                    .Where(x => x.DateTimeAgreed.HasValue)
                     .Where(x => x.CreatedById == applicationUser.Id || x.ScheduledWithId == applicationUser.Id)
                     .ToListAsync();
 
