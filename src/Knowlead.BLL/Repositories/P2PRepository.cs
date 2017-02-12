@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Knowlead.Common.Exceptions;
+using Knowlead.Services.Interfaces;
 
 namespace Knowlead.BLL.Repositories
 {
@@ -22,12 +23,15 @@ namespace Knowlead.BLL.Repositories
     {
         private readonly ApplicationDbContext _context;
         private readonly IHostingEnvironment _environment;
+        private readonly INotificationServices _notificationServices;
 
         public P2PRepository(ApplicationDbContext context,
-                             IHostingEnvironment environment)
+                             IHostingEnvironment environment,
+                             INotificationServices notificationServices)
         {
             _context = context;
             _environment = environment;
+            _notificationServices = notificationServices;
         }
 
         public async Task<P2P> GetP2PTemp(int p2pId)
@@ -192,7 +196,6 @@ namespace Knowlead.BLL.Repositories
                 throw new ErrorModelException(ErrorCodes.ConsecutiveOffersLimit, "2");
             
             p2pMessage.MessageFromId = applicationUser.Id;
-            p2pMessage.MessageToId = p2pMessage.MessageToId;
 
             _context.P2PMessages.Add(p2pMessage);
 
@@ -201,6 +204,8 @@ namespace Knowlead.BLL.Repositories
                 var error = new ErrorModel(ErrorCodes.DatabaseError);
                 return new BadRequestObjectResult(new ResponseModel(error));
             }
+
+            await _notificationServices.NewNotification(p2pMessage.MessageToId, NotificationTypes.NewP2PComment, DateTime.UtcNow);
 
             return new OkObjectResult(new ResponseModel{
                 Object = Mapper.Map<P2PMessageModel>(p2pMessage)

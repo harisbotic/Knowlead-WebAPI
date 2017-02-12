@@ -12,7 +12,10 @@ namespace Knowlead.DomainModel.P2PModels
         [MyRequired]
         public string Text { get; set; }
 
-        public DateTime? DateTimeOffer { get; set; }
+        [MyRequired]
+        public DateTime DateTimeOffer { get; set; }
+        
+        [MyRequired]
         public int PriceOffer { get; set; }
 
         public DateTime Timestamp { get; set; }

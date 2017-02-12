@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Knowlead.BLL.Repositories.Interfaces;
 using Knowlead.Common.Exceptions;
 using Knowlead.DAL;
 using Knowlead.DomainModel.NotificationModels;
+using Microsoft.EntityFrameworkCore;
 using static Knowlead.Common.Constants;
 
 namespace Knowlead.BLL.Repositories
@@ -18,6 +21,24 @@ namespace Knowlead.BLL.Repositories
             _context = context;
         }
 
+        public async Task<Notification> Get(Guid notificationId)
+        {
+            return await _context.Notifications.Where(x => x.NotificationId.Equals(notificationId)).FirstOrDefaultAsync();
+        }
+
+        public async Task<List<Notification>> GetAllWhere(Expression<Func<Notification, bool>> condition)
+        {
+            return await _context.Notifications.Where(condition).ToListAsync();
+        }
+
+        public async Task<List<Notification>> GetPagedList(Guid applicationUserId, int pageIndex, int pageItems)
+        {
+            return await _context.Notifications.Where(x => x.ForApplicationUserId.Equals(applicationUserId))
+                                                .Where(x => x.ScheduledAt <= DateTime.UtcNow)
+                                                .OrderByDescending(x => x.ScheduledAt)
+                                                .Take(pageItems).Skip(pageIndex*pageItems).ToListAsync();
+        }
+
         public async Task<List<Notification>> InsertNotification(List<Guid> userIds, String notificationType, DateTime scheduledAt)
         {
             var notifications = new List<Notification>();
@@ -29,12 +50,17 @@ namespace Knowlead.BLL.Repositories
                 _context.Notifications.Add(notification);
             }
 
-            await SaveChangesAsync();
+            await Commit();
             
             return notifications;
         }
 
-        private async Task SaveChangesAsync()
+        public void Update(Notification notification)
+        {
+            _context.Notifications.Update(notification);
+        }
+
+        public async Task Commit()
         {
             var success = await _context.SaveChangesAsync() > 0;
             if(!success)
