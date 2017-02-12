@@ -13,10 +13,7 @@ namespace Knowlead.DTO.P2PModels
     public class P2PModel
     {        
         [MyRequired]
-        public int P2pId { get; set; }
-        
-        [MyRequired]
-        public string Title { get; set; }      
+        public int P2pId { get; set; }     
           
         [MyRequired]
         public string Text { get; set; }

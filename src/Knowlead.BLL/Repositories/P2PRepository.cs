@@ -21,6 +21,7 @@ namespace Knowlead.BLL.Repositories
 {
     public class P2PRepository : IP2PRepository
     {
+        public static int ConsecutiveP2PMessageLimit = 2;
         private readonly ApplicationDbContext _context;
         private readonly IHostingEnvironment _environment;
         private readonly INotificationServices _notificationServices;
@@ -82,30 +83,41 @@ namespace Knowlead.BLL.Repositories
             p2p.CreatedById = applicationUser.Id;
             
             if(p2p.Deadline != null && p2p.Deadline < DateTime.Now.AddMinutes(1))
-                    return new BadRequestObjectResult(new ResponseModel(new FormErrorModel(nameof(P2P.Deadline), ErrorCodes.IncorrectValue)));
+                throw new ErrorModelException(ErrorCodes.IncorrectValue, nameof(P2P.Deadline));
             
              if(p2p.InitialPrice < 0)
                 throw new FormErrorModelException(nameof(P2PModel.InitialPrice), ErrorCodes.IncorrectValue);
             
-
+            
             var blobIds = p2pModel.Blobs.Select(x => x.BlobId).ToList();
             var blobs = _context.Blobs.Where(x => blobIds.Contains(x.BlobId)).ToList();
 
             foreach (var blob in blobs)
             {
                 if(blob.UploadedById != applicationUser.Id)
-                    return new BadRequestObjectResult(new ResponseModel(new FormErrorModel(nameof(P2P.Deadline), ErrorCodes.OwnershipError)));
+                    throw new ErrorModelException(ErrorCodes.OwnershipError, nameof(P2P.Deadline));
             
                 if(blob.BlobType == "Image")
-                    p2p.P2PImages.Add(new P2PImage{
+                    p2p.P2PImages.Add(new P2PImage
+                    {
                         P2p = p2p,
                         ImageBlobId = blob.BlobId
                     });
 
                 else if(blob.BlobType == "File")
-                    p2p.P2PFiles.Add(new P2PFile{
+                    p2p.P2PFiles.Add(new P2PFile
+                    {
+                        P2p = p2p,
+                        FileBlobId = blob.BlobId
+                    });
+            }
+
+            foreach (var language in p2pModel.Languages)
+            {
+                p2p.P2PLanguages.Add(new P2PLanguage
+                {
                     P2p = p2p,
-                    FileBlobId = blob.BlobId
+                    LanguageId = language.CoreLookupId
                 });
             }
             
@@ -168,7 +180,6 @@ namespace Knowlead.BLL.Repositories
         
         public async Task<IActionResult> Message(P2PMessageModel p2pMessageModel, ApplicationUser applicationUser)
         {
-            var p2pMessage = Mapper.Map<P2PMessage>(p2pMessageModel);
             var p2p = await _context.P2p.Where(x => x.P2pId == p2pMessageModel.P2pId).FirstOrDefaultAsync();
 
             if(p2p == null)
@@ -186,15 +197,16 @@ namespace Knowlead.BLL.Repositories
             if(p2p.CreatedById != applicationUser.Id && p2pMessageModel.MessageToId != p2p.CreatedById)
                 throw new ErrorModelException(ErrorCodes.HackAttempt); // outsiders can only message creator of p2p
             
-            var pastOffers = await _context.P2PMessages.Where(x => x.P2pId == p2p.P2pId).OrderByDescending(x => x.Timestamp).Take(2).ToListAsync();
+            var pastOffers = await _context.P2PMessages.Where(x => x.P2pId == p2p.P2pId).OrderByDescending(x => x.Timestamp).Take(ConsecutiveP2PMessageLimit).ToListAsync();
 
             if(p2p.CreatedById == applicationUser.Id) // check if creator of p2p is messaging someone who already messaged him 
                 if(pastOffers.Count() > 0 && pastOffers.Where(x => x.MessageToId == applicationUser.Id).Count() > 0)
                     throw new ErrorModelException(ErrorCodes.HackAttempt, nameof(P2PMessage));
 
-            if(pastOffers.FirstOrDefault().MessageFromId == pastOffers.LastOrDefault().MessageFromId) //You can't spam without anyone replying to you
-                throw new ErrorModelException(ErrorCodes.ConsecutiveOffersLimit, "2");
+            if(pastOffers.Count() == ConsecutiveP2PMessageLimit && pastOffers.FirstOrDefault()?.MessageFromId == pastOffers.LastOrDefault()?.MessageFromId) //You can't spam without anyone replying to you
+                throw new ErrorModelException(ErrorCodes.ConsecutiveOffersLimit, ConsecutiveP2PMessageLimit.ToString());
             
+            var p2pMessage = Mapper.Map<P2PMessage>(p2pMessageModel);
             p2pMessage.MessageFromId = applicationUser.Id;
 
             _context.P2PMessages.Add(p2pMessage);

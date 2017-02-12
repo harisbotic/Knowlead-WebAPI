@@ -16,9 +16,6 @@ namespace Knowlead.DomainModel.P2PModels
         public int P2pId { get; set; }
         
         [MyRequired]
-        public string Title { get; set; }
-        
-        [MyRequired]
         public string Text { get; set; }
         
         [MyRequired]
@@ -30,6 +27,9 @@ namespace Knowlead.DomainModel.P2PModels
         public DateTime? DateTimeAgreed { get; set; }
 
         public bool IsDeleted { get; set; }
+
+        [MyRequired]
+        public DateTime DateCreated { get; set; }
 
         public Guid? ScheduledWithId { get; set; }
         [ForeignKey("ScheduledWithId")]
@@ -55,6 +55,7 @@ namespace Knowlead.DomainModel.P2PModels
 
         public P2P()
         {
+            this.DateCreated = DateTime.UtcNow;
             this.Status = P2PStatus.Inactive;
             this.P2PLanguages = new List<P2PLanguage>();
             this.P2PImages = new List<P2PImage>();

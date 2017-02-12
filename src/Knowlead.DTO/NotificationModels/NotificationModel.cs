@@ -10,6 +10,7 @@ namespace Knowlead.DTO.NotificationModels
     {
         [Key]
         public Guid NotificationId { get; set; }
+        
         [MyRequired]
         public String NotificationType { get; private set; }
         
