@@ -36,10 +36,10 @@ namespace Knowlead.DomainModel.NotificationModels
             this.FromApplicationUserId = fromApplicationUserId;
 
             this.P2p = p2p;
-            this.P2pId = p2p.P2pId;
+            this.P2pId = p2p?.P2pId;
 
             this.P2pMessage = p2pMessage;
-            this.P2pMessageId = p2pMessage.P2pMessageId;
+            this.P2pMessageId = p2pMessage?.P2pMessageId;
         }
 
         public Notification(Guid forApplicationUser, String notificationType, DateTime scheduledAt)

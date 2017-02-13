@@ -15,10 +15,6 @@ namespace Knowlead.DTO.NotificationModels
         [MyRequired]
         public String NotificationType { get; private set; }
 
-        [MyRequired]
-        public Guid ForApplicationUserId { get; set; }
-        public ApplicationUserModel ForApplicationUser { get; set; }
-        
         public Guid? FromApplicationUserId { get; set; }
         public ApplicationUserModel FromApplicationUser { get; set; }
         
@@ -31,25 +27,6 @@ namespace Knowlead.DTO.NotificationModels
         [MyRequired]
         public DateTime ScheduledAt { get; set; }
         public DateTime? SeenAt { get; set; }
-
-        public NotificationModel(Guid forApplicationUser, String notificationType, DateTime scheduledAt, Guid fromApplicationUserId, P2PModel p2p, P2PMessageModel p2pMessage)
-                            :this(forApplicationUser, notificationType, scheduledAt)
-        {   
-            this.FromApplicationUserId = fromApplicationUserId;
-            
-            this.P2p = p2p;
-            this.P2pId = p2p.P2pId;
-
-            this.P2pMessage = p2pMessage;
-            this.P2pMessageId = p2pMessage.P2pMessageId;
-        }
-
-        public NotificationModel(Guid forApplicationUser, String notificationType, DateTime scheduledAt)
-        {   
-            this.ForApplicationUserId = forApplicationUser;
-            this.NotificationType = notificationType;
-            this.ScheduledAt = scheduledAt;
-        }
 
         public NotificationModel()
         {   }
