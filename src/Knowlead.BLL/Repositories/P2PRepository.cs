@@ -219,7 +219,7 @@ namespace Knowlead.BLL.Repositories
                 var error = new ErrorModel(ErrorCodes.DatabaseError);
                 return new BadRequestObjectResult(new ResponseModel(error));
             }
-            var notification = new Notification(p2pMessage.MessageToId, NotificationTypes.NewP2PComment, DateTime.UtcNow, null, p2pMessage);
+            var notification = new Notification(p2pMessage.MessageToId, NotificationTypes.NewP2PComment, DateTime.UtcNow, applicationUser.Id, null, p2pMessage);
             await _notificationServices.SendNotification(notification);
 
             return new OkObjectResult(new ResponseModel{

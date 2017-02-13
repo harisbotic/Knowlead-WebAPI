@@ -64,9 +64,12 @@ namespace Knowlead.Services
         public async Task SendNotifications (List<Notification> notifications)
         {
             foreach (var notification in notifications)
-            {
                 _notificationRepository.Add(notification);
+            
+            await _notificationRepository.Commit(); //Saving to db
 
+            foreach (var notification in notifications)
+            {
                 var scheduleAt = notification.ScheduledAt;
 
                 if(scheduleAt.Subtract(DateTime.UtcNow).TotalSeconds < 30)
@@ -79,8 +82,6 @@ namespace Knowlead.Services
                     (x) => x.DisplayNotification(notification), scheduleAt.Subtract(DateTime.UtcNow));
                 }
             }
-            
-            await _notificationRepository.Commit();
         }
 
         public async Task MarkAsRead(Guid notificationId, Guid applicationUserId)
