@@ -8,9 +8,7 @@ namespace Knowlead.BLL.QueryExtensions
     {
         public static IQueryable<P2P> IncludeEverything(this IQueryable<P2P> query)
         {
-            return query.Include(x => x.Fos)
-                        .Include(x => x.CreatedBy)
-                        .Include(x => x.ScheduledWith)
+            return query.Include(x => x.P2PLanguages)
                         .Include(x => x.P2PFiles)
                             .ThenInclude(x => x.FileBlob)
                         .Include(x => x.P2PImages)

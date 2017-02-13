@@ -8,7 +8,6 @@ using Knowlead.BLL.Repositories.Interfaces;
 using static Knowlead.Common.Constants;
 using Knowlead.DAL;
 using Knowlead.DomainModel.P2PModels;
-using Knowlead.DomainModel.UserModels;
 using Knowlead.DTO.P2PModels;
 using Knowlead.DTO.ResponseModels;
 using Microsoft.AspNetCore.Hosting;
@@ -53,9 +52,8 @@ namespace Knowlead.BLL.Repositories
             });
         }
 
-        public async Task<IActionResult> GetMessages(int p2pId, ApplicationUser applicationUser)
+        public async Task<IActionResult> GetMessages(int p2pId, Guid applicationUserId)
         {
-            var userId = applicationUser.Id;
             var p2p = await _context.P2p.Where(x => x.P2pId == p2pId).FirstOrDefaultAsync();
 
             if(p2p == null)
@@ -63,13 +61,13 @@ namespace Knowlead.BLL.Repositories
 
             IQueryable<P2PMessage> messagesQuery = _context.P2PMessages
                                                            .Where(x => x.P2pId == p2pId)
-                                                           .Where(x => x.MessageToId == userId || x.MessageFromId == userId)
+                                                           .Where(x => x.MessageToId == applicationUserId || x.MessageFromId == applicationUserId)
                                                            .Include(x => x.MessageFrom)
                                                            .Include(x => x.MessageTo); //TODO: Probably optimization is required
 
-            if(p2p.CreatedById != applicationUser.Id)
+            if(p2p.CreatedById != applicationUserId)
                 messagesQuery = messagesQuery
-                                    .Where(x => x.MessageFromId == applicationUser.Id || x.MessageToId == applicationUser.Id);
+                                    .Where(x => x.MessageFromId == applicationUserId || x.MessageToId == applicationUserId);
                 
             var messages = await messagesQuery.ToListAsync();
 
@@ -78,10 +76,10 @@ namespace Knowlead.BLL.Repositories
             });
         }
 
-        public async Task<IActionResult> Create(P2PModel p2pModel, ApplicationUser applicationUser)
+        public async Task<IActionResult> Create(P2PModel p2pModel, Guid applicationUserId)
         {
             var p2p = Mapper.Map<P2P>(p2pModel);
-            p2p.CreatedById = applicationUser.Id;
+            p2p.CreatedById = applicationUserId;
             
             if(p2p.Deadline != null && p2p.Deadline < DateTime.Now.AddMinutes(1))
                 throw new ErrorModelException(ErrorCodes.IncorrectValue, nameof(P2P.Deadline));
@@ -95,7 +93,7 @@ namespace Knowlead.BLL.Repositories
 
             foreach (var blob in blobs)
             {
-                if(blob.UploadedById != applicationUser.Id)
+                if(blob.UploadedById != applicationUserId)
                     throw new ErrorModelException(ErrorCodes.OwnershipError, nameof(P2P.Deadline));
             
                 if(blob.BlobType == "Image")
@@ -179,10 +177,10 @@ namespace Knowlead.BLL.Repositories
             });
         }
         
-        public async Task<IActionResult> Message(P2PMessageModel p2pMessageModel, ApplicationUser applicationUser)
+        public async Task<IActionResult> Message(P2PMessageModel p2pMessageModel, Guid applicationUserId)
         {
             var p2p = await _context.P2p.Where(x => x.P2pId == p2pMessageModel.P2pId).FirstOrDefaultAsync();
-            var threadWithApplicationUserId = (applicationUser.Id == p2p.CreatedById) ? p2pMessageModel.MessageToId : applicationUser.Id;
+            var threadWithApplicationUserId = (applicationUserId == p2p.CreatedById) ? p2pMessageModel.MessageToId : applicationUserId;
 
             if(p2p == null)
                 throw new ErrorModelException(ErrorCodes.EntityNotFound, nameof(P2P));
@@ -193,24 +191,24 @@ namespace Knowlead.BLL.Repositories
             if(p2p.DateTimeAgreed.HasValue)
                 throw new ErrorModelException(ErrorCodes.DiscussionClosed, nameof(P2P));
 
-            if(p2pMessageModel.MessageToId == applicationUser.Id)
+            if(p2pMessageModel.MessageToId == applicationUserId)
                 throw new ErrorModelException(ErrorCodes.AuthorityError, nameof(P2PMessage));
 
-            if(p2p.CreatedById != applicationUser.Id && p2pMessageModel.MessageToId != p2p.CreatedById)
+            if(p2p.CreatedById != applicationUserId && p2pMessageModel.MessageToId != p2p.CreatedById)
                 throw new ErrorModelException(ErrorCodes.HackAttempt); // outsiders can only message creator of p2p
             
             var pastFewOffers = await _context.P2PMessages.Where(x => x.P2pId == p2p.P2pId && (x.MessageFromId == threadWithApplicationUserId || x.MessageToId == threadWithApplicationUserId)).OrderByDescending(x => x.Timestamp).Take(ConsecutiveP2PMessageLimit).ToListAsync();
 
-            if(p2p.CreatedById == applicationUser.Id) // check if creator of p2p is messaging someone who already messaged him 
+            if(p2p.CreatedById == applicationUserId) // check if creator of p2p is messaging someone who already messaged him 
                 if(pastFewOffers.Count() == 0)
                     throw new ErrorModelException(ErrorCodes.HackAttempt, nameof(P2PMessage));
 
             if (pastFewOffers.Count == ConsecutiveP2PMessageLimit)
-                if (pastFewOffers.Where(offer => offer.MessageFromId == applicationUser.Id).Count() == ConsecutiveP2PMessageLimit)
+                if (pastFewOffers.Where(offer => offer.MessageFromId == applicationUserId).Count() == ConsecutiveP2PMessageLimit)
                     throw new ErrorModelException(ErrorCodes.ConsecutiveOffersLimit, ConsecutiveP2PMessageLimit.ToString());
             
             var p2pMessage = Mapper.Map<P2PMessage>(p2pMessageModel);
-            p2pMessage.MessageFromId = applicationUser.Id;
+            p2pMessage.MessageFromId = applicationUserId;
 
             _context.P2PMessages.Add(p2pMessage);
 
@@ -219,7 +217,7 @@ namespace Knowlead.BLL.Repositories
                 var error = new ErrorModel(ErrorCodes.DatabaseError);
                 return new BadRequestObjectResult(new ResponseModel(error));
             }
-            var notification = new Notification(p2pMessage.MessageToId, NotificationTypes.NewP2PComment, DateTime.UtcNow, applicationUser.Id, null, p2pMessage);
+            var notification = new Notification(p2pMessage.MessageToId, NotificationTypes.NewP2PComment, DateTime.UtcNow, applicationUserId, null, p2pMessage);
             await _notificationServices.SendNotification(notification);
 
             return new OkObjectResult(new ResponseModel{
@@ -227,14 +225,14 @@ namespace Knowlead.BLL.Repositories
             });
         }
 
-        public async Task<IActionResult> Delete(int p2pInt, ApplicationUser applicationUser)
+        public async Task<IActionResult> Delete(int p2pInt, Guid applicationUserId)
         {
             var p2p = await _context.P2p.Where(x => x.P2pId == p2pInt).FirstOrDefaultAsync();
 
             if (p2p == null)
                 throw new ErrorModelException(ErrorCodes.EntityNotFound, nameof(P2P));
 
-            if(p2p.CreatedById != applicationUser.Id)
+            if(p2p.CreatedById != applicationUserId)
                 return new BadRequestObjectResult(new ResponseModel(new ErrorModel(ErrorCodes.OwnershipError)));
 
             if(p2p.IsDeleted)
@@ -259,9 +257,9 @@ namespace Knowlead.BLL.Repositories
             return (await _context.SaveChangesAsync() > 0);
         }
 
-        public async Task<IActionResult> ListMine(ApplicationUser applicationUser)
+        public async Task<IActionResult> ListMine(Guid applicationUserId)
         {
-            var p2ps = await _context.P2p.IncludeEverything().Where(x => x.CreatedById == applicationUser.Id).ToListAsync();
+            var p2ps = await _context.P2p.IncludeEverything().Where(x => x.CreatedById == applicationUserId).ToListAsync();
             // var p2pModels = new List<P2PModel>();
             // var applicationUserModel = Mapper.Map<ApplicationUserModel>(applicationUser);
 
@@ -278,12 +276,12 @@ namespace Knowlead.BLL.Repositories
             });
         }
 
-        public async Task<IActionResult> ListSchedulded(ApplicationUser applicationUser)
+        public async Task<IActionResult> ListSchedulded(Guid applicationUserId)
         {
             var p2ps = await _context.P2p
                     .IncludeEverything()
                     .Where(x => x.DateTimeAgreed.HasValue)
-                    .Where(x => x.CreatedById == applicationUser.Id || x.ScheduledWithId == applicationUser.Id)
+                    .Where(x => x.CreatedById == applicationUserId || x.ScheduledWithId == applicationUserId)
                     .ToListAsync();
 
             return new OkObjectResult(new ResponseModel {
@@ -291,17 +289,25 @@ namespace Knowlead.BLL.Repositories
             });
         }
 
-        public Task<IActionResult> ListBookmarked(ApplicationUser applicationUser)
+        public Task<IActionResult> ListBookmarked(Guid applicationUserId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IActionResult> ListDeleted(ApplicationUser applicationUser)
+        public async  Task<IActionResult> ListDeleted(Guid applicationUserId)
         {
-            throw new NotImplementedException();
+            var p2ps = await _context.P2p
+                    .IncludeEverything()
+                    .Where(x => x.CreatedById == applicationUserId)
+                    .Where(x => x.IsDeleted == true)
+                    .ToListAsync();
+
+            return new OkObjectResult(new ResponseModel {
+                Object = Mapper.Map<List<P2PModel>>(p2ps)
+            });
         }
 
-        public Task<IActionResult> ListActionRequired(ApplicationUser applicationUser)
+        public Task<IActionResult> ListActionRequired(Guid applicationUserId)
         {
             throw new NotImplementedException();
         }
