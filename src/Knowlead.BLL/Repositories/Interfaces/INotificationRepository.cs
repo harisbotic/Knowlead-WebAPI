@@ -9,7 +9,7 @@ namespace Knowlead.BLL.Repositories.Interfaces
     public interface INotificationRepository
     {
         Task<Notification> Get(Guid notificationId);
-        Task<List<Notification>> GetPagedList(Guid applicationUserId, int pageIndex, int pageItems);
+        Task<List<Notification>> GetPagedList(Guid applicationUserId, int offset, int numItems);
         Task<List<Notification>> GetAllWhere(Expression<Func<Notification, bool>> condition);
         Task<List<Notification>> InsertNotification(List<Guid> userIds, String notificationType, DateTime scheduledAt);
         void Update(Notification notification);

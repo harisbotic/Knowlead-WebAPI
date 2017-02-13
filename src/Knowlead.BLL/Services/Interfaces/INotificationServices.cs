@@ -9,7 +9,7 @@ namespace Knowlead.Services.Interfaces
     {
         Task NewNotification (Guid applicationUserId, String notificationType, DateTime scheduleAt);
         Task NewNotification (List<Guid> applicationUserIds, String notificationType, DateTime scheduleAt);
-        Task<List<Notification>> GetPagedList(Guid applicationUserId, int pageIndex, int pageItems);
+        Task<List<Notification>> GetPagedList(Guid applicationUserId, int offset, int numItems);
         Task MarkAsRead(Guid notificationId, Guid applicationUserId);
         Task MarkAllAsRead(Guid applicationUserId);
         Task DisplayNotifications(List<Notification> notifications, bool now);

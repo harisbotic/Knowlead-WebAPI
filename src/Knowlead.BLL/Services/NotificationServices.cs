@@ -49,9 +49,9 @@ namespace Knowlead.Services
             return notifications;
         }
 
-        public async Task<List<Notification>> GetPagedList(Guid applicationUserId, int pageIndex, int pageItems)
+        public async Task<List<Notification>> GetPagedList(Guid applicationUserId, int offset, int numItems)
         {
-            var notifications = await _notificationRepository.GetPagedList(applicationUserId, pageIndex, pageItems);
+            var notifications = await _notificationRepository.GetPagedList(applicationUserId, offset, numItems);
 
             return notifications;
         }

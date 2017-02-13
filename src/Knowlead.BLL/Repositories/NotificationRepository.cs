@@ -31,12 +31,12 @@ namespace Knowlead.BLL.Repositories
             return await _context.Notifications.Where(condition).ToListAsync();
         }
 
-        public async Task<List<Notification>> GetPagedList(Guid applicationUserId, int pageIndex, int pageItems)
+        public async Task<List<Notification>> GetPagedList(Guid applicationUserId, int offset, int numItems)
         {
             return await _context.Notifications.Where(x => x.ForApplicationUserId.Equals(applicationUserId))
                                                 .Where(x => x.ScheduledAt <= DateTime.UtcNow)
                                                 .OrderByDescending(x => x.ScheduledAt)
-                                                .Take(pageItems).Skip(pageIndex*pageItems).ToListAsync();
+                                                .Skip(offset).Take(numItems).ToListAsync();
         }
 
         public async Task<List<Notification>> InsertNotification(List<Guid> userIds, String notificationType, DateTime scheduledAt)

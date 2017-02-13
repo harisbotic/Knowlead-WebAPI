@@ -27,11 +27,11 @@ namespace Knowlead.Controllers
         }
 
         [HttpGet("")]
-        public async Task<IActionResult> GetList(int pageIndex = 0, int pageItems = 10) //TODO: limit those numbers
+        public async Task<IActionResult> GetList(int offset = 0, int numItems = 10) //TODO: limit those numbers
         {
             var applicationUserId = _auth.GetUserId();
 
-            var notifications = await _notificationServices.GetPagedList(applicationUserId, pageIndex, pageItems);
+            var notifications = await _notificationServices.GetPagedList(applicationUserId, offset, numItems);
 
             if(notifications == null)
                 throw new ErrorModelException(ErrorCodes.EntityNotFound, nameof(Notification));
