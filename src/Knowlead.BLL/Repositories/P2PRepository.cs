@@ -198,14 +198,15 @@ namespace Knowlead.BLL.Repositories
             if(p2p.CreatedById != applicationUser.Id && p2pMessageModel.MessageToId != p2p.CreatedById)
                 throw new ErrorModelException(ErrorCodes.HackAttempt); // outsiders can only message creator of p2p
             
-            var pastOffers = await _context.P2PMessages.Where(x => x.P2pId == p2p.P2pId && (x.MessageFromId == threadWithApplicationUserId || x.MessageToId == threadWithApplicationUserId)).OrderByDescending(x => x.Timestamp).Take(ConsecutiveP2PMessageLimit).ToListAsync();
+            var pastFewOffers = await _context.P2PMessages.Where(x => x.P2pId == p2p.P2pId && (x.MessageFromId == threadWithApplicationUserId || x.MessageToId == threadWithApplicationUserId)).OrderByDescending(x => x.Timestamp).Take(ConsecutiveP2PMessageLimit).ToListAsync();
 
             if(p2p.CreatedById == applicationUser.Id) // check if creator of p2p is messaging someone who already messaged him 
-                if(pastOffers.Count() == 0)
+                if(pastFewOffers.Count() == 0)
                     throw new ErrorModelException(ErrorCodes.HackAttempt, nameof(P2PMessage));
 
-            if(pastOffers.Count() == ConsecutiveP2PMessageLimit && pastOffers.FirstOrDefault()?.MessageFromId == pastOffers.LastOrDefault()?.MessageFromId) //You can't spam without anyone replying to you
-                throw new ErrorModelException(ErrorCodes.ConsecutiveOffersLimit, ConsecutiveP2PMessageLimit.ToString());
+            if (pastFewOffers.Count == ConsecutiveP2PMessageLimit)
+                if (pastFewOffers.Where(offer => offer.MessageFromId == applicationUser.Id).Count() == ConsecutiveP2PMessageLimit)
+                    throw new ErrorModelException(ErrorCodes.ConsecutiveOffersLimit, ConsecutiveP2PMessageLimit.ToString());
             
             var p2pMessage = Mapper.Map<P2PMessage>(p2pMessageModel);
             p2pMessage.MessageFromId = applicationUser.Id;
