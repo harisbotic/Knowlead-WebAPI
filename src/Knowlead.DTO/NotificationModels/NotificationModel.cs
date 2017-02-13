@@ -19,7 +19,7 @@ namespace Knowlead.DTO.NotificationModels
         public ApplicationUserModel FromApplicationUser { get; set; }
         
         public int? P2PMessageId { get; set; }
-        public P2PMessage P2PMessage { get; set; }
+        public P2PMessageModel P2PMessage { get; set; }
 
         public int? P2pId { get; set; } //TODO: change to P2P when frontend matures
         public P2PModel P2p { get; set; }
