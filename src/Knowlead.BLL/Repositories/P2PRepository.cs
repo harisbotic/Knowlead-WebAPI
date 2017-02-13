@@ -181,6 +181,7 @@ namespace Knowlead.BLL.Repositories
         public async Task<IActionResult> Message(P2PMessageModel p2pMessageModel, ApplicationUser applicationUser)
         {
             var p2p = await _context.P2p.Where(x => x.P2pId == p2pMessageModel.P2pId).FirstOrDefaultAsync();
+            var threadWithApplicationUserId = (applicationUser.Id == p2p.CreatedById) ? p2pMessageModel.MessageToId : applicationUser.Id;
 
             if(p2p == null)
                 throw new ErrorModelException(ErrorCodes.EntityNotFound, nameof(P2P));
@@ -197,10 +198,10 @@ namespace Knowlead.BLL.Repositories
             if(p2p.CreatedById != applicationUser.Id && p2pMessageModel.MessageToId != p2p.CreatedById)
                 throw new ErrorModelException(ErrorCodes.HackAttempt); // outsiders can only message creator of p2p
             
-            var pastOffers = await _context.P2PMessages.Where(x => x.P2pId == p2p.P2pId).OrderByDescending(x => x.Timestamp).Take(ConsecutiveP2PMessageLimit).ToListAsync();
+            var pastOffers = await _context.P2PMessages.Where(x => x.P2pId == p2p.P2pId && (x.MessageFromId == threadWithApplicationUserId || x.MessageToId == threadWithApplicationUserId)).OrderByDescending(x => x.Timestamp).Take(ConsecutiveP2PMessageLimit).ToListAsync();
 
             if(p2p.CreatedById == applicationUser.Id) // check if creator of p2p is messaging someone who already messaged him 
-                if(pastOffers.Count() > 0 && pastOffers.Where(x => x.MessageToId == applicationUser.Id).Count() > 0)
+                if(pastOffers.Count() == 0)
                     throw new ErrorModelException(ErrorCodes.HackAttempt, nameof(P2PMessage));
 
             if(pastOffers.Count() == ConsecutiveP2PMessageLimit && pastOffers.FirstOrDefault()?.MessageFromId == pastOffers.LastOrDefault()?.MessageFromId) //You can't spam without anyone replying to you
