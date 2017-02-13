@@ -26,6 +26,8 @@ namespace Knowlead.DTO.P2PModels
         public int? PriceAgreed { get; set; }
         public DateTime? DateTimeAgreed { get; set; }
 
+        public DateTime DateCreated { get; set; }
+
         public bool IsDeleted { get; set; }
 
         public Guid? ScheduledWithId { get; set; }

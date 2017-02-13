@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Knowlead.BLL.Repositories.Interfaces;
 using Knowlead.Common.Exceptions;
 using Knowlead.DomainModel.LookupModels.Core;
+using Knowlead.DomainModel.NotificationModels;
 using Knowlead.DTO.StatisticsModels;
 using Knowlead.Services.Interfaces;
 using static Knowlead.Common.Constants;
@@ -47,7 +48,7 @@ namespace Knowlead.Services
             await _transactionServices.RewardMinutes(applicationUserId, reward.MinutesReward, reward.PointsReward, TransactionReasons.RewardClaimed+rewardId);
 
             //Send notification
-            await _notificationServices.NewNotification(applicationUserId, NotificationTypes.RewardClaimed, DateTime.UtcNow);
+            await _notificationServices.SendNotification(new Notification(applicationUserId, NotificationTypes.RewardClaimed, DateTime.UtcNow));
             
             return reward;
         }

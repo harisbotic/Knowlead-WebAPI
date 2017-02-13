@@ -40,20 +40,9 @@ namespace Knowlead.BLL.Repositories
                                                 .Skip(offset).Take(numItems).ToListAsync();
         }
 
-        public async Task<List<Notification>> InsertNotification(List<Guid> userIds, String notificationType, DateTime scheduledAt)
+        public void Add(Notification notification)
         {
-            var notifications = new List<Notification>();
-            foreach (var userId in userIds)
-            {
-                var notification = new Notification(userId, notificationType, scheduledAt);
-                notification.FromApplicationUserId = userId;
-                notifications.Add(notification);
-                _context.Notifications.Add(notification);
-            }
-
-            await Commit();
-            
-            return notifications;
+            _context.Notifications.Add(notification);
         }
 
         public void Update(Notification notification)

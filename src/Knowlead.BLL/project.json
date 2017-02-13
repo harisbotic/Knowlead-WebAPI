@@ -20,8 +20,7 @@
     "Microsoft.AspNetCore.JsonPatch": "1.2.0-*",
     "Microsoft.AspNetCore.SignalR": "1.0.0-*",
     "WindowsAzure.Storage": "8.0.0",
-    "Hangfire.Core": "1.6.8",
-    "Sakura.AspNetCore.PagedList.Async": "1.0.0"
+    "Hangfire.Core": "1.6.8"
   },
   "frameworks": {
     "netstandard1.6": {

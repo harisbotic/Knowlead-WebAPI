@@ -55,25 +55,32 @@ namespace Knowlead.Services
 
             return notifications;
         }
-
-        public async Task NewNotification(Guid applicationUserId, String notificationType, DateTime scheduleAt)
+        
+        public async Task SendNotification(Notification notification)
         {
-            await NewNotification(new List<Guid>(){applicationUserId}, notificationType, scheduleAt);
+            await SendNotifications(new List<Notification>(){notification});
         }
 
-        public async Task NewNotification(List<Guid> applicationUserIds, String notificationType, DateTime scheduleAt)
+        public async Task SendNotifications (List<Notification> notifications)
         {
-            var notifications = await _notificationRepository.InsertNotification(applicationUserIds, notificationType, scheduleAt);
+            foreach (var notification in notifications)
+            {
+                _notificationRepository.Add(notification);
 
-            if(scheduleAt.Subtract(DateTime.UtcNow).TotalSeconds < 30)
-            {
-                await DisplayNotifications(notifications, true);
+                var scheduleAt = notification.ScheduledAt;
+
+                if(scheduleAt.Subtract(DateTime.UtcNow).TotalSeconds < 30)
+                {
+                    await DisplayNotification(notification);
+                }
+                else
+                {
+                    BackgroundJob.Schedule<INotificationServices>(
+                    (x) => x.DisplayNotification(notification), scheduleAt.Subtract(DateTime.UtcNow));
+                }
             }
-            else
-            {
-                BackgroundJob.Schedule<INotificationServices>(
-                (x) => x.DisplayNotifications(notifications, false), scheduleAt.Subtract(DateTime.UtcNow));
-            }
+            
+            await _notificationRepository.Commit();
         }
 
         public async Task MarkAsRead(Guid notificationId, Guid applicationUserId)
@@ -100,18 +107,15 @@ namespace Knowlead.Services
         }
 
         [AutomaticRetry(Attempts = 1, OnAttemptsExceeded = AttemptsExceededAction.Delete)]
-        public Task DisplayNotifications(List<Notification> notifications, bool now = false)
+        public Task DisplayNotification(Notification notification)
         {
-            foreach (var notification in notifications)
-            {
-                var json = JsonConvert.SerializeObject(Mapper.Map<NotificationModel>(notification), new JsonSerializerSettings 
-                { 
-                    ContractResolver = new CamelCasePropertyNamesContractResolver() 
-                });
+            var json = JsonConvert.SerializeObject(Mapper.Map<NotificationModel>(notification), new JsonSerializerSettings 
+            { 
+                ContractResolver = new CamelCasePropertyNamesContractResolver() 
+            });
 
-                _hubContext.Clients.User(notification.ForApplicationUserId.ToString())
-                                    .InvokeAsync(WebClientFunctionNames.DisplayNotification, json);  
-            }
+            _hubContext.Clients.User(notification.ForApplicationUserId.ToString())
+                                .InvokeAsync(WebClientFunctionNames.DisplayNotification, json);
 
             return Task.CompletedTask;
         }
@@ -120,5 +124,6 @@ namespace Knowlead.Services
         {
             return _notificationRepository.GetNotificationStats(applicationUserId);
         }
+
     }
 }

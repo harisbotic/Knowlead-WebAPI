@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Knowlead.Common.Exceptions;
 using Knowlead.Services.Interfaces;
+using Knowlead.DomainModel.NotificationModels;
 
 namespace Knowlead.BLL.Repositories
 {
@@ -218,8 +219,8 @@ namespace Knowlead.BLL.Repositories
                 var error = new ErrorModel(ErrorCodes.DatabaseError);
                 return new BadRequestObjectResult(new ResponseModel(error));
             }
-
-            await _notificationServices.NewNotification(p2pMessage.MessageToId, NotificationTypes.NewP2PComment, DateTime.UtcNow);
+            var notification = new Notification(p2pMessage.MessageToId, NotificationTypes.NewP2PComment, DateTime.UtcNow, null, p2pMessage);
+            await _notificationServices.SendNotification(notification);
 
             return new OkObjectResult(new ResponseModel{
                 Object = Mapper.Map<P2PMessageModel>(p2pMessage)

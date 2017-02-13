@@ -2,12 +2,9 @@ using Knowlead.DAL;
 using Microsoft.AspNetCore.Mvc;
 using Knowlead.DomainModel.LookupModels.Geo;
 using Knowlead.Services.Interfaces;
-using System.Collections.Generic;
 using System;
 using Knowlead.Common.HttpRequestItems;
-using System.Threading.Tasks;
 using System.Linq;
-using Knowlead.Common;
 
 namespace Knowlead.Controllers
 {
@@ -41,10 +38,9 @@ namespace Knowlead.Controllers
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public async Task<string> Get(int id)
+        public string Get(int id)
         {
-            await _service.NewNotification(new List<Guid>(){_auth.GetUserId()}, Constants.NotificationTypes.NewP2PComment, DateTime.UtcNow.AddSeconds(id));
-            return "value";
+             return "value";
         }
 
         // POST api/values
