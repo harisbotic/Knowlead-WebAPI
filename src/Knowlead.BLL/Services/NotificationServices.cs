@@ -115,5 +115,10 @@ namespace Knowlead.Services
 
             return Task.CompletedTask;
         }
+
+        public Task<NotificationSourceStats> GetNotificationStats(Guid applicationUserId)
+        {
+            return _notificationRepository.GetNotificationStats(applicationUserId);
+        }
     }
 }

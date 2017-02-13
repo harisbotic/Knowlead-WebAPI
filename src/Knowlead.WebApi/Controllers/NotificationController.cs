@@ -65,5 +65,16 @@ namespace Knowlead.Controllers
             {
             });
         }
+
+        [HttpGet("stats")]
+        public async Task<IActionResult> GetStats()
+        {
+            var applicationUserId = _auth.GetUserId();
+            var stats = await _notificationServices.GetNotificationStats(applicationUserId);
+            return Ok(new ResponseModel()
+            {
+                Object = AutoMapper.Mapper.Map<NotificationSourceStats>(stats)
+            });
+        }
     }
 }

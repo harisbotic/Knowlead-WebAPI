@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Knowlead.DomainModel.NotificationModels;
+using Knowlead.DTO.NotificationModels;
 
 namespace Knowlead.BLL.Repositories.Interfaces
 {
@@ -14,6 +15,6 @@ namespace Knowlead.BLL.Repositories.Interfaces
         Task<List<Notification>> InsertNotification(List<Guid> userIds, String notificationType, DateTime scheduledAt);
         void Update(Notification notification);
         Task Commit();
-
+        Task<NotificationSourceStats> GetNotificationStats(Guid applicationUserId);
     }
 }

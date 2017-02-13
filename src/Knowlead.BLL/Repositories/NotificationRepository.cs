@@ -7,6 +7,7 @@ using Knowlead.BLL.Repositories.Interfaces;
 using Knowlead.Common.Exceptions;
 using Knowlead.DAL;
 using Knowlead.DomainModel.NotificationModels;
+using Knowlead.DTO.NotificationModels;
 using Microsoft.EntityFrameworkCore;
 using static Knowlead.Common.Constants;
 
@@ -65,6 +66,14 @@ namespace Knowlead.BLL.Repositories
             var success = await _context.SaveChangesAsync() > 0;
             if(!success)
                 throw new ErrorModelException(ErrorCodes.DatabaseError); //No changed were made to entity
+        }
+
+        public async Task<NotificationSourceStats> GetNotificationStats(Guid applicationUserId)
+        {
+            return new NotificationSourceStats(){
+                Unread = await _context.Notifications.Where(x => x.ForApplicationUserId == applicationUserId && !x.SeenAt.HasValue).CountAsync(),
+                Total = await _context.Notifications.Where(x => x.ForApplicationUserId == applicationUserId).CountAsync()
+            };
         }
     }
 }

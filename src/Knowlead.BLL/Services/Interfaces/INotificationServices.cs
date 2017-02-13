@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Knowlead.DomainModel.NotificationModels;
+using Knowlead.DTO.NotificationModels;
 
 namespace Knowlead.Services.Interfaces
 {
@@ -13,5 +14,6 @@ namespace Knowlead.Services.Interfaces
         Task MarkAsRead(Guid notificationId, Guid applicationUserId);
         Task MarkAllAsRead(Guid applicationUserId);
         Task DisplayNotifications(List<Notification> notifications, bool now);
+        Task<NotificationSourceStats> GetNotificationStats(Guid applicationUserId);
     }
 }
