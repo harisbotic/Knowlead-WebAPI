@@ -7,6 +7,8 @@ using Knowlead.BLL.Repositories.Interfaces;
 using Knowlead.DomainModel.P2PModels;
 using Microsoft.AspNetCore.Authorization;
 using static Knowlead.Common.Constants;
+using static Knowlead.Common.Constants.EnumActions;
+using Knowlead.Common.Exceptions;
 
 namespace Knowlead.Controllers
 {
@@ -33,17 +35,17 @@ namespace Knowlead.Controllers
         [HttpGet("messages/{p2pId}")]
         public async Task<IActionResult> GetMessages(int p2pId)
         {
-            var applicationUser = await _auth.GetUser();
+            var applicationUserId = _auth.GetUserId();
 
-            return await _p2pRepository.GetMessages(p2pId, applicationUser);
+            return await _p2pRepository.GetMessages(p2pId, applicationUserId);
         }
 
         [HttpPost("create"), ValidateModel]
         public async Task<IActionResult> Create([FromBody] P2PModel p2pModel)
         {
-            var applicationUser = await _auth.GetUser();
+            var applicationUserId = _auth.GetUserId();
 
-            return await _p2pRepository.Create(p2pModel, applicationUser);
+            return await _p2pRepository.Create(p2pModel, applicationUserId);
         }
 
         [HttpPost("schedule")]
@@ -57,54 +59,61 @@ namespace Knowlead.Controllers
         [HttpPost("message"), ValidateModel]
         public async Task<IActionResult> Message([FromBody] P2PMessageModel p2pMessageModel)
         {
-            var applicationUser = await _auth.GetUser();
+            var applicationUserId = _auth.GetUserId();
 
-            return await _p2pRepository.Message(p2pMessageModel, applicationUser);
+            return await _p2pRepository.Message(p2pMessageModel, applicationUserId);
         }
 
         [HttpDelete("delete/{p2pId}")]
         public async Task<IActionResult> Delete(int p2pId)
         {
-            var applicationUser = await _auth.GetUser();
+            var applicationUserId = _auth.GetUserId();
 
-            return await _p2pRepository.Delete(p2pId, applicationUser);
-        }
-
-        [HttpGet("my")]
-        public async Task<IActionResult> ListMine()
-        {
-            return await _p2pRepository.ListMine(await _auth.GetUser());
-        }
-
-        [HttpGet("bookmarked")]
-        public async Task<IActionResult> ListBookmarked()
-        {
-            await _p2pRepository.ListBookmarked(await _auth.GetUser());
-            return BadRequest();
-        }
-        
-        [HttpGet("scheduled")]
-        public async Task<IActionResult> ListSchedulded()
-        {
-            return await _p2pRepository.ListSchedulded(await _auth.GetUser());
-        }
-
-        [HttpGet("deleted")]
-        public async Task<IActionResult> ListDeleted()
-        {
-            return await _p2pRepository.ListDeleted(await _auth.GetUser());
-        }
-
-        [HttpGet("actionrequired")]
-        public async Task<IActionResult> ListActionRequired()
-        {
-            return await _p2pRepository.ListActionRequired(await _auth.GetUser());
+            return await _p2pRepository.Delete(p2pId, applicationUserId);
         }
 
         [HttpGet("list")]
         public async Task<IActionResult> List()
         {
             return await _p2pRepository.ListAll();
+        }
+
+        [HttpGet("list/{listP2PRequest}")]
+        public async Task<IActionResult> ChangeFriendshipStatus(ListP2PsRequests listP2PRequest)
+        {
+            var applicationUserId = _auth.GetUserId();
+            
+            // List<P2P> result = null;
+            // result = await _p2pRepository.ListMine(applicationUserId);
+            switch (listP2PRequest) 
+            {
+                case(ListP2PsRequests.My):
+                    return await _p2pRepository.ListMine(applicationUserId);
+                    // break;
+                
+                case(ListP2PsRequests.Scheduled):
+                    return await _p2pRepository.ListSchedulded(applicationUserId);
+                    // break;
+                
+                case(ListP2PsRequests.Bookmarked):
+                    return await _p2pRepository.ListBookmarked(applicationUserId);
+                    // break;
+
+                case(ListP2PsRequests.ActionRequired):
+                    return await _p2pRepository.ListActionRequired(applicationUserId);
+                    // break;
+
+                case(ListP2PsRequests.Deleted):
+                    return await _p2pRepository.ListDeleted(applicationUserId);
+                    // break;
+                
+                default:
+                    throw new ErrorModelException(ErrorCodes.IncorrectValue, nameof(FriendshipDTOActions));
+            }
+            
+            // return new OkObjectResult(new ResponseModel{
+            //     Object = Mapper.Map<FriendshipModel>(result)
+            // });
         }
     }
 }

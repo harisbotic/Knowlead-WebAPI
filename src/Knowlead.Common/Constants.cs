@@ -131,6 +131,11 @@ namespace Knowlead.Common
                 NewRequest = 0, AcceptRequest = 1, DeclineRequest = 2, CancelRequest = 3,
                 RemoveFriend = 4, BlockUser = 5, UnblockUser = 6
             }
+
+            public enum ListP2PsRequests
+            {
+                My = 0, Scheduled = 1, Bookmarked = 2, ActionRequired = 3, Deleted = 4
+            }
         }
 
         [TSClass]
