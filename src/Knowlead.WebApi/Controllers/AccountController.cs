@@ -87,5 +87,18 @@ namespace Knowlead.Controllers
                 Object = Mapper.Map<ApplicationUserModel>(applicationUser)
             });
         }
+
+        [HttpDelete("removeProfilePicture")]
+        [Authorize]
+        public async Task<IActionResult> RemoveProfilePicture()
+        {
+            var applicationUser = await _auth.GetUser(false);
+
+            applicationUser = await _accountRepository.RemoveProfilePicture(applicationUser);
+
+            return Ok(new ResponseModel{
+                Object = Mapper.Map<ApplicationUserModel>(applicationUser)
+            });
+        }
     }
 }

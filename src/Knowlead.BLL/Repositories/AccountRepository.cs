@@ -168,6 +168,15 @@ namespace Knowlead.BLL.Repositories
 
             return applicationUser;
         }
+        public async Task<ApplicationUser> RemoveProfilePicture(ApplicationUser applicationUser)
+        {
+            applicationUser.ProfilePicture = null;
+            applicationUser.ProfilePictureId = null;
+
+            await _userManager.UpdateAsync(applicationUser);
+
+            return applicationUser;
+        }
 
         public async Task<IActionResult> ConfirmEmail(ConfirmEmailModel confirmEmailModel)
         {
