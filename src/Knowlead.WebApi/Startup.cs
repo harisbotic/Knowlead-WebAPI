@@ -91,8 +91,8 @@ namespace Knowlead
                 AutomaticAuthenticate = true,
                 AutomaticChallenge = true,
                 RequireHttpsMetadata = false,
-                Audience = "http://knowlead.com:5000",
-                Authority = "http://knowlead.com:5000"
+                Audience = "https://knowlead.co:8080",
+                Authority = "https://knowlead.co:8080"
             });
 
             app.UseWebSockets();
