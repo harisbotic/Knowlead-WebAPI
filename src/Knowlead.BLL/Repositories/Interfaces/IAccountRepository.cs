@@ -15,6 +15,7 @@ namespace Knowlead.BLL.Repositories.Interfaces
         Task<IActionResult> UpdateUserDetails(ApplicationUser applicationUser, JsonPatchDocument<ApplicationUserModel> applicationUserPatch);
         Task<ApplicationUser> ChangeProfilePicture(Guid imageBlobId, ApplicationUser applicationUser);
         Task<ApplicationUser> RemoveProfilePicture(ApplicationUser applicationUser);
+        Task<ApplicationUser> UpdateUserRating(Guid applicationUserId);
         Task<IActionResult> ConfirmEmail(ConfirmEmailModel confirmEmailModel);
         Task<List<ApplicationUserReferral>> GetReferrals(Guid applicationUser, bool registred = false);
         Task<int> GetReferralsCount(Guid applicationUser, bool registred = false);

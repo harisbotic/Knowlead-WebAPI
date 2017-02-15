@@ -168,11 +168,27 @@ namespace Knowlead.BLL.Repositories
 
             return applicationUser;
         }
+        
         public async Task<ApplicationUser> RemoveProfilePicture(ApplicationUser applicationUser)
         {
             applicationUser.ProfilePicture = null;
             applicationUser.ProfilePictureId = null;
 
+            await _userManager.UpdateAsync(applicationUser);
+
+            return applicationUser;
+        }
+
+        public async Task<ApplicationUser> UpdateUserRating(Guid applicationUserId)
+        {
+            var applicationUser = await _context.ApplicationUsers.Where(x => x.Id.Equals(applicationUserId)).FirstOrDefaultAsync();
+
+            if(applicationUser == null)
+                throw new ErrorModelException(ErrorCodes.EntityNotFound, nameof(ApplicationUser));
+
+            var averageRating = await _context.Feedbacks.Where(x => x.TeacherId.Equals(applicationUserId)).AverageAsync(y => y.Rating);
+            
+            applicationUser.AverageRating = averageRating;
             await _userManager.UpdateAsync(applicationUser);
 
             return applicationUser;

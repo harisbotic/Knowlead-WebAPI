@@ -117,7 +117,7 @@ namespace Microsoft.AspNetCore.SignalR
                                                         .Select(c => c.Value).FirstOrDefault());
             });
         }
-
+        
         public override Task OnConnectedAsync(Connection connection)
         {
             _connections.Add(connection);
@@ -136,7 +136,7 @@ namespace Microsoft.AspNetCore.SignalR
             await invocationAdapter.WriteMessageAsync(invocation, stream);
 
             var buffer = ReadableBuffer.Create(stream.ToArray()).Preserve();
-            var message = new Message(buffer, Format.Text, endOfMessage: true);
+            var message = new Message(buffer, MessageType.Text, endOfMessage: true);
 
             while (await connection.Transport.Output.WaitToWriteAsync())
             {

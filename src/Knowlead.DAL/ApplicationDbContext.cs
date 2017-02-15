@@ -40,10 +40,11 @@ namespace Knowlead.DAL
         #endregion
 
         #region Feedback Models
-        public DbSet<FeedbackClass> FeedbackClasses { get; set; }
-        public DbSet<FeedbackCourse> FeedbackCourses { get; set; }
-        public DbSet<FeedbackP2P> FeedbackP2P { get; set; }
-        public DbSet<FeedbackQuestion> FeedbackQuestions { get; set; }
+        public DbSet<_Feedback> Feedbacks { get; set; }
+        public DbSet<ClassFeedback> ClassFeedbacks { get; set; }
+        public DbSet<CourseFeedback> CourseFeedbacks { get; set; }
+        public DbSet<P2PFeedback> P2PFeedbacks { get; set; }
+        public DbSet<QuestionFeedback> QuestionsFeedbacks { get; set; }
         #endregion
 
         #region Library Models
@@ -130,10 +131,10 @@ namespace Knowlead.DAL
 
             modelBuilder.Entity<_Feedback>()
                 .HasDiscriminator<string>("Category")
-                .HasValue<FeedbackClass>("Class")
-                .HasValue<FeedbackCourse>("Course")
-                .HasValue<FeedbackP2P>("P2P")
-                .HasValue<FeedbackQuestion>("Question");
+                .HasValue<ClassFeedback>("Class")
+                .HasValue<CourseFeedback>("Course")
+                .HasValue<P2PFeedback>("P2P")
+                .HasValue<QuestionFeedback>("Question");
 
             /* Application User */
             modelBuilder.Entity<ApplicationUserInterest>()

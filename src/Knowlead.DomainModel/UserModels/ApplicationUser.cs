@@ -21,6 +21,8 @@ namespace Knowlead.DomainModel.UserModels
         public Boolean? IsMale { get; set; }
         public string Timezone { get; set; }
         public string AboutMe { get; set; }
+        public float AverageRating { get; set; }
+        
         [NotMapped]
         public int? MinutesBalance { get; set; }
         [NotMapped]

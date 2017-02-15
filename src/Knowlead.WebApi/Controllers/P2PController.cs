@@ -79,7 +79,7 @@ namespace Knowlead.Controllers
         }
 
         [HttpGet("list/{listP2PRequest}")]
-        public async Task<IActionResult> ChangeFriendshipStatus(ListP2PsRequests listP2PRequest)
+        public async Task<IActionResult> ChangeFriendshipStatus(ListP2PsRequest listP2PRequest)
         {
             var applicationUserId = _auth.GetUserId();
             
@@ -87,28 +87,28 @@ namespace Knowlead.Controllers
             // result = await _p2pRepository.ListMine(applicationUserId);
             switch (listP2PRequest) 
             {
-                case(ListP2PsRequests.My):
+                case(ListP2PsRequest.My):
                     return await _p2pRepository.ListMine(applicationUserId);
                     // break;
                 
-                case(ListP2PsRequests.Scheduled):
+                case(ListP2PsRequest.Scheduled):
                     return await _p2pRepository.ListSchedulded(applicationUserId);
                     // break;
                 
-                case(ListP2PsRequests.Bookmarked):
+                case(ListP2PsRequest.Bookmarked):
                     return await _p2pRepository.ListBookmarked(applicationUserId);
                     // break;
 
-                case(ListP2PsRequests.ActionRequired):
+                case(ListP2PsRequest.ActionRequired):
                     return await _p2pRepository.ListActionRequired(applicationUserId);
                     // break;
 
-                case(ListP2PsRequests.Deleted):
+                case(ListP2PsRequest.Deleted):
                     return await _p2pRepository.ListDeleted(applicationUserId);
                     // break;
                 
                 default:
-                    throw new ErrorModelException(ErrorCodes.IncorrectValue, nameof(FriendshipDTOActions));
+                    throw new ErrorModelException(ErrorCodes.IncorrectValue, nameof(ListP2PsRequest));
             }
             
             // return new OkObjectResult(new ResponseModel{

@@ -24,6 +24,7 @@ namespace Knowlead.DTO.UserModels
         public Boolean? IsMale { get; set; }
         public string Timezone { get; set; }
         public string AboutMe { get; set; }
+        public float AverageRating { get; set; }
 
 
         public Guid? ProfilePictureId { get; set; }

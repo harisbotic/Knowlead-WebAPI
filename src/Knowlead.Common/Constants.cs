@@ -82,7 +82,9 @@ namespace Knowlead.Common
             [TSInitialize]
             public const string NotLastOffer = "NOT_LAST_OFFER";   
             [TSInitialize]
-            public const string AlreadyInCall = "ALREADY_IN_CALL";    
+            public const string AlreadyInCall = "ALREADY_IN_CALL";
+            [TSInitialize]
+            public const string FeedbackAlreadyGiven = "FEEDBACK_ALREADY_GIVEN";   
         }
 
         [TSClass]
@@ -147,9 +149,14 @@ namespace Knowlead.Common
                 RemoveFriend = 4, BlockUser = 5, UnblockUser = 6
             }
 
-            public enum ListP2PsRequests
+            public enum ListP2PsRequest
             {
                 My = 0, Scheduled = 1, Bookmarked = 2, ActionRequired = 3, Deleted = 4
+            }
+
+            public enum FeedbackOptionsRequest
+            {
+                P2P = 0, Question = 1, Course = 2, Class = 3, Video = 4
             }
         }
 
