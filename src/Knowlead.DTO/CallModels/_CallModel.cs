@@ -17,6 +17,8 @@ namespace Knowlead.DTO.CallModels
         public DateTime? EndDate { get; set; }
         public bool Sealed { get; set; }
 
+        public bool Inviting { get; set; }
+        public DateTime? InactiveSince { get; set; }
 
         public bool CallStarted { get; set; }
         public List<PeerInfoModel> Peers { get; set; }

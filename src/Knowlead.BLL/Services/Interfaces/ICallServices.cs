@@ -12,5 +12,8 @@ namespace Knowlead.Services.Interfaces
         void CallModelUpdate(_CallModel callModel, bool reset);
         bool RemoveConnectionFromCall(String connectionId);
         _CallModel GetCallForUser(Guid applicationUserId);
+        void AcceptCall(_CallModel callModel, PeerInfoModel peerInfoModel);
+        void SendInvitations(Guid callId);
+        void DisconnectFromCall(_CallModel callModel, Guid userId);
     }
 }

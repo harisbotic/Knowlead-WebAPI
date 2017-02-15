@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using Hangfire;
 using Knowlead.DTO.CallModels;
 using Knowlead.Services.Interfaces;
 using Microsoft.AspNetCore.SignalR;
@@ -22,22 +23,68 @@ namespace Knowlead.Services
             _hubContext = hubContext;
         }
 
-        public async void StartCall(_CallModel callModel)
+        private string GetCallJsonString(_CallModel callModel)
         {
-            Calls.Add(callModel);
-
-            var json = JsonConvert.SerializeObject(callModel, new JsonSerializerSettings 
+            return JsonConvert.SerializeObject(Mapper.Map<_CallModel>(callModel), new JsonSerializerSettings 
             { 
                 ContractResolver = new CamelCasePropertyNamesContractResolver() 
             });
+        }
 
-            await _hubContext.Clients.Client(callModel.Peers.FirstOrDefault().ConnectionId).InvokeAsync("startCall", json);
+        public void SendInvitations(Guid callId)
+        {
+            _CallModel call = this.GetCall(callId);
+            if (call != null)
+            {
+                this.SendInvitations(call);
+            }
+        }
 
+        public void SendInvitations(_CallModel callModel)
+        {
+            var json = GetCallJsonString(callModel);
+            int invitationsSent = 0;
             foreach (var peer in callModel.Peers)
             {
-                if(peer.PeerId != callModel.Caller.PeerId)
-                    await _hubContext.Clients.User(peer.PeerId.ToString()).InvokeAsync("callInvitation", json);
+                // Send invitations to all peers that are not connected
+                if(peer.Status != PeerStatus.Accepted)
+                {
+                    _hubContext.Clients.User(peer.PeerId.ToString()).InvokeAsync("callInvitation", json);
+                    invitationsSent++;
+                }
             }
+            // If we sent invitations that means that we should send them again
+            if (invitationsSent > 0)
+            {
+                BackgroundJob.Schedule<ICallServices>((callService) => callService.SendInvitations(callModel.CallId), TimeSpan.FromSeconds(10));
+                callModel.Inviting = true;
+                if (!callModel.InactiveSince.HasValue)
+                {
+                    callModel.InactiveSince = DateTime.UtcNow;
+                }
+                // If call was inactive more then minute, we should stop it
+                if (DateTime.UtcNow.Subtract(callModel.InactiveSince.Value) > TimeSpan.FromSeconds(60))
+                {
+                    this.CloseCall(callModel, CallEndReasons.Inactive);
+                }
+            } else
+            {
+                callModel.Inviting = false;
+                callModel.InactiveSince = null;
+            }
+        }
+
+        private async void SendStartCall(_CallModel callModel, PeerInfoModel peer)
+        {
+            await _hubContext.Clients.Client(peer.ConnectionId).InvokeAsync("startCall", GetCallJsonString(callModel));
+            peer.UpdateStatus(true);
+        }
+
+        public void StartCall(_CallModel callModel)
+        {
+            Calls.Add(callModel);
+            this.SendStartCall(callModel, callModel.Caller);
+            this.CheckCall(callModel);
         }
 
         public _CallModel GetCallForUser(Guid applicationUserId)
@@ -62,6 +109,10 @@ namespace Knowlead.Services
             {
                 this.CloseCall(call, CallEndReasons.Inactive);
             }
+            if (!call.Inviting)
+            {
+                this.SendInvitations(call);
+            }
         }
 
         public PeerInfoModel GetPeer(_CallModel callModel, Guid userId)
@@ -84,13 +135,19 @@ namespace Knowlead.Services
             }
         }
 
+        public void DisconnectFromCall(_CallModel callModel, Guid userId)
+        {
+            callModel.Peers
+                .Where(p => p.PeerId == userId)
+                .First()
+                .UpdateStatus(PeerStatus.Disconnected);
+            this.CheckCall(callModel);
+        }
+
         public void CallModelUpdate(_CallModel callModelReceived, bool reset)
         {
             _CallModel callModel = Mapper.Map<_CallModel>(callModelReceived);
-            var json = JsonConvert.SerializeObject(callModel, new JsonSerializerSettings 
-            { 
-                ContractResolver = new CamelCasePropertyNamesContractResolver() 
-            });
+            var json = GetCallJsonString(callModel);
 
             foreach (var peer in callModel.Peers)
             {
@@ -106,6 +163,7 @@ namespace Knowlead.Services
                     }
                 }
             }
+            this.CheckCall(callModel);
         }
 
         public bool RemoveConnectionFromCall(string connectionId)
@@ -122,6 +180,11 @@ namespace Knowlead.Services
                     }
             
             return false;
+        }
+
+        public void AcceptCall(_CallModel callModel, PeerInfoModel peerInfoModel)
+        {
+            this.SendStartCall(callModel, peerInfoModel);
         }
     }
 }

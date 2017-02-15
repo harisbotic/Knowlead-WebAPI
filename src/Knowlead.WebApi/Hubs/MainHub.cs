@@ -102,10 +102,10 @@ namespace Knowlead.WebApi.Hubs
                 return Task.CompletedTask;
 
             peerInfoModel.ConnectionId = Context.ConnectionId;
-            peerInfoModel.UpdateStatus(accepted);
 
-            _callServices.CallModelUpdate(callModel, false);
-            if (!accepted)
+            if (accepted)
+                _callServices.AcceptCall(callModel, peerInfoModel);
+            else
                 _callServices.CloseCall(callModel, CallEndReasons.Rejected);
             
             return Task.CompletedTask;
@@ -156,6 +156,12 @@ namespace Knowlead.WebApi.Hubs
             _callServices.CallModelUpdate(callModel, true);
             
             return Task.CompletedTask;
+        }
+
+        public void DisconnectFromCall(Guid callModelId)
+        {
+            var call = this.GetCallModel(callModelId);
+            _callServices.DisconnectFromCall(call, _auth.GetUserId());
         }
 
         // public String GetCallModel(Guid callModelId) //Is this used?
