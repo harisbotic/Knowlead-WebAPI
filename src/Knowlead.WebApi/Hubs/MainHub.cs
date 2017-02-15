@@ -1,12 +1,15 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Knowlead.BLL.Repositories.Interfaces;
+using Knowlead.Common.Exceptions;
 using Knowlead.Common.HttpRequestItems;
 using Knowlead.DTO.CallModels;
 using Knowlead.Services.Interfaces;
 using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using static Knowlead.Common.Constants;
 using static Knowlead.Common.Constants.EnumStatuses;
 
 namespace Knowlead.WebApi.Hubs
@@ -24,6 +27,23 @@ namespace Knowlead.WebApi.Hubs
             _p2pRepo = p2pRepo;
             _callServices = callServices;
             _auth = auth;
+        }
+
+        private _CallModel GetCallModel(Guid callModelId)
+        {
+            var ret = _callServices.GetCall(callModelId);
+            // Check if this call exists
+            if (ret == null)
+            {
+                throw new ErrorModelException(ErrorCodes.EntityNotFound, nameof(_CallModel));
+            }
+            var userId = _auth.GetUserId();
+            // Check if this guy has anything to do with this call
+            if (ret.Peers.Where(p => p.PeerId.Equals(userId)).Count() == 0)
+            {
+                throw new ErrorModelException(ErrorCodes.AuthorityError);
+            }
+            return ret;
         }
         public async override Task OnConnectedAsync()
         {
@@ -55,6 +75,11 @@ namespace Knowlead.WebApi.Hubs
         public async Task StartP2pCall(int p2pId)
         {
             Guid callerId = _auth.GetUserId();
+            _CallModel currentCall;
+            if ((currentCall = this._callServices.GetCallForUser(callerId)) != null)
+            {
+                throw new ErrorModelException(ErrorCodes.AlreadyInCall, currentCall.CallId.ToString());
+            }
 
             var p2p = await _p2pRepo.GetP2PTemp(p2pId);
 
@@ -70,7 +95,7 @@ namespace Knowlead.WebApi.Hubs
 
         public Task CallRespond(Guid callModelId, bool accepted)
         {
-            var callModel = _callServices.GetCall(callModelId);
+            var callModel = GetCallModel(callModelId);
             var peerInfoModel = _callServices.GetPeer(callModel, _auth.GetUserId());
 
             if(peerInfoModel == null)
@@ -80,16 +105,18 @@ namespace Knowlead.WebApi.Hubs
             peerInfoModel.UpdateStatus(accepted);
 
             _callServices.CallModelUpdate(callModel, false);
+            if (!accepted)
+                _callServices.CloseCall(callModel, CallEndReasons.Rejected);
             
             return Task.CompletedTask;
         }
 
         public Task AddSDP(Guid callModelId, String sdp)
         {
-            var callModel = _callServices.GetCall(callModelId);
+            var callModel = GetCallModel(callModelId);
             var peerInfoModel = _callServices.GetPeer(callModel, _auth.GetUserId());
 
-            if(peerInfoModel == null)
+            if(peerInfoModel == null) // This shouldn't happen
                 return Task.CompletedTask;
 
             peerInfoModel.sdps.Add(sdp);
@@ -98,9 +125,16 @@ namespace Knowlead.WebApi.Hubs
             return Task.CompletedTask;
         }
 
+        public Task StopCall(Guid callModelId, String reason)
+        {
+            var callModel = GetCallModel(callModelId);
+            _callServices.CloseCall(callModel, reason);
+            return Task.CompletedTask;
+        }
+
         public Task ResetCall(Guid callModelId)
         {
-            var callModel = _callServices.GetCall(callModelId);
+            var callModel = this.GetCallModel(callModelId);
             foreach (var peerInfoModelEach in callModel.Peers)
             {
                 peerInfoModelEach.sdps.Clear();
@@ -124,17 +158,17 @@ namespace Knowlead.WebApi.Hubs
             return Task.CompletedTask;
         }
 
-        public String GetCallModel(Guid callModelId) //Is this used?
-        {
-            var callModel = _callServices.GetCall(callModelId);
+        // public String GetCallModel(Guid callModelId) //Is this used?
+        // {
+        //     var callModel = this.GetCallModel(callModelId);
 
-            var json = JsonConvert.SerializeObject(callModel, new JsonSerializerSettings 
-            { 
-                ContractResolver = new CamelCasePropertyNamesContractResolver() 
-            });
+        //     var json = JsonConvert.SerializeObject(callModel, new JsonSerializerSettings 
+        //     { 
+        //         ContractResolver = new CamelCasePropertyNamesContractResolver() 
+        //     });
             
-            return json;
-        }
+        //     return json;
+        // }
     }
 
     public class NotificationModel

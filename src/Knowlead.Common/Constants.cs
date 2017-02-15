@@ -80,7 +80,22 @@ namespace Knowlead.Common
             [TSInitialize]
             public const string ConsecutiveOffersLimit = "CONSECUTIVE_OFFERS_LIMIT";
             [TSInitialize]
-            public const string NotLastOffer = "NOT_LAST_OFFER";    
+            public const string NotLastOffer = "NOT_LAST_OFFER";   
+            [TSInitialize]
+            public const string AlreadyInCall = "ALREADY_IN_CALL";    
+        }
+
+        [TSClass]
+        public static class CallEndReasons
+        {
+            [TSInitialize]
+            public const string Requested = "CALL_END_REQUESTED";
+            [TSInitialize]
+            public const string Inactive = "CALL_INACTIVE";
+            [TSInitialize]
+            public const string Rejected = "CALL_REJECTED";
+            [TSInitialize]
+            public const string StartProblem = "CALL_START_PROBLEM";
         }
 
         [TSClass]
