@@ -7,8 +7,6 @@ using Knowlead.Common.HttpRequestItems;
 using Knowlead.DTO.CallModels;
 using Knowlead.Services.Interfaces;
 using Microsoft.AspNetCore.SignalR;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using static Knowlead.Common.Constants;
 using static Knowlead.Common.Constants.EnumStatuses;
 

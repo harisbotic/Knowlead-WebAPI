@@ -29,8 +29,9 @@ namespace Knowlead.DTO.UserModels
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Language.Name));
 
             CreateMap<P2PMessage, P2PMessageModel>()
-                .ForMember(dest => dest.P2p, opt => opt.Ignore()); //Avoids unnecessary filling for notifications
-
+                .ForMember(dest => dest.P2p, opt => opt.Ignore()) //Avoids unnecessary filling for notifications
+                .ForMember(dest => dest.OfferAccepted, opt => opt.Ignore());
+                
             CreateMap<P2PMessageModel, P2PMessage>()
                 .ForMember(dest => dest.MessageFromId, opt => opt.Ignore())
                 .ForMember(dest => dest.MessageFrom, opt => opt.Ignore())

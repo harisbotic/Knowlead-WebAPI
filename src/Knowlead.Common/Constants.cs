@@ -108,6 +108,8 @@ namespace Knowlead.Common
             [TSInitialize]
             public const string P2PExpired = "NotificationTypes.P2P_EXPIRED";
             [TSInitialize]
+            public const string P2POfferAccepted = "NotificationTypes.P2P_OFFER_ACCEPTED";
+            [TSInitialize]
             public const string PrepareForP2P = "NotificationTypes.PREPARE_FOR_P2P";
             [TSInitialize]
             public const string RewardClaimed = "NotificationTypes.REWARD_CLAIMED";

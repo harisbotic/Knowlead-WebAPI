@@ -133,7 +133,7 @@ namespace Knowlead.BLL.Repositories
             });
         }
 
-        public async Task<IActionResult> Schedule(int p2pMessageId, Guid applicationUserId)
+        public async Task<IActionResult> Schedule(int p2pMessageId, Guid applicationUserId) //TODO: ReadyForSchedule(combine Accept and schedule)
         {
             var p2pMessage = await _context.P2PMessages.Where(x => x.P2pMessageId.Equals(p2pMessageId)).Include(x => x.P2p).FirstOrDefaultAsync();
             var p2p = p2pMessage?.P2p;
@@ -144,12 +144,16 @@ namespace Knowlead.BLL.Repositories
             var lastOfferInNegotiation = await _context.P2PMessages.Where(x => x.P2pId.Equals(p2p.P2pId))
                                                                    .Where(x => x.MessageFromId.Equals(p2pMessage.MessageFromId))
                                                                    .Where(x => x.MessageToId.Equals(p2pMessage.MessageToId))
-                                                                   .LastOrDefaultAsync();
+                                                                   .OrderByDescending(x => x.Timestamp)
+                                                                   .FirstOrDefaultAsync();
 
-            if(lastOfferInNegotiation.P2pMessageId.Equals(p2pMessage.P2pMessageId)) //Is this the last offer offered
+            if(!lastOfferInNegotiation.P2pMessageId.Equals(p2pMessage.P2pMessageId)) //Is this the last offer offered
                 throw new ErrorModelException(ErrorCodes.NotLastOffer, p2pMessage.P2pMessageId.ToString());
 
-            if(p2pMessage.MessageToId.Equals(applicationUserId)) //Can this user accept the offer
+            if(!p2p.CreatedById.Equals(applicationUserId)) //Only creator can schedule
+                throw new ErrorModelException(ErrorCodes.HackAttempt);
+
+            if(p2pMessage.MessageFromId.Equals(applicationUserId)) //Cant schedule p2p if you sent offer yourself
                 throw new ErrorModelException(ErrorCodes.HackAttempt);
 
             if(p2p.IsDeleted)
@@ -180,7 +184,7 @@ namespace Knowlead.BLL.Repositories
         public async Task<IActionResult> Message(P2PMessageModel p2pMessageModel, Guid applicationUserId)
         {
             var p2p = await _context.P2p.Where(x => x.P2pId == p2pMessageModel.P2pId).FirstOrDefaultAsync();
-            var threadWithApplicationUserId = (applicationUserId == p2p.CreatedById) ? p2pMessageModel.MessageToId : applicationUserId;
+            var negotiationWithApplicationUserId = (applicationUserId == p2p.CreatedById) ? p2pMessageModel.MessageToId : applicationUserId;
 
             if(p2p == null)
                 throw new ErrorModelException(ErrorCodes.EntityNotFound, nameof(P2P));
@@ -197,7 +201,7 @@ namespace Knowlead.BLL.Repositories
             if(p2p.CreatedById != applicationUserId && p2pMessageModel.MessageToId != p2p.CreatedById)
                 throw new ErrorModelException(ErrorCodes.HackAttempt); // outsiders can only message creator of p2p
             
-            var pastFewOffers = await _context.P2PMessages.Where(x => x.P2pId == p2p.P2pId && (x.MessageFromId == threadWithApplicationUserId || x.MessageToId == threadWithApplicationUserId)).OrderByDescending(x => x.Timestamp).Take(ConsecutiveP2PMessageLimit).ToListAsync();
+            var pastFewOffers = await _context.P2PMessages.Where(x => x.P2pId == p2p.P2pId && (x.MessageFromId == negotiationWithApplicationUserId || x.MessageToId == negotiationWithApplicationUserId)).OrderBy(x => x.Timestamp).Take(ConsecutiveP2PMessageLimit).ToListAsync();
 
             if(p2p.CreatedById == applicationUserId) // check if creator of p2p is messaging someone who already messaged him 
                 if(pastFewOffers.Count() == 0)
@@ -222,6 +226,55 @@ namespace Knowlead.BLL.Repositories
 
             return new OkObjectResult(new ResponseModel{
                 Object = Mapper.Map<P2PMessageModel>(p2pMessage)
+            });
+        }
+
+        public async Task<IActionResult> AcceptOffer(int p2pMessageId, Guid applicationUserId)
+        {
+            var offerToAccept = await _context.P2PMessages.Where(x => x.P2pMessageId == p2pMessageId).FirstOrDefaultAsync();
+            var p2p = await _context.P2p.Where(x => x.P2pId == offerToAccept.P2pId).FirstOrDefaultAsync();
+            var negotiationWithApplicationUserId = (applicationUserId == p2p.CreatedById) ? offerToAccept.MessageToId : applicationUserId;
+
+            if(p2p == null)
+                throw new ErrorModelException(ErrorCodes.EntityNotFound, nameof(P2P));
+
+            if(p2p.IsDeleted)
+                throw new ErrorModelException(ErrorCodes.DiscussionClosed, nameof(P2P));
+
+            if(p2p.DateTimeAgreed.HasValue)
+                throw new ErrorModelException(ErrorCodes.DiscussionClosed, nameof(P2P));
+
+            if(!offerToAccept.MessageFromId.Equals(p2p.CreatedById)) //Can only accept offers from creator
+                throw new ErrorModelException(ErrorCodes.HackAttempt, nameof(P2PMessage));
+
+            if(!offerToAccept.MessageToId.Equals(applicationUserId)) //important??
+                throw new ErrorModelException(ErrorCodes.HackAttempt, nameof(P2PMessage));
+            
+            var lastOfferInNegotiation = await _context.P2PMessages.Where(x => x.P2pId == p2p.P2pId && (x.MessageFromId == negotiationWithApplicationUserId || x.MessageToId == negotiationWithApplicationUserId)).OrderBy(x => x.Timestamp).LastOrDefaultAsync();
+            if(lastOfferInNegotiation.P2pMessageId != offerToAccept.P2pMessageId) // Is this the last offer in negotiation
+                throw new ErrorModelException(ErrorCodes.NotLastOffer, nameof(P2PModel));
+
+            var newP2pMessage = new P2PMessage();
+            newP2pMessage.OfferAcceptedId = offerToAccept.P2pMessageId;
+            newP2pMessage.MessageFromId = applicationUserId;
+            newP2pMessage.MessageToId = offerToAccept.MessageFromId;
+            newP2pMessage.PriceOffer = offerToAccept.PriceOffer;
+            newP2pMessage.DateTimeOffer = offerToAccept.DateTimeOffer;
+            newP2pMessage.P2pId = offerToAccept.P2pId;
+            newP2pMessage.Text = "I ACCEPT";
+
+            _context.P2PMessages.Add(newP2pMessage);
+
+            if (!await SaveChangesAsync())
+            {
+                var error = new ErrorModel(ErrorCodes.DatabaseError);
+                return new BadRequestObjectResult(new ResponseModel(error));
+            }
+            var notification = new Notification(newP2pMessage.MessageToId, NotificationTypes.P2POfferAccepted, DateTime.UtcNow, applicationUserId, null, newP2pMessage);
+            await _notificationServices.SendNotification(notification);
+
+            return new OkObjectResult(new ResponseModel{
+                Object = Mapper.Map<P2PMessageModel>(newP2pMessage)
             });
         }
 

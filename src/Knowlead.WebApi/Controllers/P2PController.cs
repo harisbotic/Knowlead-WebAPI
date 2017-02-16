@@ -64,6 +64,14 @@ namespace Knowlead.Controllers
             return await _p2pRepository.Message(p2pMessageModel, applicationUserId);
         }
 
+        [HttpPost("acceptOffer/{p2pMessageId}")]
+        public async Task<IActionResult> AcceptOffer([FromRoute] int p2pMessageId)
+        {
+            var applicationUserId = _auth.GetUserId();
+
+            return await _p2pRepository.AcceptOffer(p2pMessageId, applicationUserId);
+        }
+
         [HttpDelete("delete/{p2pId}")]
         public async Task<IActionResult> Delete(int p2pId)
         {

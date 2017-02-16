@@ -30,5 +30,8 @@ namespace Knowlead.DomainModel.P2PModels
     
         public Guid MessageFromId { get; set; }
         public ApplicationUserModel MessageFrom { get; set; }
+
+        public int? OfferAcceptedId { get; set; }
+        public P2PMessage OfferAccepted { get; set; }
     }
 }

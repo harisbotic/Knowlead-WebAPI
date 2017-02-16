@@ -12,6 +12,7 @@ namespace Knowlead.BLL.Repositories.Interfaces
         Task<IActionResult> Create(P2PModel p2pModel, Guid applicationUserId);
         Task<IActionResult> Schedule(int p2pMessageId, Guid applicationUserId);
         Task<IActionResult> Message(P2PMessageModel p2pMessageModel, Guid applicationUserId);
+        Task<IActionResult> AcceptOffer(int p2pMessageId, Guid applicationUserId);
         Task<IActionResult> Delete(int p2pId, Guid applicationUserId);
         Task<IActionResult> GetP2P(int p2pId);
         Task<IActionResult> GetMessages(int p2pId, Guid applicationUserId);
