@@ -13,7 +13,6 @@ namespace Knowlead.DomainModel.ChatModels
         {
             this.PartitionKey = GenerateChatMessagePartitionKey(senderId, sendToId);
             this.RowKey = DateTime.UtcNow.Ticks.ToString();
-            this.Timestamp = DateTime.UtcNow;
 
             SenderId = senderId;
         }
