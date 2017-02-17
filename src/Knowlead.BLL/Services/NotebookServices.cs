@@ -75,7 +75,8 @@ namespace Knowlead.Services
         {
             var notebook = await Get(applicationUserId, notebookId);
             notebook.IsDeleted = true;
-
+            
+            _notebookRepository.Update(notebook);
             await _notebookRepository.Commit();
             return true;
         }

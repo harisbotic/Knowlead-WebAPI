@@ -88,5 +88,18 @@ namespace Knowlead.Controllers
                 Object = AutoMapper.Mapper.Map<NotebookModel>(notebook)
             });
         }
+
+        [HttpDelete("{notebookId}")]
+        public async Task<IActionResult> Delete(int notebookId)
+        {
+            var applicationUserId = _auth.GetUserId();
+
+            var isSuccessful = await _notebookServices.Delete(applicationUserId, notebookId);
+
+            if(isSuccessful)
+                return Ok(new ResponseModel());
+
+            return BadRequest(new ResponseModel());
+        }
     }
 }

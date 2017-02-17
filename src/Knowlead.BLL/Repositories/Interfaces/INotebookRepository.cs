@@ -11,6 +11,7 @@ namespace Knowlead.BLL.Repositories.Interfaces
         Task<Notebook> Get (int notebookId);
         Task<List<Notebook>> GetAllWhere (Expression<Func<Notebook, bool>> condition);
         void Add (Notebook notebook);
+        void Update(Notebook notebook);
         Task Commit ();
     }
 }

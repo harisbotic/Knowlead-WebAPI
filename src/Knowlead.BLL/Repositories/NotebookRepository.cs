@@ -36,6 +36,11 @@ namespace Knowlead.BLL.Repositories
             _context.Add(notebook);
         }
 
+        public void Update(Notebook notebook)
+        {
+            _context.Update(notebook);
+        }
+
         public async Task Commit()
         {
             var success = await _context.SaveChangesAsync() > 0;
