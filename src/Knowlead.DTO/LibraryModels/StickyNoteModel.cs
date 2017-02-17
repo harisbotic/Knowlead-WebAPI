@@ -1,0 +1,26 @@
+using System;
+using Knowlead.Common.DataAnnotations;
+using Knowlead.DTO.UserModels;
+
+namespace Knowlead.DTO.LibraryModels
+{
+    public class StickyNoteModel
+    {
+        public int StickyNoteId { get; set; }
+
+        [MyRequired]
+        public String Name { get; set; }
+        public String NoteText { get; set; }
+
+        public DateTime CreatedAt { get; set; }
+        public bool IsDeleted { get; set; } = false;
+
+        public Guid CreatedById { get; set; }
+        public ApplicationUserModel CreatedBy { get; set; }
+
+        public StickyNoteModel()
+        {
+            CreatedAt = DateTime.UtcNow;
+        }
+    }
+}

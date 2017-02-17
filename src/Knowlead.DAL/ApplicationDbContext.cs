@@ -49,6 +49,7 @@ namespace Knowlead.DAL
 
         #region Library Models
         public DbSet<Notebook> Notebooks { get; set; }
+        public DbSet<StickyNote> StickyNotes { get; set; }
         #endregion
 
         #region User Models

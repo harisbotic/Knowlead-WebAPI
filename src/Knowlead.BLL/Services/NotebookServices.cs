@@ -28,6 +28,9 @@ namespace Knowlead.Services
             if(notebook == null)
                 throw new ErrorModelException(ErrorCodes.EntityNotFound, nameof(Notebook));
 
+            if(notebook.IsDeleted == true)
+                throw new ErrorModelException(ErrorCodes.EntityNotFound, nameof(Notebook));
+
             //Check if is allowed to read
             if(!notebook.CreatedById.Equals(applicationUserId))
                 throw new ErrorModelException(ErrorCodes.OwnershipError);
@@ -57,9 +60,6 @@ namespace Knowlead.Services
         public async Task<Notebook> Patch(int notebookId, JsonPatchDocument<NotebookModel> notebookPatch)
         {
             var notebook = await _notebookRepository.Get(notebookId);
-
-            if(notebook == null)
-                throw new ErrorModelException(ErrorCodes.EntityNotFound, nameof(Notebook));
 
             var notebookModel = Mapper.Map<NotebookModel>(notebook);
             notebookPatch.ApplyTo(notebookModel);
