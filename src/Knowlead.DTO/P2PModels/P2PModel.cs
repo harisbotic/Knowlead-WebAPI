@@ -28,6 +28,12 @@ namespace Knowlead.DTO.P2PModels
 
         public DateTime DateCreated { get; set; }
 
+        public int BookmarkCount { get; set; }
+        public int OfferCount { get; set; }
+
+        public bool DidBookmark { get; set; } = false;
+        public bool CanBookmark { get; set; } = false;
+
         public bool IsDeleted { get; set; }
 
         public Guid? ScheduledWithId { get; set; }

@@ -35,14 +35,20 @@ namespace Knowlead.BLL.Repositories
             _notificationServices = notificationServices;
         }
 
-        public async Task<P2P> GetP2PTemp(int p2pId)
-        {
-            return await _context.P2p.IncludeEverything().Where(x => x.P2pId == p2pId).FirstOrDefaultAsync();
-        }
-
-        public async Task<IActionResult> GetP2P(int p2pId)
+        public async Task<P2P> GetP2PTemp(int p2pId, Guid? applicationUserId = null)
         {
             var p2p = await _context.P2p.IncludeEverything().Where(x => x.P2pId == p2pId).FirstOrDefaultAsync();
+            var didBookmark = await _context.P2PBookmarks.Where(x => x.ApplicationUserId.Equals(""))
+                                                         .Where(x => x.P2pId.Equals(p2pId))
+                                                         .CountAsync() == 1;
+            p2p.DidBookmark = didBookmark;
+            p2p.CanBookmark = !didBookmark;
+            return p2p;
+        }
+
+        public async Task<IActionResult> GetP2P(int p2pId, Guid applicationUserId)
+        {
+            var p2p = await GetP2PTemp(p2pId, applicationUserId);
             
             if(p2p == null && !p2p.IsDeleted)
                 throw new ErrorModelException(ErrorCodes.EntityNotFound, nameof(P2P));
@@ -278,6 +284,45 @@ namespace Knowlead.BLL.Repositories
             });
         }
 
+        public async Task<P2P> AddBookmark(int p2pId, Guid applicationUserId)
+        {
+            var p2p = await _context.P2p.Where(x => x.P2pId.Equals(p2pId)).FirstOrDefaultAsync();
+            var p2pBookmarks = await _context.P2PBookmarks.Where(x => x.P2pId.Equals(p2pId)).ToListAsync();
+
+            if(p2p.CreatedById.Equals(applicationUserId))
+                throw new ErrorModelException(ErrorCodes.AuthorityError, nameof(P2P));
+
+            if(p2pBookmarks.Where(x => applicationUserId.Equals(applicationUserId)).Count() == 1)
+                throw new ErrorModelException(ErrorCodes.AlreadyBookmarked);
+
+            var p2pbookmark = new P2PBookmark{
+                P2pId = p2pId,
+                ApplicationUserId = applicationUserId
+            };
+
+            p2p.BookmarkCount = p2pBookmarks.Count + 1;
+
+            _context.P2PBookmarks.Add(p2pbookmark);
+            _context.P2p.Update(p2p);
+
+            await SaveChangesAsync();
+            return p2p;
+        }
+
+        public async Task<bool> RemoveBookmark(int p2pId, Guid applicationUserId)
+        {
+            var p2pBookmark = await _context.P2PBookmarks.Where(x => x.P2pId.Equals(p2pId))
+                                                          .Where(x => x.ApplicationUserId.Equals(applicationUserId))
+                                                          .FirstOrDefaultAsync();
+            if(p2pBookmark == null)
+                return false;                                            
+
+            _context.P2PBookmarks.Remove(p2pBookmark);
+            await SaveChangesAsync();
+            
+            return true;
+        }
+
         public async Task<IActionResult> Delete(int p2pInt, Guid applicationUserId)
         {
             var p2p = await _context.P2p.Where(x => x.P2pId == p2pInt).FirstOrDefaultAsync();
@@ -313,16 +358,6 @@ namespace Knowlead.BLL.Repositories
         public async Task<IActionResult> ListMine(Guid applicationUserId)
         {
             var p2ps = await _context.P2p.IncludeEverything().Where(x => x.CreatedById == applicationUserId).ToListAsync();
-            // var p2pModels = new List<P2PModel>();
-            // var applicationUserModel = Mapper.Map<ApplicationUserModel>(applicationUser);
-
-            // //Optimization
-            // foreach (var p2p in p2ps)
-            // {
-            //     var p2pModel = Mapper.Map<P2PModel>(p2p);
-            //     p2pModel.CreatedBy = applicationUserModel;
-            //     p2pModels.Add(p2pModel);
-            // }
 
             return new OkObjectResult(new ResponseModel{
                 Object = Mapper.Map<List<P2PModel>>(p2ps)
@@ -365,12 +400,20 @@ namespace Knowlead.BLL.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task<IActionResult> ListAll()
+        public async Task<IActionResult> ListAll(Guid applicationUserId)
         {
             if(!_environment.IsDevelopment())
                 return new BadRequestObjectResult(new ResponseModel(new ErrorModel("Development only endpoint")));
-
+            
             var p2ps = await _context.P2p.IncludeEverything().ToListAsync();
+            var myBookmarks = await _context.P2PBookmarks.Where(x => x.ApplicationUserId.Equals(applicationUserId)).ToListAsync();
+
+            foreach (var p2p in p2ps)
+            {
+                p2p.DidBookmark = myBookmarks.Where(x => x.P2pId == p2p.P2pId).Count() == 1;
+                p2p.CanBookmark = !p2p.DidBookmark;
+            }
+
 
             return new OkObjectResult(new ResponseModel{
                 Object = Mapper.Map<List<P2PModel>>(p2ps)

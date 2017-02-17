@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Authorization;
 using static Knowlead.Common.Constants;
 using static Knowlead.Common.Constants.EnumActions;
 using Knowlead.Common.Exceptions;
+using Knowlead.DTO.ResponseModels;
+using AutoMapper;
 
 namespace Knowlead.Controllers
 {
@@ -29,7 +31,8 @@ namespace Knowlead.Controllers
         [HttpGet("{p2pId}")]
         public async Task<IActionResult> GetP2P(int p2pId)
         {
-            return await _p2pRepository.GetP2P(p2pId);
+            var applicationUserId = _auth.GetUserId();
+            return await _p2pRepository.GetP2P(p2pId, applicationUserId);
         }
 
         [HttpGet("messages/{p2pId}")]
@@ -83,7 +86,8 @@ namespace Knowlead.Controllers
         [HttpGet("list")]
         public async Task<IActionResult> List()
         {
-            return await _p2pRepository.ListAll();
+            var applicationUserId = _auth.GetUserId();
+            return await _p2pRepository.ListAll(applicationUserId);
         }
 
         [HttpGet("list/{listP2PRequest}")]
@@ -118,10 +122,28 @@ namespace Knowlead.Controllers
                 default:
                     throw new ErrorModelException(ErrorCodes.IncorrectValue, nameof(ListP2PsRequest));
             }
+        }
+
+        [HttpPost("bookmarkAdd/{p2pId}")]
+        public async Task<IActionResult> AddBookmark(int p2pId)
+        {
+            var applicationUserId = _auth.GetUserId();
+            var p2p = await _p2pRepository.AddBookmark(p2pId, applicationUserId);
             
-            // return new OkObjectResult(new ResponseModel{
-            //     Object = Mapper.Map<FriendshipModel>(result)
-            // });
+            return Ok(new ResponseModel{
+                Object = Mapper.Map<P2PModel>(p2p)
+            });
+        }
+
+        [HttpPost("bookmarkRemove/{p2pId}")]
+        public async Task<IActionResult> RemoveBookmark(int p2pId)
+        {
+            var applicationUserId = _auth.GetUserId();
+            var successful = await _p2pRepository.RemoveBookmark(p2pId, applicationUserId);
+            
+            if(successful)
+                return Ok(new ResponseModel());
+            return BadRequest(new ResponseModel());
         }
     }
 }
