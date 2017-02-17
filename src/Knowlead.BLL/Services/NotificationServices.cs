@@ -116,7 +116,7 @@ namespace Knowlead.Services
             });
 
             _hubContext.Clients.User(notification.ForApplicationUserId.ToString())
-                                .InvokeAsync(WebClientFunctionNames.DisplayNotification, json);
+                                .InvokeAsync(WebClientFuncNames.DisplayNotification, json);
 
             return Task.CompletedTask;
         }

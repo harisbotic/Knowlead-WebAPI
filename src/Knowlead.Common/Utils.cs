@@ -1,6 +1,4 @@
 using System;
-using Knowlead.Common.Exceptions;
-using static Knowlead.Common.Constants;
 
 namespace Knowlead.Common
 {
@@ -14,14 +12,17 @@ namespace Knowlead.Common
         }
 
         public static Tuple<Guid, Guid> GetBiggerSmallerGuidTuple(Guid guidOne, Guid guidTwo)
-        { 
-            if(guidOne.Equals(guidTwo))
-                throw new ErrorModelException(ErrorCodes.IncorrectValue, nameof(Guid));
-
-            var biggerGuid = (guidOne.CompareTo(guidTwo) > 0)? guidOne : guidTwo;
-            var smallerGuid = (guidOne.CompareTo(guidTwo) < 0)? guidOne : guidTwo;
+        {
+            var biggerGuid = (guidOne.CompareTo(guidTwo) >= 0)? guidOne : guidTwo;
+            var smallerGuid = (guidOne.CompareTo(guidTwo) <= 0)? guidOne : guidTwo;
 
             return new Tuple<Guid,Guid> (biggerGuid, smallerGuid);
+        }
+
+        public static String GenerateChatMessagePartitionKey(Guid guidOne, Guid guidTwo)
+        { 
+            var bsTuple = GetBiggerSmallerGuidTuple(guidOne, guidTwo);
+            return $"{bsTuple.Item1}{bsTuple.Item2}";
         }
     }
 }

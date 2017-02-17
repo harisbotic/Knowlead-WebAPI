@@ -9,6 +9,7 @@ using Knowlead.Common.HttpRequestItems;
 using System.Linq;
 using Knowlead.WebApi.Hubs;
 using Hangfire;
+using Knowlead.DAL;
 
 namespace Knowlead
 {
@@ -60,6 +61,9 @@ namespace Knowlead
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
         {
+            var azureDataStore = new AzureDataStore(_config); 
+            azureDataStore.Init(); //Initializes azure storages (Table and Blobs)
+
             loggerFactory.AddConsole(_config.GetSection("Logging"));
             loggerFactory.AddDebug();
             app.UseCors("AllowAll");

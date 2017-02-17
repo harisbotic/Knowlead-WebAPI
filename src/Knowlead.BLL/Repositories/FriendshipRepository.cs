@@ -23,6 +23,15 @@ namespace Knowlead.BLL.Repositories
             _context = context;
         }
 
+        public async Task<Friendship> GetFriendship(Guid userIdOne, Guid userIdTwo)
+        {
+            var bsTuple = GetBiggerSmallerGuidTuple(userIdOne, userIdTwo);
+
+            return await _context.Friendships
+                                        .Where(x => x.ApplicationUserBiggerId == bsTuple.Item1 && x.ApplicationUserSmallerId == bsTuple.Item2)
+                                        .FirstOrDefaultAsync();
+        }
+
         public async Task<List<Friendship>> GetAllFriends(Guid applicationUserId, FriendshipStatus? status)
         {
             var query = _context.Friendships
@@ -42,6 +51,9 @@ namespace Knowlead.BLL.Repositories
 
         public async Task<Friendship> SendFriendRequest(Guid currentUserId, Guid otherUserId)
         {
+            if(currentUserId.Equals(otherUserId))
+                throw new ErrorModelException(ErrorCodes.IncorrectValue, nameof(otherUserId));
+
             var friendship = await GetFriendship(currentUserId, otherUserId);
 
             if(friendship != null)
@@ -181,6 +193,9 @@ namespace Knowlead.BLL.Repositories
 
         public async Task<Friendship> BlockUser(Guid currentUserId, Guid otherUserId)
         {
+            if(currentUserId.Equals(otherUserId))
+                throw new ErrorModelException(ErrorCodes.IncorrectValue, nameof(otherUserId));
+
             var friendship = await GetFriendship(currentUserId, otherUserId);
 
             if(friendship != null)
@@ -221,15 +236,6 @@ namespace Knowlead.BLL.Repositories
 
             await SaveChangesAsync();
             return friendship;
-        }
-
-        private async Task<Friendship> GetFriendship(Guid userIdOne, Guid userIdTwo)
-        {
-            var bsTuple = GetBiggerSmallerGuidTuple(userIdOne, userIdTwo);
-
-            return await _context.Friendships
-                                        .Where(x => x.ApplicationUserBiggerId == bsTuple.Item1 && x.ApplicationUserSmallerId == bsTuple.Item2)
-                                        .FirstOrDefaultAsync();
         }
 
         private void ChangeFriendshipStatusTo(Friendship friendship, Guid currentUserId, FriendshipStatus newStatus)

@@ -192,9 +192,10 @@ namespace Knowlead.Common
             public const string RewardClaimed = "TransactionReasons.REWARD_CLAIMED:";
         }
 
-        public static class WebClientFunctionNames
+        public static class WebClientFuncNames
         {
             public const string DisplayNotification = "displayNotification";
+            public const string DisplayChatMsg = "displayChatMsg";
         }
     }
 }

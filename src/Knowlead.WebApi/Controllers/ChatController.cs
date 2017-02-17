@@ -13,6 +13,7 @@ using Knowlead.Common.Exceptions;
 using Knowlead.Services.Interfaces;
 using static Knowlead.Common.Constants.EnumStatuses;
 using Microsoft.AspNetCore.Authorization;
+using System;
 
 namespace Knowlead.Controllers
 {
@@ -89,12 +90,34 @@ namespace Knowlead.Controllers
         }
 
         [HttpPost("msg")]
-        public async Task<IActionResult> SendChatMessage([FromBody] NewChatMessage newChatMessage)
+        public async Task<IActionResult> SendChatMessage([FromBody] ChatMessageModel chatMessageModel)
         {
             var senderId = _auth.GetUserId();
-            var tableResult = await _chatServices.SendChatMessage(senderId, newChatMessage.SendToId, newChatMessage.Message);
+            await _chatServices.SendChatMessage(chatMessageModel, senderId);
             
-            return StatusCode(tableResult.HttpStatusCode);
+            return Ok(new ResponseModel());
+        }
+
+        [HttpGet("getConversation/{applicationUserId}")]
+        public async Task<IActionResult> GetConversation([FromRoute] Guid applicationUserId, [FromQuery] string fromRowKey, [FromQuery] int numItems)
+        {
+            var currentUserId = _auth.GetUserId();
+            var chatMessages = await _chatServices.GetConversation(currentUserId, applicationUserId, fromRowKey, numItems);
+            
+            return Ok(new ResponseModel{
+                Object = Mapper.Map<List<ChatMessageModel>>(chatMessages)
+            });
+        }
+
+        [HttpGet("getConversations")]
+        public async Task<IActionResult> GetConversations([FromQuery] DateTimeOffset fromDateTime, [FromQuery] int numItems)
+        {
+            var currentUserId = _auth.GetUserId();
+            var conversations = await _chatServices.GetConversations(currentUserId, fromDateTime, numItems);
+            
+            return Ok(new ResponseModel{
+                Object = Mapper.Map<List<ConversationModel>>(conversations)
+            });
         }
     }
 }

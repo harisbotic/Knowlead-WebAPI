@@ -8,7 +8,6 @@ namespace Knowlead.DomainModel.ChatModels
 {
     public class Friendship
     {
-
         [MyRequired]
         public Guid ApplicationUserBiggerId { get; set; }
         public ApplicationUser ApplicationUserBigger { get; set; }

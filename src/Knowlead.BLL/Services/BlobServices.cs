@@ -15,8 +15,8 @@ namespace Knowlead.Services
 {
     public class BlobServices : IBlobServices
     {
-        private const string IMG_CONTAINER_NAME = "images";
-        private const string FILE_CONTAINER_NAME = "files";
+        public const string IMG_CONTAINER_NAME = "images";
+        public const string FILE_CONTAINER_NAME = "files";
         private readonly IConfigurationRoot _config;
         private CloudStorageAccount _storageAccount;
         private CloudBlobClient _storageClient;
@@ -27,7 +27,7 @@ namespace Knowlead.Services
         {
             _config = config;
             
-            _storageAccount = new CloudStorageAccount(new Microsoft.WindowsAzure.Storage.Auth.StorageCredentials(_config["AzureStorageAccount:accName"], _config["AzureStorageAccount:key"]), false);
+            _storageAccount = new CloudStorageAccount(new Microsoft.WindowsAzure.Storage.Auth.StorageCredentials(_config["AzureStorageAccount:accName"], _config["AzureStorageAccount:key"]), true);
             _storageClient = _storageAccount.CreateCloudBlobClient();
             _imageContainer = _storageClient.GetContainerReference(IMG_CONTAINER_NAME);
             _fileContainer = _storageClient.GetContainerReference(FILE_CONTAINER_NAME);
@@ -36,8 +36,6 @@ namespace Knowlead.Services
         public async Task<ImageBlob> SaveImageOnAzureAsync(IFormFile formFile)
         {
             ImageBlob imageBlob = Mapper.Map<ImageBlob>(formFile);
-
-            await _imageContainer.CreateIfNotExistsAsync(BlobContainerPublicAccessType.Blob, null, null);
 
             CloudBlockBlob blockBlob = _imageContainer.GetBlockBlobReference($"{imageBlob.BlobId}");
             blockBlob.Properties.ContentType = formFile.ContentType;
@@ -54,8 +52,6 @@ namespace Knowlead.Services
         public async Task<FileBlob> SaveFileOnAzureAsync (IFormFile formFile)
         {
             FileBlob fileBlob = Mapper.Map<FileBlob>(formFile);
-
-            await _fileContainer.CreateIfNotExistsAsync(BlobContainerPublicAccessType.Blob, null, null);
 
             CloudBlockBlob blockBlob = _fileContainer.GetBlockBlobReference($"{fileBlob.BlobId}");
             blockBlob.Properties.ContentType = formFile.ContentType;

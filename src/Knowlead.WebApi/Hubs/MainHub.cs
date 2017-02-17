@@ -1,12 +1,16 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Knowlead.BLL.Repositories.Interfaces;
 using Knowlead.Common.Exceptions;
 using Knowlead.Common.HttpRequestItems;
 using Knowlead.DTO.CallModels;
+using Knowlead.DTO.ChatModels;
 using Knowlead.Services.Interfaces;
 using Microsoft.AspNetCore.SignalR;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using static Knowlead.Common.Constants;
 using static Knowlead.Common.Constants.EnumStatuses;
 
@@ -16,14 +20,17 @@ namespace Knowlead.WebApi.Hubs
     {
         private readonly IP2PRepository _p2pRepo;
         private readonly ICallServices _callServices;
+        private readonly IChatServices _chatServices;
         private readonly Auth _auth;
         
         public MainHub(IP2PRepository p2pRepo,
                        ICallServices callServices,
+                       IChatServices chatServices,
                        Auth auth)
         {
             _p2pRepo = p2pRepo;
             _callServices = callServices;
+            _chatServices = chatServices;
             _auth = auth;
         }
 
@@ -56,18 +63,6 @@ namespace Knowlead.WebApi.Hubs
             _callServices.RemoveConnectionFromCall(Context.ConnectionId);
 
             return Task.CompletedTask;
-        }
-
-        public async Task Send(string message)
-        {
-            System.Console.WriteLine("PRIMIO SAM PORUKU*********\n *********** " + message);
-            
-            var e = new NotificationModel{
-                type = "error",
-                title = "Title",
-                subtitle = "Subtitle"
-            };             
-            await Clients.User(_auth.GetUserId().ToString()).InvokeAsync("notify", e);
         }
 
         public async Task StartP2pCall(int p2pId)
@@ -162,23 +157,22 @@ namespace Knowlead.WebApi.Hubs
             _callServices.DisconnectFromCall(call, _auth.GetUserId());
         }
 
-        // public String GetCallModel(Guid callModelId) //Is this used?
-        // {
-        //     var callModel = this.GetCallModel(callModelId);
+        public async void Msg(ChatMessageModel chatMessageModel)
+        {
+            var currentUser = _auth.GetUserId();
+            var chatMessage = await _chatServices.SendChatMessage(chatMessageModel, currentUser);
 
-        //     var json = JsonConvert.SerializeObject(callModel, new JsonSerializerSettings 
-        //     { 
-        //         ContractResolver = new CamelCasePropertyNamesContractResolver() 
-        //     });
-            
-        //     return json;
-        // }
+            var json = JsonConvert.SerializeObject(Mapper.Map<ChatMessageModel>(chatMessage), new JsonSerializerSettings 
+            { 
+                ContractResolver = new CamelCasePropertyNamesContractResolver() 
+            });
+
+            Clients.User(currentUser.ToString())
+                            .InvokeAsync(WebClientFuncNames.DisplayChatMsg, json).RunSynchronously();
+                            
+            Clients.User(chatMessageModel.SendToId.ToString())
+                            .InvokeAsync(WebClientFuncNames.DisplayChatMsg, json).RunSynchronously();
+        }
     }
 
-    public class NotificationModel
-    {
-        public string type {get; set;}
-        public string title {get; set;}
-        public string subtitle {get; set;}
-    }
 }

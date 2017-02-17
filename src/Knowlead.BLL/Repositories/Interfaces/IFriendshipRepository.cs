@@ -8,6 +8,7 @@ namespace Knowlead.BLL.Repositories.Interfaces
 {
     public interface IFriendshipRepository
     {
+        Task<Friendship> GetFriendship(Guid userIdOne, Guid userIdTwo);
         Task<List<Friendship>> GetAllFriends (Guid applicationUserId, FriendshipStatus? status);
         Task<Friendship> SendFriendRequest (Guid currentUserId, Guid otherUserId);
         Task<Friendship> RespondToFriendRequest (Guid currentUserId, Guid otherUserId, bool isAccepting);

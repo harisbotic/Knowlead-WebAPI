@@ -11,9 +11,9 @@ namespace Knowlead.DomainModel.ChatModels
 
         public ChatMessage(Guid senderId, Guid sendToId)
         {
-            var bsTuple = GetBiggerSmallerGuidTuple(senderId, sendToId);
-            this.PartitionKey = $"{bsTuple.Item1}{bsTuple.Item2}";
-            this.RowKey = Guid.NewGuid().ToString();
+            this.PartitionKey = GenerateChatMessagePartitionKey(senderId, sendToId);
+            this.RowKey = DateTime.UtcNow.Ticks.ToString();
+            this.Timestamp = DateTime.UtcNow;
 
             SenderId = senderId;
         }
