@@ -377,18 +377,28 @@ namespace Knowlead.BLL.Repositories
             });
         }
 
-        public Task<IActionResult> ListBookmarked(Guid applicationUserId)
+        public async Task<IActionResult> ListBookmarked(Guid applicationUserId)
         {
-            throw new NotImplementedException();
+            var p2pBookmarks = await _context.P2PBookmarks.Where(x => x.ApplicationUserId.Equals(applicationUserId))
+                                                            .Include("P2p")
+                                                            .Include("P2p.P2PLanguages")
+                                                            .Include("P2p.P2PFiles")
+                                                            .Include("P2p.P2PImages")
+                                                            .ToListAsync();
+
+
+            return new OkObjectResult(new ResponseModel {
+                Object = Mapper.Map<List<P2PBookmarkModel>>(p2pBookmarks)
+            });
         }
 
         public async  Task<IActionResult> ListDeleted(Guid applicationUserId)
         {
             var p2ps = await _context.P2p
-                    .IncludeEverything()
-                    .Where(x => x.CreatedById == applicationUserId)
-                    .Where(x => x.IsDeleted == true)
-                    .ToListAsync();
+                                    .IncludeEverything()
+                                    .Where(x => x.CreatedById == applicationUserId)
+                                    .Where(x => x.IsDeleted == true)
+                                    .ToListAsync();
 
             return new OkObjectResult(new ResponseModel {
                 Object = Mapper.Map<List<P2PModel>>(p2ps)
