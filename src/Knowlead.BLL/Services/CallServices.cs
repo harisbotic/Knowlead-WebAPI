@@ -4,6 +4,7 @@ using System.Linq;
 using AutoMapper;
 using Hangfire;
 using Knowlead.DTO.CallModels;
+using Knowlead.DTO.ChatModels;
 using Knowlead.Services.Interfaces;
 using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
@@ -23,9 +24,9 @@ namespace Knowlead.Services
             _hubContext = hubContext;
         }
 
-        private string GetCallJsonString(_CallModel callModel)
+        private string GetJsonString<T>(T callModel)
         {
-            return JsonConvert.SerializeObject(Mapper.Map<_CallModel>(callModel), new JsonSerializerSettings 
+            return JsonConvert.SerializeObject(Mapper.Map<T>(callModel), new JsonSerializerSettings 
             { 
                 ContractResolver = new CamelCasePropertyNamesContractResolver() 
             });
@@ -42,7 +43,7 @@ namespace Knowlead.Services
 
         public void SendInvitations(_CallModel callModel)
         {
-            var json = GetCallJsonString(callModel);
+            var json = GetJsonString(callModel);
             int invitationsSent = 0;
             foreach (var peer in callModel.Peers)
             {
@@ -76,7 +77,7 @@ namespace Knowlead.Services
 
         private async void SendStartCall(_CallModel callModel, PeerInfoModel peer)
         {
-            await _hubContext.Clients.Client(peer.ConnectionId).InvokeAsync("startCall", GetCallJsonString(callModel));
+            await _hubContext.Clients.Client(peer.ConnectionId).InvokeAsync("startCall", GetJsonString(callModel));
             peer.UpdateStatus(true);
         }
 
@@ -135,6 +136,21 @@ namespace Knowlead.Services
             }
         }
 
+        public void CallMsg(ChatMessageModel message)
+        {
+            var call = this.GetCall(message.SendToId.Value);
+            var msg = this.GetJsonString(message);
+            foreach (var peer in call.Peers)
+            {
+                try {
+                    _hubContext.Clients.Client(peer.ConnectionId).InvokeAsync("callMsg", msg);
+                } catch(Exception)
+                {
+                    Console.WriteLine("Tried to send chat message to disconnected peer");
+                }
+            }
+        }
+
         public void DisconnectFromCall(_CallModel callModel, Guid userId)
         {
             callModel.Peers
@@ -147,7 +163,7 @@ namespace Knowlead.Services
         public void CallModelUpdate(_CallModel callModelReceived, bool reset)
         {
             _CallModel callModel = Mapper.Map<_CallModel>(callModelReceived);
-            var json = GetCallJsonString(callModel);
+            var json = GetJsonString(callModel);
 
             foreach (var peer in callModel.Peers)
             {

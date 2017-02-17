@@ -17,8 +17,8 @@ namespace Knowlead.BLL.Repositories.Interfaces
         Task<ApplicationUser> RemoveProfilePicture(ApplicationUser applicationUser);
         Task<ApplicationUser> UpdateUserRating(Guid applicationUserId);
         Task<IActionResult> ConfirmEmail(ConfirmEmailModel confirmEmailModel);
-        Task<List<ApplicationUserReferral>> GetReferrals(Guid applicationUser, bool registred = false);
-        Task<int> GetReferralsCount(Guid applicationUser, bool registred = false);
+        Task<List<ApplicationUserReferral>> GetReferrals(Guid applicationUser, bool registred = true);
+        Task<int> GetReferralsCount(Guid applicationUser, bool registred = true);
         
     }
 }

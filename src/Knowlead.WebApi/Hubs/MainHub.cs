@@ -157,6 +157,18 @@ namespace Knowlead.WebApi.Hubs
             _callServices.DisconnectFromCall(call, _auth.GetUserId());
         }
 
+        public void CallMsg(ChatMessageModel chatMessageModel)
+        {
+            if (!chatMessageModel.SendToId.HasValue)
+            {
+                throw new ErrorModelException(ErrorCodes.HackAttempt);
+            }
+            this.GetCallModel(chatMessageModel.SendToId.Value);
+            chatMessageModel.Timestamp = DateTime.UtcNow;
+            chatMessageModel.SenderId = _auth.GetUserId();
+            _callServices.CallMsg(chatMessageModel);
+        }
+
         public async void Msg(ChatMessageModel chatMessageModel)
         {
             var currentUser = _auth.GetUserId();

@@ -1,5 +1,6 @@
 using System;
 using Knowlead.DTO.CallModels;
+using Knowlead.DTO.ChatModels;
 
 namespace Knowlead.Services.Interfaces
 {
@@ -15,5 +16,6 @@ namespace Knowlead.Services.Interfaces
         void AcceptCall(_CallModel callModel, PeerInfoModel peerInfoModel);
         void SendInvitations(Guid callId);
         void DisconnectFromCall(_CallModel callModel, Guid userId);
+        void CallMsg(ChatMessageModel message);
     }
 }
