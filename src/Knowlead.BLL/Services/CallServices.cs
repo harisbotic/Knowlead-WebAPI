@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Hangfire;
+using Knowlead.BLL.Repositories.Interfaces;
+using Knowlead.DomainModel.CallModels;
 using Knowlead.DTO.CallModels;
 using Knowlead.DTO.ChatModels;
 using Knowlead.Services.Interfaces;
@@ -18,10 +20,17 @@ namespace Knowlead.Services
     {
         private static List<_CallModel> Calls { get; set; } = new List<_CallModel>();
         private readonly IHubContext<THub> _hubContext;
+        private readonly ITransactionServices _transactionServices;
+        private readonly IP2PRepository _p2pRepository;
+        private readonly ICallRepository _callRepository;
 
-        public CallServices(IHubContext<THub> hubContext)
+        public CallServices(IHubContext<THub> hubContext, ITransactionServices transactionServices,
+                             IP2PRepository p2pRepository, ICallRepository callRepository)
         {
             _hubContext = hubContext;
+            _transactionServices = transactionServices;
+            _p2pRepository = p2pRepository;
+            _callRepository = callRepository;
         }
 
         private string GetJsonString<T>(T callModel)
@@ -121,14 +130,34 @@ namespace Knowlead.Services
             return callModel.Peers.Where(x => x.PeerId == userId).FirstOrDefault();
         }
 
-        public void CloseCall(_CallModel callModel, string reason)
+        public async void CloseCall(_CallModel callModel, string reason)
         {
-            // TODO: DO SOMETHING WITH THIS REASON
+            var p2pCallModel = callModel as P2PCallModel;
+
+            if(p2pCallModel != null)
+            {
+                var p2p = await _p2pRepository.GetP2PTemp(p2pCallModel.P2pId);
+                var callerPeerId = p2pCallModel.Caller.PeerId;
+                var otherPeerId = p2pCallModel.CallReceiverId;
+                var pointsAward = p2p.PriceAgreed.Value * 3;
+                if(DateTime.UtcNow.Subtract(callModel.StartDate).Ticks > callModel.StartDate.AddMinutes(5).Ticks)
+                {
+                    await _transactionServices.RewardMinutes(callerPeerId, p2p.PriceAgreed.Value, pointsAward, TransactionReasons.P2PCallEnded);
+                    await _transactionServices.RewardMinutes(otherPeerId, 0, pointsAward, TransactionReasons.P2PCallEnded);
+                }
+                p2p.Status = P2PStatus.Finsihed;
+                await _p2pRepository.UpdateAndSave(p2p);
+
+                var call = Mapper.Map<_Call>(callModel);
+                _callRepository.Add(call);
+                await _callRepository.Commit();
+            }
+
             Calls.Remove(callModel);
             foreach (var peer in callModel.Peers)
             {
                 try {
-                    _hubContext.Clients.Client(peer.ConnectionId).InvokeAsync("stopCall", reason);
+                    _hubContext.Clients.Client(peer.ConnectionId).InvokeAsync("stopCall", reason).RunSynchronously();
                 } catch (Exception)
                 {
                     Console.WriteLine("Tried to hang up call with disconnected peer");

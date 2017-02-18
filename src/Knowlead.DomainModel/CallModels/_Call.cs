@@ -9,17 +9,17 @@ namespace Knowlead.DomainModel.CallModels
     {
         [Key]
         public Guid CallId { get; set; }
-        public bool Failed { get; set; }
+        public bool Failed { get; set; } = false;
         public string FailReason { get; set; }
+        public double Duration { get; set; }
+        public DateTime EndDate { get; set; }
+        
         [MyRequired]
         public Guid CallerId { get; set; }
         public ApplicationUser Caller { get; set; }
-        public int Duration { get; set; }
-        public DateTime EndDate { get; set; }
 
         public _Call()
         {
-            this.Failed = false;
             this.EndDate = DateTime.UtcNow;
         }
     }

@@ -13,8 +13,9 @@ namespace Knowlead.DTO.CallModels
         public string FailReason { get; set; }
         [MyRequired]
         public PeerInfoModel Caller { get; set; }
-        public int Duration { get; set; }
+        public DateTime StartDate { get; private set; } = DateTime.UtcNow;
         public DateTime? EndDate { get; set; }
+        public double duration { get { return -StartDate.Subtract(EndDate.HasValue?EndDate.Value:DateTime.UtcNow).TotalMinutes;} private set{}}
         public bool Sealed { get; set; }
 
         public bool Inviting { get; set; }

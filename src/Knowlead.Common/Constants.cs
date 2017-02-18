@@ -194,6 +194,8 @@ namespace Knowlead.Common
             
             [TSInitialize]
             public const string RewardClaimed = "TransactionReasons.REWARD_CLAIMED:";
+            [TSInitialize]
+            public const string P2PCallEnded = "TransactionReasons.P2P_CALL_ENDED:";
         }
 
         public static class WebClientFuncNames

@@ -11,8 +11,8 @@ namespace Knowlead.DomainModel.CallModels
         public int P2PId { get; set; }
         public P2P P2P { get; set; }
         [MyRequired]
-        public Guid ReceiverId { get; set; }
-        public ApplicationUser Receiver { get; set; }
+        public Guid CallReceiverId { get; set; }
+        public ApplicationUser CallReceiver { get; set; }
 
         public P2PCall() : base()
         {

@@ -240,6 +240,12 @@ namespace Knowlead.BLL.Repositories
                 if (pastFewOffers.Where(offer => offer.MessageFromId == applicationUserId).Count() == ConsecutiveP2PMessageLimit)
                     throw new ErrorModelException(ErrorCodes.ConsecutiveOffersLimit, ConsecutiveP2PMessageLimit.ToString());
             
+            if(pastFewOffers.Count == 0)
+            {
+                p2p.OfferCount++;
+                _context.P2p.Update(p2p);
+            }
+
             var p2pMessage = Mapper.Map<P2PMessage>(p2pMessageModel);
             p2pMessage.MessageFromId = applicationUserId;
 
@@ -376,6 +382,12 @@ namespace Knowlead.BLL.Repositories
                 Object = Mapper.Map<P2PModel>(p2p)
             });
                 
+        }
+
+        public async Task UpdateAndSave(P2P p2p)
+        {
+            _context.P2p.Update(p2p);
+            await SaveChangesAsync();
         }
 
         private async Task<bool> SaveChangesAsync()

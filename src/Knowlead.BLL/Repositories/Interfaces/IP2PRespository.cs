@@ -16,6 +16,7 @@ namespace Knowlead.BLL.Repositories.Interfaces
         Task<bool> AddBookmark(int p2pId, Guid applicationUserId);
         Task<bool> RemoveBookmark(int p2pId, Guid applicationUserId);
         Task<IActionResult> Delete(int p2pId, Guid applicationUserId);
+        Task UpdateAndSave(P2P p2p);
         Task<IActionResult> GetP2P(int p2pId, Guid applicationUserId);
         Task<IActionResult> GetMessages(int p2pId, Guid applicationUserId);
         Task<IActionResult> ListMine(Guid applicationUserId);

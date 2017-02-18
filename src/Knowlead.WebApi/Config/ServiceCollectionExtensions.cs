@@ -170,6 +170,7 @@ namespace Knowlead.WebApi.Config
             services.AddScoped<IStickyNoteRepository, StickyNoteRepository>();
             services.AddScoped<IFeedbackRepository, FeedbackRepository>();
             services.AddScoped<IStatisticsRepository, StatisticsRepository>();
+            services.AddScoped<ICallRepository, CallRepository>();
             services.AddScoped<IRewardRepository, RewardRepository>();
             services.AddScoped<ITransactionRepository, TransactionRepository>();
             services.AddScoped<INotebookRepository, NotebookRepository>();

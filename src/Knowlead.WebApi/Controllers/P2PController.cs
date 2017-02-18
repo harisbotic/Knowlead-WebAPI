@@ -10,7 +10,6 @@ using static Knowlead.Common.Constants;
 using static Knowlead.Common.Constants.EnumActions;
 using Knowlead.Common.Exceptions;
 using Knowlead.DTO.ResponseModels;
-using AutoMapper;
 
 namespace Knowlead.Controllers
 {
