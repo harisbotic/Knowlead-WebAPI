@@ -47,7 +47,9 @@ namespace Knowlead.DTO.UserModels
 
             CreateMap<P2PLanguage, LanguageModel>()
                 .ForMember(dest => dest.CoreLookupId, opt => opt.MapFrom(src => src.LanguageId));
-            //Fill in
+            
+            CreateMap<P2PBookmark, P2PBookmarkModel>()
+                .ForMember(dest => dest.ApplicationUser, opt => opt.Ignore());
         }
     }
 }

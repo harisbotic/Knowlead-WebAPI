@@ -12,33 +12,33 @@ using static Knowlead.Common.Constants;
 
 namespace Knowlead.BLL.Repositories
 {
-    public class NotebookRepository : INotebookRepository
+    public class StickyNoteRepository : IStickyNoteRepository
     {
         private readonly ApplicationDbContext _context;
 
-        public NotebookRepository(ApplicationDbContext context)
+        public StickyNoteRepository(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        public async Task<Notebook> Get(int notebookId)
+        public async Task<StickyNote> Get(int stickyNoteId)
         {
-            return await _context.Notebooks.Where(x => x.NotebookId.Equals(notebookId)).FirstOrDefaultAsync();
+            return await _context.StickyNotes.Where(x => x.StickyNoteId.Equals(stickyNoteId)).FirstOrDefaultAsync();
         }
 
-        public async Task<List<Notebook>> GetAllWhere(Expression<Func<Notebook, bool>> condition)
+        public async Task<List<StickyNote>> GetAllWhere(Expression<Func<StickyNote, bool>> condition)
         {
-            return await _context.Notebooks.Where(condition).Where(x => x.IsDeleted == false).ToListAsync();
+            return await _context.StickyNotes.Where(condition).Where(x => x.IsDeleted == false).ToListAsync();
         }
 
-        public void Add(Notebook notebook)
+        public void Add(StickyNote stickyNote)
         {
-            _context.Add(notebook);
+            _context.Add(stickyNote);
         }
 
-        public void Update(Notebook notebook)
+        public void Update(StickyNote stickyNote)
         {
-            _context.Update(notebook);
+            _context.Update(stickyNote);
         }
 
         public async Task Commit()

@@ -14,30 +14,30 @@ namespace Knowlead.Controllers
 {
     [Route("api/[controller]")]
     [Authorize(Policy = Policies.RegisteredUser)]
-    public class NotebookController : Controller
+    public class StickyNoteController : Controller
     {
-        private readonly INotebookServices _notebookServices;
+        private readonly IStickyNoteServices _stickyNoteServices;
         private readonly Auth _auth;
 
-        public NotebookController(INotebookServices notebookServices, Auth auth)
+        public StickyNoteController(IStickyNoteServices stickyNoteServices, Auth auth)
         {
-            _notebookServices = notebookServices;
+            _stickyNoteServices = stickyNoteServices;
             _auth = auth;
         }
 
-        [HttpGet("{notebookId}")]
-        public async Task<IActionResult> Get(int notebookId)
+        [HttpGet("{stickyNoteId}")]
+        public async Task<IActionResult> Get(int stickyNoteId)
         {
             var applicationUserId = _auth.GetUserId();
 
-            var notebook = await _notebookServices.Get(applicationUserId, notebookId);
+            var stickyNote = await _stickyNoteServices.Get(applicationUserId, stickyNoteId);
 
-            if(notebook == null)
+            if(stickyNote == null)
                 return BadRequest();
 
             return Ok(new ResponseModel()
             {
-                Object = AutoMapper.Mapper.Map<NotebookModel>(notebook)
+                Object = AutoMapper.Mapper.Map<StickyNoteModel>(stickyNote)
             });
         }
 
@@ -46,55 +46,55 @@ namespace Knowlead.Controllers
         {
             var applicationUserId = _auth.GetUserId();
 
-            var notebook = await _notebookServices.GetAllFromUser(applicationUserId);
+            var stickyNote = await _stickyNoteServices.GetAllFromUser(applicationUserId);
 
-            if(notebook == null)
+            if(stickyNote == null)
                 return BadRequest();
 
             return Ok(new ResponseModel()
             {
-                Object = AutoMapper.Mapper.Map<List<NotebookModel>>(notebook)
+                Object = AutoMapper.Mapper.Map<List<StickyNoteModel>>(stickyNote)
             });
         }
 
         [HttpPost(""), ValidateModel]
-        public async Task<IActionResult> Create([FromBody] NotebookModel notebookModel)
+        public async Task<IActionResult> Create([FromBody] StickyNoteModel stickyNoteModel)
         {
             var applicationUserId = _auth.GetUserId();
 
-            var notebook = await _notebookServices.Create(applicationUserId, notebookModel);
+            var stickyNote = await _stickyNoteServices.Create(applicationUserId, stickyNoteModel);
 
-            if(notebook == null)
+            if(stickyNote == null)
                 return BadRequest();
 
             return Ok(new ResponseModel()
             {
-                Object = AutoMapper.Mapper.Map<NotebookModel>(notebook)
+                Object = AutoMapper.Mapper.Map<StickyNoteModel>(stickyNote)
             });
         }
         
-        [HttpPatch("{notebookId}")] //ValidateModelAttribute?
-        public async Task<IActionResult> Patch([FromBody] JsonPatchDocument<NotebookModel> notebookPatch, int notebookId)
+        [HttpPatch("{stickyNoteId}")] //ValidateModelAttribute?
+        public async Task<IActionResult> Patch([FromBody] JsonPatchDocument<StickyNoteModel> stickyNotePatch, int stickyNoteId)
         {
             var applicationUser = await _auth.GetUser();
 
-            var notebook = await _notebookServices.Patch(notebookId, notebookPatch);
+            var stickyNote = await _stickyNoteServices.Patch(stickyNoteId, stickyNotePatch);
 
-            if(notebook == null)
+            if(stickyNote == null)
                 return BadRequest();
 
             return Ok(new ResponseModel()
             {
-                Object = AutoMapper.Mapper.Map<NotebookModel>(notebook)
+                Object = AutoMapper.Mapper.Map<StickyNoteModel>(stickyNote)
             });
         }
 
-        [HttpDelete("{notebookId}")]
-        public async Task<IActionResult> Delete(int notebookId)
+        [HttpDelete("{stickyNoteId}")]
+        public async Task<IActionResult> Delete(int stickyNoteId)
         {
             var applicationUserId = _auth.GetUserId();
 
-            var isSuccessful = await _notebookServices.Delete(applicationUserId, notebookId);
+            var isSuccessful = await _stickyNoteServices.Delete(applicationUserId, stickyNoteId);
 
             if(isSuccessful)
                 return Ok(new ResponseModel());

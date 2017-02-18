@@ -26,6 +26,14 @@ namespace Knowlead.DomainModel.P2PModels
         public int? PriceAgreed { get; set; }
         public DateTime? DateTimeAgreed { get; set; }
 
+        public int BookmarkCount { get; set; }
+        public int OfferCount { get; set; }
+
+        [NotMapped]
+        public bool DidBookmark { get; set; } = false;        
+        [NotMapped]
+        public bool CanBookmark { get; set; } = false;
+
         public bool IsDeleted { get; set; }
 
         [MyRequired]

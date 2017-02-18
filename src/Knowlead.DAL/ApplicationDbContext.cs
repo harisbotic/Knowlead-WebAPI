@@ -49,6 +49,7 @@ namespace Knowlead.DAL
 
         #region Library Models
         public DbSet<Notebook> Notebooks { get; set; }
+        public DbSet<StickyNote> StickyNotes { get; set; }
         #endregion
 
         #region User Models
@@ -62,10 +63,11 @@ namespace Knowlead.DAL
         public DbSet<UserCertificate> UserCertificates { get; set; }
         #endregion
 
-        #region Peer to Peer
+        #region P2P
         public DbSet<P2P> P2p { get; set; }
         public DbSet<P2PMessage> P2PMessages { get; set; }
         public DbSet<P2PFile> P2PFiles { get; set; }
+        public DbSet<P2PBookmark> P2PBookmarks { get; set; }
         public DbSet<P2PImage> P2PImages { get; set; }
         public DbSet<P2PLanguage> P2PLanguages { get; set; }
         #endregion
@@ -159,6 +161,9 @@ namespace Knowlead.DAL
 
             modelBuilder.Entity<P2PImage>()
                 .HasKey(t => new { t.P2pId, t.ImageBlobId });
+
+            modelBuilder.Entity<P2PBookmark>()
+                .HasKey(t => new { t.P2pId, t.ApplicationUserId });
 
             modelBuilder.Entity<P2PLanguage>()
                 .HasKey(t => new { t.P2pId, t.LanguageId });
