@@ -167,6 +167,7 @@ namespace Knowlead.BLL.Repositories
 
             p2p.PriceAgreed = p2pMessage.PriceOffer;
             p2p.DateTimeAgreed = p2pMessage.DateTimeOffer;
+            p2p.ScheduledWithId = p2pMessage.MessageFromId == applicationUserId ? p2pMessage.MessageToId : p2pMessage.MessageFromId;
 
             _context.P2p.Update(p2p);
             
