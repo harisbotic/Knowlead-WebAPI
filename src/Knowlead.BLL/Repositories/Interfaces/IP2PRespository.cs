@@ -13,7 +13,7 @@ namespace Knowlead.BLL.Repositories.Interfaces
         Task<IActionResult> Schedule(int p2pMessageId, Guid applicationUserId);
         Task<IActionResult> Message(P2PMessageModel p2pMessageModel, Guid applicationUserId);
         Task<IActionResult> AcceptOffer(int p2pMessageId, Guid applicationUserId);
-        Task<P2P> AddBookmark(int p2pId, Guid applicationUserId);
+        Task<bool> AddBookmark(int p2pId, Guid applicationUserId);
         Task<bool> RemoveBookmark(int p2pId, Guid applicationUserId);
         Task<IActionResult> Delete(int p2pId, Guid applicationUserId);
         Task<IActionResult> GetP2P(int p2pId, Guid applicationUserId);

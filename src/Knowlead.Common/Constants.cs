@@ -87,6 +87,8 @@ namespace Knowlead.Common
             public const string FeedbackAlreadyGiven = "FEEDBACK_ALREADY_GIVEN";
             [TSInitialize]
             public const string AlreadyBookmarked = "ALREADY_BOOKMARKED";
+            [TSInitialize]
+            public const string WasntBookmarked = "WASNT_BOOKMARKED";
         }
 
         [TSClass]

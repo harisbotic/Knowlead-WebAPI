@@ -16,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using Knowlead.Common.Exceptions;
 using Knowlead.Services.Interfaces;
 using Knowlead.DomainModel.NotificationModels;
+using static Knowlead.Common.Constants.EnumStatuses;
 
 namespace Knowlead.BLL.Repositories
 {
@@ -35,14 +36,35 @@ namespace Knowlead.BLL.Repositories
             _notificationServices = notificationServices;
         }
 
+        private bool isBookmarkable(P2P p2p)
+        {
+            return p2p.Status == P2PStatus.Active || p2p.Status == P2PStatus.Inactive;
+        }
+
+        private async Task fillP2pBookmark(P2P p2p, Guid applicationUserId)
+        {
+            await this.fillP2pBookmark(p2p, async () => await _context.P2PBookmarks.Where(x => x.ApplicationUserId.Equals(applicationUserId) && x.P2pId == p2p.P2pId)
+                                                         .CountAsync() == 1);
+        }
+
+        private async Task fillP2pBookmark(P2P p2p, bool didBookmark)
+        {
+            await this.fillP2pBookmark(p2p, () => Task.FromResult(didBookmark));
+        }
+
+        private async Task fillP2pBookmark(P2P p2p, Func<Task<bool>> predicate)
+        {
+            p2p.DidBookmark = await predicate();
+            p2p.CanBookmark = isBookmarkable(p2p);
+        }
+
         public async Task<P2P> GetP2PTemp(int p2pId, Guid? applicationUserId = null)
         {
             var p2p = await _context.P2p.IncludeEverything().Where(x => x.P2pId == p2pId).FirstOrDefaultAsync();
-            var didBookmark = await _context.P2PBookmarks.Where(x => x.ApplicationUserId.Equals(""))
-                                                         .Where(x => x.P2pId.Equals(p2pId))
-                                                         .CountAsync() == 1;
-            p2p.DidBookmark = didBookmark;
-            p2p.CanBookmark = !didBookmark;
+            if (applicationUserId.HasValue)
+            {
+                await this.fillP2pBookmark(p2p, applicationUserId.Value);
+            }
             return p2p;
         }
 
@@ -285,7 +307,7 @@ namespace Knowlead.BLL.Repositories
             });
         }
 
-        public async Task<P2P> AddBookmark(int p2pId, Guid applicationUserId)
+        public async Task<bool> AddBookmark(int p2pId, Guid applicationUserId)
         {
             var p2p = await _context.P2p.Where(x => x.P2pId.Equals(p2pId)).FirstOrDefaultAsync();
             var p2pBookmarks = await _context.P2PBookmarks.Where(x => x.P2pId.Equals(p2pId)).ToListAsync();
@@ -307,7 +329,7 @@ namespace Knowlead.BLL.Repositories
             _context.P2p.Update(p2p);
 
             await SaveChangesAsync();
-            return p2p;
+            return true;
         }
 
         public async Task<bool> RemoveBookmark(int p2pId, Guid applicationUserId)
@@ -316,8 +338,13 @@ namespace Knowlead.BLL.Repositories
                                                           .Where(x => x.ApplicationUserId.Equals(applicationUserId))
                                                           .FirstOrDefaultAsync();
             if(p2pBookmark == null)
-                return false;                                            
+                throw new ErrorModelException(ErrorCodes.WasntBookmarked);
 
+            var p2p = await _context.P2p.Where(x => x.P2pId.Equals(p2pId)).FirstOrDefaultAsync();
+            // TODO: FIX THIS COUNT
+            p2p.BookmarkCount = p2p.BookmarkCount - 1;
+
+            _context.P2p.Update(p2p);
             _context.P2PBookmarks.Remove(p2pBookmark);
             await SaveChangesAsync();
             
@@ -421,10 +448,8 @@ namespace Knowlead.BLL.Repositories
 
             foreach (var p2p in p2ps)
             {
-                p2p.DidBookmark = myBookmarks.Where(x => x.P2pId == p2p.P2pId).Count() == 1;
-                p2p.CanBookmark = !p2p.DidBookmark;
+                await fillP2pBookmark(p2p, applicationUserId);
             }
-
 
             return new OkObjectResult(new ResponseModel{
                 Object = Mapper.Map<List<P2PModel>>(p2ps)

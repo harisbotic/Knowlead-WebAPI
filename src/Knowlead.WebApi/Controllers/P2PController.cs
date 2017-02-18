@@ -128,11 +128,9 @@ namespace Knowlead.Controllers
         public async Task<IActionResult> AddBookmark(int p2pId)
         {
             var applicationUserId = _auth.GetUserId();
-            var p2p = await _p2pRepository.AddBookmark(p2pId, applicationUserId);
+            var success = await _p2pRepository.AddBookmark(p2pId, applicationUserId);
             
-            return Ok(new ResponseModel{
-                Object = Mapper.Map<P2PModel>(p2p)
-            });
+            return Ok(new ResponseModel());
         }
 
         [HttpPost("bookmarkRemove/{p2pId}")]
