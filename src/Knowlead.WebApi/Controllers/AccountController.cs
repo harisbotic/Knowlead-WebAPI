@@ -102,13 +102,13 @@ namespace Knowlead.Controllers
             });
         }
 
-        [HttpPost("search")]
+        [HttpGet("search")]
         [Authorize]
-        public async Task<IActionResult> Search([FromQuery] string searchString)
+        public async Task<IActionResult> Search([FromQuery] string q)
         {
             var applicationUserId = _auth.GetUserId();
 
-            var searchResult = await _accountRepository.Search(searchString, applicationUserId);
+            var searchResult = await _accountRepository.Search(q, applicationUserId);
 
             return Ok(new ResponseModel{
                 Object = Mapper.Map<List<ApplicationUserModel>>(searchResult)
