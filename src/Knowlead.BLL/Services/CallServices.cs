@@ -148,17 +148,18 @@ namespace Knowlead.Services
                 {
                     await _transactionServices.RewardMinutes(callerPeerId, p2p.PriceAgreed.Value, pointsAward, TransactionReasons.P2PCallEnded);
                     await _transactionServices.RewardMinutes(otherPeerId, 0, pointsAward, TransactionReasons.P2PCallEnded);
+
+                    p2p.Status = P2PStatus.Finsihed;
+                    await _p2pRepository.UpdateAndSave(p2p);
+
+                    var notification = new Notification(callerPeerId, NotificationTypes.LeaveP2PFeedback, DateTime.UtcNow, otherPeerId, p2p, null);
+                    await _notificationServices.SendNotification(notification);
                 }
-                p2p.Status = P2PStatus.Finsihed;
-                await _p2pRepository.UpdateAndSave(p2p);
 
                 callModel.EndDate = DateTime.UtcNow;
                 var call = Mapper.Map<_Call>(callModel);
                 _callRepository.Add(call);
                 await _callRepository.Commit();
-                
-                var notification = new Notification(callerPeerId, NotificationTypes.LeaveP2PFeedback, DateTime.UtcNow, otherPeerId, p2p, null);
-                await _notificationServices.SendNotification(notification);
             }
 
             Calls.Remove(callModel);
