@@ -19,6 +19,7 @@ namespace Knowlead.BLL.Repositories.Interfaces
         Task<IActionResult> ConfirmEmail(ConfirmEmailModel confirmEmailModel);
         Task<List<ApplicationUserReferral>> GetReferrals(Guid applicationUser, bool registred = true);
         Task<int> GetReferralsCount(Guid applicationUser, bool registred = true);
+        Task<List<ApplicationUser>> Search(string searchString, Guid applicationUserId);
         
     }
 }

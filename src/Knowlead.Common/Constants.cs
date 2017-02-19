@@ -135,7 +135,7 @@ namespace Knowlead.Common
 
             public enum P2PStatus 
             {
-                Inactive = 0, Active = 1, Scheduled = 2, Finsihed = 3
+                Active = 0, Scheduled = 1, Finsihed = 2
             }
 
             //Call Status ? Paused, InProgress, WaitingFor

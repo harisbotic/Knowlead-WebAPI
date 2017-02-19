@@ -59,7 +59,7 @@ namespace Knowlead.DTO.P2PModels
 
         public P2PModel()
         {
-            this.Status = P2PStatus.Inactive;
+            this.Status = P2PStatus.Active;
             this.Languages = new List<LanguageModel>();
             this.Blobs = new List<_BlobModel>();
         }

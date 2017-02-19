@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using Knowlead.BLL.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Knowlead.Common.Exceptions;
+using static Knowlead.Common.Constants.EnumStatuses;
 
 namespace Knowlead.BLL.Repositories
 {
@@ -247,6 +248,27 @@ namespace Knowlead.BLL.Repositories
             QueryResult.User.PointsBalance = QueryResult.Trans.FirstOrDefault()?.FinalPointsBalance;
 
             return QueryResult.User;   
+        }
+
+        public async Task<List<ApplicationUser>> Search(string searchString, Guid applicationUserId)
+        {
+            if(String.IsNullOrWhiteSpace(searchString))
+                return null;
+                
+            searchString = searchString.ToLower();
+
+            var blockedFriendship = await _context.Friendships.Where(x => x.ApplicationUserBiggerId.Equals(applicationUserId) || x.ApplicationUserSmallerId.Equals(applicationUserId))
+                                                         .Where(x => x.Status == FriendshipStatus.Blocked)
+                                                         .Select(x => (x.ApplicationUserSmallerId.Equals(applicationUserId)?x.ApplicationUserSmallerId:x.ApplicationUserBiggerId))
+                                                         .ToListAsync();
+
+            var result = await _context.ApplicationUsers.Where(x => $"{x.Name} {x.Surname}".ToLower().Contains(searchString)).Take(6).ToListAsync();
+            
+            foreach (var user in result)
+                if(blockedFriendship.Contains(user.Id))
+                    result.Remove(user);
+            
+            return result;
         }
     }
 }

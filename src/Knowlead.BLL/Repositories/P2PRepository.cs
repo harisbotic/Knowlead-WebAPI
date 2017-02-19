@@ -41,7 +41,7 @@ namespace Knowlead.BLL.Repositories
 
         private bool isBookmarkable(P2P p2p)
         {
-            return p2p.Status == P2PStatus.Active || p2p.Status == P2PStatus.Inactive;
+            return p2p.Status == P2PStatus.Active;
         }
 
         private async Task fillP2pBookmark(P2P p2p, Guid applicationUserId)

@@ -11,6 +11,7 @@ using Knowlead.Common.HttpRequestItems;
 using Knowlead.BLL.Repositories.Interfaces;
 using System;
 using Knowlead.Common.Exceptions;
+using System.Collections.Generic;
 
 namespace Knowlead.Controllers
 {
@@ -98,6 +99,19 @@ namespace Knowlead.Controllers
 
             return Ok(new ResponseModel{
                 Object = Mapper.Map<ApplicationUserModel>(applicationUser)
+            });
+        }
+
+        [HttpPost("search")]
+        [Authorize]
+        public async Task<IActionResult> Search([FromQuery] string searchString)
+        {
+            var applicationUserId = _auth.GetUserId();
+
+            var searchResult = await _accountRepository.Search(searchString, applicationUserId);
+
+            return Ok(new ResponseModel{
+                Object = Mapper.Map<List<ApplicationUserModel>>(searchResult)
             });
         }
     }

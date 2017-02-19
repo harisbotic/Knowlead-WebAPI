@@ -64,7 +64,7 @@ namespace Knowlead.DomainModel.P2PModels
         public P2P()
         {
             this.DateCreated = DateTime.UtcNow;
-            this.Status = P2PStatus.Inactive;
+            this.Status = P2PStatus.Active;
             this.P2PLanguages = new List<P2PLanguage>();
             this.P2PImages = new List<P2PImage>();
             this.P2PFiles = new List<P2PFile>();
