@@ -91,6 +91,8 @@ namespace Knowlead.Common
             public const string WasntBookmarked = "WASNT_BOOKMARKED";
             [TSInitialize]
             public const string P2PFinished = "P2P_FINISHED";
+            [TSInitialize]
+            public const string P2PNotFinished = "P2P_NOT_FINISHED";
         }
 
         [TSClass]
@@ -135,7 +137,7 @@ namespace Knowlead.Common
 
             public enum P2PStatus 
             {
-                Active = 0, Scheduled = 1, Finsihed = 2
+                Active = 0, Scheduled = 1, Finished = 2
             }
 
             //Call Status ? Paused, InProgress, WaitingFor

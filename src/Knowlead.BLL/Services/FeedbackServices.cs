@@ -9,6 +9,7 @@ using Knowlead.DomainModel.LookupModels.FeedbackModels;
 using Knowlead.DTO.LookupModels.FeedbackModels;
 using Knowlead.Services.Interfaces;
 using static Knowlead.Common.Constants;
+using static Knowlead.Common.Constants.EnumStatuses;
 
 namespace Knowlead.Services
 {
@@ -35,14 +36,14 @@ namespace Knowlead.Services
             var p2pFeedback = Mapper.Map<P2PFeedbackModel, P2PFeedback>(p2pFeedbackModel);
             var p2p = await _p2pRepository.GetP2PTemp(p2pFeedback.P2pId);
 
-            // if(p2p.Status != P2PStatus.Finsihed) //Had to had call
-            //     throw new ErrorModelException("");
+            if(p2p.Status != P2PStatus.Finished) //Had to had call
+                throw new ErrorModelException(ErrorCodes.P2PNotFinished);
 
             if(!p2p.CreatedById.Equals(applicationUserId)) //Only creator can give feedback
                 throw new ErrorModelException(ErrorCodes.HackAttempt);
 
-            // if(await Exists(x => x.P2pId.Equals(p2p.P2pId))) //Is Feedback Already given
-            //     throw new ErrorModelException(ErrorCodes.FeedbackAlreadyGiven, nameof(P2PFeedback));
+            if(await Exists(x => x.P2pId.Equals(p2p.P2pId))) //Is Feedback Already given
+                throw new ErrorModelException(ErrorCodes.FeedbackAlreadyGiven, nameof(P2PFeedback));
 
             p2pFeedback.StudentId = p2p.CreatedById;
             p2pFeedback.TeacherId = p2p.ScheduledWithId.GetValueOrDefault();

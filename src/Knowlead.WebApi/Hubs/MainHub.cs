@@ -75,7 +75,7 @@ namespace Knowlead.WebApi.Hubs
             if(!p2p.CreatedById.Equals(callerId) && !p2p.ScheduledWithId.GetValueOrDefault().Equals(callerId))
                 return;
 
-            if(p2p.Status == P2PStatus.Finsihed)
+            if(p2p.Status == P2PStatus.Finished)
                 throw new ErrorModelException(ErrorCodes.P2PFinished, p2p.P2pId.ToString());
 
             var p2pCallModel = new P2PCallModel(p2p, callerId, Context.ConnectionId);

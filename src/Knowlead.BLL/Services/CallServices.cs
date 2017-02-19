@@ -146,10 +146,10 @@ namespace Knowlead.Services
                 var pointsAward = p2p.PriceAgreed.Value * 3;
                 if(DateTime.UtcNow.Ticks > callModel.StartDate.AddMinutes(5).Ticks)
                 {
-                    await _transactionServices.RewardMinutes(callerPeerId, p2p.PriceAgreed.Value, pointsAward, TransactionReasons.P2PCallEnded);
-                    await _transactionServices.RewardMinutes(otherPeerId, 0, pointsAward, TransactionReasons.P2PCallEnded);
+                    await _transactionServices.RewardMinutes(otherPeerId, p2p.PriceAgreed.Value, pointsAward, TransactionReasons.P2PCallEnded);
+                    await _transactionServices.RewardMinutes(callerPeerId, 0, pointsAward, TransactionReasons.P2PCallEnded);
                 }
-                p2p.Status = P2PStatus.Finsihed;
+                p2p.Status = P2PStatus.Finished;
                 await _p2pRepository.UpdateAndSave(p2p);
 
                 callModel.EndDate = DateTime.UtcNow;
