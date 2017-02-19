@@ -14,14 +14,14 @@ namespace Knowlead.Services
             _transactionRepository = transactionRepository;
         }
 
-        public async Task<bool> RewardMinutes(Guid applicationUserId, int minutesAmount, int pointsAmount, String reason)
+        public async Task<bool> RewardMinutes(Guid applicationUserId, int minutesAmount, int pointsAmount, string reason)
         {
             return await _transactionRepository.InsertAccountTransaction(applicationUserId, minutesAmount, pointsAmount, reason);
         }
 
-        public async Task<bool> PayWithMinutes(Guid applicationUserId, int minutesAmount, int pointsAmount, String reason)
+        public async Task<bool> PayWithMinutes(Guid applicationUserId, int minutesAmount, string reason)
         {
-            return await _transactionRepository.InsertAccountTransaction(applicationUserId, minutesAmount, pointsAmount, reason);
+            return await _transactionRepository.InsertAccountTransaction(applicationUserId, -minutesAmount, 0, reason);
         }
 
     }

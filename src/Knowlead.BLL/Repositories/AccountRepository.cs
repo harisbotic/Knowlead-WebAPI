@@ -222,8 +222,7 @@ namespace Knowlead.BLL.Repositories
         public async Task<ApplicationUser> GetApplicationUserById(Guid userId, bool includeDetails = false)
         {
             IQueryable<ApplicationUser> userQuery = _context.ApplicationUsers
-                                                            .Where(x => x.Id.Equals(userId))
-                                                            .Include(x => x.ProfilePicture);
+                                                            .Where(x => x.Id.Equals(userId));
                     
             if(includeDetails)
                 userQuery = userQuery.Include(x => x.ApplicationUserLanguages)

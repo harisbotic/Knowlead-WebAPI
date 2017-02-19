@@ -89,6 +89,8 @@ namespace Knowlead.Common
             public const string AlreadyBookmarked = "ALREADY_BOOKMARKED";
             [TSInitialize]
             public const string WasntBookmarked = "WASNT_BOOKMARKED";
+            [TSInitialize]
+            public const string P2PFinished = "P2P_FINISHED";
         }
 
         [TSClass]
@@ -119,6 +121,8 @@ namespace Knowlead.Common
             public const string RewardClaimed = "NotificationTypes.REWARD_CLAIMED";
             [TSInitialize]
             public const string NewFriendship = "NotificationTypes.NEW_FRIENDSHIP";
+            [TSInitialize]
+            public const string LeaveP2PFeedback = "NotificationTypes.LEAVE_P2P_FEEDBACK";
         }
 
         [TSClass]
@@ -196,6 +200,8 @@ namespace Knowlead.Common
             public const string RewardClaimed = "TransactionReasons.REWARD_CLAIMED:";
             [TSInitialize]
             public const string P2PCallEnded = "TransactionReasons.P2P_CALL_ENDED:";
+            [TSInitialize]
+            public const string ScheduledP2P = "TransactionReasons.SCHEDULED_P2P:";
         }
 
         public static class WebClientFuncNames
