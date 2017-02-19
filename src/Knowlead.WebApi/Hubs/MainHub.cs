@@ -52,17 +52,12 @@ namespace Knowlead.WebApi.Hubs
         }
         public async override Task OnConnectedAsync()
         {
-            System.Console.WriteLine($"{Context.ConnectionId} {Context.User.Identity.Name} CONNECTED");
             await Clients.Client(Context.ConnectionId).InvokeAsync("setConnectionId", Context.ConnectionId);
         }
 
-        public override Task OnDisconnectedAsync(Exception e)
-        {
-            System.Console.WriteLine($"{Context.ConnectionId} {Context.User.Identity.Name} DISCONNECTED");
-            
-            _callServices.RemoveConnectionFromCall(Context.ConnectionId);
-
-            return Task.CompletedTask;
+        public async override Task OnDisconnectedAsync(Exception e)
+        {   
+            await _callServices.RemoveConnectionFromCall(Context.ConnectionId);
         }
 
         public async Task StartP2pCall(int p2pId)
@@ -82,50 +77,47 @@ namespace Knowlead.WebApi.Hubs
 
             var p2pCallModel = new P2PCallModel(p2p, callerId, Context.ConnectionId);
 
-            _callServices.StartCall(p2pCallModel);
+            await _callServices.StartCall(p2pCallModel);
             //TODO: Start a 1 minute timer, that will send CallCanceled to both if call didn't start
         }
 
-        public Task CallRespond(Guid callModelId, bool accepted)
+        public async Task CallRespond(Guid callModelId, bool accepted)
         {
             var callModel = GetCallModel(callModelId);
             var peerInfoModel = _callServices.GetPeer(callModel, _auth.GetUserId());
 
             if(peerInfoModel == null)
-                return Task.CompletedTask;
+                return;
 
             peerInfoModel.ConnectionId = Context.ConnectionId;
 
             if (accepted)
-                _callServices.AcceptCall(callModel, peerInfoModel);
+                await _callServices.AcceptCall(callModel, peerInfoModel);
             else
-                _callServices.CloseCall(callModel, CallEndReasons.Rejected);
+                await _callServices.CloseCall(callModel, CallEndReasons.Rejected);
             
-            return Task.CompletedTask;
+            return;
         }
 
-        public Task AddSDP(Guid callModelId, String sdp)
+        public async Task AddSDP(Guid callModelId, String sdp)
         {
             var callModel = GetCallModel(callModelId);
             var peerInfoModel = _callServices.GetPeer(callModel, _auth.GetUserId());
 
             if(peerInfoModel == null) // This shouldn't happen
-                return Task.CompletedTask;
+                return;
 
             peerInfoModel.sdps.Add(sdp);
-            _callServices.CallModelUpdate(callModel, false);
-            
-            return Task.CompletedTask;
+            await _callServices.CallModelUpdate(callModel, false);
         }
 
-        public Task StopCall(Guid callModelId, String reason)
+        public async Task StopCall(Guid callModelId, String reason)
         {
             var callModel = GetCallModel(callModelId);
-            _callServices.CloseCall(callModel, reason);
-            return Task.CompletedTask;
+            await _callServices.CloseCall(callModel, reason);
         }
 
-        public Task ResetCall(Guid callModelId)
+        public async Task ResetCall(Guid callModelId)
         {
             var callModel = this.GetCallModel(callModelId);
             foreach (var peerInfoModelEach in callModel.Peers)
@@ -146,9 +138,7 @@ namespace Knowlead.WebApi.Hubs
                 peerInfoModel.UpdateStatus(PeerStatus.Accepted);
                 Console.WriteLine("Updating connection id for " + _auth.GetUserId() + " in call to " + Context.ConnectionId);
             }
-            _callServices.CallModelUpdate(callModel, true);
-            
-            return Task.CompletedTask;
+            await _callServices.CallModelUpdate(callModel, true);
         }
 
         public void DisconnectFromCall(Guid callModelId)

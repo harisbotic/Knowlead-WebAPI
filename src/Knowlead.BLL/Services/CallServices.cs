@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using Hangfire;
 using Knowlead.BLL.Repositories.Interfaces;
@@ -41,16 +42,16 @@ namespace Knowlead.Services
             });
         }
 
-        public void SendInvitations(Guid callId)
+        public async Task SendInvitations(Guid callId)
         {
             _CallModel call = this.GetCall(callId);
             if (call != null)
             {
-                this.SendInvitations(call);
+                await SendInvitations(call);
             }
         }
 
-        public void SendInvitations(_CallModel callModel)
+        public async Task SendInvitations(_CallModel callModel)
         {
             var json = GetJsonString(callModel);
             int invitationsSent = 0;
@@ -59,7 +60,7 @@ namespace Knowlead.Services
                 // Send invitations to all peers that are not connected
                 if(peer.Status != PeerStatus.Accepted)
                 {
-                    _hubContext.Clients.User(peer.PeerId.ToString()).InvokeAsync("callInvitation", json);
+                    await _hubContext.Clients.User(peer.PeerId.ToString()).InvokeAsync("callInvitation", json);
                     invitationsSent++;
                 }
             }
@@ -75,7 +76,7 @@ namespace Knowlead.Services
                 // If call was inactive more then minute, we should stop it
                 if (DateTime.UtcNow.Subtract(callModel.InactiveSince.Value) > TimeSpan.FromSeconds(60))
                 {
-                    this.CloseCall(callModel, CallEndReasons.Inactive);
+                    await this.CloseCall(callModel, CallEndReasons.Inactive);
                 }
             } else
             {
@@ -84,17 +85,17 @@ namespace Knowlead.Services
             }
         }
 
-        private async void SendStartCall(_CallModel callModel, PeerInfoModel peer)
+        private async Task SendStartCall(_CallModel callModel, PeerInfoModel peer)
         {
             await _hubContext.Clients.Client(peer.ConnectionId).InvokeAsync("startCall", GetJsonString(callModel));
             peer.UpdateStatus(true);
         }
 
-        public void StartCall(_CallModel callModel)
+        public async Task StartCall(_CallModel callModel)
         {
             Calls.Add(callModel);
-            this.SendStartCall(callModel, callModel.Caller);
-            this.CheckCall(callModel);
+            await this.SendStartCall(callModel, callModel.Caller);
+            await this.CheckCall(callModel);
         }
 
         public _CallModel GetCallForUser(Guid applicationUserId)
@@ -113,15 +114,15 @@ namespace Knowlead.Services
             return Calls.Where(x => x.CallId == callModelId).FirstOrDefault();
         }
 
-        private void CheckCall(_CallModel call)
+        private async Task CheckCall(_CallModel call)
         {
             if (call.Peers.Where(p => p.Status == PeerStatus.Waiting || p.Status == PeerStatus.Accepted).Count() == 0)
             {
-                this.CloseCall(call, CallEndReasons.Inactive);
+                await this.CloseCall(call, CallEndReasons.Inactive);
             }
             if (!call.Inviting)
             {
-                this.SendInvitations(call);
+                await this.SendInvitations(call);
             }
         }
 
@@ -130,7 +131,7 @@ namespace Knowlead.Services
             return callModel.Peers.Where(x => x.PeerId == userId).FirstOrDefault();
         }
 
-        public async void CloseCall(_CallModel callModel, string reason)
+        public async Task CloseCall(_CallModel callModel, string reason)
         {
             var p2pCallModel = callModel as P2PCallModel;
 
@@ -140,7 +141,7 @@ namespace Knowlead.Services
                 var callerPeerId = p2pCallModel.Caller.PeerId;
                 var otherPeerId = p2pCallModel.CallReceiverId;
                 var pointsAward = p2p.PriceAgreed.Value * 3;
-                if(DateTime.UtcNow.Subtract(callModel.StartDate).Ticks > callModel.StartDate.AddMinutes(5).Ticks)
+                if(DateTime.UtcNow.Ticks > callModel.StartDate.AddMinutes(1).Ticks)
                 {
                     await _transactionServices.RewardMinutes(callerPeerId, p2p.PriceAgreed.Value, pointsAward, TransactionReasons.P2PCallEnded);
                     await _transactionServices.RewardMinutes(otherPeerId, 0, pointsAward, TransactionReasons.P2PCallEnded);
@@ -148,6 +149,7 @@ namespace Knowlead.Services
                 p2p.Status = P2PStatus.Finsihed;
                 await _p2pRepository.UpdateAndSave(p2p);
 
+                callModel.EndDate = DateTime.UtcNow;
                 var call = Mapper.Map<_Call>(callModel);
                 _callRepository.Add(call);
                 await _callRepository.Commit();
@@ -180,16 +182,16 @@ namespace Knowlead.Services
             }
         }
 
-        public void DisconnectFromCall(_CallModel callModel, Guid userId)
+        public async Task DisconnectFromCall(_CallModel callModel, Guid userId)
         {
             callModel.Peers
                 .Where(p => p.PeerId == userId)
                 .First()
                 .UpdateStatus(PeerStatus.Disconnected);
-            this.CheckCall(callModel);
+            await this.CheckCall(callModel);
         }
 
-        public void CallModelUpdate(_CallModel callModelReceived, bool reset)
+        public async Task CallModelUpdate(_CallModel callModelReceived, bool reset)
         {
             _CallModel callModel = Mapper.Map<_CallModel>(callModelReceived);
             var json = GetJsonString(callModel);
@@ -201,17 +203,17 @@ namespace Knowlead.Services
                 {
                     try
                     {
-                        _hubContext.Clients.Client(peer.ConnectionId).InvokeAsync((reset) ? "callReset" : "callModelUpdate", json);
+                        await _hubContext.Clients.Client(peer.ConnectionId).InvokeAsync((reset) ? "callReset" : "callModelUpdate", json);
                     } catch (Exception)
                     {
                         Console.WriteLine("Tried to reset disconnected peer");
                     }
                 }
             }
-            this.CheckCall(callModel);
+            await this.CheckCall(callModel);
         }
 
-        public bool RemoveConnectionFromCall(string connectionId)
+        public async Task<bool> RemoveConnectionFromCall(string connectionId)
         {
             foreach (var call in Calls)
                 foreach (var peer in call.Peers)
@@ -220,16 +222,16 @@ namespace Knowlead.Services
                         peer.UpdateStatus(PeerStatus.Disconnected);
                         peer.ConnectionId = null;
                         peer.sdps.Clear();
-                        this.CheckCall(call);
+                        await this.CheckCall(call);
                         return true;
                     }
             
             return false;
         }
 
-        public void AcceptCall(_CallModel callModel, PeerInfoModel peerInfoModel)
+        public async Task AcceptCall(_CallModel callModel, PeerInfoModel peerInfoModel)
         {
-            this.SendStartCall(callModel, peerInfoModel);
+            await this.SendStartCall(callModel, peerInfoModel);
         }
     }
 }

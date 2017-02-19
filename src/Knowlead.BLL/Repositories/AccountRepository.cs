@@ -234,7 +234,7 @@ namespace Knowlead.BLL.Repositories
                                         .Include(x => x.Country)
                                         .Include(x => x.State);
 
-            var QueryResult = await userQuery.GroupJoin(_context.AccountTransactions.OrderByDescending(o => o.Timestamp).Take(1),
+            var QueryResult = await userQuery.GroupJoin(_context.AccountTransactions.OrderByDescending(o => o.Timestamp),
                                         x => x.Id,
                                         y => y.ApplicationUserId,
                                         (x,y) => new {User = x, Trans = y})

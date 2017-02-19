@@ -7,13 +7,17 @@ namespace Knowlead.DTO.CallModels
     {
         public _CallProfile()
         {
-            CreateMap<_CallModel, _Call>();
+            CreateMap<_CallModel, _Call>()
+                .ForMember(dest => dest.CallerId, opt => opt.MapFrom(src => src.Caller.PeerId))
+                .ForMember(dest => dest.Caller, opt => opt.Ignore());
 
             CreateMap<P2PCallModel, P2PCall>()
-                .IncludeBase<_CallModel, _Call>();
+                .ForMember(dest => dest.CallerId, opt => opt.MapFrom(src => src.Caller.PeerId))
+                .ForMember(dest => dest.Caller, opt => opt.Ignore());
 
             CreateMap<FriendCallModel, FriendCall>()
-                .IncludeBase<_CallModel, _Call>();
+                .ForMember(dest => dest.CallerId, opt => opt.MapFrom(src => src.Caller.PeerId))
+                .ForMember(dest => dest.Caller, opt => opt.Ignore());
         }
     }
 }

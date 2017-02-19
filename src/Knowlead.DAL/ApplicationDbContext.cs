@@ -128,8 +128,8 @@ namespace Knowlead.DAL
             /* Calls */
             modelBuilder.Entity<_Call>()
                 .HasDiscriminator<string>("CallType")
-                .HasValue<P2PCall>("Image")
-                .HasValue<FriendCall>("File");
+                .HasValue<P2PCall>("P2PCall")
+                .HasValue<FriendCall>("FriendCall");
 
             modelBuilder.Entity<_Feedback>()
                 .HasDiscriminator<string>("Category")

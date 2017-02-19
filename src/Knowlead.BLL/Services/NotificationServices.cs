@@ -36,7 +36,7 @@ namespace Knowlead.Services
             if(notification == null)
                 throw new ErrorModelException(ErrorCodes.EntityNotFound, nameof(Notification));
 
-            if(!notification.FromApplicationUserId.Equals(applicationUserId))
+            if(!notification.ForApplicationUserId.Equals(applicationUserId))
                 throw new ErrorModelException(ErrorCodes.AuthorityError);
 
             return notification;

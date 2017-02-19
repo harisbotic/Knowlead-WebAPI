@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Knowlead.DTO.CallModels;
 using Knowlead.DTO.ChatModels;
 
@@ -6,16 +7,16 @@ namespace Knowlead.Services.Interfaces
 {
     public interface ICallServices
     {
-        void StartCall(_CallModel callModel);
+        Task StartCall(_CallModel callModel);
         _CallModel GetCall(Guid callModelId);
         PeerInfoModel GetPeer(_CallModel callModel, Guid userId);
-        void CloseCall(_CallModel callModel, string reason);
-        void CallModelUpdate(_CallModel callModel, bool reset);
-        bool RemoveConnectionFromCall(String connectionId);
+        Task CloseCall(_CallModel callModel, string reason);
+        Task CallModelUpdate(_CallModel callModel, bool reset);
+        Task<bool> RemoveConnectionFromCall(String connectionId);
         _CallModel GetCallForUser(Guid applicationUserId);
-        void AcceptCall(_CallModel callModel, PeerInfoModel peerInfoModel);
-        void SendInvitations(Guid callId);
-        void DisconnectFromCall(_CallModel callModel, Guid userId);
+        Task AcceptCall(_CallModel callModel, PeerInfoModel peerInfoModel);
+        Task SendInvitations(Guid callId);
+        Task DisconnectFromCall(_CallModel callModel, Guid userId);
         void CallMsg(ChatMessageModel message);
     }
 }
