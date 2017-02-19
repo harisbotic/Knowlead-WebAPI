@@ -458,9 +458,15 @@ namespace Knowlead.BLL.Repositories
                                                             .Include("P2p.P2PImages")
                                                             .ToListAsync();
 
+            var p2ps = new List<P2P>();
+            foreach (var p2pBookmark in p2pBookmarks)
+            {
+                p2ps.Add(p2pBookmark.P2p);
+            }
+
 
             return new OkObjectResult(new ResponseModel {
-                Object = Mapper.Map<List<P2PBookmarkModel>>(p2pBookmarks)
+                Object = Mapper.Map<List<P2PModel>>(p2ps)
             });
         }
 
