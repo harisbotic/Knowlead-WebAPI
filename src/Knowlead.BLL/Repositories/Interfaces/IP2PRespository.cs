@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Knowlead.DomainModel.P2PModels;
 using Knowlead.DTO.P2PModels;
@@ -25,5 +26,7 @@ namespace Knowlead.BLL.Repositories.Interfaces
         Task<IActionResult> ListDeleted(Guid applicationUserId);
         Task<IActionResult> ListActionRequired(Guid applicationUserId);
         Task<IActionResult> ListAll(Guid applicationUserId);
+        Task<List<P2P>> GetByFos(int fosId, Guid applicationUserId);
+        Task<List<P2P>> GetRecommendedP2P(Guid applicationUserId);
     }
 }

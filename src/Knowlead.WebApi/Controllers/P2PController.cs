@@ -10,6 +10,8 @@ using static Knowlead.Common.Constants;
 using static Knowlead.Common.Constants.EnumActions;
 using Knowlead.Common.Exceptions;
 using Knowlead.DTO.ResponseModels;
+using System.Collections.Generic;
+using AutoMapper;
 
 namespace Knowlead.Controllers
 {
@@ -87,6 +89,28 @@ namespace Knowlead.Controllers
         {
             var applicationUserId = _auth.GetUserId();
             return await _p2pRepository.ListAll(applicationUserId);
+        }
+
+        [HttpGet("recommended")]
+        public async Task<IActionResult> GetRecommended()
+        {
+            var applicationUserId = _auth.GetUserId();
+            var p2ps = await _p2pRepository.GetRecommendedP2P(applicationUserId);
+
+            return Ok(new ResponseModel{
+                Object = Mapper.Map<List<P2PModel>>(p2ps)
+            });
+        }
+
+        [HttpGet("listByFos/{fosId}")]
+        public async Task<IActionResult> GetRecommended([FromQuery] int fosId)
+        {
+            var applicationUserId = _auth.GetUserId();
+            var p2ps = await _p2pRepository.GetByFos(fosId, applicationUserId);
+
+            return Ok(new ResponseModel{
+                Object = Mapper.Map<List<P2PModel>>(p2ps)
+            });
         }
 
         [HttpGet("list/{listP2PRequest}")]

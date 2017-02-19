@@ -152,6 +152,7 @@ namespace Knowlead.BLL.Repositories
             }
             
             _context.P2p.Add(p2p);
+            await this.fillP2pBookmark(p2p, false);
 
             if (!await SaveChangesAsync())
             {
@@ -422,6 +423,30 @@ namespace Knowlead.BLL.Repositories
             return new OkObjectResult(new ResponseModel {
                 Object = Mapper.Map<List<P2PModel>>(p2ps)
             });
+        }
+
+        public async Task<List<P2P>> GetRecommendedP2P(Guid applicationUserId)
+        {
+            var p2ps = await _context.P2p
+                            .IncludeEverything()
+                            .Where(x => !x.CreatedById.Equals(applicationUserId))
+                            .Where(x => x.Status == P2PStatus.Active)
+                            .OrderByDescending(x => x.DateCreated)
+                            .ToListAsync();
+
+            return p2ps;
+        }
+
+        public async Task<List<P2P>> GetByFos(int fosId, Guid applicationUserId)
+        {
+            var p2ps = await _context.P2p
+                        .IncludeEverything()
+                        .Where(x => x.FosId.Equals(fosId))
+                        .Where(x => x.Status == P2PStatus.Active)
+                        .OrderByDescending(x => x.DateCreated)
+                        .ToListAsync();
+
+            return p2ps;
         }
 
         public async Task<IActionResult> ListBookmarked(Guid applicationUserId)
