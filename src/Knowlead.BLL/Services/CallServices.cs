@@ -6,6 +6,7 @@ using AutoMapper;
 using Hangfire;
 using Knowlead.BLL.Repositories.Interfaces;
 using Knowlead.DomainModel.CallModels;
+using Knowlead.DomainModel.NotificationModels;
 using Knowlead.DTO.CallModels;
 using Knowlead.DTO.ChatModels;
 using Knowlead.Services.Interfaces;
@@ -23,14 +24,16 @@ namespace Knowlead.Services
         private readonly IHubContext<THub> _hubContext;
         private readonly ITransactionServices _transactionServices;
         private readonly IP2PRepository _p2pRepository;
+        private readonly INotificationServices _notificationServices;
         private readonly ICallRepository _callRepository;
 
         public CallServices(IHubContext<THub> hubContext, ITransactionServices transactionServices,
-                             IP2PRepository p2pRepository, ICallRepository callRepository)
+                             IP2PRepository p2pRepository, INotificationServices notificationServices, ICallRepository callRepository)
         {
             _hubContext = hubContext;
             _transactionServices = transactionServices;
             _p2pRepository = p2pRepository;
+            _notificationServices = notificationServices;
             _callRepository = callRepository;
         }
 
@@ -141,7 +144,7 @@ namespace Knowlead.Services
                 var callerPeerId = p2pCallModel.Caller.PeerId;
                 var otherPeerId = p2pCallModel.CallReceiverId;
                 var pointsAward = p2p.PriceAgreed.Value * 3;
-                if(DateTime.UtcNow.Ticks > callModel.StartDate.AddMinutes(1).Ticks)
+                if(DateTime.UtcNow.Ticks > callModel.StartDate.AddMinutes(5).Ticks)
                 {
                     await _transactionServices.RewardMinutes(callerPeerId, p2p.PriceAgreed.Value, pointsAward, TransactionReasons.P2PCallEnded);
                     await _transactionServices.RewardMinutes(otherPeerId, 0, pointsAward, TransactionReasons.P2PCallEnded);
@@ -153,6 +156,9 @@ namespace Knowlead.Services
                 var call = Mapper.Map<_Call>(callModel);
                 _callRepository.Add(call);
                 await _callRepository.Commit();
+                
+                var notification = new Notification(callerPeerId, NotificationTypes.LeaveP2PFeedback, DateTime.UtcNow, otherPeerId, p2p, null);
+                await _notificationServices.SendNotification(notification);
             }
 
             Calls.Remove(callModel);

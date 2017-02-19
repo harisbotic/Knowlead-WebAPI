@@ -26,14 +26,17 @@ namespace Knowlead.BLL.Repositories
         private readonly ApplicationDbContext _context;
         private readonly IHostingEnvironment _environment;
         private readonly INotificationServices _notificationServices;
+        private readonly ITransactionServices _transactionServices;
 
         public P2PRepository(ApplicationDbContext context,
                              IHostingEnvironment environment,
-                             INotificationServices notificationServices)
+                             INotificationServices notificationServices,
+                             ITransactionServices transactionServices)
         {
             _context = context;
             _environment = environment;
             _notificationServices = notificationServices;
+            _transactionServices = transactionServices;
         }
 
         private bool isBookmarkable(P2P p2p)
@@ -192,6 +195,10 @@ namespace Knowlead.BLL.Repositories
 
             if(p2pMessage.PriceOffer < 0)
                throw new ErrorModelException(ErrorCodes.IncorrectValue, nameof(P2PMessageModel.PriceOffer));
+
+            var payment = await _transactionServices.PayWithMinutes(applicationUserId, p2pMessage.PriceOffer, TransactionReasons.ScheduledP2P);
+            if(!payment)
+                throw new ErrorModelException(ErrorCodes.NotEnoughMinutes);
 
             p2p.PriceAgreed = p2pMessage.PriceOffer;
             p2p.DateTimeAgreed = p2pMessage.DateTimeOffer;
