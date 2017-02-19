@@ -8,5 +8,6 @@ namespace Knowlead.DTO.LookupModels.Core
         public int? ParentFosId { get; set; }
         public ICollection<FOSModel> Children;
         public FOSModel Parent; //For frontend only
+        public bool Unlocked { get; set; }
     }
 }
