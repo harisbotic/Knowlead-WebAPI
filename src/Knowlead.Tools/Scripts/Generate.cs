@@ -7,6 +7,7 @@ using AutoMapper;
 using Knowlead.Common;
 using Knowlead.Common.Exceptions;
 using TypeScriptBuilder;
+using static Knowlead.Common.Constants;
 
 namespace Knowlead.Tools
 {
@@ -55,6 +56,7 @@ public static class GenerateScript
         generator.AddCSType(typeof(Constants.ErrorCodes));
         generator.AddCSType(typeof(Constants.NotificationTypes));
         generator.AddCSType(typeof(Constants.CallEndReasons));
+        generator.AddCSType(typeof(EnumActions.ListP2PsRequest));
         Console.WriteLine("constants.ts");
         generator.Store(args[1] + "constants.ts");
     }
