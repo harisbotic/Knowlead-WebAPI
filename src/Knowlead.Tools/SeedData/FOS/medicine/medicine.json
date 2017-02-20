@@ -1,0 +1,84 @@
+{
+    "model": "FOS",
+    "importConfig": {
+        "key": "Code",
+        "clearTable": false,
+        "saveAfterEachRow": true,
+        "references": [{
+            "fromProperty": "CoreLookupId",
+            "toProperty": "ParentFosId",
+            "searchProperty": "Code",
+            "searchModel": "FOS"
+        }]
+    },
+    "data": [
+       
+        
+      {
+            "Code": "Medicine.SocialMedicine",
+            "Name": "Social Medicine",
+            "ParentFosId": "Medicine"
+        },
+        {
+            "Code": "Medicine.ClinicalMedicine",
+            "Name": "Clinical Medicine",
+            "ParentFosId": "Medicine"
+        },
+        {
+            "Code": "Medicine.Anatomy",
+            "Name": "Anatomy",
+            "ParentFosId": "Medicine"
+        },
+        {
+            "Code": "Medicine.Physiology",
+            "Name": "Physiology",
+            "ParentFosId": "Medicine"
+        },
+        {
+            "Code": "Medicine.Pharmology",
+            "Name": "Pharmology",
+            "ParentFosId": "Medicine"
+        },
+        {
+            "Code": "Medicine.Opthamology",
+            "Name": "Opthamology",
+            "ParentFosId": "Medicine"
+        },
+        {
+            "Code": "Medicine.Urology",
+            "Name": "Urology",
+            "ParentFosId": "Medicine"
+        },
+        {
+            "Code": "Medicine.Othorinolaringology",
+            "Name": "Othorinolaringology",
+            "ParentFosId": "Medicine"
+        },
+        {
+            "Code": "Medicine.Pediatrics",
+            "Name": "Pediatrics",
+            "ParentFosId": "Medicine"
+        },
+        {
+            "Code": "Medicine.Gynecology",
+            "Name": "Gynecology",
+            "ParentFosId": "Medicine"
+        },
+        {
+            "Code": "Medicine.Oncology",
+            "Name": "Oncology",
+            "ParentFosId": "Medicine"
+        },
+        {
+            "Code": "Medicine.InfectiousDiseases",
+            "Name": "Infectious Diseases",
+            "ParentFosId": "Medicine"
+        },
+        {
+            "Code": "Medicine.Surgery",
+            "Name": "Surgery",
+            "ParentFosId": "Medicine"
+        }
+      
+    ]
+}

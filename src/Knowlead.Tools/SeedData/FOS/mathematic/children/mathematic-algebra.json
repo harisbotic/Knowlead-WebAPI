@@ -1,0 +1,49 @@
+{
+    "model": "FOS",
+    "importConfig": {
+        "key": "Code",
+        "clearTable": false,
+        "saveAfterEachRow": true,
+        "references": [{
+            "fromProperty": "CoreLookupId",
+            "toProperty": "ParentFosId",
+            "searchProperty": "Code",
+            "searchModel": "FOS"
+        }]
+    },
+    "data": [
+       
+        
+      {
+            "Code": "Mathematic.Geometry.BasicGeometry",
+            "Name": "Basics of Geometry",
+            "ParentFosId": "Mathematic.Geometry"
+        },
+      {
+            "Code": "Mathematic.Geometry.Vectors",
+            "Name": "Vectors",
+            "ParentFosId": "Mathematic.Geometry"
+        },
+      {
+            "Code": "Mathematic.Geometry.Transformations",
+            "Name": "Transformations",
+            "ParentFosId": "Mathematic.Geometry"
+        },
+      {
+            "Code": "Mathematic.Geometry.Trigonometry",
+            "Name": "Trigonometry",
+            "ParentFosId": "Mathematic.Geometry"
+        },
+      {
+            "Code": "Mathematic.Geometry.ProjectiveGeometry",
+            "Name": "Projective Geometry",
+            "ParentFosId": "Mathematic.Geometry"
+        },
+      {
+            "Code": "Mathematic.Geometry.AnalyticalGeometry",
+            "Name": "Analytical Geometry",
+            "ParentFosId": "Mathematic.Geometry"
+        }
+
+    ]
+}

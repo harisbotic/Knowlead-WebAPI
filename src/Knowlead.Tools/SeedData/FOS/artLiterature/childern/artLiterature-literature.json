@@ -1,0 +1,31 @@
+{
+    "model": "FOS",
+    "importConfig": {
+        "key": "Code",
+        "clearTable": false,
+        "saveAfterEachRow": true,
+        "references": [{
+            "fromProperty": "CoreLookupId",
+            "toProperty": "ParentFosId",
+            "searchProperty": "Code",
+            "searchModel": "FOS"
+        }]
+    },
+    "data": [
+        {
+            "Code": "ArtLiterature.Literature.Poetry",
+            "Name": "Poetry",
+            "ParentFosId": "ArtLiterature.Literature"
+        },
+        {
+            "Code": "ArtLiterature.Literature.Prose",
+            "Name": "Prose",
+            "ParentFosId": "ArtLiterature.Literature"
+        },
+         {
+            "Code": "ArtLiterature.Literature.Drama",
+            "Name": "Drama",
+            "ParentFosId": "ArtLiterature.Literature"
+        }
+    ]
+}

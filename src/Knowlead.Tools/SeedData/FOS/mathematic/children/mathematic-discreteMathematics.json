@@ -1,0 +1,69 @@
+{
+    "model": "FOS",
+    "importConfig": {
+        "key": "Code",
+        "clearTable": false,
+        "saveAfterEachRow": true,
+        "references": [{
+            "fromProperty": "CoreLookupId",
+            "toProperty": "ParentFosId",
+            "searchProperty": "Code",
+            "searchModel": "FOS"
+        }]
+    },
+    "data": [
+       
+        
+      {
+            "Code": "Mathematic.DiscreteMathematics.Logic",
+            "Name": "Logic",
+            "ParentFosId": "Mathematic.DiscreteMathematics"
+        },
+        {
+            "Code": "Mathematic.DiscreteMathematics.SetTheory",
+            "Name": "Set Theory",
+            "ParentFosId": "Mathematic.DiscreteMathematics"
+        },
+        {
+            "Code": "Mathematic.DiscreteMathematics.NumberTheory",
+            "Name": "Number Theory",
+            "ParentFosId": "Mathematic.DiscreteMathematics"
+        },
+        {
+            "Code": "Mathematic.DiscreteMathematics.Combinatorics",
+            "Name": "Combinatorics",
+            "ParentFosId": "Mathematic.DiscreteMathematics"
+        },
+        {
+            "Code": "Mathematic.DiscreteMathematics.Algorithmy",
+            "Name": "Algorithms",
+            "ParentFosId": "Mathematic.DiscreteMathematics"
+        },
+        {
+            "Code": "Mathematic.DiscreteMathematics.ComputabilityComplexity",
+            "Name": "Computability and Complexity",
+            "ParentFosId": "Mathematic.DiscreteMathematics"
+        },
+        {
+            "Code": "Mathematic.DiscreteMathematics.Functions",
+            "Name": "Functions",
+            "ParentFosId": "Mathematic.DiscreteMathematics"
+        },
+        {
+            "Code": "Mathematic.DiscreteMathematics.Collections",
+            "Name": "Collections",
+            "ParentFosId": "Mathematic.DiscreteMathematics"
+        },
+        {
+            "Code": "Mathematic.DiscreteMathematics.Proofs",
+            "Name": "Proofs",
+            "ParentFosId": "Mathematic.DiscreteMathematics"
+        },
+        {
+            "Code": "Mathematic.DiscreteMathematics.CountingRelations",
+            "Name": "Counting and Relations",
+            "ParentFosId": "Mathematic.DiscreteMathematics"
+        }
+      
+    ]
+}

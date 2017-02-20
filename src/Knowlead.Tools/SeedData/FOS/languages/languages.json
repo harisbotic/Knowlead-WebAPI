@@ -13,116 +13,575 @@
     },
     "data": [
         {
-            "Code": "Languages.English",
+            "Code": "Languages.en",
             "Name": "English",
             "ParentFosId": "Languages"
         },
-        {
-            "Code": "Languages.English.UK",
-            "Name": "UK English",
-            "ParentFosId": "Languages.English",
-            "Unlocked": true
-        },
-        {
-            "Code": "Languages.English.USA",
-            "Name": "USA English",
-            "ParentFosId": "Languages.English",
-            "Unlocked": true 
-        },
-        {
-            "Code": "Languages.Arabic",
+     {
+            "Code": "Languages.ar",
             "Name": "Arabic",
             "ParentFosId": "Languages"
         },
         {
-            "Code": "Languages.Arabic.Egyptian",
-            "Name": "Egyptian",
-            "ParentFosId": "Languages.Arabic"
-        },
-        {
-            "Code": "Languages.Arabic.GulfArabic",
-            "Name": "Gulf Arabic",
-            "ParentFosId": "Languages.Arabic"
-        },
-         {
-            "Code": "Languages.Arabic.LevantineArabic",
-            "Name": "Levantine Arabic",
-            "ParentFosId": "Languages.Arabic"
-        },
-        {
-            "Code": "Languages.Spanish",
+            "Code": "Languages.es",
             "Name": "Spanish",
             "ParentFosId": "Languages"
         },
         {
-            "Code": "Languages.French",
+            "Code": "Languages.fr",
             "Name": "French",
             "ParentFosId": "Languages"
         },
         {
-            "Code": "Languages.German",
+            "Code": "Languages.de",
             "Name": "German",
             "ParentFosId": "Languages"
         },
         {
-            "Code": "Languages.Chinese",
+            "Code": "Languages.zh",
             "Name": "Chinese",
             "ParentFosId": "Languages"
         },
-         {
-            "Code": "Languages.Chinese.Mandarin",
-            "Name": "Mandarin Chinese",
-            "ParentFosId":"Languages.Chinese"
-        },
-         {
-            "Code": "Languages.Chinese.WuShanghainese",
-            "Name": "Wu Shanghainese",
-            "ParentFosId":"Languages.Chinese"
-        },
-         {
-            "Code": "Languages.Chinese.YueCantonese",
-            "Name": "YueCantonese",
-            "ParentFosId":"Languages.Chinese"
-        },
         {
-            "Code": "Languages.Hindi",
+            "Code": "Languages.hi",
             "Name": "Hindi",
             "ParentFosId": "Languages"
         },
         {
-            "Code": "Languages.Japanese",
+            "Code": "Languages.ja",
             "Name": "Japanese",
             "ParentFosId": "Languages"
         },
         {
-            "Code": "Languages.Italian",
+            "Code": "Languages.it",
             "Name": "Italian",
             "ParentFosId": "Languages"
         },
         {
-            "Code": "Languages.Russian",
+            "Code": "Languages.ru",
             "Name": "Russian",
             "ParentFosId": "Languages"
         },
         {
-            "Code": "Languages.Polish",
+            "Code": "Languages.pl",
             "Name": "Polish",
             "ParentFosId": "Languages"
         },
         {
-            "Code": "Languages.Turkish",
-            "Name": "Turksih",
+            "Code": "Languages.tr",
+            "Name": "Turkish",
             "ParentFosId": "Languages"
         },
         {
-            "Code": "Languages.Portugese",
+            "Code": "Languages.pt",
             "Name": "Portugese",
             "ParentFosId": "Languages"
         },
         {
-            "Code": "Languages.Bengali",
+            "Code": "Languages.bn",
             "Name": "Bengali",
             "ParentFosId": "Languages"
+        },
+        {
+            "Code": "Languages.ain",
+            "Name": "Ainu",
+            "ParentFosId": "Languages"
+        },
+        {
+            "Code": "Languages.sq",
+            "Name": "Albanian",
+            "ParentFosId": "Languages"
+        },
+        {
+            "Code": "Languages.arc",
+            "Name": "Aramaic",
+            "ParentFosId": "Languages"
+        },
+        {
+            "Code": "Languages.hy",
+            "Name": "Armenian",
+            "ParentFosId": "Languages"
+        },
+        {
+            "Code": "Languages.az",
+            "Name": "Azerbaijani",
+            "ParentFosId": "Languages"
+        },
+        {
+            "Code": "Languages.eu",
+            "Name": "Basque",
+            "ParentFosId": "Languages"
+        },
+{
+            "Code": "Languages.be",
+            "Name": "Belarusian",
+            "ParentFosId": "Languages"
+        },
+
+{
+            "Code": "Languages.bs",
+            "Name": "Bosnian",
+            "ParentFosId": "Languages"
+        },
+        {
+            "Code": "Languages.br",
+            "Name": "Breton",
+            "ParentFosId": "Languages"
+        },
+        {
+            "Code": "Languages.bg",
+            "Name": "Bulgarian",
+            "ParentFosId": "Languages"
+        },
+        {
+            "Code": "Languages.my",
+            "Name": "Burmese",
+            "ParentFosId": "Languages"
+        },
+        {
+            "Code": "Languages.ca",
+            "Name": "Catalan",
+            "ParentFosId": "Languages"
+        },
+        {
+            "Code": "Languages.ceb",
+            "Name": "Cebuano",
+            "ParentFosId": "Languages"
+        },
+{
+            "Code": "Languages.kw",
+            "Name": "Cornish",
+            "ParentFosId": "Languages"
+        },
+        {
+            "Code": "Languages.hr",
+            "Name": "Croatian",
+            "ParentFosId": "Languages"
+        },
+        {
+            "Code": "Languages.cs",
+            "Name": "Czech",
+            "ParentFosId": "Languages"
+        },
+        {
+            "Code": "Languages.da",
+            "Name": "Danish",
+            "ParentFosId": "Languages"
+        },
+        {
+            "Code": "Languages.nl",
+            "Name": "Dutch",
+            "ParentFosId": "Languages"
+        },
+        {
+            "Code": "Languages.dz",
+            "Name": "Dzongkha",
+            "ParentFosId": "Languages"
+        },
+        {
+            "Code": "Languages.et",
+            "Name": "Estonian",
+            "ParentFosId": "Languages"
+        },
+        {
+            "Code": "Languages.fo",
+            "Name": "Faroese",
+            "ParentFosId": "Languages"
+        },
+        {
+            "Code": "Languages.fi",
+            "Name": "Finnish",
+            "ParentFosId": "Languages"
+        },
+        {
+            "Code": "Languages.nl2",
+            "Name": "Flemish",
+            "ParentFosId": "Languages"
+        },
+        {
+            "Code": "Languages.ka",
+            "Name": "Georgian",
+            "ParentFosId": "Languages"
+        },
+        {
+            "Code": "Languages.got",
+            "Name": "Gothic",
+            "ParentFosId": "Languages"
+        },
+        
+        {
+            "Code": "Languages.el",
+            "Name": "Greek",
+            "ParentFosId": "Languages"
+        },
+        {
+            "Code": "Languages.gu",
+            "Name": "Gujarati",
+            "ParentFosId": "Languages"
+
+        },
+        {
+            "Code": "Languages.haw",
+            "Name": "Hawaiian",
+            "ParentFosId": "Languages"
+
+        },
+        {
+            "Code": "Languages.he",
+            "Name": "Hebrew",
+            "ParentFosId": "Languages"
+
+        },
+        {
+            "Code": "Languages.hi",
+            "Name": "Hindi",
+            "ParentFosId": "Languages"
+
+        },
+        {
+            "Code": "Languages.hu",
+            "Name": "Hungarian",
+            "ParentFosId": "Languages"
+
+        },
+        {
+            "Code": "Languages.is",
+            "Name": "Icelandic",
+            "ParentFosId": "Languages"
+
+        },
+        {
+            "Code": "Languages.id",
+            "Name": "Indonesian",
+            "ParentFosId": "Languages"
+
+        },
+        {
+            "Code": "Languages.ga",
+            "Name": "Irish",
+            "ParentFosId": "Languages"
+
+        },
+        {
+            "Code": "Languages.jv",
+            "Name": "Javanese",
+            "ParentFosId": "Languages"
+
+        },
+        {
+            "Code": "Languages.hani",
+            "Name": "Kanji",
+            "ParentFosId": "Languages"
+
+        },
+        {
+            "Code": "Languages.kn",
+            "Name": "Kannada",
+            "ParentFosId": "Languages"
+
+        },
+        {
+            "Code": "Languages.kar",
+            "Name": "Karen languages",
+            "ParentFosId": "Languages"
+
+        },
+        {
+            "Code": "Languages.kk",
+            "Name": "Kazakh",
+            "ParentFosId": "Languages"
+
+        },
+        {
+            "Code": "Languages.km",
+            "Name": "Khmer",
+            "ParentFosId": "Languages"
+
+        },
+        {
+            "Code": "Languages.ko",
+            "Name": "Korean",
+            "ParentFosId": "Languages"
+
+        },
+        {
+            "Code": "Languages.ku",
+            "Name": "Kurdish",
+            "ParentFosId": "Languages"
+
+        },
+        {
+            "Code": "Languages.ky",
+            "Name": "Kyrgyz",
+            "ParentFosId": "Languages"
+
+        },
+        {
+            "Code": "Languages.lld",
+            "Name": "Ladin",
+            "ParentFosId": "Languages"
+
+        },
+        {
+            "Code": "Languages.lv",
+            "Name": "Latvian",
+            "ParentFosId": "Languages"
+
+        },
+        {
+            "Code": "Languages.llz",
+            "Name": "Laz",
+            "ParentFosId": "Languages"
+
+        },
+        {
+            "Code": "Languages.lt",
+            "Name": "Lithuanian",
+            "ParentFosId": "Languages"
+
+        },
+        {
+            "Code": "Languages.lb",
+            "Name": "Luxembourgish",
+            "ParentFosId": "Languages"
+
+        },
+        {
+            "Code": "Languages.mk",
+            "Name": "Macedonian",
+            "ParentFosId": "Languages"
+
+        },
+        {
+            "Code": "Languages.ms",
+            "Name": "Malay",
+            "ParentFosId": "Languages"
+
+        },
+        {
+            "Code": "Languages.ml",
+            "Name": "Malayalam",
+            "ParentFosId": "Languages"
+
+        },
+        {
+            "Code": "Languages.mt",
+            "Name": "Maltese",
+            "ParentFosId": "Languages"
+
+        },
+        {
+            "Code": "Languages.gv",
+            "Name": "Manx",
+            "ParentFosId": "Languages"
+
+        },
+        {
+            "Code": "Languages.mi",
+            "Name": "Maori",
+            "ParentFosId": "Languages"
+
+        },
+        {
+            "Code": "Languages.mr",
+            "Name": "Marathi",
+            "ParentFosId": "Languages"
+
+        },
+        {
+            "Code": "Languages.mh",
+            "Name": "Marshallese",
+            "ParentFosId": "Languages"
+
+        },
+        {
+            "Code": "Languages.mn",
+            "Name": "Mongolian",
+            "ParentFosId": "Languages"
+
+        },
+        {
+            "Code": "Languages.ne",
+            "Name": "Nepali",
+            "ParentFosId": "Languages"
+
+        },
+        {
+            "Code": "Languages.no",
+            "Name": "Norwegian",
+            "ParentFosId": "Languages"
+
+        },
+        {
+            "Code": "Languages.oc",
+            "Name": "Occitan",
+            "ParentFosId": "Languages"
+
+        },
+        {
+            "Code": "Languages.pi",
+            "Name": "Pali",
+            "ParentFosId": "Languages"
+
+        },
+        {
+            "Code": "Languages.pa",
+            "Name": "Panjabi",
+            "ParentFosId": "Languages"
+
+        },
+        {
+            "Code": "Languages.fa",
+            "Name": "Persian",
+            "ParentFosId": "Languages"
+
+        },
+        {
+            "Code": "Languages.pl",
+            "Name": "Polish",
+            "ParentFosId": "Languages"
+
+        },
+        {
+            "Code": "Languages.pa",
+            "Name": "Punjabi",
+            "ParentFosId": "Languages"
+
+        },
+        {
+            "Code": "Languages.ekremwtf",
+            "Name": "Romaji",
+            "ParentFosId": "Languages"
+
+        },
+        {
+            "Code": "Languages.ro",
+            "Name": "Romanian",
+            "ParentFosId": "Languages"
+
+        },
+        {
+            "Code": "Languages.se",
+            "Name": "Sami Languages",
+            "ParentFosId": "Languages"
+
+        },
+        {
+            "Code": "Languages.sa",
+            "Name": "Sanskrit",
+            "ParentFosId": "Languages"
+
+        },
+        {
+            "Code": "Languages.sco",
+            "Name": "Scots",
+            "ParentFosId": "Languages"
+
+        },
+        {
+            "Code": "Languages.gd",
+            "Name": "Scottish Gaelic",
+            "ParentFosId": "Languages"
+
+        },
+        {
+            "Code": "Languages.sr",
+            "Name": "Serbian",
+            "ParentFosId": "Languages"
+
+        },
+        {
+            "Code": "Languages.sk",
+            "Name": "Slovak",
+            "ParentFosId": "Languages"
+
+        },
+        {
+            "Code": "Languages.sl",
+            "Name": "Slovenian",
+            "ParentFosId": "Languages"
+
+        },
+        {
+            "Code": "Languages.sv",
+            "Name": "Swedish",
+            "ParentFosId": "Languages"
+
+        },
+        {
+            "Code": "Languages.tl",
+            "Name": "Tagalog",
+            "ParentFosId": "Languages"
+
+        },
+        {
+            "Code": "Languages.taj",
+            "Name": "Tamang",
+            "ParentFosId": "Languages"
+
+        },
+        {
+            "Code": "Languages.ta",
+            "Name": "Tamil",
+            "ParentFosId": "Languages"
+
+        },
+{
+            "Code": "Languages.te",
+            "Name": "Telugu",
+            "ParentFosId": "Languages"
+
+        },
+
+{
+            "Code": "Languages.th",
+            "Name": "Thai",
+            "ParentFosId": "Languages"
+
+        },
+
+{
+            "Code": "Languages.bo",
+            "Name": "Tibetan",
+            "ParentFosId": "Languages"
+
+        },
+
+{
+            "Code": "Languages.uk",
+            "Name": "Ukrainian",
+            "ParentFosId": "Languages"
+
+        },
+
+{
+            "Code": "Languages.ur",
+            "Name": "Urdu",
+            "ParentFosId": "Languages"
+
+        },
+
+{
+            "Code": "Languages.vi",
+            "Name": "Vietnamese",
+            "ParentFosId": "Languages"
+
+        },
+
+{
+            "Code": "Languages.cy",
+            "Name": "Welsh",
+            "ParentFosId": "Languages"
+
+        },
+
+{
+            "Code": "Languages.yi",
+            "Name": "Yiddish",
+            "ParentFosId": "Languages"
+
         }
+
+
     ]
 }

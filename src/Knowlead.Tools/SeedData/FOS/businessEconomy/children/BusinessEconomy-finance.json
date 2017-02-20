@@ -1,0 +1,31 @@
+{
+    "model": "FOS",
+    "importConfig": {
+        "key": "Code",
+        "clearTable": false,
+        "saveAfterEachRow": true,
+        "references": [{
+            "fromProperty": "CoreLookupId",
+            "toProperty": "ParentFosId",
+            "searchProperty": "Code",
+            "searchModel": "FOS"
+        }]
+    },
+    "data": [
+        {
+            "Code": "BusinessEconomy.Finance.PersonalFinance",
+            "Name": "Personal Finance",
+            "ParentFosId": "BusinessEconomy.Finance"
+        },
+        {
+            "Code": "BusinessEconomy.Finance.Corporate Finance",
+            "Name": "Corporate Finance",
+            "ParentFosId": "BusinessEconomy.Finance"
+        },
+        {
+            "Code": "BusinessEconomy.PublicFinance",
+            "Name": "Public Finance",
+            "ParentFosId": "BusinessEconomy.Finance"
+        }
+    ]
+}

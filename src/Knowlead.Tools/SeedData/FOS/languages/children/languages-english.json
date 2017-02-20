@@ -1,0 +1,29 @@
+{
+    "model": "FOS",
+    "importConfig": {
+        "key": "Code",
+        "clearTable": false,
+        "saveAfterEachRow": true,
+        "references": [{
+            "fromProperty": "CoreLookupId",
+            "toProperty": "ParentFosId",
+            "searchProperty": "Code",
+            "searchModel": "FOS"
+        }]
+    },
+    "data": [
+        {
+            "Code": "Languages.en-us",
+            "Name": "USA",
+            "ParentFosId": "Languages.en"
+        },
+         {
+            "Code": "Languages.en-gb",
+            "Name": "UK",
+            "ParentFosId": "Languages.en"
+        }
+ 
+
+
+    ]
+}

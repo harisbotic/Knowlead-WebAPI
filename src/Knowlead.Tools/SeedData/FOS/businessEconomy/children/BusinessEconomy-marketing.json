@@ -1,0 +1,52 @@
+{
+    "model": "FOS",
+    "importConfig": {
+        "key": "Code",
+        "clearTable": false,
+        "saveAfterEachRow": true,
+        "references": [{
+            "fromProperty": "CoreLookupId",
+            "toProperty": "ParentFosId",
+            "searchProperty": "Code",
+            "searchModel": "FOS"
+        }]
+    },
+    "data": [
+        {
+            "Code": "BusinessEconomy.Marketing.DigitalMarketing",
+            "Name": "Digital Marketing",
+            "ParentFosId": "BusinessEconomy.Marketing"
+        },
+        {
+            "Code": "BusinessEconomy.Marketing.Advertising",
+            "Name": "Advertising",
+            "ParentFosId": "BusinessEconomy.Marketing"
+        },
+        {
+            "Code": "BusinessEconomy.Marketing.BrandsAndBranding",
+            "Name": "Brands and Branding",
+            "ParentFosId": "BusinessEconomy.Marketing"
+        },
+        {
+            "Code": "BusinessEconomy.Marketing.StrategicMarketing",
+            "Name": "Strategic Marketing",
+            "ParentFosId": "BusinessEconomy.Marketing"
+        },
+        {
+            "Code": "BusinessEconomy.Marketing.GlobalMarketing",
+            "Name": "Global Marketing",
+            "ParentFosId": "BusinessEconomy.Marketing"
+        },
+        {
+            "Code": "BusinessEconomy.Marketing.InternationalMarketing",
+            "Name": "International Marketing",
+            "ParentFosId": "BusinessEconomy.Marketing"
+        },
+        {
+            "Code": "BusinessEconomy.Marketing.ConsumersAffairs",
+            "Name": "Consumer Affairs",
+            "ParentFosId": "BusinessEconomy.Marketing"
+        }
+      
+    ]
+    }

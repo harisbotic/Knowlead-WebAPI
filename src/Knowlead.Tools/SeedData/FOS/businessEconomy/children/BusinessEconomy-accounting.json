@@ -1,0 +1,46 @@
+{
+    "model": "FOS",
+    "importConfig": {
+        "key": "Code",
+        "clearTable": false,
+        "saveAfterEachRow": true,
+        "references": [{
+            "fromProperty": "CoreLookupId",
+            "toProperty": "ParentFosId",
+            "searchProperty": "Code",
+            "searchModel": "FOS"
+        }]
+    },
+    "data": [
+        {
+            "Code": "BusinessEconomy.Accounting.FinancialAccounting",
+            "Name": "Financial Accounting",
+            "ParentFosId": "BusinessEconomy.Accounting"
+        },
+        {
+            "Code": "BusinessEconomy.Accounting.ManagementAccounting",
+            "Name": "Management Accounting",
+            "ParentFosId": "BusinessEconomy.Accounting"
+        },
+        {
+            "Code": "BusinessEconomy.Accounting.Auditing",
+            "Name": "Auditing",
+            "ParentFosId": "BusinessEconomy.Accounting"
+        },
+        {
+            "Code": "BusinessEconomy.Accounting.TaxAccounting",
+            "Name": "Tax Accounting",
+            "ParentFosId": "BusinessEconomy.Accounting"
+        },
+        {
+            "Code": "BusinessEconomy.Accounting.PublicAccounting",
+            "Name": "Public Accounting",
+            "ParentFosId": "BusinessEconomy.Accounting"
+        },
+        {
+            "Code": "BusinessEconomy.Accounting.GovernmentAccounting",
+            "Name": "Government Accounting",
+            "ParentFosId": "BusinessEconomy.Accounting"
+        }
+    ]
+}

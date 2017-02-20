@@ -1,0 +1,47 @@
+{
+    "model": "FOS",
+    "importConfig": {
+        "key": "Code",
+        "clearTable": false,
+        "saveAfterEachRow": true,
+        "references": [{
+            "fromProperty": "CoreLookupId",
+            "toProperty": "ParentFosId",
+            "searchProperty": "Code",
+            "searchModel": "FOS"
+        }]
+    },
+    "data": [
+        {
+            "Code": "ArtLiterature.VisualArts.Sketching",
+            "Name": "Sketching",
+            "ParentFosId": "ArtLiterature.VisualArts"
+        },
+         {
+            "Code": "ArtLiterature.VisualArts.Drawing",
+            "Name": "Drawing",
+            "ParentFosId": "ArtLiterature.VisualArts"
+        },
+         {
+            "Code": "ArtLiterature.VisualArts.Painting",
+            "Name": "Painting",
+            "ParentFosId": "ArtLiterature.VisualArts"
+        },
+         {
+            "Code": "ArtLiterature.VisualArts.Photography",
+            "Name": "Photography",
+            "ParentFosId": "ArtLiterature.VisualArts"
+        },
+         {
+            "Code": "ArtLiterature.VisualArts.Arhitecture",
+            "Name": "Arhitecture",
+            "ParentFosId": "ArtLiterature.VisualArts"
+        },
+         {
+            "Code": "ArtLiterature.VisualArts.Sculpture",
+            "Name": "Sculpture",
+            "ParentFosId": "ArtLiterature.VisualArts"
+        }
+        
+    ]
+}

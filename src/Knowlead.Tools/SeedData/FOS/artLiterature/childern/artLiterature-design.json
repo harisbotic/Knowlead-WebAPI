@@ -1,0 +1,42 @@
+{
+    "model": "FOS",
+    "importConfig": {
+        "key": "Code",
+        "clearTable": false,
+        "saveAfterEachRow": true,
+        "references": [{
+            "fromProperty": "CoreLookupId",
+            "toProperty": "ParentFosId",
+            "searchProperty": "Code",
+            "searchModel": "FOS"
+        }]
+    },
+    "data": [
+        {
+            "Code": "ArtLiterature.Design.3dAnimation",
+            "Name": "3D Animation",
+            "ParentFosId": "ArtLiterature.Design"
+        },
+        {
+            "Code": "ArtLiterature.Design.Photoshop",
+            "Name": "Photoshop",
+            "ParentFosId": "ArtLiterature.Design"
+        },
+        {
+            "Code": "ArtLiterature.Design.Illustrator",
+            "Name": "Illustrator",
+            "ParentFosId": "ArtLiterature.Design"
+        },
+        {
+            "Code": "ArtLiterature.Design.InDesign",
+            "Name": "InDesign",
+            "ParentFosId": "ArtLiterature.Design"
+        },
+        {
+            "Code": "ArtLiterature.Design.InteriorDesign",
+            "Name": "Interior Design",
+            "ParentFosId": "ArtLiterature.Design"
+        }
+        
+    ]
+}

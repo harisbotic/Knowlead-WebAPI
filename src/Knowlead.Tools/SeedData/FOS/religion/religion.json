@@ -1,0 +1,37 @@
+{
+    "model": "FOS",
+    "importConfig": {
+        "key": "Code",
+        "clearTable": false,
+        "saveAfterEachRow": true,
+        "references": [{
+            "fromProperty": "CoreLookupId",
+            "toProperty": "ParentFosId",
+            "searchProperty": "Code",
+            "searchModel": "FOS"
+        }]
+    },
+    "data": [
+        {
+            "Code": "Religion.Islam",
+            "Name": "Islam",
+            "ParentFosId": "Religion"
+        },
+        {
+            "Code": "Religion.Christianity",
+            "Name": "Christianity",
+            "ParentFosId": "Religion"
+        },
+        {
+            "Code": "Religion.Buddhism",
+            "Name": "Buddhism",
+            "ParentFosId": "Religion"
+        },
+        {
+            "Code": "Religion.Judaism",
+            "Name": "Judaism",
+            "ParentFosId": "Religion"
+        }
+        
+    ]
+}

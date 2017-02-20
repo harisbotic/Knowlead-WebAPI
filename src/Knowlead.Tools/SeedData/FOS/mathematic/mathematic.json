@@ -1,0 +1,45 @@
+{
+    "model": "FOS",
+    "importConfig": {
+        "key": "Code",
+        "clearTable": false,
+        "saveAfterEachRow": true,
+        "references": [{
+            "fromProperty": "CoreLookupId",
+            "toProperty": "ParentFosId",
+            "searchProperty": "Code",
+            "searchModel": "FOS"
+        }]
+    },
+    "data": [
+       
+        {
+            "Code": "Mathematic.Arithmetic",
+            "Name": "Arithmetic",
+            "ParentFosId": "Mathematic"
+        },
+      {
+            "Code": "Mathematic.Algebra",
+            "Name": "Algebra",
+            "ParentFosId": "Mathematic"
+        },
+      {
+            "Code": "Mathematic.Geometry",
+            "Name": "Geometry",
+            "ParentFosId": "Mathematic"
+        },
+      {
+            "Code": "Mathematic.DiscreteMathematics",
+            "Name": "Discrete Mathematics",
+            "ParentFosId": "Mathematic"
+        },
+      {
+            "Code": "Mathematic.Calculus",
+            "Name": "Analysis and Calculus",
+            "ParentFosId": "Mathematic"
+        }
+        
+
+
+    ]
+}

@@ -13,19 +13,19 @@
     },
     "data": [
         {
-            "Code": "ComputerSciences.GameDesign.C++",
+            "Code": "ComputerSciences.MobileApplications.C++",
             "Name": "C++",
-            "ParentFosId": "ComputerSciences.GameDesign"
+            "ParentFosId": "ComputerSciences.MobileApplications"
         },
          {
-            "Code": "ComputerSciences.GameDesign.Java",
+            "Code": "ComputerSciences.MobileApplications.Java",
             "Name": "Java",
-            "ParentFosId": "ComputerSciences.GameDesign"
+            "ParentFosId": "ComputerSciences.MobileApplications"
         },
          {
-            "Code": "ComputerSciences.GameDesign.Android",
+            "Code": "ComputerSciences.MobileApplications.Android",
             "Name": "Android",
-            "ParentFosId": "ComputerSciences.GameDesign"
+            "ParentFosId": "ComputerSciences.MobileApplications"
         }
     ]
 }

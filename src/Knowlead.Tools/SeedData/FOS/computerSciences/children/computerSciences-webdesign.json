@@ -15,22 +15,22 @@
         {
             "Code": "ComputerSciences.WebDesign.Htmlcssjavascript",
             "Name": "HTML/CSS/JAVA SCRIPT Programming",
-            "ParentFosId": "ComputerSciences.ProgrammingLanguages"
+            "ParentFosId": "ComputerSciences.WebDesign"
         },
         {
-            "Code": "ComputerSciences.ProgrammingLanguages.Php",
+            "Code": "ComputerSciences.WebDesign.Php",
             "Name": "PHP Programming",
-            "ParentFosId": "ComputerSciences.ProgrammingLanguages"
+            "ParentFosId": "ComputerSciences.WebDesign"
         },
         {
-            "Code": "ComputerSciences.ProgrammingLanguages.MVC",
+            "Code": "ComputerSciences.WebDesign.MVC",
             "Name": "MVC/ASP.NET",
-            "ParentFosId": "ComputerSciences.ProgrammingLanguages"
+            "ParentFosId": "ComputerSciences.WebDesign"
         },
         {
-            "Code": "ComputerSciences.ProgrammingLanguages.Angular",
+            "Code": "ComputerSciences.WebDesign.Angular",
             "Name": "Angular Programming",
-            "ParentFosId": "ComputerSciences.ProgrammingLanguages"
+            "ParentFosId": "ComputerSciences.WebDesign"
         }
     ]
 }

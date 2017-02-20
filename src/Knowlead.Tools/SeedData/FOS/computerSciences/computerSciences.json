@@ -18,7 +18,7 @@
             "ParentFosId": "ComputerSciences"
         },
         {
-            "Code": "ComputerSciences.WebdDesign",
+            "Code": "ComputerSciences.WebDesign",
             "Name": "Web Design",
             "ParentFosId": "ComputerSciences"
         },
@@ -31,6 +31,22 @@
             "Code": "ComputerSciences.MobileApplications",
             "Name": "Mobile Applications",
             "ParentFosId": "ComputerSciences"
+        },
+        {
+            "Code": "ComputerSciences.DataBases",
+            "Name": "Data Bases",
+            "ParentFosId": "ComputerSciences"
+        },
+        {
+            "Code": "ComputerSciences.InternetSecurity",
+            "Name": "Internet Security",
+            "ParentFosId": "ComputerSciences"
+        },
+        {
+            "Code": "ComputerSciences.Hardver",
+            "Name": "Hardver",
+            "ParentFosId": "ComputerSciences"
         }
+        
     ]
 }

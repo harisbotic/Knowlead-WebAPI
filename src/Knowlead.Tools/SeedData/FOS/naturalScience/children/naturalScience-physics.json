@@ -1,0 +1,54 @@
+{
+    "model": "FOS",
+    "importConfig": {
+        "key": "Code",
+        "clearTable": false,
+        "saveAfterEachRow": true,
+        "references": [{
+            "fromProperty": "CoreLookupId",
+            "toProperty": "ParentFosId",
+            "searchProperty": "Code",
+            "searchModel": "FOS"
+        }]
+    },
+    "data": [
+       
+        {
+            "Code": "NaturalScience.Physics.Statics",
+            "Name": "Statics",
+            "ParentFosId": "NaturalScience.Physics"
+        },
+        {
+            "Code": "NaturalScience.Physics.Dynamics",
+            "Name": "Dynamics",
+            "ParentFosId": "NaturalScience.Physics"
+        },
+        
+{
+            "Code": "NaturalScience.Physics.Astronomy",
+            "Name": "Astronomy",
+            "ParentFosId": "NaturalScience.Physics"
+        },
+        
+{
+            "Code": "NaturalScience.Physics.Molecular",
+            "Name": "Molecular",
+            "ParentFosId": "NaturalScience.Physics"
+        },
+        
+{
+            "Code": "NaturalScience.Physics.Athomic",
+            "Name": "Athomic",
+            "ParentFosId": "NaturalScience.Physics"
+        },
+        
+{
+            "Code": "NaturalScience.Physics.Quantum",
+            "Name": "Quantum",
+            "ParentFosId": "NaturalScience.Physics"
+        }
+        
+
+
+    ]
+}

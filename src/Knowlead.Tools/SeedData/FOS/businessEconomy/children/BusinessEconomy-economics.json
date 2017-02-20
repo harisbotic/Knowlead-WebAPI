@@ -1,0 +1,33 @@
+{
+    "model": "FOS",
+    "importConfig": {
+        "key": "Code",
+        "clearTable": false,
+        "saveAfterEachRow": true,
+        "references": [{
+            "fromProperty": "CoreLookupId",
+            "toProperty": "ParentFosId",
+            "searchProperty": "Code",
+            "searchModel": "FOS"
+        }]
+    },
+    "data": [
+        {
+            "Code": "BusinessEconomy.Economics.Macroeconomic",
+            "Name": "Macroeconomic",
+            "ParentFosId": "BusinessEconomy.Economics"
+        },
+        {
+            "Code": "BusinessEconomy.Economics.Microeconomic",
+            "Name": "Microeconomic",
+            "ParentFosId": "BusinessEconomy.Economics"
+        },
+        {
+            "Code": "BusinessEconomy.Economics.BasicEconomic",
+            "Name": "Basic economic",
+            "ParentFosId": "BusinessEconomy.Economics"
+        }
+        
+     
+    ]
+}

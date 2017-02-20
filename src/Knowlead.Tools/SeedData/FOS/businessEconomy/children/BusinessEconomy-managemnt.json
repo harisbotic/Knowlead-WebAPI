@@ -1,0 +1,78 @@
+{
+    "model": "FOS",
+    "importConfig": {
+        "key": "Code",
+        "clearTable": false,
+        "saveAfterEachRow": true,
+        "references": [{
+            "fromProperty": "CoreLookupId",
+            "toProperty": "ParentFosId",
+            "searchProperty": "Code",
+            "searchModel": "FOS"
+        }]
+    },
+    "data": [
+        {
+            "Code": "BusinessEconomy.Management.HumanResource",
+            "Name": "Human Resource",
+            "ParentFosId": "BusinessEconomy.Management"
+        },
+        {
+            "Code": "BusinessEconomy.Management.Enterpreneuership",
+            "Name": "Enterpreneuership",
+            "ParentFosId": "BusinessEconomy.Management"
+        },
+        {
+            "Code": "BusinessEconomy.Management.Leadership",
+            "Name": "Leadership",
+            "ParentFosId": "BusinessEconomy.Management"
+        },
+        {
+            "Code": "BusinessEconomy.Management.EventManagement",
+            "Name": "Event Management",
+            "ParentFosId": "BusinessEconomy.Management"
+        },
+        {
+            "Code": "BusinessEconomy.Management.ProjectManagement",
+            "Name": "Project Management",
+            "ParentFosId": "BusinessEconomy.Management"
+        },
+        {
+            "Code": "BusinessEconomy.Management.OrganizationalManagement",
+            "Name": "Organizational Management",
+            "ParentFosId": "BusinessEconomy.Management"
+        },
+        {
+            "Code": "BusinessEconomy.Management.SafetyManagement",
+            "Name": "Safety Management",
+            "ParentFosId": "BusinessEconomy.Management"
+        },
+        {
+            "Code": "BusinessEconomy.Management.InternationalManagement",
+            "Name": "International Management",
+            "ParentFosId": "BusinessEconomy.Management"
+        },
+        {
+            "Code": "BusinessEconomy.Management.QualityManagement",
+            "Name": "Quaity Management",
+            "ParentFosId": "BusinessEconomy.Management"
+        },
+        {
+            "Code": "BusinessEconomy.Management.FinancialManagement",
+            "Name": "Financial Management",
+            "ParentFosId": "BusinessEconomy.Management"
+        },
+        {
+            "Code": "BusinessEconomy.Management.GeneralManagement",
+            "Name": "General Management",
+            "ParentFosId": "BusinessEconomy.Management"
+        },
+        {
+            "Code": "BusinessEconomy.Management.MarketingManagement",
+            "Name": "Marketing Management",
+            "ParentFosId": "BusinessEconomy.Management"
+        }
+        
+       
+    ]
+    }

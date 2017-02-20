@@ -1,0 +1,53 @@
+{
+    "model": "FOS",
+    "importConfig": {
+        "key": "Code",
+        "clearTable": false,
+        "saveAfterEachRow": true,
+        "references": [{
+            "fromProperty": "CoreLookupId",
+            "toProperty": "ParentFosId",
+            "searchProperty": "Code",
+            "searchModel": "FOS"
+        }]
+    },
+    "data": [
+        {
+            "Code": "ArtLiterature.VisualArts",
+            "Name": "Visual Arts",
+            "ParentFosId": "ArtLiterature"
+        },
+        {
+            "Code": "ArtLiterature.ArtHistory",
+            "Name": "ArtHistory",
+            "ParentFosId": "ArtLiterature"
+        },
+        {
+            "Code": "ArtLiterature.Literature",
+            "Name": "Literature",
+            "ParentFosId": "ArtLiterature"
+        },
+        {
+            "Code": "ArtLiterature.PerformingArts",
+            "Name": "Performing Arts",
+            "ParentFosId": "ArtLiterature"
+        },
+        {
+            "Code": "ArtLiterature.Essay",
+            "Name": "Essay",
+            "ParentFosId": "ArtLiterature"
+        },
+        {
+            "Code": "ArtLiterature.Grammar",
+            "Name": "Grammar",
+            "ParentFosId": "ArtLiterature"
+        },
+        {
+            "Code": "ArtLiterature.Design",
+            "Name": "Design",
+            "ParentFosId": "ArtLiterature"
+        }
+        
+
+    ]
+}

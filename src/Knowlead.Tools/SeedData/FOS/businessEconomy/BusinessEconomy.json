@@ -1,0 +1,62 @@
+{
+    "model": "FOS",
+    "importConfig": {
+        "key": "Code",
+        "clearTable": false,
+        "saveAfterEachRow": true,
+        "references": [{
+            "fromProperty": "CoreLookupId",
+            "toProperty": "ParentFosId",
+            "searchProperty": "Code",
+            "searchModel": "FOS"
+        }]
+    },
+    "data": [
+        {
+            "Code": "BusinessEconomy.Finance",
+            "Name": "Finance",
+            "ParentFosId": "BusinessEconomy"
+        },
+         {
+            "Code": "BusinessEconomy.Accounting",
+            "Name": "Accounting",
+            "ParentFosId": "BusinessEconomy"
+        },
+         {
+            "Code": "BusinessEconomy.Statistic",
+            "Name": "Statistic",
+            "ParentFosId": "BusinessEconomy"
+        },
+         {
+            "Code": "BusinessEconomy.Management",
+            "Name": "Management",
+            "ParentFosId": "BusinessEconomy"
+        },
+         {
+            "Code": "BusinessEconomy.Marketing",
+            "Name": "Marketing",
+            "ParentFosId": "BusinessEconomy"
+        },
+         {
+            "Code": "BusinessEconomy.BusinessLaw",
+            "Name": "BusinessLaw",
+            "ParentFosId": "BusinessEconomy"
+        },
+         {
+            "Code": "BusinessEconomy.Economics",
+            "Name": "Economics",
+            "ParentFosId": "BusinessEconomy"
+        },
+{
+            "Code": "BusinessEconomy.Banking",
+            "Name": "Banking",
+            "ParentFosId": "BusinessEconomy"
+        },
+{
+            "Code": "BusinessEconomy.InternationalBusiness",
+            "Name": "International Business",
+            "ParentFosId": "BusinessEconomy"
+        },
+
+    ]
+}

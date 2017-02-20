@@ -29,7 +29,7 @@
             "Name": "Medicine"
         },
         {
-            "Code": "Math",
+            "Code": "Mathematic",
             "Name": "Math"
         },
         {
@@ -37,15 +37,15 @@
             "Name": "Sport and Physical Education"
         },
         {
-            "Code": "NaturalSciences",
+            "Code": "NaturalScience",
             "Name": "Natural Sciences"
         },
         {
-            "Code": "BussinesEconomy",
+            "Code": "BusinessEconomy",
             "Name": "Bussines and Economy"
         },
         {
-            "Code": "ArtLiteraure",
+            "Code": "ArtLiterature",
             "Name": "Art and Literature"
         },
         {

@@ -1,0 +1,82 @@
+{
+    "model": "FOS",
+    "importConfig": {
+        "key": "Code",
+        "clearTable": false,
+        "saveAfterEachRow": true,
+        "references": [{
+            "fromProperty": "CoreLookupId",
+            "toProperty": "ParentFosId",
+            "searchProperty": "Code",
+            "searchModel": "FOS"
+        }]
+    },
+    "data": [
+        {
+            "Code": "SocialStudies.Geography",
+            "Name": "Geography",
+            "ParentFosId": "SocialStudies"
+        },
+        {
+            "Code": "SocialStudies.History",
+            "Name": "History",
+            "ParentFosId": "SocialStudies"
+        },
+        {
+            "Code": "SocialStudies.Philosophy",
+            "Name": "Philosophy",
+            "ParentFosId": "SocialStudies"
+        },
+         {
+            "Code": "SocialStudies.Sociology",
+            "Name": "Sociology",
+            "ParentFosId": "SocialStudies"
+        },
+         {
+            "Code": "SocialStudies.Psychology",
+            "Name": "Psychology",
+            "ParentFosId": "SocialStudies"
+        },
+         {
+            "Code": "SocialStudies.PoliticalScience",
+            "Name": "Political Science",
+            "ParentFosId": "SocialStudies"
+        },
+         {
+            "Code": "SocialStudies.Communication",
+            "Name": "Communication",
+            "ParentFosId": "SocialStudies"
+        },
+         {
+            "Code": "SocialStudies.Education",
+            "Name": "Education",
+            "ParentFosId": "SocialStudies"
+        },
+ {
+            "Code": "SocialStudies.Journalism",
+            "Name": "Journalism",
+            "ParentFosId": "SocialStudies"
+        },
+         {
+            "Code": "SocialStudies.MediaStudies",
+            "Name": "Media Studies",
+            "ParentFosId": "SocialStudies"
+        },
+         {
+            "Code": "SocialStudies.Law",
+            "Name": "Law",
+            "ParentFosId": "SocialStudies"
+        },
+         {
+            "Code": "SocialStudies.InternationalRelations",
+            "Name": "International Relations",
+            "ParentFosId": "SocialStudies"
+        },
+         {
+            "Code": "SocialStudies.PublicRelationsAndPublicity",
+            "Name": "Public Relations And Publicity",
+            "ParentFosId": "SocialStudies"
+        }
+
+    ]
+}
