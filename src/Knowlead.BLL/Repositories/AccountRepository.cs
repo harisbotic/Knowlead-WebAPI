@@ -18,6 +18,7 @@ using Knowlead.BLL.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Knowlead.Common.Exceptions;
 using static Knowlead.Common.Constants.EnumStatuses;
+using Knowlead.Services.Interfaces;
 
 namespace Knowlead.BLL.Repositories
 {
@@ -27,16 +28,19 @@ namespace Knowlead.BLL.Repositories
         private UserManager<ApplicationUser> _userManager;
         private MessageServices _messageServices;
         private IConfigurationRoot _config;
+        private ITransactionServices _transactionServices;
 
         public AccountRepository(ApplicationDbContext context,
                 UserManager<ApplicationUser> userManager,
                 MessageServices messageServices,
-                IConfigurationRoot config)
+                IConfigurationRoot config,
+                ITransactionServices transactionServices)
         {
             _context = context;
             _userManager = userManager;
             _messageServices = messageServices;
             _config = config;
+            _transactionServices = transactionServices;
         }
 
         public async Task<IActionResult> RegisterApplicationUserAsync(RegisterUserModel registerUserModel)
@@ -53,9 +57,11 @@ namespace Knowlead.BLL.Repositories
                 string encodedEmail = WebUtility.UrlEncode(applicationUser.Email);
                 string encodedToken = WebUtility.UrlEncode(token);
                 string url = $"{_config["Urls:client"]}/confirmemail?email={encodedEmail}&code={encodedToken}";
+                var test = @"<div style=""float: left; min-height: 1px; width: 100%;""> <div style=""float: left; min-height: 1px; width: 100%;""> <div style=""width: 500px; border: 2px solid #e1e2e5; margin: 30px auto; padding: 20px; background-color: #fff;""> <div style=""text-align: center; font-size: 16px;"">Click the button to join the educational revolution.</div><a href=" + '"'+url+'"'+
+                @"> <div style=""width: 100%; height: 50px; line-height: 50px; text-align: center; background-color: #007bb6; color: #fff; font-size: 16px; font-weight: bold; border-radius: 5px; margin: 10px 0"">Confirm Account</div></a> <div style=""text-align: center; font-weight: bold;"">""First Social Network For Learning""</div></div><div> <img src=""/assets/images/logo/knowlead_logo.png"" alt=""Knowlead Logo"" style=""width: 120px; margin: 0 auto; display: inherit; margin-bottom: 20px;""> <div style=""text-align: center; color: #888da8;"">Button not working? Copy this link into your browser:</div><a href=" + '"'+url+'"' + @"> <div style=""text-align: center; margin-bottom: 15px;""> "" </div></a> <div style=""text-align: center; color: #888da8; margin-bottom: 15px;"">Copyright (c) 2017 Knowlead | All Rights Reserved.</div></div></div></div>";
 
                 // message service probably needs try and catch but this is temp solution anyways
-                await _messageServices.TempSendEmailAsync(applicationUser.Email,"Knowlead Confirmation", "haris.botic96@gmail.com", "KnowLead", url);
+                await _messageServices.TempSendEmailAsync(applicationUser.Email,"Knowlead Email Confirmation", "knowlead@knowlead.co", "Knowlead", test);
             }
             else
             {
@@ -141,6 +147,7 @@ namespace Knowlead.BLL.Repositories
                 _context.Update(referral);
                 await _context.SaveChangesAsync();
             }
+            await _transactionServices.RewardMinutes(applicationUser.Id, 100, 0, "START");
             /* TEMP CODE */
             if(!result.Succeeded)
             {

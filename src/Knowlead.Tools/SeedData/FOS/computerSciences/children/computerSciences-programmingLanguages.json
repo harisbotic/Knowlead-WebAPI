@@ -20,17 +20,20 @@
           {
             "Code": "ComputerSciences.ProgrammingLanguages.C++",
             "Name": "C++ Programming",
-            "ParentFosId": "ComputerSciences.ProgrammingLanguages"
+            "ParentFosId": "ComputerSciences.ProgrammingLanguages",
+            "Unlocked": true
         },
           {
             "Code": "ComputerSciences.ProgrammingLanguages.C#",
             "Name": "C# Programming",
-            "ParentFosId": "ComputerSciences.ProgrammingLanguages"
+            "ParentFosId": "ComputerSciences.ProgrammingLanguages",
+            "Unlocked": true
         },
           {
             "Code": "ComputerSciences.ProgrammingLanguages.Java",
             "Name": "Java Programming",
-            "ParentFosId": "ComputerSciences.ProgrammingLanguages"
+            "ParentFosId": "ComputerSciences.ProgrammingLanguages",
+            "Unlocked": true
         },
           {
             "Code": "ComputerSciences.ProgrammingLanguages.Pascal",

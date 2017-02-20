@@ -70,7 +70,8 @@
         {
             "Code": "Languages.tr",
             "Name": "Turkish",
-            "ParentFosId": "Languages"
+            "ParentFosId": "Languages",
+            "Unlocked": true
         },
         {
             "Code": "Languages.pt",
@@ -121,7 +122,8 @@
 {
             "Code": "Languages.bs",
             "Name": "Bosnian",
-            "ParentFosId": "Languages"
+            "ParentFosId": "Languages",
+            "Unlocked": true
         },
         {
             "Code": "Languages.br",

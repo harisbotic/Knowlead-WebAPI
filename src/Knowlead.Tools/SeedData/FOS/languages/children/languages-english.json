@@ -14,13 +14,15 @@
     "data": [
         {
             "Code": "Languages.en-us",
-            "Name": "USA",
-            "ParentFosId": "Languages.en"
+            "Name": "USA English",
+            "ParentFosId": "Languages.en",
+            "Unlocked": true
         },
          {
             "Code": "Languages.en-gb",
-            "Name": "UK",
-            "ParentFosId": "Languages.en"
+            "Name": "UK English",
+            "ParentFosId": "Languages.en",
+            "Unlocked": true
         }
  
 
