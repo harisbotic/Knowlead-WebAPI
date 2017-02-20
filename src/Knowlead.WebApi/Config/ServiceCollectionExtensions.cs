@@ -13,7 +13,6 @@ using Knowlead.BLL.Repositories.Interfaces;
 using Knowlead.WebApi.Hubs;
 using Hangfire;
 using Microsoft.Extensions.Configuration;
-using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
 using static Knowlead.Common.Constants;
@@ -139,7 +138,7 @@ namespace Knowlead.WebApi.Config
         public static IServiceCollection AddHangfire(this IServiceCollection services, IConfigurationRoot config) 
         {
             services.AddHangfire(options => 
-                options.UsePostgreSqlStorage(config["ConnectionStrings:LocalPostgreSQL"]));
+                options.UseSqlServerStorage(config["ConnectionStrings:AzureSqlServer"]));
 
             return services;
         }

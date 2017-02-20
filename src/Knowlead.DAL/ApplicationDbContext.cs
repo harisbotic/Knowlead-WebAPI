@@ -97,7 +97,7 @@ namespace Knowlead.DAL
         {
             base.OnConfiguring(optionsBuilder);
 
-            optionsBuilder.UseNpgsql(_config["ConnectionStrings:LocalPostgreSQL"],
+            optionsBuilder.UseSqlServer(_config["ConnectionStrings:AzureSqlServer"],
                                             b => b.MigrationsAssembly("Knowlead.WebApi"));
         }
 
@@ -107,7 +107,7 @@ namespace Knowlead.DAL
 
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.HasPostgresExtension("uuid-ossp");
+            // modelBuilder.HasPostgresExtension("uuid-ossp");
 
             /* GeoLookups */
             modelBuilder.Entity<Country>().ToTable("Countries");
