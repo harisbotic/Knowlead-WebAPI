@@ -104,7 +104,7 @@ namespace Knowlead.WebApi.Config
                 config.Password.RequireNonAlphanumeric = false;
                 config.Password.RequireLowercase = true;
             })
-                .AddEntityFrameworkStores<ApplicationDbContext, Guid>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders()
                 .AddErrorDescriber<CustomIdentityErrorDescriber>()
                 .AddClaimsPrincipalFactory<AppClaimsPrincipalFactory>();
