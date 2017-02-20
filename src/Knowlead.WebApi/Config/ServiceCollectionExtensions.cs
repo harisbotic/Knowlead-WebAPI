@@ -11,6 +11,7 @@ using Newtonsoft.Json.Serialization;
 using Knowlead.Services.Interfaces;
 using Knowlead.BLL.Repositories.Interfaces;
 using Knowlead.WebApi.Hubs;
+using Hangfire.PostgreSql;
 using Hangfire;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.SignalR;
@@ -137,8 +138,8 @@ namespace Knowlead.WebApi.Config
 
         public static IServiceCollection AddHangfire(this IServiceCollection services, IConfigurationRoot config) 
         {
-            services.AddHangfire(options => 
-                options.UseSqlServerStorage(config["ConnectionStrings:AzureSqlServer"]));
+              services.AddHangfire(options =>
+                options.UsePostgreSqlStorage(config["ConnectionStrings:LocalPostgreSQL"]));
 
             return services;
         }
