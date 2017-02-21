@@ -92,10 +92,10 @@ namespace Knowlead.Controllers
         }
 
         [HttpGet("recommended")]
-        public async Task<IActionResult> GetRecommended()
+        public async Task<IActionResult> GetRecommended(int offset = 0, int numItems = 10)
         {
             var applicationUserId = _auth.GetUserId();
-            var p2ps = await _p2pRepository.GetRecommendedP2P(applicationUserId);
+            var p2ps = await _p2pRepository.GetRecommendedP2P(applicationUserId, offset, numItems);
 
             return Ok(new ResponseModel{
                 Object = Mapper.Map<List<P2PModel>>(p2ps)
