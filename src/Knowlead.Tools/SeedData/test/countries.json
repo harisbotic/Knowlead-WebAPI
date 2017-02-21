@@ -2,8 +2,8 @@
     "model": "Country",
     "importConfig": {
         "key": "Code",
-        "clearTable": false,
-        "saveAfterEachRow": false
+        "clearTable": true,
+        "saveAfterEachRow": true
     },
     "data": [
         {
@@ -11,16 +11,16 @@
             "Code": "ba"
         },
         {
-            "Name": "United States of America",
-            "Code": "us"
+            "Name": "Croatia",
+            "Code": "hr"
         },
         {
-            "Name": "Great Britain",
-            "Code": "gb"
+            "Name": "Serbia",
+            "Code": "sr"
         },
         {
-            "Name": "Germany",
-            "Code": "de"
+            "Name": "Turkey",
+            "Code": "tr"
         }
     ]
 }

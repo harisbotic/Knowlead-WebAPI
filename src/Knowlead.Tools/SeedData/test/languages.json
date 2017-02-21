@@ -2,7 +2,7 @@
     "model": "Language",
     "importConfig": {
         "key": "Code",
-        "clearTable": false,
+        "clearTable": true,
         "saveAfterEachRow": true
     },
     "data": [
@@ -11,24 +11,16 @@
             "Code": "ba"
         },
         {
-            "Name": "English",
-            "Code": "en"
+            "Name": "Serbian",
+            "Code": "sr"
         },
         {
-            "Name": "German",
-            "Code": "de"
+            "Name": "Croatian",
+            "Code": "hr"
         },
         {
-            "Name": "Spanish",
-            "Code": "sp"
-        },
-        {
-            "Name": "Bhutan",
-            "Code": "bh"
-        },
-        {
-            "Name": "Botswanian",
-            "Code": "bt"
+            "Name": "Turkish",
+            "Code": "tr"
         }
     ]
 }
