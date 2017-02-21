@@ -21,6 +21,10 @@
         {
             "Name": "Turkey",
             "Code": "tr"
+        },
+        {
+            "Name": "Other",
+            "Code": "other"
         }
     ]
 }
