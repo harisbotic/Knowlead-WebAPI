@@ -116,7 +116,7 @@ namespace Knowlead.BLL.Repositories
             if(p2p.Deadline != null && p2p.Deadline < DateTime.Now.AddMinutes(1))
                 throw new ErrorModelException(ErrorCodes.IncorrectValue, nameof(P2P.Deadline));
             
-             if(p2p.InitialPrice < 0)
+             if(p2p.InitialPrice < 10)
                 throw new FormErrorModelException(nameof(P2PModel.InitialPrice), ErrorCodes.IncorrectValue);
             
             
@@ -239,6 +239,9 @@ namespace Knowlead.BLL.Repositories
 
             if(p2p.CreatedById != applicationUserId && p2pMessageModel.MessageToId != p2p.CreatedById)
                 throw new ErrorModelException(ErrorCodes.HackAttempt); // outsiders can only message creator of p2p
+
+            if(p2pMessageModel.PriceOffer < 10)
+                throw new FormErrorModelException(nameof(p2pMessageModel.PriceOffer), ErrorCodes.IncorrectValue); // outsiders can only message creator of p2p
             
             var pastFewOffers = await _context.P2PMessages.Where(x => x.P2pId == p2p.P2pId && (x.MessageFromId == negotiationWithApplicationUserId || x.MessageToId == negotiationWithApplicationUserId)).OrderByDescending(x => x.Timestamp).Take(ConsecutiveP2PMessageLimit).ToListAsync();
 
