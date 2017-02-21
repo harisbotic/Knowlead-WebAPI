@@ -93,7 +93,7 @@ namespace Knowlead.BLL.Repositories
             IQueryable<P2PMessage> messagesQuery = _context.P2PMessages
                                                            .Where(x => x.P2pId == p2pId)
                                                            .Where(x => x.MessageToId == applicationUserId || x.MessageFromId == applicationUserId)
-                                                           .OrderByDescending(x => x.Timestamp)
+                                                           .OrderBy(x => x.Timestamp)
                                                            .Include(x => x.MessageFrom)
                                                            .Include(x => x.MessageTo); //TODO: Probably optimization is required
 
