@@ -386,6 +386,8 @@ namespace Knowlead.BLL.Repositories
                 var error = new ErrorModel(ErrorCodes.DatabaseError);
                 return new BadRequestObjectResult(new ResponseModel(error));
             }
+            if(p2p.Status == P2PStatus.Scheduled)
+                await _transactionServices.RewardMinutes(applicationUserId, p2p.PriceAgreed.GetValueOrDefault(), 0, TransactionReasons.ScheduledP2PDeleted);
 
             return new OkObjectResult(new ResponseModel{
                 Object = Mapper.Map<P2PModel>(p2p)
@@ -406,7 +408,9 @@ namespace Knowlead.BLL.Repositories
 
         public async Task<IActionResult> ListMine(Guid applicationUserId)
         {
-            var p2ps = await _context.P2p.IncludeEverything().Where(x => x.CreatedById == applicationUserId).ToListAsync();
+            var p2ps = await _context.P2p.IncludeEverything().Where(x => x.CreatedById == applicationUserId)
+                                                             .Where(x => x.IsDeleted == false)
+                                                             .OrderByDescending(x => x.DateCreated).ToListAsync();
 
             return new OkObjectResult(new ResponseModel{
                 Object = Mapper.Map<List<P2PModel>>(p2ps)
@@ -461,6 +465,8 @@ namespace Knowlead.BLL.Repositories
                                                             .Include("P2p.P2PFiles")
                                                             .Include("P2p.P2PImages")
                                                             .OrderByDescending(x => x.P2p.DateCreated)
+                                                            .Where(x => x.P2p.IsDeleted == false)
+                                                            .Where(x => x.P2p.Status == P2PStatus.Active)
                                                             .ToListAsync();
 
             var p2ps = new List<P2P>();

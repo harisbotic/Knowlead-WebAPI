@@ -204,6 +204,8 @@ namespace Knowlead.Common
             public const string P2PCallEnded = "TransactionReasons.P2P_CALL_ENDED:";
             [TSInitialize]
             public const string ScheduledP2P = "TransactionReasons.SCHEDULED_P2P:";
+            [TSInitialize]
+            public const string ScheduledP2PDeleted = "TransactionReasons.SCHEDULED_P2P_DELETED";
         }
 
         public static class WebClientFuncNames
