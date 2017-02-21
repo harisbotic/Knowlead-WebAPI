@@ -73,7 +73,7 @@ namespace Knowlead.Controllers
             });
         }
         
-        [HttpPatch("{stickyNoteId}")] //ValidateModelAttribute?
+        [HttpPost("patch/{stickyNoteId}")] //ValidateModelAttribute?
         public async Task<IActionResult> Patch([FromBody] JsonPatchDocument<StickyNoteModel> stickyNotePatch, int stickyNoteId)
         {
             var applicationUser = await _auth.GetUser();
