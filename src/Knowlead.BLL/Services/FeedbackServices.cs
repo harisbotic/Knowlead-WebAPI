@@ -33,7 +33,7 @@ namespace Knowlead.Services
 
         public async Task<P2PFeedback> GiveP2PFeedback(P2PFeedbackModel p2pFeedbackModel, Guid applicationUserId)
         {
-            var p2pFeedback = Mapper.Map<P2PFeedbackModel, P2PFeedback>(p2pFeedbackModel);
+            var p2pFeedback = Mapper.Map<P2PFeedback>(p2pFeedbackModel);
             var p2p = await _p2pRepository.GetP2PTemp(p2pFeedback.P2pId);
 
             if(p2p.Status != P2PStatus.Finished) //Had to had call
@@ -49,12 +49,14 @@ namespace Knowlead.Services
             p2pFeedback.TeacherId = p2p.ScheduledWithId.GetValueOrDefault();
             p2pFeedback.FosId = p2p.FosId;
 
-            p2pFeedback.Expertise.LimitToRange(0,5);
-            p2pFeedback.Helpful.LimitToRange(0,5);
+            p2pFeedback.Expertise.LimitToRange(1,5);
+            p2pFeedback.Helpful.LimitToRange(1,5);
+
+            p2pFeedback.CalculateRating();
 
             _feedbackRepository.Add(p2pFeedback);
-            await _accountRepository.UpdateUserRating(applicationUserId);
             await _feedbackRepository.Commit();
+            await _accountRepository.UpdateUserRating(p2pFeedback.TeacherId);
 
             return p2pFeedback;
         }

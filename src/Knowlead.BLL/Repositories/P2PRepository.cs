@@ -416,7 +416,7 @@ namespace Knowlead.BLL.Repositories
         {
             var p2ps = await _context.P2p
                     .IncludeEverything()
-                    .Where(x => x.DateTimeAgreed.HasValue)
+                    .Where(x => x.Status == P2PStatus.Scheduled)
                     .Where(x => x.CreatedById == applicationUserId || x.ScheduledWithId == applicationUserId)
                     .ToListAsync();
 

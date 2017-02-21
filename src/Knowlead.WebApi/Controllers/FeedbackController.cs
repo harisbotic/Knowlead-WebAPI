@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using AutoMapper;
 using Knowlead.Common.Attributes;
 using Knowlead.Common.HttpRequestItems;
 using Knowlead.DTO.LookupModels.FeedbackModels;
@@ -31,7 +32,7 @@ namespace Knowlead.Controllers
             var p2pFeedback = await _feedbackServices.GiveP2PFeedback(p2pFeedbackModel, applicationUserId);
             
             return Ok(new ResponseModel{
-                Object = p2pFeedback
+                Object = Mapper.Map<P2PFeedbackModel>(p2pFeedback)
             });
         }
     }

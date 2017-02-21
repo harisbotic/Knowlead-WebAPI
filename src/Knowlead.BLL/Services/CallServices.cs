@@ -144,7 +144,7 @@ namespace Knowlead.Services
                 var callerPeerId = p2pCallModel.Caller.PeerId;
                 var otherPeerId = p2pCallModel.CallReceiverId;
                 var pointsAward = p2p.PriceAgreed.Value * 3;
-                if(DateTime.UtcNow.Ticks > callModel.StartDate.AddMinutes(5).Ticks)
+                if(DateTime.UtcNow.Ticks > callModel.StartDate.AddSeconds(70).Ticks)
                 {
                     await _transactionServices.RewardMinutes(otherPeerId, p2p.PriceAgreed.Value, pointsAward, TransactionReasons.P2PCallEnded);
                     await _transactionServices.RewardMinutes(callerPeerId, 0, pointsAward, TransactionReasons.P2PCallEnded);

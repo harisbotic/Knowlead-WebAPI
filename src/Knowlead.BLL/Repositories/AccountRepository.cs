@@ -196,7 +196,8 @@ namespace Knowlead.BLL.Repositories
             var averageRating = await _context.Feedbacks.Where(x => x.TeacherId.Equals(applicationUserId)).AverageAsync(y => y.Rating);
             
             applicationUser.AverageRating = averageRating;
-            await _userManager.UpdateAsync(applicationUser);
+            _context.Update(applicationUser);
+            await _context.SaveChangesAsync();
 
             return applicationUser;
         }
