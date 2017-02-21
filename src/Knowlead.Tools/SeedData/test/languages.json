@@ -2,7 +2,7 @@
     "model": "Language",
     "importConfig": {
         "key": "Code",
-        "clearTable": true,
+        "clearTable": false,
         "saveAfterEachRow": true
     },
     "data": [
