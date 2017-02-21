@@ -206,7 +206,7 @@ namespace Knowlead.BLL.Repositories
             p2p.DateTimeAgreed = p2pMessage.DateTimeOffer;
             p2p.ScheduledWithId = p2pMessage.MessageFromId == applicationUserId ? p2pMessage.MessageToId : p2pMessage.MessageFromId;
             p2p.Status = P2PStatus.Scheduled;
-            
+
             _context.P2p.Update(p2p);
             
             if (!await SaveChangesAsync())
@@ -214,6 +214,8 @@ namespace Knowlead.BLL.Repositories
                 var error = new ErrorModel(ErrorCodes.DatabaseError);
                 return new BadRequestObjectResult(new ResponseModel(error));
             }
+            var notification = new Notification(p2p.ScheduledWithId.Value, NotificationTypes.P2PScheduled, DateTime.UtcNow, p2p.CreatedById, p2p, null);
+            await _notificationServices.SendNotification(notification);
 
             return new OkObjectResult(new ResponseModel{
                 Object = Mapper.Map<P2PModel>(p2p)

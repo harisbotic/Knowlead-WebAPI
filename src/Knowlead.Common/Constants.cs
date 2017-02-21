@@ -125,6 +125,8 @@ namespace Knowlead.Common
             public const string NewFriendship = "NotificationTypes.NEW_FRIENDSHIP";
             [TSInitialize]
             public const string LeaveP2PFeedback = "NotificationTypes.LEAVE_P2P_FEEDBACK";
+            [TSInitialize]
+            public const string P2PScheduled = "NotificationTypes.P2P_SCHEDULED";
         }
 
         [TSClass]
