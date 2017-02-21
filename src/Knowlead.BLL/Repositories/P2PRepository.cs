@@ -204,7 +204,8 @@ namespace Knowlead.BLL.Repositories
             p2p.PriceAgreed = p2pMessage.PriceOffer;
             p2p.DateTimeAgreed = p2pMessage.DateTimeOffer;
             p2p.ScheduledWithId = p2pMessage.MessageFromId == applicationUserId ? p2pMessage.MessageToId : p2pMessage.MessageFromId;
-
+            p2p.Status = P2PStatus.Scheduled;
+            
             _context.P2p.Update(p2p);
             
             if (!await SaveChangesAsync())
@@ -379,7 +380,6 @@ namespace Knowlead.BLL.Repositories
                 return new BadRequestObjectResult(new ResponseModel(new ErrorModel(ErrorCodes.AlreadyDeleted, nameof(P2P))));
 
             p2p.IsDeleted = true;
-
             if (!await SaveChangesAsync())
             {
                 var error = new ErrorModel(ErrorCodes.DatabaseError);
@@ -431,6 +431,7 @@ namespace Knowlead.BLL.Repositories
                             .IncludeEverything()
                             .Where(x => !x.CreatedById.Equals(applicationUserId))
                             .Where(x => x.Status == P2PStatus.Active)
+                            .Where(x => x.IsDeleted == false)
                             .OrderByDescending(x => x.DateCreated)
                             .Skip(offset).Take(numItems)
                             .ToListAsync();
