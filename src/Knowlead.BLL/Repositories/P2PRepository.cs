@@ -93,6 +93,7 @@ namespace Knowlead.BLL.Repositories
             IQueryable<P2PMessage> messagesQuery = _context.P2PMessages
                                                            .Where(x => x.P2pId == p2pId)
                                                            .Where(x => x.MessageToId == applicationUserId || x.MessageFromId == applicationUserId)
+                                                           .OrderByDescending(x => x.Timestamp)
                                                            .Include(x => x.MessageFrom)
                                                            .Include(x => x.MessageTo); //TODO: Probably optimization is required
 
@@ -239,7 +240,7 @@ namespace Knowlead.BLL.Repositories
             if(p2p.CreatedById != applicationUserId && p2pMessageModel.MessageToId != p2p.CreatedById)
                 throw new ErrorModelException(ErrorCodes.HackAttempt); // outsiders can only message creator of p2p
             
-            var pastFewOffers = await _context.P2PMessages.Where(x => x.P2pId == p2p.P2pId && (x.MessageFromId == negotiationWithApplicationUserId || x.MessageToId == negotiationWithApplicationUserId)).OrderBy(x => x.Timestamp).Take(ConsecutiveP2PMessageLimit).ToListAsync();
+            var pastFewOffers = await _context.P2PMessages.Where(x => x.P2pId == p2p.P2pId && (x.MessageFromId == negotiationWithApplicationUserId || x.MessageToId == negotiationWithApplicationUserId)).OrderByDescending(x => x.Timestamp).Take(ConsecutiveP2PMessageLimit).ToListAsync();
 
             if(p2p.CreatedById == applicationUserId) // check if creator of p2p is messaging someone who already messaged him 
                 if(pastFewOffers.Count() == 0)
@@ -418,6 +419,7 @@ namespace Knowlead.BLL.Repositories
                     .IncludeEverything()
                     .Where(x => x.Status == P2PStatus.Scheduled)
                     .Where(x => x.CreatedById == applicationUserId || x.ScheduledWithId == applicationUserId)
+                    .Where(x => x.IsDeleted == false)
                     .ToListAsync();
 
             return new OkObjectResult(new ResponseModel {
@@ -454,10 +456,11 @@ namespace Knowlead.BLL.Repositories
         public async Task<IActionResult> ListBookmarked(Guid applicationUserId)
         {
             var p2pBookmarks = await _context.P2PBookmarks.Where(x => x.ApplicationUserId.Equals(applicationUserId))
-                                                            .Include("P2p")
+                                                            .Include(x => x.P2p)
                                                             .Include("P2p.P2PLanguages")
                                                             .Include("P2p.P2PFiles")
                                                             .Include("P2p.P2PImages")
+                                                            .OrderByDescending(x => x.P2p.DateCreated)
                                                             .ToListAsync();
 
             var p2ps = new List<P2P>();
@@ -478,6 +481,7 @@ namespace Knowlead.BLL.Repositories
                                     .IncludeEverything()
                                     .Where(x => x.CreatedById == applicationUserId)
                                     .Where(x => x.IsDeleted == true)
+                                    .OrderByDescending(x  => x.DateCreated)
                                     .ToListAsync();
 
             return new OkObjectResult(new ResponseModel {
