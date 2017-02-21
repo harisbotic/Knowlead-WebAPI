@@ -58,7 +58,7 @@ namespace Knowlead.BLL.Repositories
                 string encodedToken = WebUtility.UrlEncode(token);
                 string url = $"{_config["Urls:client"]}/confirmemail?email={encodedEmail}&code={encodedToken}";
                 var test = @"<div style=""float: left; min-height: 1px; width: 100%;""> <div style=""float: left; min-height: 1px; width: 100%;""> <div style=""width: 500px; border: 2px solid #e1e2e5; margin: 30px auto; padding: 20px; background-color: #fff;""> <div style=""text-align: center; font-size: 16px;"">Click the button to join the educational revolution.</div><a href=" + '"'+url+'"'+
-                @"> <div style=""width: 100%; height: 50px; line-height: 50px; text-align: center; background-color: #007bb6; color: #fff; font-size: 16px; font-weight: bold; border-radius: 5px; margin: 10px 0"">Confirm Account</div></a> <div style=""text-align: center; font-weight: bold;"">""First Social Network For Learning""</div></div><div> <img src=""/assets/images/logo/knowlead_logo.png"" alt=""Knowlead Logo"" style=""width: 120px; margin: 0 auto; display: inherit; margin-bottom: 20px;""> <div style=""text-align: center; color: #888da8;"">Button not working? Copy this link into your browser:</div><a href=" + '"'+url+'"' + @"> <div style=""text-align: center; margin-bottom: 15px;""> "" </div></a> <div style=""text-align: center; color: #888da8; margin-bottom: 15px;"">Copyright (c) 2017 Knowlead | All Rights Reserved.</div></div></div></div>";
+                @"> <div style=""width: 100%; height: 50px; line-height: 50px; text-align: center; background-color: #007bb6; color: #fff; font-size: 16px; font-weight: bold; border-radius: 5px; margin: 10px 0"">Confirm Account</div></a> <div style=""text-align: center; font-weight: bold;"">""First Social Network For Learning""</div></div><div> <div style=""text-align: center; color: #888da8;"">Button not working? Copy this link into your browser:</div><a href=" + '"'+url+'"' + "> " + url +  @" <div style=""text-align: center; margin-bottom: 15px;""> "" </div></a> <div style=""text-align: center; color: #888da8; margin-bottom: 15px;"">Copyright (c) 2017 Knowlead | All Rights Reserved.</div></div></div></div>";
 
                 // message service probably needs try and catch but this is temp solution anyways
                 await _messageServices.TempSendEmailAsync(applicationUser.Email,"Knowlead Email Confirmation", "knowlead@knowlead.co", "Knowlead", test);
@@ -74,7 +74,7 @@ namespace Knowlead.BLL.Repositories
                 _context.ApplicationUserReferrals.Add(referral);
                 await _context.SaveChangesAsync();
             }
-
+            await _transactionServices.RewardMinutes(applicationUser.Id, 100, 0, "START");
             var applicationUserModel = Mapper.Map<ApplicationUserModel>(applicationUser);
             return new OkObjectResult(new ResponseModel{
                 Object = applicationUserModel
@@ -147,7 +147,6 @@ namespace Knowlead.BLL.Repositories
                 _context.Update(referral);
                 await _context.SaveChangesAsync();
             }
-            await _transactionServices.RewardMinutes(applicationUser.Id, 100, 0, "START");
             /* TEMP CODE */
             if(!result.Succeeded)
             {
