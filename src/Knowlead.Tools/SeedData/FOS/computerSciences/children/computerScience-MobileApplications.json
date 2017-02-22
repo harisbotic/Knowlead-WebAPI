@@ -13,12 +13,12 @@
     },
     "data": [
         {
-            "Code": "ComputerSciences.MobileApplications.C++Mobile",
+            "Code": "ComputerSciences.MobileApplications.C++",
             "Name": "C++ for Mobile",
             "ParentFosId": "ComputerSciences.MobileApplications"
         },
          {
-            "Code": "ComputerSciences.MobileApplications.JavaMobile",
+            "Code": "ComputerSciences.MobileApplications.Java",
             "Name": "Java for Mobile",
             "ParentFosId": "ComputerSciences.MobileApplications"
         },

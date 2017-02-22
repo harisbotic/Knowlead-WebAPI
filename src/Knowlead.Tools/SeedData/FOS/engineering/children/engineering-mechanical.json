@@ -13,7 +13,7 @@
     },
     "data": [
         {
-            "Code": "Engineering.Mechanical.TechnicalDrawingMechanical",
+            "Code": "Engineering.Mechanical.TechnicalDrawing",
             "Name": "Technical Drawing in Mechanical Engineering",
             "ParentFosId": "Engineering.Mechanical"
         },
@@ -23,12 +23,12 @@
             "ParentFosId": "Engineering.Mechanical"
         },
         {
-            "Code": "Engineering.Mechanical.ComputerAidedDrawingMechanical",
+            "Code": "Engineering.Mechanical.ComputerAidedDrawing",
             "Name": "Computer Aided Drawing",
             "ParentFosId": "Engineering.Mechanical"
         },
         {
-            "Code": "Engineering.Mechanical.MaterialsMechanical",
+            "Code": "Engineering.Mechanical.Materials",
             "Name": "Materials in Mechanical Engineering",
             "ParentFosId": "Engineering.Mechanical"
         },
@@ -68,7 +68,7 @@
             "ParentFosId": "Engineering.Mechanical"
         },
         {
-            "Code": "Engineering.Mechanical.SimulationsMechanical",
+            "Code": "Engineering.Mechanical.Simulations",
             "Name": "Simulations in Mechanical Engineering",
             "ParentFosId": "Engineering.Mechanical"
         }

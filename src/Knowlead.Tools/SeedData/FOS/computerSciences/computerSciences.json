@@ -43,7 +43,7 @@
             "ParentFosId": "ComputerSciences"
         },
         {
-            "Code": "ComputerSciences.Hardware",
+            "Code": "ComputerSciences.Hardver",
             "Name": "Hardware",
             "ParentFosId": "ComputerSciences"
         }
