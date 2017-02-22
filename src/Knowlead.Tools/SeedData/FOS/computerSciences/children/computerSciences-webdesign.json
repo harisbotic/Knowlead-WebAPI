@@ -13,8 +13,33 @@
     },
     "data": [
         {
-            "Code": "ComputerSciences.WebDesign.Htmlcssjavascript",
-            "Name": "HTML/CSS/JAVA SCRIPT Programming",
+            "Code": "ComputerSciences.WebDesign.HtmlCss",
+            "Name": "HTML/CSS Programming",
+            "ParentFosId": "ComputerSciences.WebDesign"
+        },
+        {
+            "Code": "ComputerSciences.WebDesign.SassScss",
+            "Name": "Sass/Scss Programming",
+            "ParentFosId": "ComputerSciences.WebDesign"
+        },
+        {
+            "Code": "ComputerSciences.WebDesign.JavaScript",
+            "Name": "JavaScript Programming",
+            "ParentFosId": "ComputerSciences.WebDesign"
+        },
+        {
+            "Code": "ComputerSciences.WebDesign.TypeScript",
+            "Name": "TypeScript Programming",
+            "ParentFosId": "ComputerSciences.WebDesign"
+        },
+        {
+            "Code": "ComputerSciences.WebDesign.CoffeeScript",
+            "Name": "CoffeeScript Programming",
+            "ParentFosId": "ComputerSciences.WebDesign"
+        },
+        {
+            "Code": "ComputerSciences.WebDesign.Worpress",
+            "Name": "Wordpress",
             "ParentFosId": "ComputerSciences.WebDesign"
         },
         {
@@ -30,6 +55,11 @@
         {
             "Code": "ComputerSciences.WebDesign.Angular",
             "Name": "Angular Programming",
+            "ParentFosId": "ComputerSciences.WebDesign"
+        },
+        {
+            "Code": "ComputerSciences.WebDesign.Angular2",
+            "Name": "Angular2 Programming",
             "ParentFosId": "ComputerSciences.WebDesign"
         }
     ]

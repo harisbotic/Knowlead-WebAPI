@@ -13,13 +13,13 @@
     },
     "data": [
         {
-            "Code": "Engineering.Civil.Materials",
-            "Name": "Materials",
+            "Code": "Engineering.Civil.MaterialsCivil",
+            "Name": "Materials in Civil Engineering",
             "ParentFosId": "Engineering.Civil"
         },
         {
-            "Code": "Engineering.Civil.TechnicalDrawing",
-            "Name": "Technical Drawing",
+            "Code": "Engineering.Civil.TechnicalDrawingCivil",
+            "Name": "Technical Drawing in Civil Engineering",
             "ParentFosId": "Engineering.Civil"
         },
         {

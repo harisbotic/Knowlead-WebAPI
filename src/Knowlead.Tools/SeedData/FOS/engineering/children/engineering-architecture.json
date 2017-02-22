@@ -13,8 +13,8 @@
     },
     "data": [
         {
-            "Code": "Engineering.Architecture.TechnicalDrawing",
-            "Name": "Technical Drawing",
+            "Code": "Engineering.Architecture.TechnicalDrawingArchitecture",
+            "Name": "Technical Drawing in Architecture",
             "ParentFosId": "Engineering.Architecture"
         },
         {
@@ -38,8 +38,8 @@
             "ParentFosId": "Engineering.Architecture"
         },
         {
-            "Code": "Engineering.Architecture.Simulations",
-            "Name": "Simulations",
+            "Code": "Engineering.Architecture.SimulationsArchitecture",
+            "Name": "Simulations in Architecture",
             "ParentFosId": "Engineering.Architecture"
         }
     ]

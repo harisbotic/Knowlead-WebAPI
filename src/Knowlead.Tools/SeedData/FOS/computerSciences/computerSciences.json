@@ -34,7 +34,7 @@
         },
         {
             "Code": "ComputerSciences.DataBases",
-            "Name": "Data Bases",
+            "Name": "DataBases",
             "ParentFosId": "ComputerSciences"
         },
         {
@@ -43,10 +43,10 @@
             "ParentFosId": "ComputerSciences"
         },
         {
-            "Code": "ComputerSciences.Hardver",
-            "Name": "Hardver",
+            "Code": "ComputerSciences.Hardware",
+            "Name": "Hardware",
             "ParentFosId": "ComputerSciences"
         }
-        
+
     ]
 }
