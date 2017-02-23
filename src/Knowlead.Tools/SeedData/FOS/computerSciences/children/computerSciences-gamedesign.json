@@ -14,17 +14,17 @@
     "data": [
         {
             "Code": "ComputerSciences.GameDesign.C++",
-            "Name": "C++",
+            "Name": "Game Development C++",
             "ParentFosId": "ComputerSciences.GameDesign"
         },
          {
             "Code": "ComputerSciences.GameDesign.Java",
-            "Name": "Java",
+            "Name": "Game Development Java",
             "ParentFosId": "ComputerSciences.GameDesign"
         },
          {
             "Code": "ComputerSciences.GameDesign.Android",
-            "Name": "Android",
+            "Name": "Game Development Android",
             "ParentFosId": "ComputerSciences.GameDesign"
         }
     ]

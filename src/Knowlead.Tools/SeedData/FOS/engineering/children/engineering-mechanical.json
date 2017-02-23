@@ -14,7 +14,7 @@
     "data": [
         {
             "Code": "Engineering.Mechanical.TechnicalDrawing",
-            "Name": "Technical Drawing",
+            "Name": "Technical Drawing in Mechanical Engineering",
             "ParentFosId": "Engineering.Mechanical"
         },
         {
@@ -28,8 +28,8 @@
             "ParentFosId": "Engineering.Mechanical"
         },
         {
-            "Code": "Engineering.Mechanical.Materials ",
-            "Name": "Materials",
+            "Code": "Engineering.Mechanical.Materials",
+            "Name": "Materials in Mechanical Engineering",
             "ParentFosId": "Engineering.Mechanical"
         },
         {
@@ -69,7 +69,7 @@
         },
         {
             "Code": "Engineering.Mechanical.Simulations",
-            "Name": "Simulations",
+            "Name": "Simulations in Mechanical Engineering",
             "ParentFosId": "Engineering.Mechanical"
         }
     ]

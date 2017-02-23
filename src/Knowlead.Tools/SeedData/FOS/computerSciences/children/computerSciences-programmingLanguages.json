@@ -48,7 +48,8 @@
         {
             "Code": "ComputerSciences.ProgrammingLanguages.Python",
             "Name": "Python Programming",
-            "ParentFosId": "ComputerSciences.ProgrammingLanguages"
+            "ParentFosId": "ComputerSciences.ProgrammingLanguages",
+            "Unlocked": true
         }
     ]
 }
