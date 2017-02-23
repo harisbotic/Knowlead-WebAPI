@@ -57,8 +57,16 @@ namespace Knowlead.BLL.Repositories
 
         private async Task fillP2pBookmark(P2P p2p, Func<Task<bool>> predicate)
         {
-            p2p.DidBookmark = await predicate();
             p2p.CanBookmark = isBookmarkable(p2p);
+
+            if(!p2p.CanBookmark)
+            {
+                p2p.DidBookmark = false;
+            }
+            else
+            {
+                p2p.DidBookmark = await predicate();
+            }
         }
 
         public async Task<P2P> GetP2PTemp(int p2pId, Guid? applicationUserId = null)
@@ -417,6 +425,12 @@ namespace Knowlead.BLL.Repositories
                                                              .Where(x => x.IsDeleted == false)
                                                              .OrderByDescending(x => x.DateCreated).ToListAsync();
 
+
+            var myBookmarks = await _context.P2PBookmarks.Where(x => x.ApplicationUserId.Equals(applicationUserId)).ToListAsync();
+
+            foreach (var p2p in p2ps)
+                await fillP2pBookmark(p2p, myBookmarks.Where(b => b.ApplicationUserId.Equals(applicationUserId)).Count() == 1);
+
             return new OkObjectResult(new ResponseModel{
                 Object = Mapper.Map<List<P2PModel>>(p2ps)
             });
@@ -430,6 +444,9 @@ namespace Knowlead.BLL.Repositories
                     .Where(x => x.CreatedById == applicationUserId || x.ScheduledWithId == applicationUserId)
                     .Where(x => x.IsDeleted == false)
                     .ToListAsync();
+
+            foreach (var p2p in p2ps)
+                await fillP2pBookmark(p2p, false);
 
             return new OkObjectResult(new ResponseModel {
                 Object = Mapper.Map<List<P2PModel>>(p2ps)
@@ -447,6 +464,12 @@ namespace Knowlead.BLL.Repositories
                             .Skip(offset).Take(numItems)
                             .ToListAsync();
 
+
+            var myBookmarks = await _context.P2PBookmarks.Where(x => x.ApplicationUserId.Equals(applicationUserId)).ToListAsync();
+
+            foreach (var p2p in p2ps)
+                await fillP2pBookmark(p2p, myBookmarks.Where(b => b.ApplicationUserId.Equals(applicationUserId)).Count() == 1);
+
             return p2ps;
         }
 
@@ -458,6 +481,11 @@ namespace Knowlead.BLL.Repositories
                         .Where(x => x.Status == P2PStatus.Active)
                         .OrderByDescending(x => x.DateCreated)
                         .ToListAsync();
+
+            var myBookmarks = await _context.P2PBookmarks.Where(x => x.ApplicationUserId.Equals(applicationUserId)).ToListAsync();
+
+            foreach (var p2p in p2ps)
+                await fillP2pBookmark(p2p, myBookmarks.Where(b => b.ApplicationUserId.Equals(applicationUserId)).Count() == 1);
 
             return p2ps;
         }
@@ -471,7 +499,6 @@ namespace Knowlead.BLL.Repositories
                                                             .Include("P2p.P2PImages")
                                                             .OrderByDescending(x => x.P2p.DateCreated)
                                                             .Where(x => x.P2p.IsDeleted == false)
-                                                            .Where(x => x.P2p.Status == P2PStatus.Active)
                                                             .ToListAsync();
 
             var p2ps = new List<P2P>();
@@ -480,6 +507,10 @@ namespace Knowlead.BLL.Repositories
                 p2ps.Add(p2pBookmark.P2p);
             }
 
+            foreach (var p2p in p2ps)
+            {
+                await fillP2pBookmark(p2p, true);
+            }
 
             return new OkObjectResult(new ResponseModel {
                 Object = Mapper.Map<List<P2PModel>>(p2ps)
@@ -494,6 +525,9 @@ namespace Knowlead.BLL.Repositories
                                     .Where(x => x.IsDeleted == true)
                                     .OrderByDescending(x  => x.DateCreated)
                                     .ToListAsync();
+
+            foreach (var p2p in p2ps)
+                await fillP2pBookmark(p2p, false);
 
             return new OkObjectResult(new ResponseModel {
                 Object = Mapper.Map<List<P2PModel>>(p2ps)
