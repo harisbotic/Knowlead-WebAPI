@@ -1,8 +1,10 @@
 using System;
+using System.Net;
 using System.Threading.Tasks;
 using Knowlead.BLL.Repositories.Interfaces;
 using Knowlead.DAL;
 using Knowlead.DomainModel.StatisticsModels;
+using Knowlead.DomainModel.UserModels;
 using Knowlead.Services;
 
 namespace Knowlead.BLL.Repositories
@@ -11,11 +13,13 @@ namespace Knowlead.BLL.Repositories
     {
         private readonly ApplicationDbContext _context;
         private MessageServices _messageServices;
+        private IAccountRepository _accountRepository;
 
-        public StatisticsRepository(ApplicationDbContext context, MessageServices messageServices)
+        public StatisticsRepository(ApplicationDbContext context, MessageServices messageServices, IAccountRepository accountRepository)
         {
             _context = context;
             _messageServices = messageServices;
+            _accountRepository = accountRepository;
         }
 
         public async Task<PlatformFeedback> SubmitPlatformFeedback(String feedback, Guid applicationUserId)
@@ -25,7 +29,10 @@ namespace Knowlead.BLL.Repositories
             _context.PlatformFeedbacks.Add(platformFeedback);
             await _context.SaveChangesAsync();
             
-            await _messageServices.TempSendEmailAsync("feedback@knowlead.co","New Platform Feedback", "haris.botic96@@gmail.com", applicationUserId.ToString(), feedback);
+            ApplicationUser user = await _accountRepository.GetApplicationUserById(applicationUserId);
+            var nameSurname = WebUtility.HtmlEncode(user.Name) + " " + WebUtility.HtmlEncode(user.Surname);
+            var text = WebUtility.HtmlEncode(feedback);
+            await _messageServices.TempSendEmailAsync("feedback@knowlead.co", "New Feedback - " + nameSurname, user.Email, nameSurname, text);
 
             return platformFeedback;
         }
