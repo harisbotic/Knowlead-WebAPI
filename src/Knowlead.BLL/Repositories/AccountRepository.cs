@@ -81,6 +81,46 @@ namespace Knowlead.BLL.Repositories
             });
         }
 
+        public async Task<bool> GeneratePasswordResetTokenAsync (string email)
+        {
+            var applicationUser = await _userManager.FindByEmailAsync(email);
+            
+            if(applicationUser != null)
+                throw new ErrorModelException(ErrorCodes.EmailInvalid);
+
+            string token = await _userManager.GeneratePasswordResetTokenAsync(applicationUser);
+            string encodedEmail = WebUtility.UrlEncode(applicationUser.Email);
+            string encodedToken = WebUtility.UrlEncode(token);
+            string url = $"{_config["Urls:client"]}/resetpassword?email={encodedEmail}&token={encodedToken}";
+            var emailText = $"Go to this link to reset your password {url}";
+
+            // message service probably needs try and catch but this is temp solution anyways
+            await _messageServices.TempSendEmailAsync(applicationUser.Email,"Knowlead Password Reset", "knowlead@knowlead.co", "Knowlead", emailText);
+            return true;
+        }
+
+        public async Task<bool> ResetPasswordAsync (PasswordResetModel passwordResetModel)
+        {
+            var email = passwordResetModel.Email;
+            var token = passwordResetModel.Token;
+            var newPassword = passwordResetModel.NewPassword;
+            
+            var applicationUser = await _userManager.FindByEmailAsync(email);
+            
+            if(applicationUser != null)
+                throw new ErrorModelException(ErrorCodes.EmailInvalid);
+
+            var result = await _userManager.ResetPasswordAsync(applicationUser, token, newPassword);
+            if (result.Succeeded)
+            {
+                return true;
+            }
+            else
+            {
+                throw new ErrorModelException(ErrorCodes.TokenInvalid);
+            }
+        }
+
         public async Task<List<ApplicationUserReferral>> GetReferrals(Guid applicationUser, bool registrated = true)
         {
             return await _context.ApplicationUserReferrals.Where(x => x.ReferralUserId.Equals(applicationUser) && x.UserRegistred == registrated).Include(x => x.NewRegistredUser).ToListAsync();

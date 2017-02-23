@@ -344,7 +344,7 @@ namespace Knowlead.BLL.Repositories
             if(p2p.CreatedById.Equals(applicationUserId))
                 throw new ErrorModelException(ErrorCodes.AuthorityError, nameof(P2P));
 
-            if(p2pBookmarks.Where(x => applicationUserId.Equals(applicationUserId)).Count() == 1)
+            if(p2pBookmarks.Where(x => x.ApplicationUserId.Equals(applicationUserId)).Count() == 1)
                 throw new ErrorModelException(ErrorCodes.AlreadyBookmarked);
 
             var p2pbookmark = new P2PBookmark{
@@ -457,7 +457,6 @@ namespace Knowlead.BLL.Repositories
         {
             var p2ps = await _context.P2p
                             .IncludeEverything()
-                            .Where(x => !x.CreatedById.Equals(applicationUserId))
                             .Where(x => x.Status == P2PStatus.Active)
                             .Where(x => x.IsDeleted == false)
                             .OrderByDescending(x => x.DateCreated)

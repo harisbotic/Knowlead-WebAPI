@@ -67,6 +67,30 @@ namespace Knowlead.Controllers
             return (await _accountRepository.ConfirmEmail(confirmEmailModel));
         }
 
+        [HttpPost("generatePasswordResetToken/{email}"), ValidateModel]
+        [AllowAnonymous]
+        public async Task<IActionResult> GeneratePasswordResetToken([FromRouteAttribute] string email)
+        {
+            var result = await _accountRepository.GeneratePasswordResetTokenAsync(email);
+
+            if(result)
+                return Ok(new ResponseModel());
+
+            return BadRequest(new ResponseModel());
+        }
+
+        [HttpPost("resetPassword"), ValidateModel]
+        [AllowAnonymous]
+        public async Task<IActionResult> ResetPassword([FromBody] PasswordResetModel passwordResetModel)
+        {
+            var result = await _accountRepository.ResetPasswordAsync(passwordResetModel);
+
+            if(result)
+                return Ok(new ResponseModel());
+
+            return BadRequest(new ResponseModel());
+        }
+
         [HttpPost("details"), ValidateModel]
         [Authorize]
         public async Task<IActionResult> Details([FromBody] JsonPatchDocument<ApplicationUserModel> userDetailsPatch)

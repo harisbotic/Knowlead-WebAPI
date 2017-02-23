@@ -17,6 +17,8 @@ namespace Knowlead.BLL.Repositories.Interfaces
         Task<ApplicationUser> RemoveProfilePicture(ApplicationUser applicationUser);
         Task<ApplicationUser> UpdateUserRating(Guid applicationUserId);
         Task<IActionResult> ConfirmEmail(ConfirmEmailModel confirmEmailModel);
+        Task<bool> GeneratePasswordResetTokenAsync (string email);
+        Task<bool> ResetPasswordAsync (PasswordResetModel resetPasswordModel);
         Task<List<ApplicationUserReferral>> GetReferrals(Guid applicationUser, bool registred = true);
         Task<int> GetReferralsCount(Guid applicationUser, bool registred = true);
         Task<List<ApplicationUser>> Search(string searchString, Guid applicationUserId);
