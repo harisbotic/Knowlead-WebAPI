@@ -429,7 +429,7 @@ namespace Knowlead.BLL.Repositories
             var myBookmarks = await _context.P2PBookmarks.Where(x => x.ApplicationUserId.Equals(applicationUserId)).ToListAsync();
 
             foreach (var p2p in p2ps)
-                await fillP2pBookmark(p2p, myBookmarks.Where(b => b.ApplicationUserId.Equals(applicationUserId)).Count() == 1);
+                await fillP2pBookmark(p2p, myBookmarks.Where(b => b.P2pId.Equals(p2p.P2pId)).Count() == 1);
 
             return new OkObjectResult(new ResponseModel{
                 Object = Mapper.Map<List<P2PModel>>(p2ps)
@@ -467,7 +467,7 @@ namespace Knowlead.BLL.Repositories
             var myBookmarks = await _context.P2PBookmarks.Where(x => x.ApplicationUserId.Equals(applicationUserId)).ToListAsync();
 
             foreach (var p2p in p2ps)
-                await fillP2pBookmark(p2p, myBookmarks.Where(b => b.ApplicationUserId.Equals(applicationUserId)).Count() == 1);
+                await fillP2pBookmark(p2p, myBookmarks.Where(b => b.P2pId.Equals(p2p.P2pId)).Count() == 1);
 
             return p2ps;
         }
@@ -484,7 +484,7 @@ namespace Knowlead.BLL.Repositories
             var myBookmarks = await _context.P2PBookmarks.Where(x => x.ApplicationUserId.Equals(applicationUserId)).ToListAsync();
 
             foreach (var p2p in p2ps)
-                await fillP2pBookmark(p2p, myBookmarks.Where(b => b.ApplicationUserId.Equals(applicationUserId)).Count() == 1);
+                await fillP2pBookmark(p2p, myBookmarks.Where(b => b.P2pId.Equals(p2p.P2pId)).Count() == 1);
 
             return p2ps;
         }
