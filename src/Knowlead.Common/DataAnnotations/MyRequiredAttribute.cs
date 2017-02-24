@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using System;
 
 namespace Knowlead.Common.DataAnnotations
 {
@@ -14,8 +13,9 @@ namespace Knowlead.Common.DataAnnotations
 
             // only check string length if empty strings are not allowed
             var stringValue = value as string;
-            if(String.IsNullOrWhiteSpace(stringValue))
-                return false;
+            if (stringValue != null) {
+                return stringValue.Trim().Length != 0;
+            }
                 
             return true;
         }
