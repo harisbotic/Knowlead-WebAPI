@@ -71,12 +71,6 @@
             "Code": "SocialStudies.InternationalRelations",
             "Name": "International Relations",
             "ParentFosId": "SocialStudies"
-        },
-         {
-            "Code": "SocialStudies.PublicRelationsAndPublicity",
-            "Name": "Public Relations And Publicity",
-            "ParentFosId": "SocialStudies"
         }
-
     ]
 }

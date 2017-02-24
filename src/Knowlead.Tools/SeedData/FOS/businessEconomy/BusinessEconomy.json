@@ -57,6 +57,11 @@
             "Name": "International Business",
             "ParentFosId": "BusinessEconomy"
         },
+         {
+            "Code": "BusinessEconomy.PublicRelationsAndPublicity",
+            "Name": "Public Relations And Publicity",
+            "ParentFosId": "BusinessEconomy"
+        }
 
     ]
 }
