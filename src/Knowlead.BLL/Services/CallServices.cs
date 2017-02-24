@@ -143,12 +143,13 @@ namespace Knowlead.Services
                 var p2p = await _p2pRepository.GetP2PTemp(p2pCallModel.P2pId);
                 var callerPeerId = p2pCallModel.Caller.PeerId;
                 var otherPeerId = p2pCallModel.CallReceiverId;
-                var pointsAward = p2p.PriceAgreed.Value * 3;
+                var teacherPointsAward = p2p.PriceAgreed.Value * 1.7;
+                var studentPointsAward = p2p.PriceAgreed.Value * 1.2;
                 if(DateTime.UtcNow.Ticks > callModel.StartDate.AddSeconds(70).Ticks)
                 {
-                    await _transactionServices.RewardMinutes(otherPeerId, p2p.PriceAgreed.Value, pointsAward, TransactionReasons.P2PCallEnded);
-                    await _transactionServices.RewardMinutes(callerPeerId, 0, pointsAward, TransactionReasons.P2PCallEnded);
-
+                    await _transactionServices.RewardMinutes(callerPeerId, 0, (int)studentPointsAward, TransactionReasons.P2PCallEnded);
+                    await _transactionServices.RewardMinutes(otherPeerId, p2p.PriceAgreed.Value, (int)teacherPointsAward, TransactionReasons.P2PCallEnded);
+                    
                     p2p.Status = P2PStatus.Finished;
                     await _p2pRepository.UpdateAndSave(p2p);
 
@@ -156,9 +157,9 @@ namespace Knowlead.Services
                     await _notificationServices.SendNotification(notification);
                 }
 
-                callModel.EndDate = DateTime.UtcNow;
-                var call = Mapper.Map<_Call>(callModel);
-                _callRepository.Add(call);
+                p2pCallModel.EndDate = DateTime.UtcNow;
+                var p2pCall = Mapper.Map<P2PCall>(p2pCallModel);
+                _callRepository.Add(p2pCall);
                 await _callRepository.Commit();
             }
 
