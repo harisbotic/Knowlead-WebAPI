@@ -29,7 +29,7 @@ namespace Knowlead.WebApi.Attributes
             else if(exType == typeof(FormErrorModelException))
             {
                 var feme = ex as FormErrorModelException;
-                responseModel.AddError(feme.FormError);
+                responseModel.AddFormError(feme.FormError);
             }
 
             //If no specific exception occured

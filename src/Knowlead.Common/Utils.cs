@@ -1,4 +1,6 @@
 using System;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace Knowlead.Common
 {
@@ -24,5 +26,8 @@ namespace Knowlead.Common
             var bsTuple = GetBiggerSmallerGuidTuple(guidOne, guidTwo);
             return $"{bsTuple.Item1}{bsTuple.Item2}";
         }
+
+        public static string ToCamelCase(this string str) => str.ToLower()[0] + str.Substring(1);
+        
     }
 }

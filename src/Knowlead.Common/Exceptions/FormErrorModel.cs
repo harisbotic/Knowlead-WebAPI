@@ -11,7 +11,7 @@ namespace Knowlead.Common.Exceptions
             }
             set
             { 
-                this.key = value.ToLower();
+                this.key = value.ToCamelCase();
             }
         }
 

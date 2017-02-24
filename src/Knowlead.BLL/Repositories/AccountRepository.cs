@@ -81,11 +81,11 @@ namespace Knowlead.BLL.Repositories
             });
         }
 
-        public async Task<bool> GeneratePasswordResetTokenAsync (string email)
+        public async Task<bool> GeneratePasswordResetTokenAsync(string email)
         {
             var applicationUser = await _userManager.FindByEmailAsync(email);
             
-            if(applicationUser != null)
+            if(applicationUser == null)
                 throw new ErrorModelException(ErrorCodes.EmailInvalid);
 
             string token = await _userManager.GeneratePasswordResetTokenAsync(applicationUser);
@@ -99,7 +99,7 @@ namespace Knowlead.BLL.Repositories
             return true;
         }
 
-        public async Task<bool> ResetPasswordAsync (PasswordResetModel passwordResetModel)
+        public async Task<bool> ResetPasswordAsync(PasswordResetModel passwordResetModel)
         {
             var email = passwordResetModel.Email;
             var token = passwordResetModel.Token;
@@ -107,7 +107,7 @@ namespace Knowlead.BLL.Repositories
             
             var applicationUser = await _userManager.FindByEmailAsync(email);
             
-            if(applicationUser != null)
+            if(applicationUser == null)
                 throw new ErrorModelException(ErrorCodes.EmailInvalid);
 
             var result = await _userManager.ResetPasswordAsync(applicationUser, token, newPassword);
@@ -116,8 +116,8 @@ namespace Knowlead.BLL.Repositories
                 return true;
             }
             else
-            {
-                throw new ErrorModelException(ErrorCodes.TokenInvalid);
+            { 
+                throw new FormErrorModelException(nameof(PasswordResetModel.NewPassword), result.Errors.First().Description); //TODO: Code is fieldName and Descrition is actually the code, I would remove description property and leave code only
             }
         }
 
