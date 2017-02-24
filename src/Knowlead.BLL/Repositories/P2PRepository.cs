@@ -22,7 +22,7 @@ namespace Knowlead.BLL.Repositories
 {
     public class P2PRepository : IP2PRepository
     {
-        public static int ConsecutiveP2PMessageLimit = 2;
+        public static int ConsecutiveP2PMessageLimit = 3;
         private readonly ApplicationDbContext _context;
         private readonly IHostingEnvironment _environment;
         private readonly INotificationServices _notificationServices;
