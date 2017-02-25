@@ -11,12 +11,13 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Adapters;
 using Microsoft.AspNetCore.JsonPatch.Operations;
 using Newtonsoft.Json.Linq;
+using Knowlead.DAL;
 
 namespace Knowlead.BLL
 {
     public static class PatchAppliers
     {
-        public static void CustomApplyTo<T>(this JsonPatchDocument<T> patchDoc, T objectToApplyTo, Dictionary<string, Object> forManualPatch, ApplicationUser applicationUser = null) where T : class
+        public static void CustomApplyTo<T>(this JsonPatchDocument<T> patchDoc, ApplicationDbContext _context, T objectToApplyTo, Dictionary<string, Object> forManualPatch, ApplicationUser applicationUser = null) where T : class
         {
             if (objectToApplyTo == null)
             {
@@ -31,10 +32,10 @@ namespace Knowlead.BLL
                 if(z.Value != null)
                 {
                     if(z.Value.GetType() == typeof(List<ApplicationUserLanguage>))
-                        ApplyToApplicationUserLanguage(op, objectToApplyTo as ApplicationUserModel, (ICollection<ApplicationUserLanguage>)z.Value, applicationUser);
+                        ApplyToApplicationUserLanguage(_context, op, objectToApplyTo as ApplicationUserModel, (ICollection<ApplicationUserLanguage>)z.Value, applicationUser);
                     
                     if(z.Value.GetType() == typeof(List<ApplicationUserInterest>))
-                        ApplyToApplicationUserInterests(op, objectToApplyTo as ApplicationUserModel, (ICollection<ApplicationUserInterest>)z.Value, applicationUser);
+                        ApplyToApplicationUserInterests(_context, op, objectToApplyTo as ApplicationUserModel, (ICollection<ApplicationUserInterest>)z.Value, applicationUser);
                     
                 }
                 else 
@@ -44,7 +45,7 @@ namespace Knowlead.BLL
             }
         }
         // "ApplyTo" + name of class
-        private static void ApplyToApplicationUserLanguage(Operation op, ApplicationUserModel applicationUserModel, ICollection<ApplicationUserLanguage> langs, ApplicationUser applicationUser) 
+        private static void ApplyToApplicationUserLanguage(ApplicationDbContext _context, Operation op, ApplicationUserModel applicationUserModel, ICollection<ApplicationUserLanguage> langs, ApplicationUser applicationUser) 
         {
             if(applicationUser == null)
             {
@@ -80,13 +81,13 @@ namespace Knowlead.BLL
                 if(lang == null || langModel == null)
                     throw new Exception("Language not found to be removed");
 
-                langs.Remove(lang);
+                _context.ApplicationUserLanguages.Remove(lang);
                 applicationUserModel.Languages.Remove(langModel);
             }
         }
 
         // "ApplyTo" + name of class
-        private static void ApplyToApplicationUserInterests(Operation op, ApplicationUserModel applicationUserModel, ICollection<ApplicationUserInterest> interests, ApplicationUser applicationUser) 
+        private static void ApplyToApplicationUserInterests(ApplicationDbContext _context, Operation op, ApplicationUserModel applicationUserModel, ICollection<ApplicationUserInterest> interests, ApplicationUser applicationUser) 
         {
             if(applicationUser == null)
             {
@@ -132,14 +133,14 @@ namespace Knowlead.BLL
 
             else if(op.OperationType == OperationType.Remove)
             {
-                var id = int.Parse((op.path.Substring(opPath.Length)));
+                var id = int.Parse(Regex.Match(op.path, @"\d+").Value);
                 var interest = interests.Where(x => x.FosId == id).FirstOrDefault();
                 var interestModel = applicationUserModel.Interests.Where(x => x.FosId == id).FirstOrDefault();
 
                 if(interest == null || interestModel == null)
                     throw new Exception("Interest not found to be removed");
 
-                interests.Remove(interest);
+                _context.ApplicationUserInterests.Remove(interest);
                 applicationUserModel.Interests.Remove(interestModel);
             }
         }

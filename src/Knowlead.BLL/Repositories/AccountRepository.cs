@@ -137,8 +137,8 @@ namespace Knowlead.BLL.Repositories
             var forManualPatch = new Dictionary<string, Object>();
             forManualPatch.Add(nameof(ApplicationUserModel.Languages), applicationUser.ApplicationUserLanguages);
             forManualPatch.Add(nameof(ApplicationUserModel.Interests), applicationUser.ApplicationUserInterests);
-            applicationUserPatch.CustomApplyTo(applicationUserModel, forManualPatch, applicationUser);
-            
+            applicationUserPatch.CustomApplyTo(_context, applicationUserModel, forManualPatch, applicationUser);
+
             //TODO: These checkings should be in service, or another place ment for ApplicationUserValidations
             if(applicationUserModel.ProfilePictureId != null && !applicationUserModel.ProfilePictureId.Equals(applicationUser?.ProfilePictureId))
             {
