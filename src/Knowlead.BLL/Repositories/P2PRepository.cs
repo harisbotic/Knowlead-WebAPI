@@ -390,6 +390,9 @@ namespace Knowlead.BLL.Repositories
             if(p2p.CreatedById != applicationUserId)
                 return new BadRequestObjectResult(new ResponseModel(new ErrorModel(ErrorCodes.OwnershipError)));
 
+            if(p2p.Status == P2PStatus.Scheduled)
+                throw new ErrorModelException(ErrorCodes.CantDeleteScheduledP2P, p2pInt.ToString());
+
             if(p2p.IsDeleted)
                 return new BadRequestObjectResult(new ResponseModel(new ErrorModel(ErrorCodes.AlreadyDeleted, nameof(P2P))));
 
@@ -399,13 +402,10 @@ namespace Knowlead.BLL.Repositories
                 var error = new ErrorModel(ErrorCodes.DatabaseError);
                 return new BadRequestObjectResult(new ResponseModel(error));
             }
-            if(p2p.Status == P2PStatus.Scheduled)
-                await _transactionServices.RewardMinutes(applicationUserId, p2p.PriceAgreed.GetValueOrDefault(), 0, TransactionReasons.ScheduledP2PDeleted);
 
             return new OkObjectResult(new ResponseModel{
                 Object = Mapper.Map<P2PModel>(p2p)
             });
-                
         }
 
         public async Task UpdateAndSave(P2P p2p)
