@@ -108,22 +108,20 @@ namespace Knowlead.Services
         }
 
         [AutomaticRetry(Attempts = 1, OnAttemptsExceeded = AttemptsExceededAction.Delete)]
-        public Task DisplayNotification(Notification notification)
+        public async Task DisplayNotification(Notification notification)
         {
             var json = JsonConvert.SerializeObject(Mapper.Map<NotificationModel>(notification), new JsonSerializerSettings 
             { 
                 ContractResolver = new CamelCasePropertyNamesContractResolver() 
             });
 
-            _hubContext.Clients.User(notification.ForApplicationUserId.ToString())
+            await _hubContext.Clients.User(notification.ForApplicationUserId.ToString())
                                 .InvokeAsync(WebClientFuncNames.DisplayNotification, json);
-
-            return Task.CompletedTask;
         }
 
-        public Task<NotificationSourceStats> GetNotificationStats(Guid applicationUserId)
+        public async Task<NotificationSourceStats> GetNotificationStats(Guid applicationUserId)
         {
-            return _notificationRepository.GetNotificationStats(applicationUserId);
+            return await _notificationRepository.GetNotificationStats(applicationUserId);
         }
 
     }

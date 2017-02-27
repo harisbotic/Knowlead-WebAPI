@@ -93,6 +93,8 @@ namespace Knowlead.Common
             public const string P2PFinished = "P2P_FINISHED";
             [TSInitialize]
             public const string P2PNotFinished = "P2P_NOT_FINISHED";
+            [TSInitialize]
+            public const string CantDeleteScheduledP2P = "CANT_DELETE_SCHEDULED_P2P";
         }
 
         [TSClass]

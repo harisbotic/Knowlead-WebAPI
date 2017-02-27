@@ -30,7 +30,7 @@ namespace Knowlead.DomainModel.NotificationModels
         public DateTime ScheduledAt { get; set; }
         public DateTime? SeenAt { get; set; }
 
-        public Notification(Guid forApplicationUser, String notificationType, DateTime scheduledAt, Guid fromApplicationUserId, P2P p2p, P2PMessage p2pMessage)
+        public Notification(Guid forApplicationUser, String notificationType, DateTime scheduledAt, Guid? fromApplicationUserId, P2P p2p, P2PMessage p2pMessage)
                             :this(forApplicationUser, notificationType, scheduledAt)
         {   
             this.FromApplicationUserId = fromApplicationUserId;

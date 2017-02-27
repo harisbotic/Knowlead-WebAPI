@@ -13,16 +13,6 @@
     },
     "data": [
         {
-            "Code": "us:ny",
-            "Name": "New York",
-            "StatesCountryId": "us"
-        },
-        {
-            "Code": "us:wa",
-            "Name": "Washington d.c.",
-            "StatesCountryId": "us"
-        },
-        {
             "Code": "ba:fbih",
             "Name": "Federacija BiH",
             "StatesCountryId": "ba"

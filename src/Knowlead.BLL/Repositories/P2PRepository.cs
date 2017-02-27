@@ -222,8 +222,17 @@ namespace Knowlead.BLL.Repositories
                 var error = new ErrorModel(ErrorCodes.DatabaseError);
                 return new BadRequestObjectResult(new ResponseModel(error));
             }
-            var notification = new Notification(p2p.ScheduledWithId.Value, NotificationTypes.P2PScheduled, DateTime.UtcNow, p2p.CreatedById, p2p, null);
-            await _notificationServices.SendNotification(notification);
+            var p2pIsScheduled = new Notification(p2p.ScheduledWithId.Value, NotificationTypes.P2PScheduled, DateTime.UtcNow, p2p.CreatedById, p2p, null);
+            var notificationList = new List<Notification>{p2pIsScheduled};
+            if(p2p.DateTimeAgreed.Value.AddMinutes(-31) > DateTime.UtcNow) //if p2p is scheduled in 40 min or later
+            {
+                var teacherPrepareForP2P = new Notification(p2p.ScheduledWithId.Value, NotificationTypes.PrepareForP2P, p2p.DateTimeAgreed.Value.AddMinutes(-30), null, p2p, null);
+                var studentPrepareForP2P = new Notification(p2p.CreatedById, NotificationTypes.PrepareForP2P, DateTime.UtcNow.AddMinutes(-30), null, p2p, null);
+                notificationList.Add(teacherPrepareForP2P);
+                notificationList.Add(studentPrepareForP2P);
+            }
+            
+            await _notificationServices.SendNotifications(notificationList);
 
             return new OkObjectResult(new ResponseModel{
                 Object = Mapper.Map<P2PModel>(p2p)
@@ -279,7 +288,7 @@ namespace Knowlead.BLL.Repositories
                 var error = new ErrorModel(ErrorCodes.DatabaseError);
                 return new BadRequestObjectResult(new ResponseModel(error));
             }
-            var notification = new Notification(p2pMessage.MessageToId, NotificationTypes.NewP2PComment, DateTime.UtcNow, applicationUserId, null, p2pMessage);
+            var notification = new Notification(p2pMessage.MessageToId, NotificationTypes.NewP2PComment, DateTime.UtcNow, applicationUserId, p2p, p2pMessage);
             await _notificationServices.SendNotification(notification);
 
             return new OkObjectResult(new ResponseModel{
