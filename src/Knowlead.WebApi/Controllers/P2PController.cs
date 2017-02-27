@@ -12,6 +12,7 @@ using Knowlead.Common.Exceptions;
 using Knowlead.DTO.ResponseModels;
 using System.Collections.Generic;
 using AutoMapper;
+using System;
 
 namespace Knowlead.Controllers
 {
@@ -34,6 +35,11 @@ namespace Knowlead.Controllers
         {
             var applicationUserId = _auth.GetUserId();
             return await _p2pRepository.GetP2P(p2pId, applicationUserId);
+        }
+
+        public class pag
+        {
+            public int pp { get; set; }
         }
 
         [HttpGet("messages/{p2pId}")]
@@ -91,11 +97,11 @@ namespace Knowlead.Controllers
             return await _p2pRepository.ListAll(applicationUserId);
         }
 
-        [HttpGet("recommended")]
-        public async Task<IActionResult> GetRecommended(int offset = 0, int numItems = 10)
+        [HttpGet("recommended")] //TODO: change from DateTime to DATETIMEOFFSEt everywhere because datetime saves timezones, test it ofc
+        public async Task<IActionResult> GetRecommended(DateTimeOffset dateTimeStart, int offset = 10)
         {
             var applicationUserId = _auth.GetUserId();
-            var p2ps = await _p2pRepository.GetRecommendedP2P(applicationUserId, offset, numItems);
+            var p2ps = await _p2pRepository.GetRecommendedP2P(applicationUserId, dateTimeStart, offset);
 
             return Ok(new ResponseModel{
                 Object = Mapper.Map<List<P2PModel>>(p2ps)

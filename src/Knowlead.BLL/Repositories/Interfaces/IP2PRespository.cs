@@ -27,6 +27,6 @@ namespace Knowlead.BLL.Repositories.Interfaces
         Task<IActionResult> ListActionRequired(Guid applicationUserId);
         Task<IActionResult> ListAll(Guid applicationUserId);
         Task<List<P2P>> GetByFos(int fosId, Guid applicationUserId);
-        Task<List<P2P>> GetRecommendedP2P(Guid applicationUserId, int offset = 0, int numItems = 10);
+        Task<List<P2P>> GetRecommendedP2P(Guid applicationUserId, DateTimeOffset dateTimeStart, int offset = 10);
     }
 }

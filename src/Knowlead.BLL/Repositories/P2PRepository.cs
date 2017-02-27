@@ -462,14 +462,15 @@ namespace Knowlead.BLL.Repositories
             });
         }
 
-        public async Task<List<P2P>> GetRecommendedP2P(Guid applicationUserId, int offset, int numItems)
+        public async Task<List<P2P>> GetRecommendedP2P(Guid applicationUserId, DateTimeOffset dateTimeStart, int offset)
         {
             var p2ps = await _context.P2p
                             .IncludeEverything()
                             .Where(x => x.Status == P2PStatus.Active)
                             .Where(x => x.IsDeleted == false)
+                            .Where(x => x.DateCreated > dateTimeStart.UtcDateTime)
                             .OrderByDescending(x => x.DateCreated)
-                            .Skip(offset).Take(numItems)
+                            .Take(offset)
                             .ToListAsync();
 
 
