@@ -64,7 +64,7 @@ namespace Knowlead.DAL
         #endregion
 
         #region P2P
-        public DbSet<P2P> P2p { get; set; }
+        public DbSet<P2P> P2p { get; set; } //Todo: change to P2ps
         public DbSet<P2PMessage> P2PMessages { get; set; }
         public DbSet<P2PFile> P2PFiles { get; set; }
         public DbSet<P2PBookmark> P2PBookmarks { get; set; }

@@ -40,7 +40,8 @@ namespace Knowlead.DTO.P2PModels
         [ForeignKey("ScheduledWithId")]
         public ApplicationUserModel ScheduledWith { get; set; }
 
-
+        public DateTime? TeacherReady { get; set; }
+        
         public Guid? CreatedById { get; set; }
         [ForeignKey("CreatedById")]
         public ApplicationUserModel CreatedBy { get; set; }

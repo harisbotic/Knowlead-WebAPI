@@ -108,6 +108,15 @@ namespace Knowlead.Controllers
             });
         }
 
+        [HttpPost("iamready/p2pId")]
+        public async Task<IActionResult> IAmReady(int p2pId)
+        {
+            var applicationUserId = _auth.GetUserId();
+            await _p2pRepository.IAmReady(p2pId, applicationUserId);
+
+            return Ok(new ResponseModel());
+        }
+
         [HttpGet("listByFos/{fosId}")]
         public async Task<IActionResult> GetRecommended([FromQuery] int fosId)
         {

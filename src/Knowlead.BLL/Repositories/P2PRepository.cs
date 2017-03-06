@@ -385,7 +385,7 @@ namespace Knowlead.BLL.Repositories
             _context.P2p.Update(p2p);
             _context.P2PBookmarks.Remove(p2pBookmark);
             await SaveChangesAsync();
-            
+
             return true;
         }
 
@@ -564,6 +564,26 @@ namespace Knowlead.BLL.Repositories
             return new OkObjectResult(new ResponseModel{
                 Object = Mapper.Map<List<P2PModel>>(p2ps)
             });
+        }
+        public async Task IAmReady(int p2pId, Guid applicationUserId)
+        {
+            var p2p = await _context.P2p.Where(x => x.P2pId.Equals(p2pId)).FirstOrDefaultAsync();
+            
+            if(p2p.TeacherReady != null)
+                throw new ErrorModelException(ErrorCodes.AlreadyReady);
+                
+            if(p2p.ScheduledWithId.Equals(applicationUserId)) //Only teacher can be ready
+                throw new ErrorModelException(ErrorCodes.AuthorityError);
+
+            if(!p2p.DateTimeAgreed.HasValue
+            || DateTime.UtcNow.AddMinutes(15) > p2p.DateTimeAgreed.Value //Has to be 15 mins before p2p starts
+            || DateTime.UtcNow < p2p.DateTimeAgreed.Value.AddMinutes(-15))
+                throw new ErrorModelException(ErrorCodes.CantBeReadyNow);
+            
+            else
+                p2p.TeacherReady = DateTime.UtcNow;
+
+            await SaveChangesAsync();
         }
     }
 }
