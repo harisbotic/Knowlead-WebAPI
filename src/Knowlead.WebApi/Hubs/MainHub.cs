@@ -162,9 +162,9 @@ namespace Knowlead.WebApi.Hubs
             _callServices.CallMsg(chatMessageModel);
         }
 
-        public async void Msg(ChatMessageModel chatMessageModel)
+        public async Task Msg(ChatMessageModel chatMessageModel)
         {
-            var currentUser = _auth.GetUserId();
+            var currentUser = _auth.GetUserId();         
             var chatMessage = await _chatServices.SendChatMessage(chatMessageModel, currentUser);
 
             var json = JsonConvert.SerializeObject(Mapper.Map<ChatMessageModel>(chatMessage), new JsonSerializerSettings 
@@ -173,11 +173,10 @@ namespace Knowlead.WebApi.Hubs
             });
 
             Clients.User(currentUser.ToString())
-                            .InvokeAsync(WebClientFuncNames.DisplayChatMsg, json).RunSynchronously();
-                            
+                .InvokeAsync(WebClientFuncNames.DisplayChatMsg, json);   
+
             Clients.User(chatMessageModel.SendToId.ToString())
-                            .InvokeAsync(WebClientFuncNames.DisplayChatMsg, json).RunSynchronously();
+                            .InvokeAsync(WebClientFuncNames.DisplayChatMsg, json);
         }
     }
-
 }

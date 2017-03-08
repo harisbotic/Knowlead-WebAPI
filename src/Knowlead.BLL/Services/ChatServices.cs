@@ -57,11 +57,11 @@ namespace Knowlead.Services
 
             TableOperation operation = TableOperation.Insert(chatMessageEntity);
             TableOperation operation2 = TableOperation.InsertOrReplace(conversationEntity);
-            TableOperation operation3 = TableOperation.InsertOrReplace(conversationEntity2);
-
-            _chatMsgTable.ExecuteAsync(operation).RunSynchronously();
-            _conversationTable.ExecuteAsync(operation2).RunSynchronously();
-            _conversationTable.ExecuteAsync(operation3).RunSynchronously();
+            TableOperation operation3 = TableOperation.InsertOrReplace(conversationEntity2); 
+            
+            await _chatMsgTable.ExecuteAsync(operation);
+            _conversationTable.ExecuteAsync(operation2).ConfigureAwait(true);
+            _conversationTable.ExecuteAsync(operation3).ConfigureAwait(true);
 
             return chatMessageEntity;
         }
