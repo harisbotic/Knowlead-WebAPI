@@ -10,6 +10,6 @@ namespace Knowlead.Services.Interfaces
     {
         Task<ChatMessage> SendChatMessage(ChatMessageModel chatMessageModel, Guid senderId);
         Task<List<ChatMessage>> GetConversation(Guid userOneId, Guid userTwoId, string fromRowKey, int numItems = 10);
-        Task<List<Conversation>> GetConversations(Guid applicationUserId, DateTimeOffset fromDateTime, int numItems = 10);
+        Task<List<Conversation>> GetConversations(Guid applicationUserId, DateTime fromDateTime, int numItems = 10);
     }
 }

@@ -81,7 +81,9 @@ namespace Knowlead.WebApi.Hubs
             var p2pCallModel = new P2PCallModel(p2p, callerId, Context.ConnectionId);
 
             await _callServices.StartCall(p2pCallModel);
-            //TODO: Start a 1 minute timer, that will send CallCanceled to both if call didn't start
+            
+            // send a request to delete p2p 
+
         }
 
         public async Task CallRespond(Guid callModelId, bool accepted)
@@ -152,11 +154,11 @@ namespace Knowlead.WebApi.Hubs
 
         public void CallMsg(ChatMessageModel chatMessageModel)
         {
-            if (!chatMessageModel.SendToId.HasValue)
+            if (!chatMessageModel.RecipientId.HasValue)
             {
                 throw new ErrorModelException(ErrorCodes.HackAttempt);
             }
-            this.GetCallModel(chatMessageModel.SendToId.Value);
+            this.GetCallModel(chatMessageModel.RecipientId.Value);
             chatMessageModel.Timestamp = DateTime.UtcNow;
             chatMessageModel.SenderId = _auth.GetUserId();
             _callServices.CallMsg(chatMessageModel);
@@ -175,7 +177,7 @@ namespace Knowlead.WebApi.Hubs
             Clients.User(currentUser.ToString())
                 .InvokeAsync(WebClientFuncNames.DisplayChatMsg, json);   
 
-            Clients.User(chatMessageModel.SendToId.ToString())
+            Clients.User(chatMessageModel.RecipientId.ToString())
                             .InvokeAsync(WebClientFuncNames.DisplayChatMsg, json);
         }
     }

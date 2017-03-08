@@ -177,7 +177,7 @@ namespace Knowlead.Services
 
         public void CallMsg(ChatMessageModel message)
         {
-            var call = this.GetCall(message.SendToId.Value);
+            var call = this.GetCall(message.RecipientId.Value);
             var msg = this.GetJsonString(message);
             foreach (var peer in call.Peers)
             {

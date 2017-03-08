@@ -11,13 +11,4 @@ namespace Knowlead.DTO.ChatModels
         [MyRequired]
         public FriendshipDTOActions Action { get; set; }
     }
-
-    public class NewChatMessage
-    {
-        [MyRequired]
-        public string Message { get; set; }
-
-        [MyRequired]
-        public Guid SendToId { get; set; }
-    }
 }

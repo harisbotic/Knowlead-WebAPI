@@ -39,10 +39,10 @@ namespace Knowlead.Services
 
         public async Task<ChatMessage> SendChatMessage(ChatMessageModel chatMessageModel, Guid senderId)
         {
-            var sendToId = chatMessageModel.SendToId.GetValueOrDefault();
+            var recipientId = chatMessageModel.RecipientId.GetValueOrDefault();
             var message = chatMessageModel.Message;
             
-            var friendship = await _friendshipRepository.GetFriendship(senderId, sendToId);
+            var friendship = await _friendshipRepository.GetFriendship(senderId, recipientId);
 
             if(friendship == null || friendship.Status != FriendshipStatus.Accepted)
                 throw new ErrorModelException(ErrorCodes.NotInFriendlist);
@@ -50,10 +50,10 @@ namespace Knowlead.Services
             if(String.IsNullOrEmpty(message))
                 throw new ErrorModelException(ErrorCodes.IncorrectValue, nameof(message));
 
-            ChatMessage chatMessageEntity = new ChatMessage(senderId, sendToId, message);
+            ChatMessage chatMessageEntity = new ChatMessage(senderId, recipientId, message);
 
-            Conversation conversationEntity = new Conversation(senderId, sendToId, message, senderId);
-            Conversation conversationEntity2 = new Conversation(sendToId, senderId, message, senderId);
+            Conversation conversationEntity = new Conversation(senderId, recipientId, message, senderId);
+            Conversation conversationEntity2 = new Conversation(recipientId, senderId, message, senderId);
 
             TableOperation operation = TableOperation.Insert(chatMessageEntity);
             TableOperation operation2 = TableOperation.InsertOrReplace(conversationEntity);
@@ -74,13 +74,13 @@ namespace Knowlead.Services
             TableQuery.CombineFilters(
             TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, partitionKey),
             TableOperators.And,
-            TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.LessThan, fromRowKey))).Take(numItems);
+            TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.GreaterThan, fromRowKey))).Take(numItems);
 
             var tableQuery =  await _chatMsgTable.ExecuteQuerySegmentedAsync(rangeQuery, null);
             return tableQuery.Results;
         }
 
-        public async Task<List<Conversation>> GetConversations(Guid applicationUserId, DateTimeOffset fromDateTime, int numItems = 10)
+        public async Task<List<Conversation>> GetConversations(Guid applicationUserId, DateTime fromDateTime, int numItems = 10)
         {   
             TableQuery<Conversation> rangeQuery = new TableQuery<Conversation>().Where(
             TableQuery.CombineFilters(

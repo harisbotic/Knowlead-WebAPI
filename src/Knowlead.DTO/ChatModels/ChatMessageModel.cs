@@ -8,7 +8,7 @@ namespace Knowlead.DTO.ChatModels
         [MyRequired]
         public string Message { get; set; }
         [MyRequired]
-        public Guid? SendToId { get; set; }
+        public Guid? RecipientId { get; set; }
         public Guid? SenderId { get; set; }
       
         public string RowKey { get; set; }

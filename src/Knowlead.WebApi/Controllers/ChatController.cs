@@ -110,7 +110,7 @@ namespace Knowlead.Controllers
         }
 
         [HttpGet("getConversations")]
-        public async Task<IActionResult> GetConversations([FromQuery] DateTimeOffset fromDateTime, [FromQuery] int numItems)
+        public async Task<IActionResult> GetConversations([FromQuery] DateTime fromDateTime, [FromQuery] int numItems)
         {
             var currentUserId = _auth.GetUserId();
             var conversations = await _chatServices.GetConversations(currentUserId, fromDateTime, numItems);

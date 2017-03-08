@@ -12,10 +12,12 @@ namespace Knowlead.DTO.ChatModels
             CreateMap<ChatMessageModel, ChatMessage>()
                 .ForMember(dest => dest.Message, opt => opt.MapFrom(src => src.Message))
                 .ForMember(dest => dest.RowKey, opt => opt.MapFrom(src => src.RowKey))
+                .ForMember(dest => dest.RecipientId, opt => opt.MapFrom(src => src.RecipientId))
                 .ForAllOtherMembers(x => x.Ignore());
 
             CreateMap<ChatMessage, ChatMessageModel>();
-            CreateMap<Conversation, ConversationModel>();
+            CreateMap<Conversation, ConversationModel>()
+                .ForMember(dest => dest.Timestamp, opt => opt.MapFrom(src => src.Timestamp.UtcDateTime));
 
         }
     }
