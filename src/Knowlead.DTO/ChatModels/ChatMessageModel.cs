@@ -12,6 +12,6 @@ namespace Knowlead.DTO.ChatModels
         public Guid? SenderId { get; set; }
       
         public string RowKey { get; set; }
-        public DateTimeOffset Timestamp { get; set; }
+        public DateTime Timestamp { get; set; }
     }
 }

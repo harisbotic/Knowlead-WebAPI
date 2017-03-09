@@ -15,7 +15,9 @@ namespace Knowlead.DTO.ChatModels
                 .ForMember(dest => dest.RecipientId, opt => opt.MapFrom(src => src.RecipientId))
                 .ForAllOtherMembers(x => x.Ignore());
 
-            CreateMap<ChatMessage, ChatMessageModel>();
+            CreateMap<ChatMessage, ChatMessageModel>()
+                .ForMember(dest => dest.Timestamp, opt => opt.MapFrom(src => src.Timestamp.UtcDateTime));
+                
             CreateMap<Conversation, ConversationModel>()
                 .ForMember(dest => dest.Timestamp, opt => opt.MapFrom(src => src.Timestamp.UtcDateTime));
 
