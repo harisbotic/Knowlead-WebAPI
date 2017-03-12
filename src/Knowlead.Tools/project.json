@@ -28,7 +28,7 @@
       "target": "project"
     },
     "TypeScriptBuilder": "0.1.10",
-    "Microsoft.EntityFrameworkCore.Design": "1.1.0-*",
+    "Microsoft.EntityFrameworkCore.Design": "1.1.0",
     "AutoMapper": "5.1.1"
   },
   "frameworks": {
@@ -36,7 +36,7 @@
       "dependencies": {
         "Microsoft.NETCore.App": {
           "type": "platform",
-          "version": "1.2.0-*"
+          "version": "1.2.0-beta-001289-00"
         }
       },
       "imports": [

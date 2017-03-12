@@ -16,9 +16,9 @@
     "Knowlead.DTO": {
       "target": "project"
     },
-    "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "1.1.0-*",
-    "Microsoft.AspNetCore.JsonPatch": "1.2.0-*",
-    "Microsoft.AspNetCore.SignalR": "1.0.0-*",
+    "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "1.1.0",
+    "Microsoft.AspNetCore.JsonPatch": "1.1.0",
+    "Microsoft.AspNetCore.SignalR": "1.0.0-preview1-23544",
     "WindowsAzure.Storage": "8.0.0",
     "Hangfire.Core": "1.6.8"
   },

@@ -4,8 +4,8 @@
     "debugType": "portable"
   },
   "dependencies": {
-    "Microsoft.AspNetCore.Mvc.DataAnnotations": "1.2.0-*",
-    "Microsoft.AspNetCore.Identity": "1.2.0-*",
+    "Microsoft.AspNetCore.Mvc.DataAnnotations": "1.2.0-preview1-23514",
+    "Microsoft.AspNetCore.Identity": "1.2.0-preview1-23514",
     "TypeScriptBuilder": "0.1.10"
   },
   "frameworks": {
