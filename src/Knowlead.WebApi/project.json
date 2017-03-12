@@ -16,10 +16,10 @@
     "Knowlead.DTO": {
       "target": "project"
     },
-    "Microsoft.AspNetCore.Mvc": "1.2.0-*",
-    "Microsoft.AspNetCore.Server.IISIntegration": "1.2.0-*",
-    "Microsoft.AspNetCore.Server.Kestrel": "1.2.0-*",
-    "Microsoft.AspNetCore.Server.Kestrel.Https": "1.2.0-*",
+    "Microsoft.AspNetCore.Mvc": "1.2.0-preview1-23514",
+    "Microsoft.AspNetCore.Server.IISIntegration": "1.2.0-preview1-23514",
+    "Microsoft.AspNetCore.Server.Kestrel": "1.2.0-preview1-23514",
+    "Microsoft.AspNetCore.Server.Kestrel.Https": "1.2.0-preview1-23514",
     "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.2.0-*",
     "Microsoft.Extensions.Configuration.FileExtensions": "1.2.0-*",
     "Microsoft.Extensions.Configuration.Json": "1.2.0-*",
@@ -35,7 +35,7 @@
     "Microsoft.AspNetCore.SignalR": "1.0.0-*",
     "Microsoft.AspNetCore.WebSockets": "1.0.0-*",
     "AutoMapper.Extensions.Microsoft.DependencyInjection":"1.1.2",
-    "AspNet.Security.OAuth.Validation": "1.0.0-*",
+    "AspNet.Security.OAuth.Validation": "1.0.0-alpha2-final",
     "OpenIddict": "1.0.0-*",
     "OpenIddict.EntityFrameworkCore": "1.0.0-*",
     "OpenIddict.Mvc": "1.0.0-*",

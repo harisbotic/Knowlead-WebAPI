@@ -88,7 +88,7 @@ namespace Knowlead
 
                 await next.Invoke();
             });
-            app.UseOAuthValidation();
+
             app.UseOpenIddict();
             app.UseJwtBearerAuthentication(new JwtBearerOptions
             {

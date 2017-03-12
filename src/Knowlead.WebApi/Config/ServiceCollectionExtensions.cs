@@ -17,7 +17,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
 using static Knowlead.Common.Constants;
-using AspNet.Security.OpenIdConnect.Primitives;
 
 namespace Knowlead.WebApi.Config
 {
@@ -54,23 +53,11 @@ namespace Knowlead.WebApi.Config
             return services;
         }
 
-        
-
         // Register the OpenIddict services, including the default Entity Framework stores.
         public static IServiceCollection AddCustomOpenIddict(this IServiceCollection services) 
         {
-            // Configure Identity to use the same JWT claims as OpenIddict instead
-            // of the legacy WS-Federation claims it uses by default (ClaimTypes),
-            // which saves you from doing the mapping in your authorization controller.
-            services.Configure<IdentityOptions>(options =>
-            {
-                options.ClaimsIdentity.UserNameClaimType = OpenIdConnectConstants.Claims.Name;
-                options.ClaimsIdentity.UserIdClaimType = OpenIdConnectConstants.Claims.Subject;
-                options.ClaimsIdentity.RoleClaimType = OpenIdConnectConstants.Claims.Role;
-            });
-
-            services.AddOpenIddict<Guid>()
-                .AddEntityFrameworkCoreStores<ApplicationDbContext>()
+        services.AddOpenIddict<Guid>()
+            .AddEntityFrameworkCoreStores<ApplicationDbContext>()
 
             // Register the ASP.NET Core MVC binder used by OpenIddict.
             // Note: if you don't call this method, you won't be able to
@@ -90,7 +77,7 @@ namespace Knowlead.WebApi.Config
             .UseJsonWebTokens()
 
             // During development, you can disable the HTTPS requirement.
-            .DisableHttpsRequirement() //TODO:
+            .DisableHttpsRequirement()
 
             // When request caching is enabled, authorization and logout requests
             // are stored in the distributed cache by OpenIddict and the user agent
