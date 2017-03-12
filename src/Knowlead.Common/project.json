@@ -9,9 +9,9 @@
     "TypeScriptBuilder": "0.1.10"
   },
   "frameworks": {
-    "netstandard1.6": {
+    "netstandard1.6.1": {
       "dependencies": {
-        "NETStandard.Library": "1.6.2-*"
+        "NETStandard.Library": "1.6.1"
       }
     }
   }
