@@ -104,6 +104,8 @@ namespace Knowlead.WebApi.Config
                 config.Password.RequireDigit = false;
                 config.Password.RequireNonAlphanumeric = false;
                 config.Password.RequireLowercase = true;
+                config.Lockout.MaxFailedAccessAttempts = 20;
+                config.Lockout.AllowedForNewUsers = false;
             })
                 .AddEntityFrameworkStores<ApplicationDbContext, Guid>()
                 .AddDefaultTokenProviders()
