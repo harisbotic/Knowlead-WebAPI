@@ -17,6 +17,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
 using static Knowlead.Common.Constants;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.Extensions.Options;
 
 namespace Knowlead.WebApi.Config
 {
@@ -94,6 +97,15 @@ namespace Knowlead.WebApi.Config
             return services;
         }
 
+        //RELATED TO IDENTITY        
+        public class ConfirmEmailDataProtectorTokenProvider<TUser>: DataProtectorTokenProvider<TUser> where TUser:class
+        {
+            public ConfirmEmailDataProtectorTokenProvider(IDataProtectionProvider dataProtectionProvider, IOptions<ConfirmEmailDataProtectionTokenProviderOptions> options) : base(dataProtectionProvider, options)
+            {
+            }
+        }
+        public class ConfirmEmailDataProtectionTokenProviderOptions : DataProtectionTokenProviderOptions { }
+        private const string EmailConfirmationTokenProviderName = "ConfirmEmail";
         public static IServiceCollection AddIdentityFramework(this IServiceCollection services)
         {
             services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(config =>
@@ -109,16 +121,21 @@ namespace Knowlead.WebApi.Config
             })
                 .AddEntityFrameworkStores<ApplicationDbContext, Guid>()
                 .AddDefaultTokenProviders()
+                .AddTokenProvider<ConfirmEmailDataProtectorTokenProvider<ApplicationUser>>(EmailConfirmationTokenProviderName)
                 .AddErrorDescriber<CustomIdentityErrorDescriber>()
                 .AddClaimsPrincipalFactory<AppClaimsPrincipalFactory>();
 
                 services.Configure<IdentityOptions>(options =>
                 {
                     options.Cookies.ApplicationCookie.Events = new CustomCookieAuthenticationEvents();
+                    options.Tokens.EmailConfirmationTokenProvider = EmailConfirmationTokenProviderName;
                     // options.Cookies.ApplicationCookie.AutomaticChallenge = false;
                 });
 
-            // services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, AppClaimsPrincipalFactory>();
+                services.Configure<ConfirmEmailDataProtectionTokenProviderOptions>(options =>
+                {
+                    options.TokenLifespan = TimeSpan.FromDays(60);
+                });
 
             return services;
         }
