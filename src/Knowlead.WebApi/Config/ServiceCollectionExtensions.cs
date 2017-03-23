@@ -193,6 +193,7 @@ namespace Knowlead.WebApi.Config
             services.AddScoped<IRewardRepository, RewardRepository>();
             services.AddScoped<ITransactionRepository, TransactionRepository>();
             services.AddScoped<INotebookRepository, NotebookRepository>();
+            services.AddScoped<UnitOfWork>();
 
             return services;
         }

@@ -60,8 +60,8 @@ namespace Knowlead.Services
             TableOperation operation3 = TableOperation.InsertOrReplace(conversationEntity2); 
             
             await _chatMsgTable.ExecuteAsync(operation);
-            _conversationTable.ExecuteAsync(operation2).ConfigureAwait(true);
-            _conversationTable.ExecuteAsync(operation3).ConfigureAwait(true);
+            _conversationTable.ExecuteAsync(operation2);
+            _conversationTable.ExecuteAsync(operation3);
 
             return chatMessageEntity;
         }
