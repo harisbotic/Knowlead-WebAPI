@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RuntimeFrameworkVersion>2.0.0-*</RuntimeFrameworkVersion>
+    <TargetFramework>netstandard1.6.1</TargetFramework>
+    <DebugType>portable</DebugType>
+    <AssemblyName>Knowlead.DTO</AssemblyName>
+    <PackageId>Knowlead.DTO</PackageId>
+    <PackageTargetFallback>$(PackageTargetFallback);dnxcore50;portable-net451+win8</PackageTargetFallback>
+    <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../Knowlead.Common/Knowlead.Common.csproj" />
+    <ProjectReference Include="../Knowlead.DomainModel/Knowlead.DomainModel.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.DataAnnotations" Version="1.2.0-*" />
+    <PackageReference Include="AutoMapper" Version="5.1.1" />
+  </ItemGroup>
+
+</Project>

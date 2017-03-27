@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RuntimeFrameworkVersion>2.0.0-*</RuntimeFrameworkVersion>
+    <TargetFramework>netstandard1.6.1</TargetFramework>
+    <DebugType>portable</DebugType>
+    <AssemblyName>Knowlead.BLL</AssemblyName>
+    <PackageId>Knowlead.BLL</PackageId>
+    <PackageTargetFallback>$(PackageTargetFallback);dnxcore50;portable-net451+win8</PackageTargetFallback>
+    <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../Knowlead.Common/Knowlead.Common.csproj" />
+    <ProjectReference Include="../Knowlead.DAL/Knowlead.DAL.csproj" />
+    <ProjectReference Include="../Knowlead.DomainModel/Knowlead.DomainModel.csproj" />
+    <ProjectReference Include="../Knowlead.DTO/Knowlead.DTO.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="1.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="1.2.0-*" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.0.0-*" />
+    <PackageReference Include="WindowsAzure.Storage" Version="8.0.0" />
+    <PackageReference Include="Hangfire.Core" Version="1.6.8" />
+  </ItemGroup>
+
+</Project>

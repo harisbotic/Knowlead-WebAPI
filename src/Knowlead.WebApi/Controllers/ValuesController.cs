@@ -25,12 +25,11 @@ namespace Knowlead.Controllers
         [HttpGet("value")]
         public IActionResult ReferralStats()
         {
-            var e = _uow.CourseRepository.Get(x => x.NotebookId == 1);
+            //var e = _uow.CourseRepository.Get(x => x.NotebookId == 1);
             
 
             return Ok(new ResponseModel()
             {
-                Object = e
             });
         }
     }
