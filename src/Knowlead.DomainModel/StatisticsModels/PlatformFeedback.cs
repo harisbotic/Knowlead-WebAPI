@@ -4,7 +4,7 @@ using Knowlead.DomainModel.UserModels;
 
 namespace Knowlead.DomainModel.StatisticsModels
 {
-    public class PlatformFeedback
+    public class PlatformFeedback : EntityBase
     {
         [Key]
         public Guid PlatformFeedbackId { get; set; }

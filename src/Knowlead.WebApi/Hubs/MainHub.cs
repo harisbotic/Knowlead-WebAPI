@@ -174,10 +174,10 @@ namespace Knowlead.WebApi.Hubs
                 ContractResolver = new CamelCasePropertyNamesContractResolver() 
             });
 
-            Clients.User(currentUser.ToString())
+            await Clients.User(currentUser.ToString())
                 .InvokeAsync(WebClientFuncNames.DisplayChatMsg, json);   
 
-            Clients.User(chatMessageModel.RecipientId.ToString())
+            await Clients.User(chatMessageModel.RecipientId.ToString())
                             .InvokeAsync(WebClientFuncNames.DisplayChatMsg, json);
         }
     }

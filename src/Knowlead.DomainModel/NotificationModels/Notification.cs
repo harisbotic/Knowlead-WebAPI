@@ -6,7 +6,7 @@ using Knowlead.DomainModel.UserModels;
 
 namespace Knowlead.DomainModel.NotificationModels
 {
-    public class Notification
+    public class Notification : EntityBase
     {
         [Key]
         public Guid NotificationId { get; set; }
@@ -53,6 +53,7 @@ namespace Knowlead.DomainModel.NotificationModels
         }
 
         public Notification()
-        {   }
+        {
+        }
     }
 }

@@ -2,13 +2,15 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using AutoMapper;
+using Knowlead.Common.Configurations.AppSettings;
 using Knowlead.DomainModel.BlobModels;
 using Knowlead.DomainModel.UserModels;
 using Knowlead.DTO.BlobModels;
 using Knowlead.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Auth;
 using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace Knowlead.Services
@@ -17,17 +19,18 @@ namespace Knowlead.Services
     {
         public const string IMG_CONTAINER_NAME = "images";
         public const string FILE_CONTAINER_NAME = "files";
-        private readonly IConfigurationRoot _config;
-        private CloudStorageAccount _storageAccount;
-        private CloudBlobClient _storageClient;
-        private CloudBlobContainer _imageContainer;
-        private CloudBlobContainer _fileContainer;
 
-        public BlobServices(IConfigurationRoot config)
+        private readonly AppSettings _appSettings;
+        private readonly CloudStorageAccount _storageAccount;
+        private readonly CloudBlobClient _storageClient;
+        private readonly CloudBlobContainer _imageContainer;
+        private readonly CloudBlobContainer _fileContainer;
+
+        public BlobServices(IOptions<AppSettings> appSettings)
         {
-            _config = config;
+            _appSettings = appSettings.Value;
             
-            _storageAccount = new CloudStorageAccount(new Microsoft.WindowsAzure.Storage.Auth.StorageCredentials(_config["AzureStorageAccount:accName"], _config["AzureStorageAccount:key"]), true);
+            _storageAccount = new CloudStorageAccount(new StorageCredentials(_appSettings.AzureStorageAccount.AccountName, _appSettings.AzureStorageAccount.Key), true);
             _storageClient = _storageAccount.CreateCloudBlobClient();
             _imageContainer = _storageClient.GetContainerReference(IMG_CONTAINER_NAME);
             _fileContainer = _storageClient.GetContainerReference(FILE_CONTAINER_NAME);

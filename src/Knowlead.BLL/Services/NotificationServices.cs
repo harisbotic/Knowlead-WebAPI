@@ -9,7 +9,6 @@ using Knowlead.DomainModel.NotificationModels;
 using Knowlead.DTO.NotificationModels;
 using Knowlead.Services.Interfaces;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using static Knowlead.Common.Constants;
@@ -18,13 +17,10 @@ namespace Knowlead.Services
 {
     public class NotificationServices<THub> : INotificationServices where THub : class
     {
-        private readonly IConfigurationRoot _config;
         private readonly IHubContext<THub> _hubContext;
         private readonly INotificationRepository _notificationRepository;
-        public NotificationServices(IConfigurationRoot config, IHubContext<THub> hubContext,
-                                    INotificationRepository notificationRepository)
+        public NotificationServices(IHubContext<THub> hubContext, INotificationRepository notificationRepository)
         {
-            _config = config;
             _hubContext = hubContext;
             _notificationRepository = notificationRepository;
         }

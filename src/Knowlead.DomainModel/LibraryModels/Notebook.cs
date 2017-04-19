@@ -4,7 +4,7 @@ using Knowlead.DomainModel.UserModels;
 
 namespace Knowlead.DomainModel.LibraryModels
 {
-    public class Notebook
+    public class Notebook : EntityBase
     {
         [MyRequired]
         public int NotebookId { get; set; }
@@ -16,8 +16,6 @@ namespace Knowlead.DomainModel.LibraryModels
         [MyRequired]
         public String SecondaryColor { get; set; } = "#007bb6";
         [MyRequired]
-        public DateTime CreatedAt { get; set; }
-        [MyRequired]
         public bool IsDeleted { get; set; } = false;
 
 
@@ -25,9 +23,5 @@ namespace Knowlead.DomainModel.LibraryModels
         public Guid CreatedById { get; set; }
         public ApplicationUser CreatedBy { get; set; }
 
-        public Notebook()
-        {
-            CreatedAt = DateTime.UtcNow;
-        }
     }
 }

@@ -1,21 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
+  <Import Project="..\..\build\common.props" />
+
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <DebugType>portable</DebugType>
-    <PreserveCompilationContext>true</PreserveCompilationContext>
-    <AssemblyName>Knowlead.WebApi</AssemblyName>
-    <OutputType>Exe</OutputType>
-    <PackageId>Knowlead.WebApi</PackageId>
-    <RuntimeFrameworkVersion>2.0.0-*</RuntimeFrameworkVersion>
+    <RuntimeFrameworkVersion>$(RuntimeFrameworkVersion)</RuntimeFrameworkVersion>
     <PackageTargetFallback>$(PackageTargetFallback);dotnet5.6;portable-net45+win8</PackageTargetFallback>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Update="Views;Areas\**\Views">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </None>
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="../Knowlead.BLL/Knowlead.BLL.csproj" />
@@ -25,33 +16,29 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="1.2.0-*" />
-    <PackageReference Include="Microsoft.AspNetCore.Server.IISIntegration" Version="1.2.0-*" />
-    <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version="1.2.0-*" />
-    <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel.Https" Version="1.2.0-*" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="1.2.0-*" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="1.2.0-*" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="1.2.0-*" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="1.2.0-*" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="1.2.0-*" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="1.2.0-*" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="1.2.0-*" />
-    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="1.2.0-*" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="1.1.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="1.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="1.2.0-*" />
-    <PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="1.2.0-*" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.0.0-*" />
-    <PackageReference Include="Microsoft.AspNetCore.WebSockets" Version="1.0.1" />
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="1.1.2" />
-    <PackageReference Include="AspNet.Security.OAuth.Validation" Version="1.0.0-alpha2-final" />
-    <PackageReference Include="OpenIddict" Version="1.0.0-*" />
-    <PackageReference Include="OpenIddict.EntityFrameworkCore" Version="1.0.0-*" />
-    <PackageReference Include="OpenIddict.Mvc" Version="1.0.0-*" />
-    <PackageReference Include="AutoMapper" Version="5.1.1" />
-    <PackageReference Include="Hangfire.AspNetCore" Version="1.6.8" />
-    <PackageReference Include="Hangfire.SqlServer" Version="1.6.8" />
-    <PackageReference Include="Hangfire.PostgreSql" Version="1.4.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="$(AspNetCoreVersion)" />
+    <PackageReference Include="Microsoft.AspNetCore.Server.IISIntegration" Version="$(AspNetCoreVersion)" />
+    <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version="$(AspNetCoreVersion)" />
+    <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel.Https" Version="$(AspNetCoreVersion)" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="$(AspNetCoreVersion)" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="$(AspNetCoreVersion)" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="$(AspNetCoreVersion)" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="$(AspNetCoreVersion)" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="$(AspNetCoreVersion)" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="$(AspNetCoreVersion)" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="$(AspNetCoreVersion)" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="$(AspNetCoreVersion)" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="$(AspNetCoreVersion)" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="$(AspNetCoreVersion)" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="$(AspNetCoreVersion)" />
+    <PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="$(AspNetCoreVersion)" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="$(SignalRVersion)" />
+    <PackageReference Include="Microsoft.AspNetCore.WebSockets" Version="$(WebSocketsVersion)" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="$(AutoMapperDIVersion)" />
+    <PackageReference Include="AutoMapper" Version="$(AutoMapperVersion)" />
+    <PackageReference Include="Hangfire.AspNetCore" Version="$(HangfireVersion)" />
+    <PackageReference Include="Hangfire.SqlServer" Version="$(HangfireVersion)" />
+    <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="1.1.0" />
   </ItemGroup>
 
   <ItemGroup>

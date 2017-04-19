@@ -10,39 +10,35 @@ using System.Linq;
 using Knowlead.WebApi.Hubs;
 using Hangfire;
 using Knowlead.DAL;
+using Microsoft.Extensions.Options;
+using Knowlead.Common.Configurations.AppSettings;
+using System.IO;
 
 namespace Knowlead
 {
     public class Startup
     {
-        private IConfigurationRoot _config;
-        public static string _configPath = "./Config/Appsettings";
-        public static IConfigurationRoot GetConfiguration(IHostingEnvironment env)
-        {
-
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(System.IO.Directory.GetCurrentDirectory())
-                .AddJsonFile($"{_configPath}/appsettings.json", optional: false, reloadOnChange: true)
-                .AddEnvironmentVariables();
-            if (env != null)
-            {
-                builder
-                    .SetBasePath(env.ContentRootPath)
-                    .AddJsonFile($"{_configPath}/appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
-            }
-
-            return builder.Build();
-        }
+        private readonly IConfigurationRoot _config;
+        private readonly AppSettings _appSettings; 
+        public const string _configPath = AppSettings.Path;
 
         public Startup(IHostingEnvironment env)
         {
-            _config = GetConfiguration(env);
+            _config = new ConfigurationBuilder()
+                .SetBasePath(Path.GetFullPath(Path.Combine(env.ContentRootPath, @"../")))
+                .AddJsonFile($"{_configPath}/appsettings.json", optional: false, reloadOnChange: false)
+                .AddJsonFile($"{_configPath}/appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: false)
+                .AddEnvironmentVariables()
+                .Build();
+
+            _appSettings = new AppSettings();
+            _config.GetSection("AppSettings").Bind(_appSettings);
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton(_config);
+            services.Configure<AppSettings>(_config.GetSection("AppSettings"));
             services.AddScoped<Auth>();
 
             services.AddCrossOrigin();
@@ -53,15 +49,14 @@ namespace Knowlead
             services.AddCustomPolicies();
             services.AddCustomSignalR();
             services.AddDbContext();
-            services.AddHangfire(_config);
+            services.AddHangfire(_appSettings);
             services.AddIdentityFramework();
-            services.AddCustomOpenIddict();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
+        public void Configure(IOptions<AppSettings> appOptions, IApplicationBuilder app, ILoggerFactory loggerFactory)
         {
-            var azureDataStore = new AzureDataStore(_config); 
+            var azureDataStore = new AzureDataStore(appOptions); 
             azureDataStore.Init(); //Initializes azure storages (Table and Blobs)
 
             loggerFactory.AddConsole(_config.GetSection("Logging"));
@@ -85,18 +80,16 @@ namespace Knowlead
                         }
                     }
                 }
-
                 await next.Invoke();
             });
 
-            app.UseOpenIddict();
-            app.UseJwtBearerAuthentication(new JwtBearerOptions
+            app.UseIdentityServerAuthentication(new IdentityServerAuthenticationOptions
             {
+                Authority = _appSettings.BaseUrls.Auth,
+                RequireHttpsMetadata = false,
+                
                 AutomaticAuthenticate = true,
                 AutomaticChallenge = true,
-                RequireHttpsMetadata = false,
-                Audience = "https://knowlead.co:8080",
-                Authority = "https://knowlead.co:8080"
             });
 
             app.UseWebSockets();

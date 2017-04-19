@@ -5,7 +5,7 @@ using Knowlead.DTO.LookupModels.Core;
 
 namespace Knowlead.DTO.FeedbackModels
 {
-    public class _FeedbackModel
+    public class _FeedbackModel : EntityBaseModel
     {
         public int FeedbackId { get; set; }
 

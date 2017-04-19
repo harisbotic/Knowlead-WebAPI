@@ -5,16 +5,15 @@ using Knowlead.DomainModel.BlobModels;
 
 namespace Knowlead.DomainModel.UserModels
 {
-    public class UserCertificate
+    public class UserCertificate : EntityBase
     {
         [Key]
         public int UserCertificateId { get; set; }
+        
         [MyRequired]
         public string Name { get; set; }
         public string Desc { get; set; }
 
-        [MyRequired]
-        public DateTime CreatedAt { get; set; }
 
         [MyRequired]
         public Guid ApplicationUserId { get; set; }
@@ -22,10 +21,5 @@ namespace Knowlead.DomainModel.UserModels
 
         public int ImageBlobId { get; set; }
         public ImageBlob ImageBlob { get; set; }
-
-        public UserCertificate()
-        {
-            CreatedAt = DateTime.UtcNow;
-        }
     }
 }

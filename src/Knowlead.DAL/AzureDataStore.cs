@@ -1,4 +1,5 @@
-using Microsoft.Extensions.Configuration;
+using Knowlead.Common.Configurations.AppSettings;
+using Microsoft.Extensions.Options;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Auth;
 using Microsoft.WindowsAzure.Storage.Blob;
@@ -11,7 +12,7 @@ namespace Knowlead.DAL
         public const string IMG_CONTAINER_NAME = "images";
         public const string FILE_CONTAINER_NAME = "files";
         
-        private readonly IConfigurationRoot _config;
+        private readonly AppSettings _appSettings;
         private readonly CloudStorageAccount _storageAccount;
 
         //NOSQL - Tables
@@ -24,10 +25,10 @@ namespace Knowlead.DAL
         private CloudBlobContainer _imageContainer;
         private CloudBlobContainer _fileContainer;
 
-        public AzureDataStore(IConfigurationRoot config)
+        public AzureDataStore(IOptions<AppSettings> appSettings)
         {
-            _config = config;
-            _storageAccount = new CloudStorageAccount(new StorageCredentials(_config["AzureStorageAccount:accName"], _config["AzureStorageAccount:key"]), true); //TODO: Change to true for https
+            _appSettings = appSettings.Value;
+            _storageAccount = new CloudStorageAccount(new StorageCredentials(_appSettings.AzureStorageAccount.AccountName, _appSettings.AzureStorageAccount.Key), true); //TODO: Change to true for https
 
             _tableClient = _storageAccount.CreateCloudTableClient();
             _chatMsgTable = _tableClient.GetTableReference("chatMessages");

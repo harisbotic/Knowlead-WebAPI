@@ -2,11 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Knowlead.BLL.Repositories.Interfaces;
+using Knowlead.Common.Configurations.AppSettings;
 using Knowlead.Common.Exceptions;
 using Knowlead.DomainModel.ChatModels;
 using Knowlead.DTO.ChatModels;
 using Knowlead.Services.Interfaces;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Auth;
 using Microsoft.WindowsAzure.Storage.Table;
@@ -18,19 +19,19 @@ namespace Knowlead.Services
 {
     public class ChatServices : IChatServices
     {
-        private readonly IConfigurationRoot _config;
+        private readonly AppSettings _appSettings;
         private readonly IFriendshipRepository _friendshipRepository;
         private readonly CloudTable _chatMsgTable;
         private readonly CloudTable _conversationTable;
         private readonly CloudStorageAccount _storageAccount;
         private readonly CloudTableClient _tableClient;
 
-        public ChatServices(IConfigurationRoot config, IFriendshipRepository friendshipRepository)
+        public ChatServices(IOptions<AppSettings> appSettings, IFriendshipRepository friendshipRepository)
         {
-            _config = config;
+            _appSettings = appSettings.Value;
             _friendshipRepository = friendshipRepository;
 
-            _storageAccount = new CloudStorageAccount(new StorageCredentials(_config["AzureStorageAccount:accName"], _config["AzureStorageAccount:key"]), true); //TODO: Change to true for https
+            _storageAccount = new CloudStorageAccount(new StorageCredentials(_appSettings.AzureStorageAccount.AccountName, _appSettings.AzureStorageAccount.Key), true); //TODO: Change to true for https
             _tableClient = _storageAccount.CreateCloudTableClient();
 
             _chatMsgTable = _tableClient.GetTableReference("chatMessages");
@@ -60,8 +61,8 @@ namespace Knowlead.Services
             TableOperation operation3 = TableOperation.InsertOrReplace(conversationEntity2); 
             
             await _chatMsgTable.ExecuteAsync(operation);
-            _conversationTable.ExecuteAsync(operation2);
-            _conversationTable.ExecuteAsync(operation3);
+            await _conversationTable.ExecuteAsync(operation2);
+            await _conversationTable.ExecuteAsync(operation3);
 
             return chatMessageEntity;
         }

@@ -1,25 +1,24 @@
-using System.Threading.Tasks;
+using Knowlead.Common.Configurations.AppSettings;
 using Knowlead.Common.HttpRequestItems;
 using Knowlead.DAL;
 using Knowlead.DTO.ResponseModels;
-using Knowlead.Services.Interfaces;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using static Knowlead.Common.Constants;
+using Microsoft.Extensions.Options;
 
 namespace Knowlead.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize(Policy = Policies.RegisteredUser)]
     public class ValuesController : Controller
     {
         private readonly UnitOfWork _uow;
         private readonly Auth _auth;
+        private readonly AppSettings _appSettings;
 
-        public ValuesController(UnitOfWork uow, Auth auth)
+        public ValuesController(UnitOfWork uow, Auth auth, IOptions<AppSettings> appSettings)
         {
             _uow = uow;
             _auth = auth;
+            _appSettings = appSettings.Value;
         }
         
         [HttpGet("value")]

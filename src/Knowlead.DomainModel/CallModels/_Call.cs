@@ -5,7 +5,7 @@ using Knowlead.DomainModel.UserModels;
 
 namespace Knowlead.DomainModel.CallModels
 {
-    public class _Call
+    public class _Call : EntityBase
     {
         [Key]
         public Guid CallId { get; set; }

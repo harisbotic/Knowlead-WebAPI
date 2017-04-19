@@ -5,7 +5,7 @@ using static Knowlead.Common.Constants.EnumStatuses;
 
 namespace Knowlead.DTO.CallModels
 {
-    public class _CallModel
+    public class _CallModel : EntityBaseModel
     {
         [MyRequired]
         public Guid CallId { get; set; }

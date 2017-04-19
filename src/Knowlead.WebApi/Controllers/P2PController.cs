@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Knowlead.Common.HttpRequestItems;
 using Knowlead.DTO.P2PModels;
 using Knowlead.BLL.Repositories.Interfaces;
-using Knowlead.DomainModel.P2PModels;
 using Microsoft.AspNetCore.Authorization;
 using static Knowlead.Common.Constants;
 using static Knowlead.Common.Constants.EnumActions;

@@ -4,13 +4,10 @@ using Knowlead.DTO.LookupModels.Core;
 
 namespace Knowlead.DTO.UserModels
 {
-    public class UserAchievementModel
+    public class UserAchievementModel : EntityBaseModel
     {
         [MyRequired]
         public int UserAchievementId { get; set; }
-
-        [MyRequired]
-        public DateTime CreatedAt { get; set; }
 
         [MyRequired]
         public Guid ApplicationUserId { get; set; }
@@ -20,10 +17,5 @@ namespace Knowlead.DTO.UserModels
         public int AchievementId { get; set; }
 
         public AchievementModel Achievement { get; set; }
-
-        public UserAchievementModel()
-        {
-            CreatedAt = DateTime.UtcNow;
-        }
     }
 }

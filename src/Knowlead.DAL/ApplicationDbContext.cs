@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Knowlead.DomainModel.UserModels;
 using Knowlead.DomainModel.LookupModels.Core;
 using Knowlead.DomainModel.LookupModels.Geo;
@@ -12,22 +11,22 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Knowlead.DomainModel.CallModels;
 using System.Linq;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Npgsql.EntityFrameworkCore.PostgreSQL;
-using Microsoft.Extensions.DependencyInjection;
 using Knowlead.DomainModel.ChatModels;
 using Knowlead.DomainModel.NotificationModels;
 using Knowlead.DomainModel.StatisticsModels;
 using Knowlead.DomainModel.TransactionModels;
 using Knowlead.DomainModel.LibraryModels;
+using Microsoft.Extensions.Options;
+using Knowlead.Common.Configurations.AppSettings;
 
 namespace Knowlead.DAL
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
     {
-        private IConfigurationRoot _config;
-        public ApplicationDbContext(IConfigurationRoot config, DbContextOptions options) : base(options)
+        private readonly AppSettings _appSettings;
+        public ApplicationDbContext(IOptions<AppSettings> appSettings, DbContextOptions options) : base(options)
         {
-            _config = config;
+             _appSettings = appSettings.Value;
         }
 
         #region Lookup Models
@@ -97,17 +96,13 @@ namespace Knowlead.DAL
         {
             base.OnConfiguring(optionsBuilder);
 
-            optionsBuilder.UseNpgsql(_config["ConnectionStrings:LocalPostgreSQL"],
-                                            b => b.MigrationsAssembly("Knowlead.WebApi"));
+            optionsBuilder.UseSqlServer(_appSettings.ConnectionStrings.KnowleadSQL,
+                                            b => b.MigrationsAssembly("Knowlead.DAL"));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.UseOpenIddict<Guid>();
-
             base.OnModelCreating(modelBuilder);
-
-            modelBuilder.HasPostgresExtension("uuid-ossp");
 
             /* GeoLookups */
             modelBuilder.Entity<Country>().ToTable("Countries");
@@ -139,6 +134,11 @@ namespace Knowlead.DAL
                 .HasValue<QuestionFeedback>("Question");
 
             /* Application User */
+            modelBuilder.Entity<ApplicationUser>()
+                .HasOne(s => s.ProfilePicture)
+                .WithMany()
+                .HasForeignKey(e => e.ProfilePictureId);
+
             modelBuilder.Entity<ApplicationUserInterest>()
                 .HasKey(t => new { t.ApplicationUserId, t.FosId });
 

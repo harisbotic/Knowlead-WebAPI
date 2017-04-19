@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using Knowlead.Common.DataAnnotations;
-using Knowlead.DomainModel.P2PModels;
 using Knowlead.DTO.BlobModels;
 using Knowlead.DTO.LookupModels.Core;
 using Knowlead.DTO.UserModels;
@@ -10,7 +9,7 @@ using static Knowlead.Common.Constants.EnumStatuses;
 
 namespace Knowlead.DTO.P2PModels
 {
-    public class P2PModel
+    public class P2PModel : EntityBaseModel
     {        
         [MyRequired]
         public int P2pId { get; set; }     
@@ -26,7 +25,7 @@ namespace Knowlead.DTO.P2PModels
         public int? PriceAgreed { get; set; }
         public DateTime? DateTimeAgreed { get; set; }
 
-        public DateTime DateCreated { get; set; }
+        public DateTime DateCreated { get; set; } //TODO:
 
         public int BookmarkCount { get; set; }
         public int OfferCount { get; set; }

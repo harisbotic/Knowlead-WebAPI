@@ -25,10 +25,6 @@ namespace Knowlead.Tools
             {
                 return new Seeder<Country>(context, config, verbose);
             }
-            else if (type == typeof(OpenIddict.Models.OpenIddictApplication<Guid>))
-            {
-                return new Seeder<OpenIddict.Models.OpenIddictApplication<Guid>>(context, config, verbose);
-            }
             else if (type == typeof(Language))
             {
                 return new Seeder<Language>(context, config, verbose);
@@ -51,7 +47,6 @@ namespace Knowlead.Tools
         public static Dictionary<string, Type> models = new Dictionary<string, Type>()
         {
             {"State", typeof(State)},
-            {"OpenIddictApplication", typeof(OpenIddict.Models.OpenIddictApplication<Guid>)},
             {"Language", typeof(Language)},
             {"FOS", typeof(FOS)},
             {"Reward", typeof(Reward)},
@@ -155,7 +150,7 @@ namespace Knowlead.Tools
             if (verbose)
                 Console.WriteLine("Debug: Using class: '" + entityType.Name + "'");
             if (context == null)
-                context = ScriptUtils.InitializeContext();
+                context = ScriptUtils.InitializeContext(args);
             
             /** Seeding roles and roleclaims **/
             if(verbose)

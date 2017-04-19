@@ -5,7 +5,7 @@ using Knowlead.DomainModel.UserModels;
 
 namespace Knowlead.DomainModel.BlobModels
 {
-    public class _Blob
+    public class _Blob : EntityBase
     {
         [Key]
         public Guid BlobId { get; set; }

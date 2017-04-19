@@ -4,7 +4,7 @@ using Knowlead.DTO.UserModels;
 
 namespace Knowlead.DTO.BlobModels
 {
-    public class _BlobModel
+    public class _BlobModel : EntityBaseModel
     {
         [MyRequired]
         public Guid BlobId { get; set; }
@@ -18,8 +18,7 @@ namespace Knowlead.DTO.BlobModels
         public ApplicationUserModel UploadedBy { get; set; }
 
         public _BlobModel()
-        {
-            
+        {   
         }
     }
 }

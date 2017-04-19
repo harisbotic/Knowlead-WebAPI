@@ -4,7 +4,7 @@ using Knowlead.DomainModel.UserModels;
 
 namespace Knowlead.DomainModel.P2PModels
 {
-    public class P2PBookmark
+    public class P2PBookmark : EntityBase
     {
         [MyRequired]
         public int P2pId { get; set; }
@@ -13,6 +13,5 @@ namespace Knowlead.DomainModel.P2PModels
         [MyRequired]
         public Guid ApplicationUserId { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
-      
     }
 }

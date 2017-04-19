@@ -5,7 +5,7 @@ using Knowlead.DomainModel.LookupModels.Core;
 
 namespace Knowlead.DomainModel.UserModels
 {
-    public class ApplicationUserInterest
+    public class ApplicationUserInterest : EntityBase
     {
         [MyRequired]
         public Guid ApplicationUserId { get; set; }

@@ -24,9 +24,15 @@
         "generate-dto.bat": true,
         "migrate.bat": true,
         "desktop.ini": true,
+        "version.props": true,
 
         //Git things
-        ".gitignore": true
+        ".gitignore": true,
+
+        //Visual Studio things
+        "**/*.sln": true,
+        "**/*.userprefs": true,
+        "**/*.csproj.user": true
         
     }
 }

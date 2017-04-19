@@ -1,12 +1,14 @@
 using System;
 using System.IO;
+using System.Linq;
+using Knowlead.Common.Configurations.AppSettings;
 using Knowlead.DAL;
-using Knowlead;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 public class EFLoggerProvider : ILoggerProvider
 {
@@ -37,15 +39,44 @@ public class EFLoggerProvider : ILoggerProvider
 }
 public static class ScriptUtils
 {
-    public static ApplicationDbContext InitializeContext(bool debug = false)
+    public static ApplicationDbContext InitializeContext(string[] args, bool debug = false)
     {
         Console.Write("Debug: Initializing ApplicationDbContext ... ");
         Console.Out.Flush();
 
-        DbContextOptions options = new DbContextOptionsBuilder().Options;
-        Startup._configPath = Directory.GetCurrentDirectory() + "/../Knowlead.WebApi/" + Startup._configPath;
-        IConfigurationRoot root = Startup.GetConfiguration(null);
-        ApplicationDbContext ret = new ApplicationDbContext(root, options);
+        DbContextOptions dbOptions = new DbContextOptionsBuilder().Options;
+
+        var env = args.Where(x => x.StartsWith("--env-")).FirstOrDefault();
+        string envAppSettings;
+
+        switch(env)
+        {
+            case "--env-production":
+                envAppSettings = "Production";
+            break;
+            
+            case "--env-development":
+                envAppSettings = "Development";
+            break;
+
+            default:
+                envAppSettings = "Development";
+            break;
+        }
+
+        var _configPath = Directory.GetCurrentDirectory() + "/../" + AppSettings.Path;
+
+        IConfigurationRoot root = new ConfigurationBuilder()
+                .AddJsonFile($"{_configPath}/appsettings.json", optional: false, reloadOnChange: false)
+                .AddJsonFile($"{_configPath}/appsettings.{envAppSettings}.json", optional: false, reloadOnChange: false)
+                .Build();
+
+        var appSettings = new AppSettings();
+        root.GetSection("AppSettings").Bind(appSettings);
+
+        var IOptions = new OptionsWrapper<AppSettings>(appSettings);
+        
+        ApplicationDbContext ret = new ApplicationDbContext(IOptions, dbOptions);
         if (debug)
         {
             var serviceProvider = ret.GetInfrastructure<IServiceProvider>();

@@ -1,6 +1,4 @@
 using System;
-using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Knowlead.BLL.Repositories.Interfaces;
 using Knowlead.Common.Exceptions;
@@ -48,10 +46,7 @@ namespace Knowlead.Common.HttpRequestItems
             if (!_accessor.HttpContext.User.Identity.IsAuthenticated)
                 throw new ErrorModelException(ErrorCodes.NotLoggedIn);
 
-            var userId = _accessor.HttpContext.User.Claims
-                                                    .Where(c => c.Type == ClaimTypes.NameIdentifier)
-                                                        .Select(c => c.Value).FirstOrDefault();
-            return Guid.Parse(userId);
+            return _accessor.HttpContext.User.Claims.GetUserIdFromClaims();
 
         }
     }

@@ -1,18 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\..\build\common.props" />
+  
   <PropertyGroup>
-    <RuntimeFrameworkVersion>2.0.0-*</RuntimeFrameworkVersion>
+    <RuntimeFrameworkVersion>$(RuntimeFrameworkVersion)</RuntimeFrameworkVersion>
     <TargetFramework>netstandard1.6.1</TargetFramework>
-    <DebugType>portable</DebugType>
-    <AssemblyName>Knowlead.Common</AssemblyName>
-    <PackageId>Knowlead.Common</PackageId>
     <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.DataAnnotations" Version="1.2.0-*" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="1.2.0-*" />
-    <PackageReference Include="TypeScriptBuilder" Version="0.1.10" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.DataAnnotations" Version="$(AspNetCoreVersion)" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="$(AspNetCoreVersion)" />
+    <PackageReference Include="TypeScriptBuilder" Version="$(TypeScriptBuilderVersion)" />
+    <PackageReference Include="IdentityModel" Version="2.7.0" />
   </ItemGroup>
 
 </Project>

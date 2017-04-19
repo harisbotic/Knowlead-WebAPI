@@ -11,15 +11,14 @@ using Newtonsoft.Json.Serialization;
 using Knowlead.Services.Interfaces;
 using Knowlead.BLL.Repositories.Interfaces;
 using Knowlead.WebApi.Hubs;
-using Hangfire.PostgreSql;
 using Hangfire;
-using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
 using static Knowlead.Common.Constants;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Options;
+using Knowlead.Common.Configurations.AppSettings;
 
 namespace Knowlead.WebApi.Config
 {
@@ -56,47 +55,6 @@ namespace Knowlead.WebApi.Config
             return services;
         }
 
-        // Register the OpenIddict services, including the default Entity Framework stores.
-        public static IServiceCollection AddCustomOpenIddict(this IServiceCollection services) 
-        {
-        services.AddOpenIddict<Guid>()
-            .AddEntityFrameworkCoreStores<ApplicationDbContext>()
-
-            // Register the ASP.NET Core MVC binder used by OpenIddict.
-            // Note: if you don't call this method, you won't be able to
-            // bind OpenIdConnectRequest or OpenIdConnectResponse parameters.
-            .AddMvcBinders()
-
-            // Enable the authorization, logout, token and userinfo endpoints.
-            .EnableAuthorizationEndpoint("/connect/authorize")
-            .EnableLogoutEndpoint("/connect/logout")
-            .EnableTokenEndpoint("/connect/token")
-            .EnableUserinfoEndpoint("/connect/userinfo")
-
-            // Allow client applications to use the code flow.
-            // .AllowAuthorizationCodeFlow()
-            .AllowPasswordFlow()
-            .AllowRefreshTokenFlow()
-            .UseJsonWebTokens()
-
-            // During development, you can disable the HTTPS requirement.
-            .DisableHttpsRequirement()
-
-            // When request caching is enabled, authorization and logout requests
-            // are stored in the distributed cache by OpenIddict and the user agent
-            // is redirected to the same page with a single parameter (request_id).
-            // This allows flowing large OpenID Connect requests even when using
-            // an external authentication provider like Google, Facebook or Twitter.
-            .EnableRequestCaching()
-
-            // Register a new ephemeral key, that is discarded when the application
-            // shuts down. Tokens signed using this key are automatically invalidated.
-            // This method should only be used during development.
-            .AddEphemeralSigningKey();
-
-            return services;
-        }
-
         //RELATED TO IDENTITY        
         public class ConfirmEmailDataProtectorTokenProvider<TUser>: DataProtectorTokenProvider<TUser> where TUser:class
         {
@@ -119,17 +77,15 @@ namespace Knowlead.WebApi.Config
                 config.Lockout.MaxFailedAccessAttempts = 20;
                 config.Lockout.AllowedForNewUsers = false;
             })
-                .AddEntityFrameworkStores<ApplicationDbContext, Guid>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders()
                 .AddTokenProvider<ConfirmEmailDataProtectorTokenProvider<ApplicationUser>>(EmailConfirmationTokenProviderName)
-                .AddErrorDescriber<CustomIdentityErrorDescriber>()
-                .AddClaimsPrincipalFactory<AppClaimsPrincipalFactory>();
+                .AddErrorDescriber<CustomIdentityErrorDescriber>();
 
                 services.Configure<IdentityOptions>(options =>
                 {
                     options.Cookies.ApplicationCookie.Events = new CustomCookieAuthenticationEvents();
                     options.Tokens.EmailConfirmationTokenProvider = EmailConfirmationTokenProviderName;
-                    // options.Cookies.ApplicationCookie.AutomaticChallenge = false;
                 });
 
                 services.Configure<ConfirmEmailDataProtectionTokenProviderOptions>(options =>
@@ -149,16 +105,15 @@ namespace Knowlead.WebApi.Config
 
         public static IServiceCollection AddDbContext(this IServiceCollection services) 
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseOpenIddict<Guid>());
+            services.AddDbContext<ApplicationDbContext>();
 
             return services;
         }
 
-        public static IServiceCollection AddHangfire(this IServiceCollection services, IConfigurationRoot config) 
+        public static IServiceCollection AddHangfire(this IServiceCollection services, AppSettings appSettings) 
         {
               services.AddHangfire(options =>
-                options.UsePostgreSqlStorage(config["ConnectionStrings:LocalPostgreSQL"]));
+                    options.UseSqlServerStorage(appSettings.ConnectionStrings.KnowleadSQL));
 
             return services;
         }

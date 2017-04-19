@@ -4,7 +4,7 @@ using Knowlead.DTO.UserModels;
 
 namespace Knowlead.DTO.P2PModels
 {
-    public class P2PBookmarkModel
+    public class P2PBookmarkModel : EntityBaseModel
     {
         [MyRequired]
         public int P2pId { get; set; }

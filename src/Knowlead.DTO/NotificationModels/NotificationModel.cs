@@ -1,13 +1,12 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using Knowlead.Common.DataAnnotations;
-using Knowlead.DomainModel.P2PModels;
 using Knowlead.DTO.P2PModels;
 using Knowlead.DTO.UserModels;
 
 namespace Knowlead.DTO.NotificationModels
 {
-    public class NotificationModel
+    public class NotificationModel : EntityBaseModel
     {
         [Key]
         public Guid NotificationId { get; set; }
@@ -29,6 +28,7 @@ namespace Knowlead.DTO.NotificationModels
         public DateTime? SeenAt { get; set; }
 
         public NotificationModel()
-        {   }
+        {
+        }
     }
 }

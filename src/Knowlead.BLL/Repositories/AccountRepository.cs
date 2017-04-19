@@ -6,7 +6,6 @@ using Knowlead.DTO.UserModels;
 using Knowlead.Services;
 using Microsoft.AspNetCore.Identity;
 using System.Net;
-using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.JsonPatch;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -19,27 +18,29 @@ using Microsoft.EntityFrameworkCore;
 using Knowlead.Common.Exceptions;
 using static Knowlead.Common.Constants.EnumStatuses;
 using Knowlead.Services.Interfaces;
+using Microsoft.Extensions.Options;
+using Knowlead.Common.Configurations.AppSettings;
 
 namespace Knowlead.BLL.Repositories
 {
     public class AccountRepository : IAccountRepository
     {
-        private ApplicationDbContext _context;
-        private UserManager<ApplicationUser> _userManager;
-        private MessageServices _messageServices;
-        private IConfigurationRoot _config;
-        private ITransactionServices _transactionServices;
+        private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly MessageServices _messageServices;
+        private readonly AppSettings _appSettings;
+        private readonly ITransactionServices _transactionServices;
 
         public AccountRepository(ApplicationDbContext context,
                 UserManager<ApplicationUser> userManager,
                 MessageServices messageServices,
-                IConfigurationRoot config,
+                IOptions<AppSettings> appSettings,
                 ITransactionServices transactionServices)
         {
             _context = context;
             _userManager = userManager;
             _messageServices = messageServices;
-            _config = config;
+            _appSettings = appSettings.Value;
             _transactionServices = transactionServices;
         }
 
@@ -56,7 +57,7 @@ namespace Knowlead.BLL.Repositories
                 string token = await _userManager.GenerateEmailConfirmationTokenAsync(applicationUser);
                 string encodedEmail = WebUtility.UrlEncode(applicationUser.Email);
                 string encodedToken = WebUtility.UrlEncode(token);
-                string url = $"{_config["Urls:client"]}/confirmemail?email={encodedEmail}&code={encodedToken}";
+                string url = $"{_appSettings.BaseUrls.WebClient}/confirmemail?email={encodedEmail}&code={encodedToken}";
                 var test = @"<div style=""float: left; min-height: 1px; width: 100%;""> <div style=""float: left; min-height: 1px; width: 100%;""> <div style=""width: 500px; border: 2px solid #e1e2e5; margin: 30px auto; padding: 20px; background-color: #fff;""> <div style=""text-align: center; font-size: 16px;"">Click the button to join the educational revolution.</div><a href=" + '"'+url+'"'+
                 @"> <div style=""width: 100%; height: 50px; line-height: 50px; text-align: center; background-color: #007bb6; color: #fff; font-size: 16px; font-weight: bold; border-radius: 5px; margin: 10px 0"">Confirm Account</div></a> <div style=""text-align: center; font-weight: bold;"">""First Social Network For Learning""</div></div><div> <div style=""text-align: center; color: #888da8;"">Button not working? Copy this link into your browser:</div><a href=" + '"'+url+'"' + "> " + url +  @" <div style=""text-align: center; margin-bottom: 15px;""> "" </div></a> <div style=""text-align: center; color: #888da8; margin-bottom: 15px;"">Copyright (c) 2017 Knowlead | All Rights Reserved.</div></div></div></div>";
 
@@ -91,7 +92,7 @@ namespace Knowlead.BLL.Repositories
             string token = await _userManager.GeneratePasswordResetTokenAsync(applicationUser);
             string encodedEmail = WebUtility.UrlEncode(applicationUser.Email);
             string encodedToken = WebUtility.UrlEncode(token);
-            string url = $"{_config["Urls:client"]}/resetpassword?email={encodedEmail}&token={encodedToken}";
+            string url = $"{_appSettings.BaseUrls.WebClient}/resetpassword?email={encodedEmail}&token={encodedToken}";
             var emailText = $"Go to this link to reset your password {url}";
 
             // message service probably needs try and catch but this is temp solution anyways

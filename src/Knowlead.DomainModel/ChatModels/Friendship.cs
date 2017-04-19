@@ -6,7 +6,7 @@ using static Knowlead.Common.Constants.EnumStatuses;
 
 namespace Knowlead.DomainModel.ChatModels
 {
-    public class Friendship
+    public class Friendship : EntityBase
     {
         [MyRequired]
         public Guid ApplicationUserBiggerId { get; set; }
@@ -24,7 +24,6 @@ namespace Knowlead.DomainModel.ChatModels
         public ApplicationUser LastActionBy { get; set; }
 
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         public Friendship(Guid currentUserId, Guid otherUserId, FriendshipStatus Status)
         {

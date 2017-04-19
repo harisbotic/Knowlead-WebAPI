@@ -5,7 +5,7 @@ using Knowlead.DomainModel.UserModels;
 
 namespace Knowlead.DomainModel.TransactionModels
 {
-    public class AccountTransaction
+    public class AccountTransaction : EntityBase
     {
         [Key]
         public Guid AccountTransactionId { get; set; }
@@ -24,7 +24,7 @@ namespace Knowlead.DomainModel.TransactionModels
         public String Reason { get; set; }
 
         [MyRequired]
-        public DateTime Timestamp { get; set; } = DateTime.UtcNow;
+        public DateTime Timestamp { get; set; } = DateTime.UtcNow; //TODO: Use inherited
 
         [MyRequired]
         public Guid ApplicationUserId { get; set; }

@@ -10,7 +10,7 @@ using static Knowlead.Common.Constants.EnumStatuses;
 namespace Knowlead.DomainModel.P2PModels
 {
     [Table("P2Ps")]
-    public class P2P
+    public class P2P : EntityBase
     {
         [Key]
         public int P2pId { get; set; }
@@ -30,14 +30,14 @@ namespace Knowlead.DomainModel.P2PModels
         public int OfferCount { get; set; }
 
         [NotMapped]
-        public bool DidBookmark { get; set; } = false;        
+        public bool DidBookmark { get; set; } = false;
         [NotMapped]
         public bool CanBookmark { get; set; } = false;
 
         public bool IsDeleted { get; set; }
 
         [MyRequired]
-        public DateTime DateCreated { get; set; }
+        public DateTime DateCreated { get; set; } //TODO: Switch to inherited one
 
         public Guid? ScheduledWithId { get; set; }
         [ForeignKey("ScheduledWithId")]

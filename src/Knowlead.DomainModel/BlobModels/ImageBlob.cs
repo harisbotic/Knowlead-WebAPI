@@ -7,7 +7,6 @@ namespace Knowlead.DomainModel.BlobModels
 
         public ImageBlob() : base("Image")
         {
-            
         }
     }
 }

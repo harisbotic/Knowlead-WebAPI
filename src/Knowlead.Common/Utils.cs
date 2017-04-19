@@ -1,9 +1,16 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using IdentityModel;
 
 namespace Knowlead.Common
 {
     public static class Utils
     {
+        public static Guid GetUserIdFromClaims(this IEnumerable<Claim> claims)     
+            => new Guid(claims.Where(c => c.Type == JwtClaimTypes.Subject).FirstOrDefault().Value);
+    
         public static int LimitToRange(this int @value, int min, int max)
         {
             if (@value < min) { return min; }

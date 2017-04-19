@@ -4,7 +4,6 @@ namespace Knowlead.DomainModel.BlobModels
     {
         public FileBlob() : base("File")
         {
-            
         }
     }
 }

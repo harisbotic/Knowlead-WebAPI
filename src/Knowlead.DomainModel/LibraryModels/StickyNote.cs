@@ -4,7 +4,7 @@ using Knowlead.DomainModel.UserModels;
 
 namespace Knowlead.DomainModel.LibraryModels
 {
-    public class StickyNote
+    public class StickyNote : EntityBase
     {
         [MyRequired]
         public int StickyNoteId { get; set; }
@@ -13,8 +13,6 @@ namespace Knowlead.DomainModel.LibraryModels
         public String NoteText { get; set; }
 
         [MyRequired]
-        public DateTime CreatedAt { get; set; }
-        [MyRequired]
         public bool IsDeleted { get; set; } = false;
 
 
@@ -22,9 +20,5 @@ namespace Knowlead.DomainModel.LibraryModels
         public Guid CreatedById { get; set; }
         public ApplicationUser CreatedBy { get; set; }
 
-        public StickyNote()
-        {
-            CreatedAt = DateTime.UtcNow;
-        }
     }
 }

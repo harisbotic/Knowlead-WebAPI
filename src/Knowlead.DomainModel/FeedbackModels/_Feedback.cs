@@ -9,7 +9,7 @@ using System.Collections.Generic;
 namespace Knowlead.DomainModel.FeedbackModels
 {
     [Table("Feedbacks")]
-    public abstract class _Feedback
+    public abstract class _Feedback : EntityBase
     {
         [Key]
         public int FeedbackId { get; set; }

@@ -1,11 +1,10 @@
 using System;
 using Knowlead.Common.DataAnnotations;
-using Knowlead.DTO.P2PModels;
 using Knowlead.DTO.UserModels;
 
-namespace Knowlead.DomainModel.P2PModels
+namespace Knowlead.DTO.P2PModels
 {
-    public class P2PMessageModel
+    public class P2PMessageModel : EntityBaseModel
     {
         public int P2pMessageId { get; set; }
         

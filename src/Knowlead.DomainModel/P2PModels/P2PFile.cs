@@ -4,7 +4,7 @@ using Knowlead.DomainModel.BlobModels;
 
 namespace Knowlead.DomainModel.P2PModels
 {
-    public class P2PFile
+    public class P2PFile : EntityBase
     {
         [MyRequired]
         public int P2pId { get; set; }

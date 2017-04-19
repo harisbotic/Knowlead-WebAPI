@@ -4,7 +4,7 @@ using Knowlead.DTO.LookupModels.Core;
 
 namespace Knowlead.DTO.UserModels
 {
-    public class InterestModel
+    public class InterestModel : EntityBaseModel
     {
         [MyRequired]
         public int FosId { get; set; }

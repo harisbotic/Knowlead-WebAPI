@@ -3,7 +3,7 @@ using Knowlead.Common.DataAnnotations;
 
 namespace Knowlead.DomainModel.UserModels
 {
-    public class ApplicationUserReferral
+    public class ApplicationUserReferral : EntityBase
     {
         [MyRequired]
         public Guid NewRegistredUserId { get; set; }
@@ -23,7 +23,6 @@ namespace Knowlead.DomainModel.UserModels
 
         public ApplicationUserReferral() //Just for EF
         {
-
         }
     }
 }

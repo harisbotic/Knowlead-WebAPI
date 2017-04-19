@@ -4,7 +4,7 @@ using Knowlead.DTO.LookupModels.Core;
 
 namespace Knowlead.DTO.UserModels
 {
-    public class ApplicationUserLanguageModel
+    public class ApplicationUserLanguageModel : EntityBaseModel
     {
         [MyRequired]
         public Guid ApplicationUserId { get; set; }

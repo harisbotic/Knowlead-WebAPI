@@ -5,7 +5,7 @@ using Knowlead.DomainModel.UserModels;
 
 namespace Knowlead.DomainModel.P2PModels
 {
-    public class P2PMessage
+    public class P2PMessage : EntityBase
     {
         [Key]
         public int P2pMessageId { get; set; }
@@ -20,7 +20,7 @@ namespace Knowlead.DomainModel.P2PModels
         public int PriceOffer { get; set; }
 
         [MyRequired]
-        public DateTime Timestamp { get; set; }
+        public DateTime Timestamp { get; set; } //TODO: Use inherited
 
         [MyRequired]
         public int P2pId { get; set; }
