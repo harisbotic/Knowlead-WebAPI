@@ -1,0 +1,24 @@
+<Project>
+  <Import Project="dependencies.props" />
+  <Import Project="..\version.props" />
+
+  <ItemGroup Condition="'$(AssemblyName)' != 'Knowlead.Common'">
+    <ProjectReference Include="../Knowlead.Common/Knowlead.Common.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <Product>Knowlead WebAPI Server</Product>
+    <RepositoryUrl>https://github.com/harisbotic/Knowlead-WebAPI</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <VersionSuffix Condition="'$(VersionSuffix)'!='' AND '$(BuildNumber)' != ''">$(VersionSuffix)-$(BuildNumber)</VersionSuffix>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Internal.AspNetCore.Sdk" Version="$(InternalAspNetCoreSdkVersion)" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFrameworkIdentifier)'=='.NETFramework' AND '$(OutputType)'=='library'">
+    <PackageReference Include="NETStandard.Library" Version="$(NetStandardImplicitPackageVersion)" />
+  </ItemGroup>
+
+</Project>

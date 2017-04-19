@@ -1,0 +1,15 @@
+<Project>
+  <PropertyGroup>
+    <AspNetCoreVersion>2.0.0-*</AspNetCoreVersion>
+    <RuntimeFrameworkVersion>2.0.0-*</RuntimeFrameworkVersion>
+    <InternalAspNetCoreSdkVersion>2.0.0-*</InternalAspNetCoreSdkVersion>
+    <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
+    <TypeScriptBuilderVersion>0.1.10</TypeScriptBuilderVersion>
+    <SignalRVersion>1.0.0-*</SignalRVersion>
+    <AzureStorageVersion>8.0.0</AzureStorageVersion>
+    <HangfireVersion>1.6.8</HangfireVersion>
+    <AutoMapperVersion>5.1.1</AutoMapperVersion>
+    <AutoMapperDIVersion>1.1.2</AutoMapperDIVersion>
+    <WebSocketsVersion>1.0.1</WebSocketsVersion>
+  </PropertyGroup>
+</Project>
