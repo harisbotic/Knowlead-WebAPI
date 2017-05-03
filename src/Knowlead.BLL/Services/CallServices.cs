@@ -167,7 +167,7 @@ namespace Knowlead.Services
             foreach (var peer in callModel.Peers)
             {
                 try {
-                    _hubContext.Clients.Client(peer.ConnectionId).InvokeAsync("stopCall", reason).RunSynchronously();
+                    await _hubContext.Clients.Client(peer.ConnectionId).InvokeAsync("stopCall", reason);
                 } catch (Exception)
                 {
                     Console.WriteLine("Tried to hang up call with disconnected peer");

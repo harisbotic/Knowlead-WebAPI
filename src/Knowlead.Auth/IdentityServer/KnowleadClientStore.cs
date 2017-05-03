@@ -1,4 +1,4 @@
-using Knowlead.DAL;
+using Knowlead.Auth.Hax;
 
 namespace Knowlead.Auth.IdentityServer
 {

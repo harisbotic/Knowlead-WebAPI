@@ -3,8 +3,7 @@ using IdentityModel;
 using IdentityServer4.Models;
 using IdentityServer4.Validation;
 using Knowlead.Common;
-using Knowlead.DAL;
-using Knowlead.DomainModel.UserModels;
+using Knowlead.Auth.Hax;
 using Microsoft.AspNetCore.Identity;
 
 namespace Knowlead.Auth.IdentityServer

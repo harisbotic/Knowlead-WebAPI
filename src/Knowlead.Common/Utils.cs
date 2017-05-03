@@ -9,7 +9,7 @@ namespace Knowlead.Common
     public static class Utils
     {
         public static Guid GetUserIdFromClaims(this IEnumerable<Claim> claims)     
-            => new Guid(claims.Where(c => c.Type == JwtClaimTypes.Subject).FirstOrDefault().Value);
+            => new Guid(claims.Where(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").FirstOrDefault().Value);
     
         public static int LimitToRange(this int @value, int min, int max)
         {

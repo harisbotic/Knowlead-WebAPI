@@ -5,7 +5,8 @@ using System.Threading.Tasks;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
 using Knowlead.Common;
-using Knowlead.DAL;
+using Knowlead.Auth.Hax;
+using IdentityModel;
 
 namespace Knowlead.Auth.IdentityServer
 {
@@ -22,7 +23,7 @@ namespace Knowlead.Auth.IdentityServer
         /// </summary>
         public virtual Task GetProfileDataAsync(ProfileDataRequestContext context)
         {
-            var subject = context.Subject.Claims.GetUserIdFromClaims();
+            var subject = context.Subject.Claims.Where(c => c.Type == JwtClaimTypes.Subject).FirstOrDefault().Value; //TODO: Should get this from Knowlead.Common.Utils
             var user = _context.ApplicationUsers.Where(x => x.Id.Equals(subject)).FirstOrDefault();
             
             if(user == null)

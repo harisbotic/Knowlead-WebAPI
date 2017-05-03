@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -13,6 +13,7 @@ using Knowlead.DAL;
 using Microsoft.Extensions.Options;
 using Knowlead.Common.Configurations.AppSettings;
 using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Knowlead
 {
@@ -62,7 +63,6 @@ namespace Knowlead
             loggerFactory.AddConsole(_config.GetSection("Logging"));
             loggerFactory.AddDebug();
             app.UseCors("AllowAll");
-            app.UseIdentity();
 
             app.Use(async (context, next) =>
             {
@@ -83,14 +83,7 @@ namespace Knowlead
                 await next.Invoke();
             });
 
-            app.UseIdentityServerAuthentication(new IdentityServerAuthenticationOptions
-            {
-                Authority = _appSettings.BaseUrls.Auth,
-                RequireHttpsMetadata = false,
-                
-                AutomaticAuthenticate = true,
-                AutomaticChallenge = true,
-            });
+            app.UseAuthentication();
 
             app.UseWebSockets();
             

@@ -30,7 +30,6 @@
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="$(AspNetCoreVersion)" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="$(AspNetCoreVersion)" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="$(AspNetCoreVersion)" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="$(AspNetCoreVersion)" />
     <PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="$(AspNetCoreVersion)" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="$(SignalRVersion)" />
     <PackageReference Include="Microsoft.AspNetCore.WebSockets" Version="$(WebSocketsVersion)" />
@@ -38,7 +37,8 @@
     <PackageReference Include="AutoMapper" Version="$(AutoMapperVersion)" />
     <PackageReference Include="Hangfire.AspNetCore" Version="$(HangfireVersion)" />
     <PackageReference Include="Hangfire.SqlServer" Version="$(HangfireVersion)" />
-    <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="1.1.0" />
+    <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="1.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="$(AspNetCoreVersion)" />
   </ItemGroup>
 
   <ItemGroup>

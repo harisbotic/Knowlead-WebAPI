@@ -4,10 +4,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Knowlead.DomainModel.UserModels;
-using Knowlead.DAL;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System;
+using Knowlead.Auth.Hax;
 using Knowlead.Auth.IdentityServer;
 using IdentityServer4.Validation;
 using IdentityServer4.Services;
@@ -57,7 +56,7 @@ namespace Knowlead.Auth
             services.AddScoped<IResourceOwnerPasswordValidator, KnowleadResourceOwnerPasswordValidator>();
 
             services.AddIdentity<ApplicationUser, IdentityRole<Guid>>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddEntityFrameworkStores<ApplicationDbContext, Guid>()
                 .AddDefaultTokenProviders();
         }
 

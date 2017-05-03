@@ -19,6 +19,12 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Options;
 using Knowlead.Common.Configurations.AppSettings;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
+using Knowlead.Common.Exceptions;
+using Knowlead.DTO.ResponseModels;
+using Newtonsoft.Json;
 
 namespace Knowlead.WebApi.Config
 {
@@ -34,11 +40,6 @@ namespace Knowlead.WebApi.Config
             .AddJsonOptions(config => 
             {
                 config.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-            });
-            
-            services.Configure<IdentityOptions>(options=>
-            {
-                options.Cookies.ApplicationCookie.LoginPath = null;
             });
 
             return services;
@@ -82,15 +83,41 @@ namespace Knowlead.WebApi.Config
                 .AddTokenProvider<ConfirmEmailDataProtectorTokenProvider<ApplicationUser>>(EmailConfirmationTokenProviderName)
                 .AddErrorDescriber<CustomIdentityErrorDescriber>();
 
-                services.Configure<IdentityOptions>(options =>
+                // services.Configure<IdentityOptions>(options =>
+                // {
+                //     options.Tokens.EmailConfirmationTokenProvider = EmailConfirmationTokenProviderName;
+                // });
+
+                // services.Configure<ConfirmEmailDataProtectionTokenProviderOptions>(options =>
+                // {
+                //     options.TokenLifespan = TimeSpan.FromDays(60);
+                // });
+
+                services.AddAuthenticationCore(options =>
                 {
-                    options.Cookies.ApplicationCookie.Events = new CustomCookieAuthenticationEvents();
-                    options.Tokens.EmailConfirmationTokenProvider = EmailConfirmationTokenProviderName;
+                    options.DefaultAuthenticateScheme = "jwt";
+                    options.DefaultChallengeScheme = "jwt";
+                    options.DefaultSignInScheme = "jwt";
                 });
 
-                services.Configure<ConfirmEmailDataProtectionTokenProviderOptions>(options =>
+                services.AddJwtBearerAuthentication("jwt", o =>
                 {
-                    options.TokenLifespan = TimeSpan.FromDays(60);
+                    o.Authority = "https://knowlead.co:5005/";
+                    o.Audience  = "https://knowlead.co:5005/resources";
+                    o.Events = new JwtBearerEvents()
+                    {
+                        OnAuthenticationFailed = c =>
+                        {
+                            c.HandleResponse();
+                            c.Response.StatusCode = 401;
+                            c.Response.ContentType = "application/json";
+
+                            return c.Response.WriteAsync(JsonConvert.SerializeObject(new ResponseModel(new ErrorModel(ErrorCodes.AuthorityError)), new JsonSerializerSettings 
+                            { 
+                                ContractResolver = new CamelCasePropertyNamesContractResolver() 
+                            }));
+                        }
+                    };
                 });
 
             return services;
