@@ -81,7 +81,6 @@ public static class ScriptUtils
         {
             var serviceProvider = ret.GetInfrastructure<IServiceProvider>();
             var loggerFactory = serviceProvider.GetService<ILoggerFactory>();
-            loggerFactory.AddProvider(new EFLoggerProvider());
         }
         ret.Database.EnsureCreated();
         Console.WriteLine("OK");
