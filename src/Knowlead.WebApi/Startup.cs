@@ -55,13 +55,11 @@ namespace Knowlead
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IOptions<AppSettings> appOptions, IApplicationBuilder app, ILoggerFactory loggerFactory)
+        public void Configure(IOptions<AppSettings> appOptions, IApplicationBuilder app)
         {
             var azureDataStore = new AzureDataStore(appOptions); 
             azureDataStore.Init(); //Initializes azure storages (Table and Blobs)
 
-            loggerFactory.AddConsole(_config.GetSection("Logging"));
-            loggerFactory.AddDebug();
             app.UseCors("AllowAll");
 
             app.Use(async (context, next) =>
