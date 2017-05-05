@@ -1,3 +1,4 @@
+call .\environment.bat
 cd src
 cd Knowlead.WebApi
 dotnet ef migrations add hepek_%random%

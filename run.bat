@@ -1,4 +1,4 @@
-set ASPNETCORE_ENVIRONMENT=Development
+call .\environment.bat
 cd src
 cd Knowlead.WebApi
 dotnet watch run
