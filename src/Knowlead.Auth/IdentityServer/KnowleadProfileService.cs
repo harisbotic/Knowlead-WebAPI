@@ -7,6 +7,7 @@ using IdentityServer4.Services;
 using Knowlead.Common;
 using Knowlead.Auth.Hax;
 using IdentityModel;
+using System;
 
 namespace Knowlead.Auth.IdentityServer
 {
@@ -24,7 +25,7 @@ namespace Knowlead.Auth.IdentityServer
         public virtual Task GetProfileDataAsync(ProfileDataRequestContext context)
         {
             var subject = context.Subject.Claims.Where(c => c.Type == JwtClaimTypes.Subject).FirstOrDefault().Value; //TODO: Should get this from Knowlead.Common.Utils
-            var user = _context.ApplicationUsers.Where(x => x.Id.Equals(subject)).FirstOrDefault();
+            var user = _context.ApplicationUsers.Where(x => x.Id.Equals(new Guid(subject))).FirstOrDefault();
             
             if(user == null)
                 return Task.FromResult(0);
@@ -35,12 +36,6 @@ namespace Knowlead.Auth.IdentityServer
 
             if(user.Name != null)
                 claimList.Add(new Claim(ClaimTypes.GivenName, user.Name));
-
-            if(user.Surname != null)
-                claimList.Add(new Claim(ClaimTypes.Name, user.Surname));
-
-            if(user.PhoneNumber != null)
-                claimList.Add(new Claim(ClaimTypes.Name, user.PhoneNumber));
 
             // context.AddFilteredClaims(claimList);
             context.IssuedClaims = claimList;
