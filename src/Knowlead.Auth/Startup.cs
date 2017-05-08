@@ -12,6 +12,7 @@ using IdentityServer4.Validation;
 using IdentityServer4.Services;
 using Knowlead.Common.Configurations.AppSettings;
 using System.IO;
+using Knowlead.Common;
 
 namespace Knowlead.Auth
 {
@@ -40,6 +41,8 @@ namespace Knowlead.Auth
             
             services.AddMvc();
 
+            services.AddCrossOrigin();
+
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(_appSettings.ConnectionStrings.KnowleadSQL));
 
 			services.AddIdentityServer()
@@ -66,10 +69,12 @@ namespace Knowlead.Auth
             loggerFactory.AddConsole(_config.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            app.UseMvc();
+            app.UseCors("AllowAll");
 
 			app.UseIdentity();
 			app.UseIdentityServer();
+
+            app.UseMvc();
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using IdentityModel;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Knowlead.Common
 {
@@ -34,5 +35,15 @@ namespace Knowlead.Common
 
         public static string ToCamelCase(this string str) => str.ToLower()[0] + str.Substring(1);
         
+        public static IServiceCollection AddCrossOrigin(this IServiceCollection services)
+        {
+            services.AddCors(options => 
+            {
+                options.AddPolicy("AllowAll", p => p.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().AllowCredentials());
+            });
+
+            return services;
+        }
+
     }
 }

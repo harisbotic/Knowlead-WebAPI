@@ -179,15 +179,5 @@ namespace Knowlead.WebApi.Config
 
             return services;
         }
-
-        public static IServiceCollection AddCrossOrigin(this IServiceCollection services)
-        {
-            services.AddCors(options => 
-            {
-                options.AddPolicy("AllowAll", p => p.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().AllowCredentials());
-            });
-
-            return services;
-        }
     }
 }

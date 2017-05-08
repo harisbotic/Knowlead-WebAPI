@@ -14,6 +14,7 @@ using Microsoft.Extensions.Options;
 using Knowlead.Common.Configurations.AppSettings;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using Knowlead.Common;
 
 namespace Knowlead
 {
