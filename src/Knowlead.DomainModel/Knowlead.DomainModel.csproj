@@ -4,8 +4,7 @@
 
   <PropertyGroup>
     <RuntimeFrameworkVersion>$(RuntimeFrameworkVersion)</RuntimeFrameworkVersion>
-    <TargetFramework>netstandard1.6.1</TargetFramework>
-    <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
     <PackageTargetFallback>$(PackageTargetFallback);dnxcore50;portable-net451+win8</PackageTargetFallback>
   </PropertyGroup>
 

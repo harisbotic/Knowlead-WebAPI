@@ -18,13 +18,17 @@
         "README.md": true,
         "NuGet.Config": true,
         "global.json": true,
+        "desktop.ini": true,
+        "version.props": true,
+
+        //Custom Scripts
         "run.bat": true,
         "seed.bat": true,
         "update.bat": true,
         "generate-dto.bat": true,
         "migrate.bat": true,
-        "desktop.ini": true,
-        "version.props": true,
+        "environment.bat": true,
+        "auth.bat": true,
 
         //Git things
         ".gitignore": true,
