@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System.Reflection;
 using static Knowlead.Common.Constants;
+using Microsoft.AspNetCore.Identity;
 
 namespace Knowlead.Tools
 {

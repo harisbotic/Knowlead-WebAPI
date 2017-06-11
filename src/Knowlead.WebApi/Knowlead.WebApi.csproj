@@ -24,7 +24,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="$(AspNetCoreVersion)" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="$(AspNetCoreVersion)" />
     <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="$(AspNetCoreVersion)" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="$(AspNetCoreVersion)" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Configuration" Version="$(AspNetCoreVersion)" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="$(AspNetCoreVersion)" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="$(AspNetCoreVersion)" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="$(AspNetCoreVersion)" />
@@ -32,7 +32,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="$(AspNetCoreVersion)" />
     <PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="$(AspNetCoreVersion)" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="$(SignalRVersion)" />
-    <PackageReference Include="Microsoft.AspNetCore.WebSockets" Version="$(WebSocketsVersion)" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Http" Version="$(SignalRVersion)" />
+    <PackageReference Include="Microsoft.AspNetCore.WebSockets" Version="$(AspNetCoreVersion)" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="$(AutoMapperDIVersion)" />
     <PackageReference Include="AutoMapper" Version="$(AutoMapperVersion)" />
     <PackageReference Include="Hangfire.AspNetCore" Version="$(HangfireVersion)" />

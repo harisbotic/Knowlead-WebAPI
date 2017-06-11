@@ -1,9 +1,8 @@
 using System.IO;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
-using System.Security.Cryptography.X509Certificates;
 using System.Net;
+using System.Security.Cryptography.X509Certificates;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace Knowlead
@@ -19,9 +18,10 @@ namespace Knowlead
             
             X509Certificate2 certificate = new X509Certificate2("knowlead_co.pfx", "knowlead-hepek!");
             var host = new WebHostBuilder()
+                .UseSetting(WebHostDefaults.PreventHostingStartupKey, "true")
                 .ConfigureLogging((context, factory) =>
                 {
-                    factory.UseConfiguration(context.Configuration.GetSection("Logging"));
+                    factory.AddConfiguration(context.Configuration.GetSection("Logging"));
                     factory.AddConsole();
                     factory.AddDebug();
                 })

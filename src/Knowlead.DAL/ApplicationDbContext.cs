@@ -18,6 +18,7 @@ using Knowlead.DomainModel.TransactionModels;
 using Knowlead.DomainModel.LibraryModels;
 using Microsoft.Extensions.Options;
 using Knowlead.Common.Configurations.AppSettings;
+using Microsoft.AspNetCore.Identity;
 
 namespace Knowlead.DAL
 {

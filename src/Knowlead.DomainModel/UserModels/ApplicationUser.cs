@@ -5,6 +5,7 @@ using Knowlead.Common.DataAnnotations;
 using Knowlead.DomainModel.BlobModels;
 using Knowlead.DomainModel.LookupModels.Core;
 using Knowlead.DomainModel.LookupModels.Geo;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using static Knowlead.Common.Constants.EnumStatuses;
 

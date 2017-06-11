@@ -8,6 +8,6 @@
     <HangfireVersion>1.6.8</HangfireVersion>
     <AutoMapperVersion>5.1.1</AutoMapperVersion>
     <AutoMapperDIVersion>1.1.2</AutoMapperDIVersion>
-    <WebSocketsVersion>1.0.1</WebSocketsVersion>
+    <NETStandardLibraryNETFrameworkVersion>2.0.0-*</NETStandardLibraryNETFrameworkVersion>
   </PropertyGroup>
 </Project>
