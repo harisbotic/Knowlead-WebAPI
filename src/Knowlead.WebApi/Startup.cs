@@ -88,7 +88,7 @@ namespace Knowlead
             
             app.UseSignalR(routes =>
             {
-                routes.MapHub<MainHub>("/mainHub");
+                routes.MapHub<MainHub>("mainHub");
             });
 
             //app.UseHangfireDashboard(); // Will be available under http://localhost:5000/hangfire
