@@ -10,7 +10,9 @@ namespace Knowlead.BLL.QueryExtensions
         {
             return query.Include(x => x.P2PLanguages)
                         .Include(x => x.P2PFiles)
-                        .Include(x => x.P2PImages);
+                        .ThenInclude(x => x.FileBlob)
+                        .Include(x => x.P2PImages)
+                        .ThenInclude(x => x.ImageBlob);
                         
         }
     }
