@@ -16,6 +16,7 @@ namespace Knowlead.DTO.UserModels
                 .ForMember(dest => dest.InitialPrice, opt => opt.MapFrom(src => src.InitialPrice))
                 .ForMember(dest => dest.Deadline, opt => opt.MapFrom(src => src.Deadline))
                 .ForMember(dest => dest.FosId, opt => opt.MapFrom(src => src.FosId))
+                .ForMember(dest => dest.DifficultyLevel, opt => opt.MapFrom(src => src.DifficultyLevel))
                 .ForAllOtherMembers(x => x.Ignore());
 
             CreateMap<P2P, P2PModel>()

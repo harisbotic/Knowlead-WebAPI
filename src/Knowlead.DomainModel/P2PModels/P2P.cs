@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Knowlead.DomainModel.LookupModels.Core;
 using Knowlead.DomainModel.UserModels;
 using static Knowlead.Common.Constants.EnumStatuses;
+using static Knowlead.Common.Constants.EnumLevels;
 
 namespace Knowlead.DomainModel.P2PModels
 {
@@ -63,10 +64,14 @@ namespace Knowlead.DomainModel.P2PModels
         [MyRequired]
         public P2PStatus Status { get; set; }
 
+        [MyRequired]
+        public P2PDifficultyLevel DifficultyLevel { get; set; }
+
         public P2P()
         {
             this.DateCreated = DateTime.UtcNow;
             this.Status = P2PStatus.Active;
+            this.DifficultyLevel = P2PDifficultyLevel.Basic;
             this.P2PLanguages = new List<P2PLanguage>();
             this.P2PImages = new List<P2PImage>();
             this.P2PFiles = new List<P2PFile>();

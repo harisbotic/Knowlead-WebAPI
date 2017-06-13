@@ -5,6 +5,7 @@ using Knowlead.Common.DataAnnotations;
 using Knowlead.DTO.BlobModels;
 using Knowlead.DTO.LookupModels.Core;
 using Knowlead.DTO.UserModels;
+using static Knowlead.Common.Constants.EnumLevels;
 using static Knowlead.Common.Constants.EnumStatuses;
 
 namespace Knowlead.DTO.P2PModels
@@ -57,9 +58,13 @@ namespace Knowlead.DTO.P2PModels
         [MyRequired]
         public P2PStatus Status { get; set; }
 
+        [MyRequired]
+        public P2PDifficultyLevel DifficultyLevel { get; set; }
+
         public P2PModel()
         {
             this.Status = P2PStatus.Active;
+            this.DifficultyLevel = P2PDifficultyLevel.Basic;
             this.Languages = new List<LanguageModel>();
             this.Blobs = new List<_BlobModel>();
         }

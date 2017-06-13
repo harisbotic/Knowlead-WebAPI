@@ -181,6 +181,15 @@ namespace Knowlead.Common
         }
 
         [TSClass]
+        public static class EnumLevels
+        {
+            public enum P2PDifficultyLevel 
+            {
+                Basic = 0, Intermediate = 1, Advanced = 2,
+            }
+        }
+
+        [TSClass]
         public static class CustomClaimTypes
         {
             [TSInitialize]
