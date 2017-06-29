@@ -4,8 +4,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.Pipelines;
-using System.IO.Pipelines.Text.Primitives;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
@@ -131,11 +129,11 @@ namespace Microsoft.AspNetCore.SignalR
         private async Task WriteAsync(ConnectionContext connection, HubMessage hubMessage)
         {
             var protocol = connection.Metadata.Get<IHubProtocol>(HubConnectionMetadataNames.HubProtocol);
-            var payload = await protocol.WriteToArrayAsync(hubMessage);
+            var payload = protocol.WriteToArray(hubMessage);
 
-            while (await connection.Transport.Output.WaitToWriteAsync())
+            while (await connection.Transport.Out.WaitToWriteAsync())
             {
-                if (connection.Transport.Output.TryWrite(payload))
+                if (connection.Transport.Out.TryWrite(payload))
                 {
                     break;
                 }
