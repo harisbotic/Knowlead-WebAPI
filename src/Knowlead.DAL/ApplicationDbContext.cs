@@ -19,15 +19,50 @@ using Knowlead.DomainModel.LibraryModels;
 using Microsoft.Extensions.Options;
 using Knowlead.Common.Configurations.AppSettings;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Configuration;
+using System.IO;
 
 namespace Knowlead.DAL
 {
+    public class DataContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
+    {
+        public ApplicationDbContext Create(DbContextFactoryOptions options)
+        {
+            // Used only for EF .NET Core CLI tools (update database/migrations etc.)
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Path.Combine(Directory.GetCurrentDirectory()))
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
+            var config = builder.Build();
+
+            AppSettings appSettings = new AppSettings();
+            config.GetSection("AppSettings").Bind(appSettings);
+
+            var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>()
+                .UseSqlServer(appSettings.ConnectionStrings.KnowleadSQL);
+
+            return new ApplicationDbContext(appSettings.ConnectionStrings.KnowleadSQL, optionsBuilder.Options);
+        }
+
+        public ApplicationDbContext CreateDbContext(string[] args)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
     {
-        private readonly AppSettings _appSettings;
+        private readonly string _connectionString;
         public ApplicationDbContext(IOptions<AppSettings> appSettings, DbContextOptions options) : base(options)
         {
-             _appSettings = appSettings.Value;
+             _connectionString = appSettings.Value.ConnectionStrings.KnowleadSQL;
+        }
+
+        public ApplicationDbContext(String connectionString, DbContextOptions options) : base(options)
+        {
+             _connectionString = connectionString;
         }
 
         #region Lookup Models
@@ -97,8 +132,7 @@ namespace Knowlead.DAL
         {
             base.OnConfiguring(optionsBuilder);
 
-            optionsBuilder.UseSqlServer(_appSettings.ConnectionStrings.KnowleadSQL,
-                                            b => b.MigrationsAssembly("Knowlead.DAL"));
+            optionsBuilder.UseSqlServer(_connectionString, b => b.MigrationsAssembly("Knowlead.DAL"));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

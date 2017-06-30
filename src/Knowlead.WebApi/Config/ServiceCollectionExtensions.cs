@@ -25,6 +25,7 @@ using Microsoft.AspNetCore.Http;
 using Knowlead.Common.Exceptions;
 using Knowlead.DTO.ResponseModels;
 using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 
 namespace Knowlead.WebApi.Config
 {
@@ -65,9 +66,12 @@ namespace Knowlead.WebApi.Config
         }
         public class ConfirmEmailDataProtectionTokenProviderOptions : DataProtectionTokenProviderOptions { }
         private const string EmailConfirmationTokenProviderName = "ConfirmEmail";
+        public class ApplicationRole : IdentityRole<Guid>
+        {
+        }
         public static IServiceCollection AddIdentityFramework(this IServiceCollection services)
         {
-            services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(config =>
+            services.AddIdentity<ApplicationUser, ApplicationRole>(config =>
             {
                 config.User.RequireUniqueEmail = true;
                 config.Password.RequiredLength = 8;
@@ -108,7 +112,7 @@ namespace Knowlead.WebApi.Config
                     {
                         OnAuthenticationFailed = c =>
                         {
-                            c.HandleResponse();
+                            c.NoResult();
                             c.Response.StatusCode = 401;
                             c.Response.ContentType = "application/json";
 
