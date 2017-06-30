@@ -28,12 +28,37 @@ namespace Knowlead.DAL
 {
     public class DataContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
     {
-        public ApplicationDbContext Create(DbContextFactoryOptions options)
+        public const string _configPath = AppSettings.Path;
+
+        public ApplicationDbContext CreateDbContext(string[] args)
         {
+            var env = args.Where(x => x.StartsWith("--env-")).FirstOrDefault();
+            string envAppSettings;
+
+            switch(env)
+            {
+                case "--env-production":
+                    envAppSettings = "Production";
+                break;
+                
+                case "--env-development":
+                    envAppSettings = "Development";
+                break;
+
+                default:
+                    envAppSettings = "Development";
+                break;
+            }
+
             // Used only for EF .NET Core CLI tools (update database/migrations etc.)
             var builder = new ConfigurationBuilder()
-                .SetBasePath(Path.Combine(Directory.GetCurrentDirectory()))
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+                .SetBasePath(Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), @"../")))
+                .AddJsonFile($"{_configPath}/appsettings.json", optional: false, reloadOnChange: false)
+                .AddJsonFile($"{_configPath}/appsettings.{envAppSettings}.json", optional: true, reloadOnChange: false)
+                .AddEnvironmentVariables();
+
+                //THIS WORKS ONLU FOR DEV STAGE
+                
 
             var config = builder.Build();
 
@@ -44,11 +69,6 @@ namespace Knowlead.DAL
                 .UseSqlServer(appSettings.ConnectionStrings.KnowleadSQL);
 
             return new ApplicationDbContext(appSettings.ConnectionStrings.KnowleadSQL, optionsBuilder.Options);
-        }
-
-        public ApplicationDbContext CreateDbContext(string[] args)
-        {
-            throw new NotImplementedException();
         }
     }
 
