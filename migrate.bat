@@ -1,7 +1,6 @@
 call .\environment.bat
 cd src
-cd Knowlead.WebApi
-dotnet ef migrations add hepek_%random%
-dotnet ef database update
-cd ..
-cd ..
+cd Knowlead.DAL
+dotnet build
+dotnet ef database update --startup-project=../Knowlead.WebApi
+pause
