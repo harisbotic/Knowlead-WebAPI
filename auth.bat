@@ -1,4 +1,4 @@
 call .\environment.bat
 cd src
 cd Knowlead.Auth
-dotnet watch run
+dotnet run
