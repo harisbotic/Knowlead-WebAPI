@@ -21,4 +21,11 @@
     <PackageReference Include="NETStandard.Library" Version="$(BundledNETStandardPackageVersion)" />
   </ItemGroup>
 
+
+  <PropertyGroup>
+    <NoWarn>NU1701;NU1603</NoWarn>
+  </PropertyGroup>
+
+
+
 </Project>
