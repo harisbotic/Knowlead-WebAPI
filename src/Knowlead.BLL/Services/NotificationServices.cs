@@ -15,7 +15,7 @@ using static Knowlead.Common.Constants;
 
 namespace Knowlead.Services
 {
-    public class NotificationServices<THub> : INotificationServices where THub : class
+    public class NotificationServices<THub> : INotificationServices where THub : Hub
     {
         private readonly IHubContext<THub> _hubContext;
         private readonly INotificationRepository _notificationRepository;

@@ -97,14 +97,12 @@ namespace Knowlead.WebApi.Config
                 //     options.TokenLifespan = TimeSpan.FromDays(60);
                 // });
 
-                services.AddAuthenticationCore(options =>
+                services.AddAuthentication(options =>
                 {
                     options.DefaultAuthenticateScheme = "jwt";
                     options.DefaultChallengeScheme = "jwt";
                     options.DefaultSignInScheme = "jwt";
-                });
-
-                services.AddJwtBearerAuthentication("jwt", o =>
+                }).AddJwtBearer(o =>
                 {
                     o.Authority = "https://knowlead.co:5005/";
                     o.Audience  = "https://knowlead.co:5005/resources";
@@ -123,7 +121,7 @@ namespace Knowlead.WebApi.Config
                         }
                     };
                 });
-
+                
             return services;
         }
         public static IServiceCollection AddCustomSignalR(this IServiceCollection services) 

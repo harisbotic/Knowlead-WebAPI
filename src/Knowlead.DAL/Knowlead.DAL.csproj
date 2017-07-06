@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="$(AspNetCoreVersion)" />
+    <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="$(DotNetToolsVersion)" />
   </ItemGroup>
 
 </Project>

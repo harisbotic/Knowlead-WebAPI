@@ -1,6 +1,7 @@
 <Project>
   <PropertyGroup>
     <AspNetCoreVersion>2.0.0-*</AspNetCoreVersion>
+    <DotNetToolsVersion>1.0.0</DotNetToolsVersion>
     <InternalAspNetCoreSdkVersion>2.1.0-*</InternalAspNetCoreSdkVersion>
     <TypeScriptBuilderVersion>0.1.10</TypeScriptBuilderVersion>
     <SignalRVersion>1.0.0-*</SignalRVersion>
@@ -9,6 +10,6 @@
     <AutoMapperVersion>5.1.1</AutoMapperVersion>
     <AutoMapperDIVersion>1.1.2</AutoMapperDIVersion>
     <NETStandardLibraryNETFrameworkVersion>2.0.0-*</NETStandardLibraryNETFrameworkVersion>
-    <RuntimeFrameworkVersion Condition="'$(TargetFramework)'=='netcoreapp2.0'">2.0.0-*</RuntimeFrameworkVersion>
+    <RuntimeFrameworkVersion>2.0.0-preview3-25429-01</RuntimeFrameworkVersion>
   </PropertyGroup>
 </Project>
