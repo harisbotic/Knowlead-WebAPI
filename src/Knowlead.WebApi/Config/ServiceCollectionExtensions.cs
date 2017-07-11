@@ -99,9 +99,8 @@ namespace Knowlead.WebApi.Config
 
                 services.AddAuthentication(options =>
                 {
-                    options.DefaultAuthenticateScheme = "jwt";
-                    options.DefaultChallengeScheme = "jwt";
-                    options.DefaultSignInScheme = "jwt";
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 }).AddJwtBearer(o =>
                 {
                     o.Authority = "https://knowlead.co:5005/";

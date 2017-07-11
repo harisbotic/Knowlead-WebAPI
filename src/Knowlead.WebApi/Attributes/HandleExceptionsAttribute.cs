@@ -12,7 +12,7 @@ namespace Knowlead.WebApi.Attributes
         public override void OnException(ExceptionContext filterContext)
         {
             Exception ex = filterContext.Exception;
-            int statusCode = 400;
+            //int statusCode = 400;
 
             var exType = ex.GetType();
             var responseModel = new ResponseModel();
@@ -38,12 +38,12 @@ namespace Knowlead.WebApi.Attributes
                 responseModel.AddError(new ErrorModel(ex.Message));
                 if(ex?.InnerException != null)
                     responseModel.AddError(new ErrorModel(ex.InnerException.Message));
-                statusCode = 500;
+                //statusCode = 500;
             }
             
             filterContext.Result = new BadRequestObjectResult(responseModel)
             {
-                StatusCode = statusCode
+                //StatusCode = statusCode
             };
         }
     }
