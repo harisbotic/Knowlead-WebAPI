@@ -32,7 +32,7 @@ namespace Knowlead.BLL.Repositories
             ApplicationUser user = await _accountRepository.GetApplicationUserById(applicationUserId);
             var nameSurname = WebUtility.HtmlEncode(user.Name) + " " + WebUtility.HtmlEncode(user.Surname);
             var text = WebUtility.HtmlEncode(feedback);
-            await _messageServices.TempSendEmailAsync("feedback@knowlead.co", "New Feedback - " + nameSurname, user.Email, nameSurname, text);
+            await _messageServices.SendEmailAsync("feedback@knowlead.co", $"New Feedback - {nameSurname}", text, user.Email, nameSurname);
 
             return platformFeedback;
         }
