@@ -59,7 +59,7 @@ namespace Knowlead.BLL.Repositories
                 string encodedEmail = WebUtility.UrlEncode(applicationUser.Email);
                 string encodedToken = WebUtility.UrlEncode(token);
 
-                RegistrationEmailData emailData = new RegistrationEmailData{
+                RegistrationEmail emailData = new RegistrationEmail{
                     Url = $"{_appSettings.BaseUrls.WebClient}/confirmemail?email={encodedEmail}&code={encodedToken}"
                 };
 
@@ -94,8 +94,8 @@ namespace Knowlead.BLL.Repositories
             string encodedEmail = WebUtility.UrlEncode(applicationUser.Email);
             string encodedToken = WebUtility.UrlEncode(token);
 
-            PasswordResetEmailData emailData = new PasswordResetEmailData {
-                Url = $"{_appSettings.BaseUrls.WebClient}/resetpassword?email={encodedEmail}&token={encodedToken}"
+            PasswordResetEmail emailData = new PasswordResetEmail {
+                PwdResetLink = $"{_appSettings.BaseUrls.WebClient}/resetpassword?email={encodedEmail}&token={encodedToken}"
             };
 
             return await _messageServices.SendEmailAsync(applicationUser.Email, "Knowlead Password Reset", emailData);

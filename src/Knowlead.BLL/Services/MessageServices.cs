@@ -18,7 +18,7 @@ namespace Knowlead.Services
     {
         private static Dictionary<string, string> _templateCache = new Dictionary<string, string>();
 
-        public async Task<bool> SendEmailAsync(string toAddress, string subject, IEmailData emailData, string fromAddress = "knowlead@knowlead.co", string fromName = "Knowlead")
+        public async Task<bool> SendEmailAsync(string toAddress, string subject, IEmail emailData, string fromAddress = "knowlead@knowlead.co", string fromName = "Knowlead")
         {
             if(!_templateCache.ContainsKey(emailData.TemplateFilename))
             {

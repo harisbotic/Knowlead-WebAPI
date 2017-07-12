@@ -5,7 +5,7 @@ namespace Knowlead.Services.Interfaces
 {
     public interface IEmailSender
     {
-        Task<bool> SendEmailAsync(string toAddress, string subject, IEmailData emailData, string fromAddress, string fromName);
+        Task<bool> SendEmailAsync(string toAddress, string subject, IEmail emailData, string fromAddress, string fromName);
         Task<bool> SendEmailAsync(string toAddress, string subject, string content, string fromAddress, string fromName);
     }
 }
