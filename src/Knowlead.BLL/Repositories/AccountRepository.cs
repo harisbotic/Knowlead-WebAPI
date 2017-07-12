@@ -60,7 +60,7 @@ namespace Knowlead.BLL.Repositories
                 string encodedToken = WebUtility.UrlEncode(token);
 
                 RegistrationEmail emailData = new RegistrationEmail{
-                    Url = $"{_appSettings.BaseUrls.WebClient}/confirmemail?email={encodedEmail}&code={encodedToken}"
+                    RegistrationLink = $"{_appSettings.BaseUrls.WebClient}/confirmemail?email={encodedEmail}&code={encodedToken}"
                 };
 
                 await _messageServices.SendEmailAsync(applicationUser.Email, "Knowlead Email Confirmation", emailData);
