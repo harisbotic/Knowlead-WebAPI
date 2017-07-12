@@ -69,7 +69,7 @@ namespace Knowlead.Controllers
 
         [HttpPost("generatePasswordResetToken/{email}")]
         [AllowAnonymous]
-        public async Task<IActionResult> GeneratePasswordResetToken([FromRouteAttribute] string email)
+        public async Task<IActionResult> GeneratePasswordResetToken([FromRoute] string email)
         {
             var result = await _accountRepository.GeneratePasswordResetTokenAsync(email);
 
