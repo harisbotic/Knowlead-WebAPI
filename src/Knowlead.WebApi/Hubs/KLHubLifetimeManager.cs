@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR.Internal.Protocol;
 using Microsoft.AspNetCore.Sockets;
 using Microsoft.AspNetCore.Sockets.Internal.Formatters;
+using Microsoft.AspNetCore.SignalR.Features;
 
 namespace Microsoft.AspNetCore.SignalR
 {
@@ -20,7 +21,7 @@ namespace Microsoft.AspNetCore.SignalR
         private long _nextInvocationId = 0;
         private readonly HubConnectionList _connections = new HubConnectionList();
 
-        public override Task AddGroupAsync(string connectionId, string groupName)
+         public override Task AddGroupAsync(string connectionId, string groupName)
         {
             var connection = _connections[connectionId];
             if (connection == null)
@@ -28,16 +29,18 @@ namespace Microsoft.AspNetCore.SignalR
                 return Task.CompletedTask;
             }
 
-            var groups = connection.Metadata.GetOrAdd(HubConnectionMetadataNames.Groups, _ => new HashSet<string>());
+            var feature = connection.Features.Get<IHubGroupsFeature>();
+            var groups = feature.Groups;
+
             lock (groups)
             {
                 groups.Add(groupName);
             }
 
             return Task.CompletedTask;
-        }
+}
 
-        public override Task RemoveGroupAsync(string connectionId, string groupName)
+       public override Task RemoveGroupAsync(string connectionId, string groupName)
         {
             var connection = _connections[connectionId];
             if (connection == null)
@@ -45,12 +48,8 @@ namespace Microsoft.AspNetCore.SignalR
                 return Task.CompletedTask;
             }
 
-            var groups = connection.Metadata.Get<HashSet<string>>(HubConnectionMetadataNames.Groups);
-
-            if (groups == null)
-            {
-                return Task.CompletedTask;
-            }
+            var feature = connection.Features.Get<IHubGroupsFeature>();
+            var groups = feature.Groups;
 
             lock (groups)
             {
@@ -58,7 +57,7 @@ namespace Microsoft.AspNetCore.SignalR
             }
 
             return Task.CompletedTask;
-        }
+}
 
         public override Task InvokeAllAsync(string methodName, object[] args)
         {
@@ -97,10 +96,16 @@ namespace Microsoft.AspNetCore.SignalR
         {
             return InvokeAllWhere(methodName, args, connection =>
             {
-                var groups = connection.Metadata.Get<HashSet<string>>(HubConnectionMetadataNames.Groups);
-                return groups?.Contains(groupName) == true;
+                var feature = connection.Features.Get<IHubGroupsFeature>();
+                var groups = feature.Groups;
+
+                // PERF: ...
+                lock (groups)
+                {
+                    return groups.Contains(groupName) == true;
+                }
             });
-        }
+}
 
         public override Task InvokeUserAsync(string userId, string methodName, object[] args)
         {
@@ -116,6 +121,8 @@ namespace Microsoft.AspNetCore.SignalR
         
        public override Task OnConnectedAsync(HubConnectionContext connection)
         {
+            connection.Features.Set<IHubGroupsFeature>(new HubGroupsFeature());
+
             _connections.Add(connection);
             return Task.CompletedTask;
         }
@@ -128,9 +135,8 @@ namespace Microsoft.AspNetCore.SignalR
 
         private async Task WriteAsync(HubConnectionContext connection, HubMessage hubMessage)
         {
-            var protocol = connection.Metadata.Get<IHubProtocol>(HubConnectionMetadataNames.HubProtocol);
             var payload = connection.Protocol.WriteToArray(hubMessage);
-            
+
             while (await connection.Output.WaitToWriteAsync())
             {
                 if (connection.Output.TryWrite(payload))
@@ -138,12 +144,23 @@ namespace Microsoft.AspNetCore.SignalR
                     break;
                 }
             }
-        }
+}
 
         private string GetInvocationId()
         {
             var invocationId = Interlocked.Increment(ref _nextInvocationId);
             return invocationId.ToString();
         }
+
+        private interface IHubGroupsFeature
+        {
+            HashSet<string> Groups { get; }
+        }
+
+        private class HubGroupsFeature : IHubGroupsFeature
+        {
+            public HashSet<string> Groups { get; } = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        }
+
     }
 }

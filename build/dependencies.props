@@ -4,7 +4,7 @@
     <DotNetToolsVersion>1.0.0</DotNetToolsVersion>
     <InternalAspNetCoreSdkVersion>2.1.0-*</InternalAspNetCoreSdkVersion>
     <TypeScriptBuilderVersion>0.1.10</TypeScriptBuilderVersion>
-    <SignalRVersion>1.0.0-*</SignalRVersion>
+    <SignalRVersion>1.0.0-alpha-*</SignalRVersion>
     <AzureStorageVersion>8.0.0</AzureStorageVersion>
     <HangfireVersion>1.6.8</HangfireVersion>
     <AutoMapperVersion>5.1.1</AutoMapperVersion>
