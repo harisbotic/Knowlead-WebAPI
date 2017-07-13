@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using Knowlead.Common.Email.Interfaces;
+using Knowlead.BLL.Emails.Interfaces;
 
 namespace Knowlead.Services.Interfaces
 {

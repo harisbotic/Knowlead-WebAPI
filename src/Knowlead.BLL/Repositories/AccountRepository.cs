@@ -20,7 +20,7 @@ using static Knowlead.Common.Constants.EnumStatuses;
 using Knowlead.Services.Interfaces;
 using Microsoft.Extensions.Options;
 using Knowlead.Common.Configurations.AppSettings;
-using Knowlead.Common.Email;
+using Knowlead.BLL.Emails;
 
 namespace Knowlead.BLL.Repositories
 {

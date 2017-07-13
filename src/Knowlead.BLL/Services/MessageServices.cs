@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Knowlead.Services.Interfaces;
-using Knowlead.Common.Email.Interfaces;
+using Knowlead.BLL.Emails.Interfaces;
 using Newtonsoft.Json;
 
 namespace Knowlead.Services
@@ -24,7 +24,7 @@ namespace Knowlead.Services
             {
                 try
                 {
-                    string templatePath = $"{Environment.CurrentDirectory}/../Knowlead.Common/Email/Templates/{emailData.TemplateFilename}";
+                    string templatePath = $"{Environment.CurrentDirectory}/../Knowlead.BLL/Emails/Templates/{emailData.TemplateFilename}";
                     string templateContent = System.IO.File.ReadAllText(templatePath);
                     _templateCache.Add(emailData.TemplateFilename, templateContent);
                 }
@@ -68,6 +68,7 @@ namespace Knowlead.Services
             return true;
         }
 
+        /*
         public async Task TempSendEmailAsync(string to, string subject, string fromAddress, string fromName, string message)
         {
             var client = new HttpClient();
@@ -92,5 +93,6 @@ namespace Knowlead.Services
                 Console.WriteLine("jel to");
             }
         }
+        */
     }
 }
