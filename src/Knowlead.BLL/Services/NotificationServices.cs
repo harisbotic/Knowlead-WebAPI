@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Hangfire;
+using Knowlead.BLL.Emails;
 using Knowlead.BLL.Repositories.Interfaces;
 using Knowlead.Common.Exceptions;
 using Knowlead.DomainModel.NotificationModels;
+using Knowlead.DomainModel.UserModels;
 using Knowlead.DTO.NotificationModels;
 using Knowlead.Services.Interfaces;
 using Microsoft.AspNetCore.SignalR;
@@ -19,10 +21,14 @@ namespace Knowlead.Services
     {
         private readonly IHubContext<THub> _hubContext;
         private readonly INotificationRepository _notificationRepository;
-        public NotificationServices(IHubContext<THub> hubContext, INotificationRepository notificationRepository)
+        private readonly MessageServices _messageServices;
+        private readonly IAccountRepository _accountRepository;
+        public NotificationServices(IHubContext<THub> hubContext, INotificationRepository notificationRepository, MessageServices messageServices, IAccountRepository accountRepository)
         {
             _hubContext = hubContext;
             _notificationRepository = notificationRepository;
+            _messageServices = messageServices;
+            _accountRepository = accountRepository;
         }
 
         public async Task<Notification> Get(Guid notificationId, Guid applicationUserId)
@@ -78,6 +84,28 @@ namespace Knowlead.Services
                     (x) => x.DisplayNotification(notification), scheduleAt.Subtract(DateTime.UtcNow));
                 }
             }
+        }
+
+        public async Task SendNotificationEmails()
+        {
+            Dictionary<Guid, List<Notification>> notifications = await _notificationRepository.GetAllUnread();
+            foreach(Guid userGuid in notifications.Keys)
+            {
+                NotificationEmail email = new NotificationEmail();
+                email.Notifications = notifications[userGuid];
+                
+                ApplicationUser user = await _accountRepository.GetApplicationUserById(userGuid);
+                if(await _messageServices.SendEmailAsync(user.Email, "Notifications", email)) 
+                {
+                    foreach(Notification n in notifications[userGuid])
+                    {
+                        n.IsEmailSent = true;
+                        _notificationRepository.Update(n);
+                    }
+                }
+            }
+            
+            await _notificationRepository.Commit();
         }
 
         public async Task MarkAsRead(Guid notificationId, Guid applicationUserId)

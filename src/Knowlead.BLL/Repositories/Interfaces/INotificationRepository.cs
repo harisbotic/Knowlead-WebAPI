@@ -12,6 +12,7 @@ namespace Knowlead.BLL.Repositories.Interfaces
         Task<Notification> Get(Guid notificationId);
         Task<List<Notification>> GetPagedList(Guid applicationUserId, int offset, int numItems);
         Task<List<Notification>> GetAllWhere(Expression<Func<Notification, bool>> condition);
+        Task<Dictionary<Guid, List<Notification>>> GetAllUnread();
         void Add(Notification notification);
         void Update(Notification notification);
         Task Commit();

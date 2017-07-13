@@ -15,6 +15,7 @@ using Knowlead.Common.Configurations.AppSettings;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Knowlead.Common;
+using Knowlead.Services.Interfaces;
 
 namespace Knowlead
 {
@@ -56,7 +57,7 @@ namespace Knowlead
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IOptions<AppSettings> appOptions, IApplicationBuilder app)
+        public void Configure(IOptions<AppSettings> appOptions, IApplicationBuilder app, INotificationServices notificationServices)
         {
             var azureDataStore = new AzureDataStore(appOptions); 
             azureDataStore.Init(); //Initializes azure storages (Table and Blobs)
@@ -93,6 +94,7 @@ namespace Knowlead
 
             //app.UseHangfireDashboard(); // Will be available under http://localhost:5000/hangfire
             app.UseHangfireServer();
+            RecurringJob.AddOrUpdate(() => notificationServices.SendNotificationEmails(), Cron.MinuteInterval(10));
 
             app.UseMvc();
         }

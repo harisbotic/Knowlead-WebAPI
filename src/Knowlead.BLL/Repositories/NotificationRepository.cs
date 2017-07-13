@@ -32,6 +32,13 @@ namespace Knowlead.BLL.Repositories
             return await _context.Notifications.Where(condition).ToListAsync();
         }
 
+        public async Task<Dictionary<Guid, List<Notification>>> GetAllUnread()
+        {
+            return await _context.Notifications.Where(n => (!n.SeenAt.HasValue && !n.IsEmailSent))
+                .GroupBy(n => n.ForApplicationUserId)
+                .ToDictionaryAsync(group => group.Key, group => group.ToList());
+        }
+
         public async Task<List<Notification>> GetPagedList(Guid applicationUserId, int offset, int numItems)
         {
             return await _context.Notifications.Where(x => x.ForApplicationUserId.Equals(applicationUserId))
