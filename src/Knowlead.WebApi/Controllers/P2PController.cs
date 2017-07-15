@@ -113,7 +113,7 @@ namespace Knowlead.Controllers
         }
 
         [HttpGet("list/{listP2PRequest}")]
-        public async Task<IActionResult> ChangeFriendshipStatus(ListP2PsRequest listP2PRequest,
+        public async Task<IActionResult> ListP2Ps(ListP2PsRequest listP2PRequest,
                                             [FromQuery] int? fosId, DateTime dateTimeStart, int offset = 10)
         {
             var applicationUserId = _auth.GetUserId();
@@ -142,7 +142,7 @@ namespace Knowlead.Controllers
                     break;
 
                 case(ListP2PsRequest.Recommended):
-                    p2ps = await _p2pRepository.GetRecommendedP2P(applicationUserId, new DateTime(), 10);
+                    p2ps = await _p2pRepository.GetRecommendedP2P(applicationUserId, dateTimeStart, offset);
                     break;
                 
                 default:
