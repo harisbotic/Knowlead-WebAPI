@@ -17,6 +17,7 @@ using Knowlead.Common.Exceptions;
 using Knowlead.Services.Interfaces;
 using Knowlead.DomainModel.NotificationModels;
 using static Knowlead.Common.Constants.EnumStatuses;
+using static Knowlead.Common.Constants.EnumActions;
 
 namespace Knowlead.BLL.Repositories
 {
@@ -428,47 +429,50 @@ namespace Knowlead.BLL.Repositories
             return (await _context.SaveChangesAsync() > 0);
         }
 
-        public async Task<IActionResult> ListMine(Guid applicationUserId)
+        public async Task<List<P2P>> ListMine(int? fosId, Guid applicationUserId)
         {
-            var p2ps = await _context.P2p.IncludeEverything().Where(x => x.CreatedById == applicationUserId)
-                                                             .Where(x => x.IsDeleted == false)
-                                                             .OrderByDescending(x => x.DateCreated).ToListAsync();
+            var query = _context.P2p.IncludeEverything().Where(x => x.CreatedById == applicationUserId)
+                                                             .Where(x => x.IsDeleted == false);
 
+            if(fosId.HasValue)
+                query = query.Where(x => x.FosId.Equals(fosId.Value));
+
+            var p2ps = await query.OrderByDescending(x => x.DateCreated).ToListAsync();
 
             var myBookmarks = await _context.P2PBookmarks.Where(x => x.ApplicationUserId.Equals(applicationUserId)).ToListAsync();
 
             foreach (var p2p in p2ps)
                 await fillP2pBookmark(p2p, myBookmarks.Where(b => b.P2pId.Equals(p2p.P2pId)).Count() == 1);
 
-            return new OkObjectResult(new ResponseModel{
-                Object = Mapper.Map<List<P2PModel>>(p2ps)
-            });
+            return p2ps;
         }
 
-        public async Task<IActionResult> ListSchedulded(Guid applicationUserId)
+        public async Task<List<P2P>> ListSchedulded(int? fosId, Guid applicationUserId)
         {
-            var p2ps = await _context.P2p
+            var query = _context.P2p
                     .IncludeEverything()
                     .Where(x => x.Status == P2PStatus.Scheduled)
                     .Where(x => x.CreatedById == applicationUserId || x.ScheduledWithId == applicationUserId)
-                    .Where(x => x.IsDeleted == false)
-                    .ToListAsync();
+                    .Where(x => x.IsDeleted == false);
+
+            if(fosId.HasValue)
+                query = query.Where(x => x.FosId.Equals(fosId.Value));
+
+            var p2ps = await query.OrderBy(x => x.DateTimeAgreed.Value).ToListAsync();
 
             foreach (var p2p in p2ps)
                 await fillP2pBookmark(p2p, false);
 
-            return new OkObjectResult(new ResponseModel {
-                Object = Mapper.Map<List<P2PModel>>(p2ps)
-            });
+            return p2ps;
         }
 
-        public async Task<List<P2P>> GetRecommendedP2P(Guid applicationUserId, DateTimeOffset dateTimeStart, int offset)
+        public async Task<List<P2P>> GetRecommendedP2P(Guid applicationUserId, DateTime dateTimeStart, int offset)
         {
             var p2ps = await _context.P2p
                             .IncludeEverything()
                             .Where(x => x.Status == P2PStatus.Active)
                             .Where(x => x.IsDeleted == false)
-                            .Where(x => x.DateCreated > dateTimeStart.UtcDateTime)
+                            .Where(x => x.DateCreated > dateTimeStart)
                             .OrderByDescending(x => x.DateCreated)
                             .Take(offset)
                             .ToListAsync();
@@ -481,34 +485,19 @@ namespace Knowlead.BLL.Repositories
 
             return p2ps;
         }
-
-        public async Task<List<P2P>> GetByFos(int fosId, Guid applicationUserId)
+        public async Task<List<P2P>> ListBookmarked(int? fosId, Guid applicationUserId)
         {
-            var p2ps = await _context.P2p
-                        .IncludeEverything()
-                        .Where(x => x.FosId.Equals(fosId))
-                        .Where(x => x.Status == P2PStatus.Active)
-                        .OrderByDescending(x => x.DateCreated)
-                        .ToListAsync();
-
-            var myBookmarks = await _context.P2PBookmarks.Where(x => x.ApplicationUserId.Equals(applicationUserId)).ToListAsync();
-
-            foreach (var p2p in p2ps)
-                await fillP2pBookmark(p2p, myBookmarks.Where(b => b.P2pId.Equals(p2p.P2pId)).Count() == 1);
-
-            return p2ps;
-        }
-
-        public async Task<IActionResult> ListBookmarked(Guid applicationUserId)
-        {
-            var p2pBookmarks = await _context.P2PBookmarks.Where(x => x.ApplicationUserId.Equals(applicationUserId))
+            var query = _context.P2PBookmarks.Where(x => x.ApplicationUserId.Equals(applicationUserId))
                                                             .Include(x => x.P2p)
                                                             .Include("P2p.P2PLanguages")
                                                             .Include("P2p.P2PFiles")
                                                             .Include("P2p.P2PImages")
-                                                            .OrderByDescending(x => x.P2p.DateCreated)
-                                                            .Where(x => x.P2p.IsDeleted == false)
-                                                            .ToListAsync();
+                                                            .Where(x => x.P2p.IsDeleted == false);
+
+            if(fosId.HasValue)
+                query = query.Where(x => x.P2p.FosId.Equals(fosId.Value));
+            
+            var p2pBookmarks = await query.OrderByDescending(x => x.P2p.DateCreated).ToListAsync();
 
             var p2ps = new List<P2P>();
             foreach (var p2pBookmark in p2pBookmarks)
@@ -521,12 +510,10 @@ namespace Knowlead.BLL.Repositories
                 await fillP2pBookmark(p2p, true);
             }
 
-            return new OkObjectResult(new ResponseModel {
-                Object = Mapper.Map<List<P2PModel>>(p2ps)
-            });
+            return p2ps;
         }
 
-        public async  Task<IActionResult> ListDeleted(Guid applicationUserId)
+        public async  Task<List<P2P>> ListDeleted(Guid applicationUserId)
         {
             var p2ps = await _context.P2p
                                     .IncludeEverything()
@@ -538,12 +525,10 @@ namespace Knowlead.BLL.Repositories
             foreach (var p2p in p2ps)
                 await fillP2pBookmark(p2p, false);
 
-            return new OkObjectResult(new ResponseModel {
-                Object = Mapper.Map<List<P2PModel>>(p2ps)
-            });
+            return p2ps;
         }
 
-        public Task<IActionResult> ListActionRequired(Guid applicationUserId)
+        public Task<List<P2P>> ListActionRequired(Guid applicationUserId)
         {
             throw new NotImplementedException();
         }

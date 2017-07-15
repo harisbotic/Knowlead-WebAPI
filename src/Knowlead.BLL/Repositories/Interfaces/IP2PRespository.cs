@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Knowlead.DomainModel.P2PModels;
 using Knowlead.DTO.P2PModels;
 using Microsoft.AspNetCore.Mvc;
+using static Knowlead.Common.Constants.EnumActions;
 
 namespace Knowlead.BLL.Repositories.Interfaces
 {
@@ -20,14 +21,13 @@ namespace Knowlead.BLL.Repositories.Interfaces
         Task UpdateAndSave(P2P p2p);
         Task<IActionResult> GetP2P(int p2pId, Guid applicationUserId);
         Task<IActionResult> GetMessages(int p2pId, Guid applicationUserId);
-        Task<IActionResult> ListMine(Guid applicationUserId);
-        Task<IActionResult> ListSchedulded(Guid applicationUserId);
-        Task<IActionResult> ListBookmarked(Guid applicationUserId);
-        Task<IActionResult> ListDeleted(Guid applicationUserId);
-        Task<IActionResult> ListActionRequired(Guid applicationUserId);
+        Task<List<P2P>> ListMine(int? fosId, Guid applicationUserId);
+        Task<List<P2P>> ListSchedulded(int? fosId, Guid applicationUserId);
+        Task<List<P2P>> ListBookmarked(int? fosId, Guid applicationUserId);
+        Task<List<P2P>> ListDeleted(Guid applicationUserId);
+        Task<List<P2P>> ListActionRequired(Guid applicationUserId);
         Task<IActionResult> ListAll(Guid applicationUserId);
-        Task<List<P2P>> GetByFos(int fosId, Guid applicationUserId);
-        Task<List<P2P>> GetRecommendedP2P(Guid applicationUserId, DateTimeOffset dateTimeStart, int offset = 10);
+        Task<List<P2P>> GetRecommendedP2P(Guid applicationUserId, DateTime dateTimeStart, int offset = 10);
         Task IAmReady(int p2pId, Guid applicationUserId);
     }
 }

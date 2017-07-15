@@ -42,6 +42,7 @@ namespace Knowlead.Services
 
             CloudBlockBlob blockBlob = _imageContainer.GetBlockBlobReference($"{imageBlob.BlobId}");
             blockBlob.Properties.ContentType = formFile.ContentType;
+            blockBlob.Properties.ContentDisposition = string.Format("attachment;filename=\"{0}\"", formFile.FileName);
 
             using (Stream stream = formFile.OpenReadStream())
             {

@@ -52,7 +52,7 @@ namespace Knowlead.DAL
 
             // Used only for EF .NET Core CLI tools (update database/migrations etc.)
             var builder = new ConfigurationBuilder()
-                .SetBasePath(Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), @"../")))
+                .SetBasePath(Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), @"../../../../")))
                 .AddJsonFile($"{_configPath}/appsettings.json", optional: false, reloadOnChange: false)
                 .AddJsonFile($"{_configPath}/appsettings.{envAppSettings}.json", optional: true, reloadOnChange: false)
                 .AddEnvironmentVariables();
