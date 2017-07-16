@@ -72,7 +72,7 @@ namespace Knowlead.BLL.Repositories
 
         public async Task<P2P> GetP2PTemp(int p2pId, Guid? applicationUserId = null)
         {
-            var p2p = await _context.P2p.IncludeEverything().Where(x => x.P2pId == p2pId).FirstOrDefaultAsync();
+            var p2p = await _context.P2p.IncludeEverything().Include(x => x.CreatedBy).Where(x => x.P2pId == p2pId).FirstOrDefaultAsync();
             if (applicationUserId.HasValue)
             {
                 await this.fillP2pBookmark(p2p, applicationUserId.Value);
