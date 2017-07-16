@@ -470,6 +470,7 @@ namespace Knowlead.BLL.Repositories
         {
             var p2ps = await _context.P2p
                             .IncludeEverything()
+                            .Include(x => x.CreatedBy)
                             .Where(x => x.Status == P2PStatus.Active)
                             .Where(x => x.IsDeleted == false)
                             .Where(x => x.DateCreated > dateTimeStart)
