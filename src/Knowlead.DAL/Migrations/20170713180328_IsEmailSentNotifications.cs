@@ -14,6 +14,8 @@ namespace Knowlead.DAL.Migrations
                 type: "bit",
                 nullable: false,
                 defaultValue: false);
+
+            migrationBuilder.Sql("UPDATE Notifications SET IsEmailSent = 1");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

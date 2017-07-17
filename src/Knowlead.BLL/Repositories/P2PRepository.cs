@@ -428,7 +428,7 @@ namespace Knowlead.BLL.Repositories
             return (await _context.SaveChangesAsync() > 0);
         }
 
-        public async Task<IActionResult> ListMine(Guid applicationUserId)
+        public async Task<IActionResult> ListByUserId(Guid applicationUserId)
         {
             var p2ps = await _context.P2p.IncludeEverything().Where(x => x.CreatedById == applicationUserId)
                                                              .Where(x => x.IsDeleted == false)

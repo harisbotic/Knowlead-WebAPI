@@ -17,5 +17,6 @@ namespace Knowlead.BLL.Repositories.Interfaces
         void Update(Notification notification);
         Task Commit();
         Task<NotificationSourceStats> GetNotificationStats(Guid applicationUserId);
+        Task SendNotificationEmails();
     }
 }

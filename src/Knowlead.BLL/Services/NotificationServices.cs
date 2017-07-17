@@ -86,28 +86,6 @@ namespace Knowlead.Services
             }
         }
 
-        public async Task SendNotificationEmails()
-        {
-            Dictionary<Guid, List<Notification>> notifications = await _notificationRepository.GetAllUnread();
-            foreach(Guid userGuid in notifications.Keys)
-            {
-                NotificationEmail email = new NotificationEmail();
-                email.Notifications = notifications[userGuid];
-                
-                ApplicationUser user = await _accountRepository.GetApplicationUserById(userGuid);
-                if(await _messageServices.SendEmailAsync(user.Email, "Notifications", email)) 
-                {
-                    foreach(Notification n in notifications[userGuid])
-                    {
-                        n.IsEmailSent = true;
-                        _notificationRepository.Update(n);
-                    }
-                }
-            }
-            
-            await _notificationRepository.Commit();
-        }
-
         public async Task MarkAsRead(Guid notificationId, Guid applicationUserId)
         {
             var notification = await Get(notificationId, applicationUserId);

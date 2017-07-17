@@ -10,7 +10,7 @@ namespace Knowlead.Services.Interfaces
     {
         Task SendNotification (Notification notification);
         Task SendNotifications (List<Notification> notifications);
-        Task SendNotificationEmails();
+        //Task SendNotificationEmails();
         Task<List<Notification>> GetPagedList(Guid applicationUserId, int offset, int numItems);
         Task MarkAsRead(Guid notificationId, Guid applicationUserId);
         Task MarkAllAsRead(Guid applicationUserId);

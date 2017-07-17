@@ -20,7 +20,7 @@ namespace Knowlead.BLL.Repositories.Interfaces
         Task UpdateAndSave(P2P p2p);
         Task<IActionResult> GetP2P(int p2pId, Guid applicationUserId);
         Task<IActionResult> GetMessages(int p2pId, Guid applicationUserId);
-        Task<IActionResult> ListMine(Guid applicationUserId);
+        Task<IActionResult> ListByUserId(Guid applicationUserId);
         Task<IActionResult> ListSchedulded(Guid applicationUserId);
         Task<IActionResult> ListBookmarked(Guid applicationUserId);
         Task<IActionResult> ListDeleted(Guid applicationUserId);
