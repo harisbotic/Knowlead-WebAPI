@@ -29,6 +29,7 @@ namespace Knowlead.DomainModel.NotificationModels
         [MyRequired]
         public DateTime ScheduledAt { get; set; }
         public DateTime? SeenAt { get; set; }
+        public Boolean IsEmailSent { get; set; } = false;
 
         public Notification(Guid forApplicationUser, String notificationType, DateTime scheduledAt, Guid? fromApplicationUserId, P2P p2p, P2PMessage p2pMessage)
                             :this(forApplicationUser, notificationType, scheduledAt)

@@ -15,6 +15,8 @@ using Knowlead.Common.Configurations.AppSettings;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Knowlead.Common;
+using Knowlead.Services.Interfaces;
+using Knowlead.BLL.Repositories.Interfaces;
 
 namespace Knowlead
 {
@@ -93,6 +95,7 @@ namespace Knowlead
 
             //app.UseHangfireDashboard(); // Will be available under http://localhost:5000/hangfire
             app.UseHangfireServer();
+            //Hangfire.RecurringJob.AddOrUpdate<INotificationRepository>("send_emails_for_unread_notifications", (n) => n.SendNotificationEmails(), Cron.Minutely);
 
             app.UseMvc();
         }

@@ -1,6 +1,6 @@
-using Knowlead.Common.Email.Interfaces;
+using Knowlead.BLL.Emails.Interfaces;
 
-namespace Knowlead.Common.Email
+namespace Knowlead.BLL.Emails
 {
     public class RegistrationEmail : IEmail
     {

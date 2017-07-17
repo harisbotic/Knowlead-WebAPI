@@ -429,7 +429,7 @@ namespace Knowlead.BLL.Repositories
             return (await _context.SaveChangesAsync() > 0);
         }
 
-        public async Task<List<P2P>> ListMine(int[] fosIds, Guid applicationUserId)
+        public async Task<List<P2P>> ListByUserId(int[] fosIds,Guid applicationUserId)
         {
             var query = _context.P2p.IncludeEverything().Where(x => x.CreatedById == applicationUserId)
                                                              .Where(x => x.IsDeleted == false);

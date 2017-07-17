@@ -1,4 +1,4 @@
-namespace Knowlead.Common.Email.Interfaces
+namespace Knowlead.BLL.Emails.Interfaces
 {
     public interface IEmail
     {
