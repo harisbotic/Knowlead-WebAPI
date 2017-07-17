@@ -12,6 +12,7 @@ using Knowlead.DTO.ResponseModels;
 using System.Collections.Generic;
 using AutoMapper;
 using System;
+using Knowlead.DomainModel.P2PModels;
 
 namespace Knowlead.Controllers
 {
@@ -34,11 +35,6 @@ namespace Knowlead.Controllers
         {
             var applicationUserId = _auth.GetUserId();
             return await _p2pRepository.GetP2P(p2pId, applicationUserId);
-        }
-
-        public class pag
-        {
-            public int pp { get; set; }
         }
 
         [HttpGet("messages/{p2pId}")]
@@ -103,10 +99,10 @@ namespace Knowlead.Controllers
         }
 
         [HttpGet("recommended")] //TODO: change from DateTime to DATETIMEOFFSEt everywhere because datetime saves timezones, test it ofc
-        public async Task<IActionResult> GetRecommended(DateTimeOffset dateTimeStart, int offset = 10)
+        public async Task<IActionResult> GetRecommended(int[] fosIds, DateTime dateTimeStart, int offset = 10)
         {
             var applicationUserId = _auth.GetUserId();
-            var p2ps = await _p2pRepository.GetRecommendedP2P(applicationUserId, dateTimeStart, offset);
+            var p2ps = await _p2pRepository.GetRecommendedP2P(fosIds, applicationUserId, dateTimeStart, offset);
 
             return Ok(new ResponseModel{
                 Object = Mapper.Map<List<P2PModel>>(p2ps)
@@ -122,49 +118,46 @@ namespace Knowlead.Controllers
             return Ok(new ResponseModel());
         }
 
-        [HttpGet("listByFos/{fosId}")]
-        public async Task<IActionResult> GetRecommended([FromQuery] int fosId)
-        {
-            var applicationUserId = _auth.GetUserId();
-            var p2ps = await _p2pRepository.GetByFos(fosId, applicationUserId);
-
-            return Ok(new ResponseModel{
-                Object = Mapper.Map<List<P2PModel>>(p2ps)
-            });
-        }
-
         [HttpGet("list/{listP2PRequest}")]
-        public async Task<IActionResult> ChangeFriendshipStatus(ListP2PsRequest listP2PRequest)
+        public async Task<IActionResult> ListP2Ps(ListP2PsRequest listP2PRequest,
+                                            [FromQuery] int[] fosIds, DateTime dateTimeStart, int offset = 10)
         {
             var applicationUserId = _auth.GetUserId();
             
-            // List<P2P> result = null;
-            // result = await _p2pRepository.ListMine(applicationUserId);
+            List<P2P> p2ps = null;
             switch (listP2PRequest) 
             {
                 case(ListP2PsRequest.My):
-                    return await _p2pRepository.ListByUserId(applicationUserId);
-                    // break;
+                    p2ps = await _p2pRepository.ListByUserId(applicationUserId);
+                    break;
                 
                 case(ListP2PsRequest.Scheduled):
-                    return await _p2pRepository.ListSchedulded(applicationUserId);
-                    // break;
+                    p2ps = await _p2pRepository.ListSchedulded(fosIds, applicationUserId);
+                    break;
                 
                 case(ListP2PsRequest.Bookmarked):
-                    return await _p2pRepository.ListBookmarked(applicationUserId);
-                    // break;
+                    p2ps = await _p2pRepository.ListBookmarked(fosIds, applicationUserId);
+                    break;
 
                 case(ListP2PsRequest.ActionRequired):
-                    return await _p2pRepository.ListActionRequired(applicationUserId);
-                    // break;
+                    p2ps = await _p2pRepository.ListActionRequired(applicationUserId);
+                    break;
 
                 case(ListP2PsRequest.Deleted):
-                    return await _p2pRepository.ListDeleted(applicationUserId);
-                    // break;
+                    p2ps = await _p2pRepository.ListDeleted(applicationUserId);
+                    break;
+
+                case(ListP2PsRequest.Recommended):
+                    p2ps = await _p2pRepository.GetRecommendedP2P(fosIds, applicationUserId, dateTimeStart, offset);
+                    break;
                 
                 default:
                     throw new ErrorModelException(ErrorCodes.IncorrectValue, nameof(ListP2PsRequest));
             }
+
+            return new OkObjectResult(new ResponseModel {
+                Object = Mapper.Map<List<P2PModel>>(p2ps)
+            });
         }
 
         [HttpPost("bookmarkAdd/{p2pId}")]

@@ -169,9 +169,9 @@ namespace Knowlead.Common
                 RemoveFriend = 4, BlockUser = 5, UnblockUser = 6
             }
 
-            public enum ListP2PsRequest
+            public enum ListP2PsRequest //TODO: Rename to P2PCategories?
             {
-                My = 0, Scheduled = 1, Bookmarked = 2, ActionRequired = 3, Deleted = 4
+                My = 0, Scheduled = 1, Bookmarked = 2, ActionRequired = 3, Deleted = 4, Recommended = 5
             }
 
             public enum FeedbackOptionsRequest

@@ -64,17 +64,17 @@ namespace Knowlead.BLL.Repositories
                         throw new ErrorModelException(ErrorCodes.AlreadyFriends, otherUserId.ToString());
                     
                     case(FriendshipStatus.Pending):
-                        if(friendship.LastActionById == currentUserId)
+                        if(friendship.LastActionById.Equals(currentUserId))
                             return friendship;
                         throw new ErrorModelException(ErrorCodes.SthWentWrong);
                     
                     case(FriendshipStatus.Declined):
-                        if(friendship.LastActionById != currentUserId)
+                        if(friendship.LastActionById.Equals(currentUserId))
                             throw new ErrorModelException(ErrorCodes.HackAttempt);
                         break;
 
                     case(FriendshipStatus.Blocked):
-                        if(friendship.LastActionById == currentUserId)
+                        if(friendship.LastActionById.Equals(currentUserId))
                             throw new ErrorModelException(ErrorCodes.UserBlocked, otherUserId.ToString());
                         throw new ErrorModelException(ErrorCodes.EntityNotFound, nameof(ApplicationUser));
                 }
