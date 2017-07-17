@@ -95,7 +95,7 @@ namespace Knowlead
 
             //app.UseHangfireDashboard(); // Will be available under http://localhost:5000/hangfire
             app.UseHangfireServer();
-            RecurringJob.AddOrUpdate<INotificationRepository>("email-notifications", (n) => n.SendNotificationEmails(), Cron.Minutely);
+            //Hangfire.RecurringJob.AddOrUpdate<INotificationRepository>("send_emails_for_unread_notifications", (n) => n.SendNotificationEmails(), Cron.Minutely);
 
             app.UseMvc();
         }
