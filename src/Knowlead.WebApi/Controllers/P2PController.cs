@@ -93,10 +93,10 @@ namespace Knowlead.Controllers
         }
 
         [HttpGet("recommended")] //TODO: change from DateTime to DATETIMEOFFSEt everywhere because datetime saves timezones, test it ofc
-        public async Task<IActionResult> GetRecommended(DateTime dateTimeStart, int offset = 10)
+        public async Task<IActionResult> GetRecommended(int[] fosIds, DateTime dateTimeStart, int offset = 10)
         {
             var applicationUserId = _auth.GetUserId();
-            var p2ps = await _p2pRepository.GetRecommendedP2P(applicationUserId, dateTimeStart, offset);
+            var p2ps = await _p2pRepository.GetRecommendedP2P(fosIds, applicationUserId, dateTimeStart, offset);
 
             return Ok(new ResponseModel{
                 Object = Mapper.Map<List<P2PModel>>(p2ps)
@@ -114,7 +114,7 @@ namespace Knowlead.Controllers
 
         [HttpGet("list/{listP2PRequest}")]
         public async Task<IActionResult> ListP2Ps(ListP2PsRequest listP2PRequest,
-                                            [FromQuery] int? fosId, DateTime dateTimeStart, int offset = 10)
+                                            [FromQuery] int[] fosIds, DateTime dateTimeStart, int offset = 10)
         {
             var applicationUserId = _auth.GetUserId();
             
@@ -122,15 +122,15 @@ namespace Knowlead.Controllers
             switch (listP2PRequest) 
             {
                 case(ListP2PsRequest.My):
-                    p2ps = await _p2pRepository.ListMine(fosId, applicationUserId);
+                    p2ps = await _p2pRepository.ListMine(fosIds, applicationUserId);
                     break;
                 
                 case(ListP2PsRequest.Scheduled):
-                    p2ps = await _p2pRepository.ListSchedulded(fosId, applicationUserId);
+                    p2ps = await _p2pRepository.ListSchedulded(fosIds, applicationUserId);
                     break;
                 
                 case(ListP2PsRequest.Bookmarked):
-                    p2ps = await _p2pRepository.ListBookmarked(fosId, applicationUserId);
+                    p2ps = await _p2pRepository.ListBookmarked(fosIds, applicationUserId);
                     break;
 
                 case(ListP2PsRequest.ActionRequired):
@@ -142,7 +142,7 @@ namespace Knowlead.Controllers
                     break;
 
                 case(ListP2PsRequest.Recommended):
-                    p2ps = await _p2pRepository.GetRecommendedP2P(applicationUserId, dateTimeStart, offset);
+                    p2ps = await _p2pRepository.GetRecommendedP2P(fosIds, applicationUserId, dateTimeStart, offset);
                     break;
                 
                 default:

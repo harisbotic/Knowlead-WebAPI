@@ -429,13 +429,13 @@ namespace Knowlead.BLL.Repositories
             return (await _context.SaveChangesAsync() > 0);
         }
 
-        public async Task<List<P2P>> ListMine(int? fosId, Guid applicationUserId)
+        public async Task<List<P2P>> ListMine(int[] fosIds, Guid applicationUserId)
         {
             var query = _context.P2p.IncludeEverything().Where(x => x.CreatedById == applicationUserId)
                                                              .Where(x => x.IsDeleted == false);
 
-            if(fosId.HasValue)
-                query = query.Where(x => x.FosId.Equals(fosId.Value));
+            if(fosIds.Length > 0)
+                query = query.Where(x => fosIds.Contains(x.FosId));
 
             var p2ps = await query.OrderByDescending(x => x.DateCreated).ToListAsync();
 
@@ -447,7 +447,7 @@ namespace Knowlead.BLL.Repositories
             return p2ps;
         }
 
-        public async Task<List<P2P>> ListSchedulded(int? fosId, Guid applicationUserId)
+        public async Task<List<P2P>> ListSchedulded(int[] fosIds, Guid applicationUserId)
         {
             var query = _context.P2p
                     .IncludeEverything()
@@ -455,8 +455,8 @@ namespace Knowlead.BLL.Repositories
                     .Where(x => x.CreatedById == applicationUserId || x.ScheduledWithId == applicationUserId)
                     .Where(x => x.IsDeleted == false);
 
-            if(fosId.HasValue)
-                query = query.Where(x => x.FosId.Equals(fosId.Value));
+            if(fosIds.Length > 0)
+                query = query.Where(x => fosIds.Contains(x.FosId));
 
             var p2ps = await query.OrderBy(x => x.DateTimeAgreed.Value).ToListAsync();
 
@@ -466,18 +466,20 @@ namespace Knowlead.BLL.Repositories
             return p2ps;
         }
 
-        public async Task<List<P2P>> GetRecommendedP2P(Guid applicationUserId, DateTime dateTimeStart, int offset)
+        public async Task<List<P2P>> GetRecommendedP2P(int[] fosIds, Guid applicationUserId, DateTime dateTimeStart, int offset)
         {
-            var p2ps = await _context.P2p
+            var query =  _context.P2p
                             .IncludeEverything()
                             .Include(x => x.CreatedBy)
                             .Where(x => x.Status == P2PStatus.Active)
                             .Where(x => x.IsDeleted == false)
                             .Where(x => x.DateCreated > dateTimeStart)
-                            .OrderByDescending(x => x.DateCreated)
-                            .Take(offset)
-                            .ToListAsync();
+                            .Take(offset);
 
+           if(fosIds.Length > 0)
+                query = query.Where(x => fosIds.Contains(x.FosId));
+
+            var p2ps = await query.OrderByDescending(x => x.DateCreated).ToListAsync();
 
             var myBookmarks = await _context.P2PBookmarks.Where(x => x.ApplicationUserId.Equals(applicationUserId)).ToListAsync();
 
@@ -486,7 +488,7 @@ namespace Knowlead.BLL.Repositories
 
             return p2ps;
         }
-        public async Task<List<P2P>> ListBookmarked(int? fosId, Guid applicationUserId)
+        public async Task<List<P2P>> ListBookmarked(int[] fosIds, Guid applicationUserId)
         {
             var query = _context.P2PBookmarks.Where(x => x.ApplicationUserId.Equals(applicationUserId))
                                                             .Include(x => x.P2p)
@@ -495,8 +497,8 @@ namespace Knowlead.BLL.Repositories
                                                             .Include("P2p.P2PImages")
                                                             .Where(x => x.P2p.IsDeleted == false);
 
-            if(fosId.HasValue)
-                query = query.Where(x => x.P2p.FosId.Equals(fosId.Value));
+            if(fosIds.Length > 0)
+                query = query.Where(x => fosIds.Contains(x.P2p.FosId));
             
             var p2pBookmarks = await query.OrderByDescending(x => x.P2p.DateCreated).ToListAsync();
 
