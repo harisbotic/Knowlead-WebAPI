@@ -95,7 +95,11 @@ namespace Knowlead.Controllers
         [HttpGet("listByUserId/{applicationUserId}")]
         public async Task<IActionResult> ListByUserId(Guid applicationUserId)
         {
-            return await _p2pRepository.ListByUserId(applicationUserId);
+            var p2ps = await _p2pRepository.ListByUserId(new int[0], applicationUserId);
+
+            return Ok(new ResponseModel{
+                Object = Mapper.Map<List<P2PModel>>(p2ps)
+            });
         }
 
         [HttpGet("recommended")] //TODO: change from DateTime to DATETIMEOFFSEt everywhere because datetime saves timezones, test it ofc
@@ -128,7 +132,7 @@ namespace Knowlead.Controllers
             switch (listP2PRequest) 
             {
                 case(ListP2PsRequest.My):
-                    p2ps = await _p2pRepository.ListByUserId(applicationUserId);
+                    p2ps = await _p2pRepository.ListByUserId(fosIds, applicationUserId);
                     break;
                 
                 case(ListP2PsRequest.Scheduled):
