@@ -9,6 +9,7 @@ namespace Knowlead.BLL.Repositories.Interfaces
     {
         Task<List<Reward>> GetAllRewards(string codeStartsWith = null);
         Task<Reward> GetReward(int rewardId);
+        Task<Reward> GetReward(string rewardCode);
         Task<bool> GotReward(Guid applicationUserId, int rewardId);
         Task<List<int>> GetClaimedRewards(Guid applicationUserId);
         Task ClaimReward(Guid applicationUserId, int rewardId);

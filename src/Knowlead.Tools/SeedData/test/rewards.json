@@ -47,6 +47,12 @@
             "Code": "ref404",
             "MinutesReward": 5000,
             "PointsReward": 0
+        },
+        {
+            "Name": "MSFTImagineCupPromoCode",
+            "Code": "msicpromocode",
+            "MinutesReward": 50,
+            "PointsReward": 0
         }
     ]
 }

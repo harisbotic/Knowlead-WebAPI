@@ -65,6 +65,11 @@ namespace Knowlead.Services
                 return await _accountRepository.GetReferralsCount(applicationUserId) >= refNumber;
             }
 
+            if(reward.Code.StartsWith("msicpromocode"))
+            {            
+                return true;
+            }
+
             return false;
         }
 

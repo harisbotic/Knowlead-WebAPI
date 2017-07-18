@@ -99,6 +99,12 @@ namespace Knowlead.Common
             public const string AlreadyReady = "ALREADY_READY";
             [TSInitialize]
             public const string CantBeReadyNow = "CANT_BE_READY_NOW";
+            [TSInitialize]
+            public const string PromoCodeInvalid = "PROMOCODE_INVALID";
+            [TSInitialize]
+            public const string PromoCodeAlreadyUsed = "PROMOCODE_ALREADY_USED";
+            [TSInitialize]
+            public const string PromoCodeExpired = "PROMOCODE_EXPIRED";
         }
 
         [TSClass]

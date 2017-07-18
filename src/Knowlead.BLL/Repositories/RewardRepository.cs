@@ -34,6 +34,11 @@ namespace Knowlead.BLL.Repositories
             return await _context.Rewards.Where(x => x.CoreLookupId == rewardId).FirstOrDefaultAsync();
         }
 
+        public async Task<Reward> GetReward(string rewardCode)
+        {
+            return await _context.Rewards.Where(x => x.Code == rewardCode).FirstOrDefaultAsync();
+        }
+
         public async Task<bool> GotReward(Guid applicationUserId, int rewardId)
         {
             return await _context.ApplicationUserRewards.Where(x => x.ApplicationUserId.Equals(applicationUserId) &&

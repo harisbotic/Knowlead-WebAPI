@@ -23,6 +23,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using System.IO;
+using Knowlead.DomainModel;
 
 namespace Knowlead.DAL
 {
@@ -147,6 +148,7 @@ namespace Knowlead.DAL
         #endregion
 
         public DbSet<Notification> Notifications { get; set; }
+        public DbSet<PromoCode> PromoCodes{ get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
