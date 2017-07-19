@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="../Knowlead.DAL/Knowlead.DAL.csproj" />
+    <ProjectReference Include="../Knowlead.DTO/Knowlead.DTO.csproj" />
     <ProjectReference Include="../Knowlead.DomainModel/Knowlead.DomainModel.csproj" />
   </ItemGroup>
 

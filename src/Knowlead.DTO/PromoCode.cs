@@ -1,8 +1,8 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using Knowlead.Common.DataAnnotations;
-using Knowlead.DomainModel.LookupModels.Core;
-using Knowlead.DomainModel.UserModels;
+using Knowlead.DTO.LookupModels.Core;
+using Knowlead.DTO.UserModels;
 
 namespace Knowlead.DTO
 {
@@ -18,9 +18,9 @@ namespace Knowlead.DTO
 
         [MyRequired]
         public int RewardId { get; set; }
-        public Reward Reward { get; set; }
+        public RewardModel Reward { get; set; }
 
         public Guid? ActivatorId { get; set; }
-        public ApplicationUser Activator { get; set; }
+        public ApplicationUserModel Activator { get; set; }
     }
 }
