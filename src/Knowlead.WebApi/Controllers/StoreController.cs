@@ -27,12 +27,12 @@ namespace Knowlead.Controllers
         }
         
         [HttpPost("applyPromoCode")]
-        public async Task<IActionResult> ApplyPromoCode([FromQuery] string promocode)
+        public async Task<IActionResult> ApplyPromoCode([FromQuery] string promocode) //TODO: should be just code
         {
             var promoCode = await _promoCodeRepository.ApplyPromoCode(promocode, _auth.GetUserId());
 
             return Ok(new ResponseModel {
-                Object = Mapper.Map<PromoCodeModel>(promocode)
+                Object = Mapper.Map<PromoCodeModel>(promoCode)
             });
         }
 
