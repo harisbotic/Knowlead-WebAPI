@@ -45,6 +45,9 @@ namespace Knowlead.BLL.Repositories
 
             if(status == FriendshipStatus.Blocked)
                 query = _context.Friendships.Where(x => x.LastActionById == applicationUserId);
+
+            query = query.Include(x => x.ApplicationUserBigger);
+            query = query.Include(x => x.ApplicationUserSmaller);
  
             return await query.ToListAsync();
         }
