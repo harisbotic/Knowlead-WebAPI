@@ -11,16 +11,20 @@ using static Knowlead.Common.Constants.EnumStatuses;
 using static Knowlead.Common.Utils;
 using Knowlead.DomainModel.ChatModels;
 using Knowlead.Common.Exceptions;
+using Knowlead.Services.Interfaces;
+using Knowlead.DomainModel.NotificationModels;
 
 namespace Knowlead.BLL.Repositories
 {
     public class FriendshipRepository : IFriendshipRepository
     {
         private readonly ApplicationDbContext _context;
+        private readonly INotificationServices _notificationServices;
 
-        public FriendshipRepository(ApplicationDbContext context)
+        public FriendshipRepository(ApplicationDbContext context, INotificationServices notificationServices)
         {
             _context = context;
+            _notificationServices = notificationServices;
         }
 
         public async Task<Friendship> GetFriendship(Guid userIdOne, Guid userIdTwo)
@@ -88,6 +92,10 @@ namespace Knowlead.BLL.Repositories
             }
 
             await SaveChangesAsync();
+
+            var notification = new Notification(otherUserId, NotificationTypes.FriendshipRequest, DateTime.UtcNow, currentUserId, null, null);
+            await _notificationServices.SendNotification(notification);
+
             return friendship;
         }
 
@@ -124,9 +132,16 @@ namespace Knowlead.BLL.Repositories
                         ChangeFriendshipStatusTo(friendship, currentUserId, FriendshipStatus.Accepted);
                     else
                         ChangeFriendshipStatusTo(friendship, currentUserId, FriendshipStatus.Declined);
+                
+                    await SaveChangesAsync();
+
+                    if(isAccepting)
+                    {
+                        var notification = new Notification(otherUserId, NotificationTypes.FriendshipAccepted, DateTime.UtcNow, currentUserId, null, null);
+                        await _notificationServices.SendNotification(notification);
+                    }
                 }
 
-            await SaveChangesAsync();
             return friendship;
         }
 
