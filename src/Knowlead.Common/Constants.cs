@@ -130,15 +130,17 @@ namespace Knowlead.Common
             [TSInitialize]
             public const string P2POfferAccepted = "NotificationTypes.P2P_OFFER_ACCEPTED";
             [TSInitialize]
+            public const string P2PScheduled = "NotificationTypes.P2P_SCHEDULED";
+            [TSInitialize]
             public const string PrepareForP2P = "NotificationTypes.PREPARE_FOR_P2P";
             [TSInitialize]
             public const string RewardClaimed = "NotificationTypes.REWARD_CLAIMED";
             [TSInitialize]
-            public const string NewFriendship = "NotificationTypes.NEW_FRIENDSHIP";
+            public const string FriendshipRequest = "NotificationTypes.FRIENDSHIP_REQUEST";            
+            [TSInitialize]
+            public const string FriendshipAccepted= "NotificationTypes.FRIENDSHIP_ACCEPTED";
             [TSInitialize]
             public const string LeaveP2PFeedback = "NotificationTypes.LEAVE_P2P_FEEDBACK";
-            [TSInitialize]
-            public const string P2PScheduled = "NotificationTypes.P2P_SCHEDULED";
         }
 
         [TSClass]

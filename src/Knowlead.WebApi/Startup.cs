@@ -17,6 +17,10 @@ using Microsoft.AspNetCore.Hosting;
 using Knowlead.Common;
 using Knowlead.Services.Interfaces;
 using Knowlead.BLL.Repositories.Interfaces;
+using Knowlead.Services;
+using System.Collections.Generic;
+using System;
+using Knowlead.DomainModel.UserModels;
 
 namespace Knowlead
 {

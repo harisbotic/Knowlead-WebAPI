@@ -40,13 +40,6 @@ namespace Knowlead.BLL.Repositories
             return await _context.Notifications.Where(condition).ToListAsync();
         }
 
-        public async Task<Dictionary<Guid, List<Notification>>> GetAllUnread()
-        {
-            return await _context.Notifications.Where(n => (!n.SeenAt.HasValue && !n.IsEmailSent))
-                .GroupBy(n => n.ForApplicationUserId)
-                .ToDictionaryAsync(group => group.Key, group => group.ToList());
-        }
-
         public async Task<List<Notification>> GetPagedList(Guid applicationUserId, int offset, int numItems)
         {
             return await _context.Notifications.Where(x => x.ForApplicationUserId.Equals(applicationUserId))
@@ -83,28 +76,36 @@ namespace Knowlead.BLL.Repositories
         
         public async Task SendNotificationEmails()
         {
-            Dictionary<Guid, List<Notification>> notifications = await GetAllUnread();
+            bool shouldCommit = false;
+
+            Dictionary<Guid, List<Notification>> notifications = await _context.Notifications
+                .Where(n => NotificationEmail.ALLOWED_NOTIFICATION_TYPES.Contains(n.NotificationType))
+                .Where(n => (!n.SeenAt.HasValue && !n.IsEmailSent))
+                .Where(n => n.ScheduledAt < DateTime.UtcNow)
+                .Include(n => n.ForApplicationUser) //test
+                .GroupBy(n => n.ForApplicationUserId)
+                .ToDictionaryAsync(group => group.Key, group => group.ToList());
+
             foreach(Guid userGuid in notifications.Keys)
             {
                 NotificationEmail email = new NotificationEmail();
                 email.Notifications = notifications[userGuid];
                 
-                ApplicationUser user = await _accountRepository.GetApplicationUserById(userGuid);
-                if(await _messageServices.SendEmailAsync(user.Email, "Notifications", email)) 
+                String receiverEmail = notifications[userGuid].First().ForApplicationUser.Email;
+                if(await _messageServices.SendEmailAsync("haris.botic96@gmail.com", "Notifications", email)) 
                 {
                     foreach(Notification n in notifications[userGuid])
                     {
+                        shouldCommit = true;
                         n.IsEmailSent = true;
                         Update(n);
                     }
                 }
             }
-            
-            try
-            {
-                await Commit();
-            }
-            catch { }
+
+            if(shouldCommit)
+                await Commit(); //TODO: Risky if commit fails
+
         }
     }
 }

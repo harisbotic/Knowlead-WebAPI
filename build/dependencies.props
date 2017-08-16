@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <AspNetCoreVersion>2.0.0-*</AspNetCoreVersion>
+    <AspNetCoreVersion>2.0.0</AspNetCoreVersion>
     <DotNetToolsVersion>1.0.0</DotNetToolsVersion>
     <InternalAspNetCoreSdkVersion>2.1.0-*</InternalAspNetCoreSdkVersion>
     <TypeScriptBuilderVersion>0.1.10</TypeScriptBuilderVersion>
@@ -9,7 +9,7 @@
     <HangfireVersion>1.6.8</HangfireVersion>
     <AutoMapperVersion>5.1.1</AutoMapperVersion>
     <AutoMapperDIVersion>1.1.2</AutoMapperDIVersion>
-    <NETStandardLibraryNETFrameworkVersion>2.0.0-*</NETStandardLibraryNETFrameworkVersion>
-    <RuntimeFrameworkVersion>2.0.0-preview3-25429-01</RuntimeFrameworkVersion>
+    <NETStandardLibraryNETFrameworkVersion>2.0.0</NETStandardLibraryNETFrameworkVersion>
+    <RuntimeFrameworkVersion>2.0.0</RuntimeFrameworkVersion>
   </PropertyGroup>
 </Project>
